@@ -1,0 +1,45 @@
+# kube-prometheus-stack Helm values — boutique-gke-sre
+# Phase 6: install via GitOps or Helm; tune before production sync.
+#
+# Chart: prometheus-community/kube-prometheus-stack
+# Remote write target: Google Managed Prometheus (optional)
+
+# prometheus:
+#   prometheusSpec:
+#     retention: 15d
+#     replicas: 2
+#     resources:
+#       requests:
+#         cpu: 500m
+#         memory: 2Gi
+#       limits:
+#         cpu: 2
+#         memory: 4Gi
+#     serviceMonitorSelectorNilUsesHelmValues: false
+#     podMonitorSelectorNilUsesHelmValues: false
+#     # remoteWrite:
+#     #   - url: https://monitoring.googleapis.com/v1/projects/boutique-gke/location/global/prometheus/api/v1/write
+#     #     oauth2:
+#     #       clientId:
+#     #         secret:
+#     #           name: gmp-remote-write
+#     #           key: client_id
+#     #       clientSecret:
+#     #         name: gmp-remote-write
+#     #         key: client_secret
+#     #       tokenUrl: https://oauth2.googleapis.com/token
+#     #       scopes: [https://www.googleapis.com/auth/monitoring.write]
+#
+# alertmanager:
+#   enabled: true
+#   alertmanagerSpec:
+#     replicas: 2
+#
+# grafana:
+#   enabled: false  # Grafana deployed separately under observability/grafana/
+#
+# defaultRules:
+#   create: true
+#
+# kubeStateMetrics:
+#   enabled: true

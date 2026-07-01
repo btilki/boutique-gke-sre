@@ -1,0 +1,8 @@
+# Argo CD control-plane namespace (Phase 4).
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: argocd
+  labels:
+    app.kubernetes.io/name: argocd
+    app.kubernetes.io/part-of: boutique-gke-sre

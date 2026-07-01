@@ -1,0 +1,23 @@
+# Build, scan, sign — placeholder (Phase 3)
+
+# WIF → build/mirror → Trivy → Artifact Registry → cosign sign + attest
+# Enable when terraform/modules/wif and artifact-registry are applied.
+
+name: build-scan-sign
+
+on:
+  workflow_dispatch:
+  # push:
+  #   branches: [main]
+  #   paths:
+  #     - ".github/workflows/build-scan-sign.yml"
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  placeholder:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Phase 3 — implement WIF auth and image pipeline per docs/setup/07-github-wif.md"

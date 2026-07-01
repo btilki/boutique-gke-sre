@@ -1,0 +1,32 @@
+# Kyverno ClusterPolicy scaffold — require liveness and readiness probes (Phase 4).
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: require-probes
+  annotations:
+    policies.kyverno.io/title: Require Health Probes
+    policies.kyverno.io/category: Best Practices
+    policies.kyverno.io/severity: medium
+spec:
+  validationFailureAction: Enforce
+  background: true
+  rules:
+    - name: require-liveness-readiness
+      match:
+        any:
+          - resources:
+              kinds:
+                - Pod
+      validate:
+        message: "Containers must define livenessProbe and readinessProbe."
+        foreach:
+          - list: "request.object.spec.containers"
+            deny:
+              conditions:
+                any:
+                  - key: "{{ element.livenessProbe }}"
+                    operator: Equals
+                    value: ""
+                  - key: "{{ element.readinessProbe }}"
+                    operator: Equals
+                    value: ""

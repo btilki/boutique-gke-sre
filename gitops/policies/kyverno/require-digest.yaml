@@ -1,0 +1,45 @@
+# Kyverno ClusterPolicy scaffold — reject :latest and require image digest (Phase 4).
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: require-digest
+  annotations:
+    policies.kyverno.io/title: Require Image Digest
+    policies.kyverno.io/category: Best Practices
+    policies.kyverno.io/severity: high
+spec:
+  validationFailureAction: Enforce
+  background: true
+  rules:
+    - name: reject-latest-tag
+      match:
+        any:
+          - resources:
+              kinds:
+                - Pod
+      validate:
+        message: "Images must use digest (@sha256:...) not :latest or floating tags."
+        foreach:
+          - list: "request.object.spec.containers"
+            deny:
+              conditions:
+                any:
+                  - key: "{{ element.image }}"
+                    operator: Equals
+                    value: "*:latest"
+    - name: require-digest
+      match:
+        any:
+          - resources:
+              kinds:
+                - Pod
+      validate:
+        message: "Image reference must include a digest (@sha256:...)."
+        foreach:
+          - list: "request.object.spec.containers"
+            deny:
+              conditions:
+                all:
+                  - key: "{{ element.image }}"
+                    operator: NotEquals
+                    value: "*@*"

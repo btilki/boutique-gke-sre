@@ -1,0 +1,18 @@
+# Manifest digest PR — placeholder (Phase 3)
+
+# Opens PR updating gitops/apps/boutique/values-images.yaml after image push.
+
+name: manifest-digest-pr
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  placeholder:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Phase 3 — wire digest promotion per docs/setup/08-artifact-registry-binary-auth.md"

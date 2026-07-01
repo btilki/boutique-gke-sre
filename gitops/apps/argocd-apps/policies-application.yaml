@@ -1,0 +1,20 @@
+# Argo CD Application for Kyverno and NetworkPolicy — enabled in Phase 4.
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: policies
+  namespace: argocd
+  labels:
+    app.kubernetes.io/part-of: boutique-gke-sre
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/biroltilki/boutique-gke-sre  # set to actual repo URL
+    targetRevision: main
+    path: gitops/policies
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: kyverno
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true

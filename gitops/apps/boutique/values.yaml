@@ -1,0 +1,3 @@
+# Online Boutique Helm values — populated in Phase 5.
+# Service replicas, resource requests/limits, probes, and ingress for boutique.biroltilki.art.
+# Image references use digest pins from values-images.yaml (CI-updated).

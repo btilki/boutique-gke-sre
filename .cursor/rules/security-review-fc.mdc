@@ -1,0 +1,72 @@
+---
+description: Feature cycle #10 — security review as Security Engineer for boutique-gke-sre
+alwaysApply: false
+---
+
+# Security Prompt (#10)
+
+Review **boutique-gke-sre** as a **Security Engineer**.
+
+**Scope:** Changes in the current phase, topic, or PR — or full-project review when requested.
+
+**Project context:** Single GCP project `boutique-gke`, private GKE, WIF CI, digest-only images, cosign, Binary Authorization, Kyverno, ESO, NetworkPolicy, Cloud Armor.
+
+---
+
+## Review Areas
+
+For each area, report findings with **risk level** and **mitigations**:
+
+| Area | Check |
+|------|-------|
+| **Secrets management** | No plain Secrets in Git; ESO + Secret Manager; no keys in CI |
+| **IAM** | Least privilege; no overly broad project roles; WIF attribute conditions |
+| **Least privilege** | Service accounts scoped to required APIs only |
+| **RBAC** | Kubernetes RBAC; Argo CD permissions; no cluster-admin for apps |
+| **Supply chain security** | Digest-only refs; cosign sign/attest; Binary Authorization; Trivy gates |
+| **Container security** | Non-root where possible; resource limits; probe requirements |
+| **Kubernetes security** | NetworkPolicy default-deny; admission policies; namespace isolation |
+| **Terraform security** | No secrets in state/tfvars committed; IAM bindings minimal |
+| **GitHub security** | Branch protection; WIF not SA keys; workflow permissions |
+| **CI/CD security** | OIDC trust boundaries; artifact signing; fail-closed scans |
+| **Network security** | Private nodes; ingress TLS; Cloud Armor; firewall baseline |
+| **Compliance** | Audit logging; policy-as-code coverage |
+| **Vulnerabilities** | Known CVEs in images, providers, actions |
+| **Misconfigurations** | Public buckets, open firewalls, `:latest` tags, missing policies |
+
+---
+
+## Output Format
+
+For each finding:
+
+```
+### [Area] — Short title
+- **Risk:** Critical | High | Medium | Low | Informational
+- **Finding:** What is wrong or missing
+- **Evidence:** File path, resource name, or config snippet
+- **Mitigation:** Concrete fix
+- **Priority:** Fix before prod | Fix this phase | Backlog
+```
+
+End with:
+
+1. **Executive summary** — top 3 risks
+2. **Blockers** — must fix before production / Phase gate
+3. **Recommended next actions** — ordered list
+
+---
+
+## When to Run
+
+- End of **Phase 3** (WIF, AR, Binary Auth, CI)
+- End of **Phase 4** (Argo CD, Kyverno, ESO, NetworkPolicy) — **required gate**
+- End of **Phase 7** (Cloud Armor, PagerDuty, edge exposure)
+- After any security-sensitive change
+
+---
+
+## Invocation Examples
+
+- `@security-review Review Phase 3 WIF and CI workflows`
+- `@security-review Full review of gitops/policies before topic 12`

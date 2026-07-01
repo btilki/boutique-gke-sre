@@ -1,0 +1,19 @@
+# Kyverno CLI test — require-digest policy
+# Run: kyverno test tests/kyverno/ (when policies exist under gitops/policies/kyverno/)
+#
+apiVersion: cli.kyverno.io/v1alpha1
+kind: Test
+metadata:
+  name: require-digest-test
+policies:
+  # Uncomment when policy is committed:
+  # - ../../gitops/policies/kyverno/require-digest.yaml
+resources:
+  - ../../examples/kyverno-policy-test/bad-latest-pod.yaml
+results:
+  # Uncomment and align rule names with policy manifest:
+  # - policy: require-digest
+  #   rule: validate-digest
+  #   resource: bad-latest-pod
+  #   kind: Pod
+  #   result: fail

@@ -1,0 +1,34 @@
+# Boutique allow-list NetworkPolicy scaffold — explicit service-to-service paths (Phase 4).
+# Uncomment and refine selectors when Online Boutique is deployed.
+#
+# apiVersion: networking.k8s.io/v1
+# kind: NetworkPolicy
+# metadata:
+#   name: boutique-allow
+#   namespace: boutique
+#   labels:
+#     network-policy.biroltilki.art/tier: application
+# spec:
+#   podSelector:
+#     matchLabels:
+#       app.kubernetes.io/part-of: boutique
+#   policyTypes:
+#     - Ingress
+#     - Egress
+#   ingress:
+#     - from:
+#         - podSelector:
+#             matchLabels:
+#               app.kubernetes.io/part-of: boutique
+#   egress:
+#     - to:
+#         - podSelector:
+#             matchLabels:
+#               app.kubernetes.io/part-of: boutique
+#     - to:
+#         - namespaceSelector: {}
+#       ports:
+#         - protocol: UDP
+#           port: 53
+#         - protocol: TCP
+#           port: 53

@@ -1,0 +1,339 @@
+---
+description: Topic-based setup guides for boutique-gke-sre — user-executed bootstrap order
+alwaysApply: false
+---
+
+# Setup Guide Prompt
+
+Generate setup guides for **boutique-gke-sre** organized **by topic** in `docs/setup/`. Each topic is a standalone guide the user executes step-by-step.
+
+**Context:** Bootstrap from empty GCP project `boutique-gke` to a production-ready private GKE cluster serving:
+
+- https://boutique.biroltilki.art
+- https://argocd.boutique.biroltilki.art
+
+**Source of truth:** When setup guides exist, they govern implementation. Do not replace manual steps with install scripts.
+
+---
+
+## Collaboration Reminder
+
+The **user executes commands**. You provide the guide, explain each step, and **wait for confirmation** before the next major topic.
+
+1. Identify the current setup step
+2. Explain why it is required
+3. Show commands exactly as documented
+4. Wait for the user to execute them
+5. Help interpret output if needed
+6. Continue only after the user confirms completion
+
+Do **not** create installation scripts whose only purpose is executing documented manual procedures.
+
+---
+
+## Index File
+
+Maintain `docs/setup/README.md` with:
+
+- Topic list in execution order (table below)
+- Estimated time per topic
+- Dependency graph (which topics block others)
+- Links to [docs/bootstrap.md](../bootstrap.md), [docs/dns.md](../dns.md), [docs/teardown.md](../teardown.md)
+
+---
+
+## Topic Order and Guide Files
+
+| # | Topic | Guide file | Est. time | Blocks |
+|---|-------|------------|-----------|--------|
+| 1 | GCP project and APIs | `01-gcp-project-apis.md` | 30 min | All |
+| 2 | Terraform remote state (GCS + locking) | `02-terraform-remote-state.md` | 45 min | Terraform apply |
+| 3 | VPC, subnets, Cloud NAT (private nodes) | `03-vpc-nat.md` | 1 h | GKE |
+| 4 | GKE cluster (regional, WI, multi-zone) | `04-gke-cluster.md` | 1–2 h | DNS, apps |
+| 5 | Cloud DNS + registrar NS delegation | `05-cloud-dns.md` | 45 min | HTTPS hostnames |
+| 6 | Static ingress IP + TLS (managed certs) | `06-ingress-tls.md` | 1 h | Public URLs |
+| 7 | GitHub WIF → GCP (no JSON keys) | `07-github-wif.md` | 1 h | CI pipeline |
+| 8 | Artifact Registry + Binary Authorization | `08-artifact-registry-binary-auth.md` | 1 h | Signed deploys |
+| 9 | Argo CD bootstrap | `09-argocd-bootstrap.md` | 1 h | GitOps (**gate**) |
+| 10 | External Secrets Operator + Secret Manager | `10-external-secrets.md` | 45 min | App secrets |
+| 11 | Kyverno policies | `11-kyverno-policies.md` | 45 min | Boutique deploy |
+| 12 | Online Boutique deploy (Helm, digest-only) | `12-boutique-deploy.md` | 1 h | SLOs, smoke |
+| 13 | Observability (OTel, MP, Grafana, SLOs) | `13-observability-slos.md` | 2 h | Alerting |
+| 14 | PagerDuty integration | `14-pagerduty.md` | 1 h | On-call |
+| 15 | Cloud Armor on storefront | `15-cloud-armor.md` | 45 min | Edge hardening |
+| 16 | Smoke validation + SRE artifact verification | `16-smoke-validation.md` | 1 h | Production bar |
+
+**Phase gate:** Topics 9–11 (Argo CD, ESO, Kyverno) must complete before treating the cluster as production-ready (aligns with Phase 4 in project planning).
+
+### Dependency graph
+
+```
+01 → 02 → 03 → 04 → 05 → 06
+                    ↓
+07 → 08 → 09 → 10 → 11 → 12 → 13 → 14 → 15 → 16
+```
+
+Topics 7–8 can parallelize with 5–6 after topic 4 completes.
+
+---
+
+## Required Sections (Every Topic)
+
+Each topic guide **must** include:
+
+1. **Goal** — what will exist when complete
+2. **Why this step is required** — dependency chain, production rationale
+3. **Prerequisites** — prior guide link, tools, access
+4. **Commands** — exact, copy-pasteable (no omissions)
+5. **Expected output** — what success looks like in terminal or console
+6. **Validation** — commands to verify (include `dig`/`curl` where relevant)
+7. **Common problems** — error messages → resolution (table)
+8. **Recovery** — how to roll back or retry safely
+9. **Best practices** — enterprise hardening for this step
+10. **Security notes** — IAM, least privilege, audit implications
+11. **Next step** — link to the following topic guide
+
+### Topic guide template
+
+```markdown
+# <Topic Title>
+
+## Goal
+...
+
+## Why this step is required
+...
+
+## Prerequisites
+- Prior guide: [link]
+- Tools: ...
+- Access: ...
+
+## Commands
+\`\`\`bash
+# exact commands
+\`\`\`
+
+## Expected output
+...
+
+## Validation
+\`\`\`bash
+dig +short boutique.biroltilki.art
+dig +short argocd.boutique.biroltilki.art
+curl -I https://boutique.biroltilki.art
+curl -I https://argocd.boutique.biroltilki.art
+\`\`\`
+
+## Common problems
+| Symptom | Cause | Fix |
+|---------|-------|-----|
+
+## Recovery
+...
+
+## Best practices
+...
+
+## Security notes
+...
+
+## Next step
+→ [Next Topic Title](next-file.md)
+```
+
+Use domain-specific validation only where relevant (not every topic needs all four `dig`/`curl` commands).
+
+---
+
+## Graphical / Console Configuration
+
+When a step requires a **graphical UI** (GitHub, GCP Console, PagerDuty, domain registrar, etc.), document it in detail:
+
+- Exact navigation path (e.g. **GCP Console → IAM → Workload Identity Federation**)
+- Every field name and expected value
+- Screenshots optional; text must be sufficient without them
+- What to click, save, or copy (e.g. WIF provider resource name → Terraform variable)
+
+### UI-heavy topics
+
+| Topic | UI surfaces to document |
+|-------|-------------------------|
+| 1 | GCP Console: project selector, APIs & Services, billing link |
+| 5 | Domain registrar: NS record edit; GCP Cloud DNS: zone details, name servers |
+| 7 | GitHub: Settings → Actions → General (workflow permissions); repo secrets if any |
+| 8 | GCP: Artifact Registry create; Binary Authorization policy editor |
+| 14 | PagerDuty: Services → Integrations → Events API v2; Cloud Monitoring notification channel |
+| 15 | GCP: Cloud Armor policy rules, attach to backend service |
+
+---
+
+## Per-Topic Content Outline
+
+### 1 — GCP project and APIs
+
+- Create/select project `boutique-gke`; link billing
+- Enable APIs: `container`, `compute`, `dns`, `iam`, `artifactregistry`, `secretmanager`, `monitoring`, `logging`, `cloudtrace`, `binaryauthorization`, `iap` (if used)
+- Set default region/zone; configure `gcloud config`
+
+### 2 — Terraform remote state
+
+- GCS bucket with versioning + uniform access
+- State prefix: `boutique/terraform.tfstate`
+- Optional: DynamoDB-style locking via GCS (Terraform 1.x native locking) or document lock mechanism
+- `backend.tf` in `terraform/environments/boutique/`
+
+### 3 — VPC, subnets, Cloud NAT
+
+- Custom VPC; private subnet for nodes; secondary ranges for pods/services
+- Cloud Router + Cloud NAT for private node egress
+- Private Google Access enabled
+- Firewall: allow health checks; deny broad ingress
+
+### 4 — GKE cluster
+
+- Regional private cluster; Workload Identity enabled
+- Multi-zone node pool; autoscaling min/max
+- Authorized networks or IAP for admin access
+- `kubectl get-credentials` validation
+
+### 5 — Cloud DNS + NS delegation
+
+- Managed zone for `biroltilki.art` or subdomain strategy
+- A records: `boutique`, `argocd` → static IP (may be created in topic 6)
+- Registrar NS delegation steps (UI detailed)
+- See also [docs/dns.md](../dns.md)
+
+### 6 — Static ingress IP + TLS
+
+- Reserve global static IP (Terraform)
+- GCE Ingress annotations; Google-managed certificates
+- Map DNS A records; wait for cert provisioning (can take 15–60 min)
+- `curl -I` both hostnames
+
+### 7 — GitHub WIF → GCP
+
+- Terraform `wif` module: pool, OIDC provider, attribute mapping
+- GitHub repo settings: allow OIDC, restrict to repo/ref
+- GitHub Actions workflow snippet: `google-github-actions/auth`
+- **No JSON key download** — security notes mandatory
+
+### 8 — Artifact Registry + Binary Authorization
+
+- AR repository; cleanup/retention policy
+- Attestor + policy (require attestation from CI SA)
+- Test push from local or dry-run workflow
+
+### 9 — Argo CD bootstrap
+
+- Install via Helm or `gitops/bootstrap/argocd/`
+- Ingress for `argocd.boutique.biroltilki.art`
+- Admin password retrieval; disable or SSO note for prod
+- App-of-apps `root-app.yaml`
+
+### 10 — ESO + Secret Manager
+
+- Install ESO operator; `ClusterSecretStore` for GCP SM
+- Workload Identity binding for ESO K8s SA
+- Sample `ExternalSecret` (no real secret values in Git)
+
+### 11 — Kyverno policies
+
+- Install Kyverno; apply five minimum policies
+- Policy tests in `tests/kyverno/`
+- Verify deny on `:latest` test manifest
+
+### 12 — Online Boutique deploy
+
+- Helm chart in `gitops/apps/boutique/`
+- Digest-only `values-images.yaml`
+- Argo Application; **manual sync**
+- Binary Auth + Kyverno must pass
+
+### 13 — Observability + SLOs
+
+- OTel Collector → Cloud Trace + Managed Prometheus
+- Grafana dashboards; datasource config
+- Cloud Monitoring SLOs: browse 99.9%, checkout 99.95%
+- Burn-rate alert policies with runbook URLs
+
+### 14 — PagerDuty integration
+
+- Notification channel in Cloud Monitoring
+- Attach to alert policies; test incident
+- See [docs/sre/oncall/test-alerts.md](../sre/oncall/test-alerts.md)
+
+### 15 — Cloud Armor on storefront
+
+- Security policy; OWASP CRS baseline
+- Attach to boutique Ingress backend service
+- Test blocked vs allowed request (optional curl with bad pattern)
+
+### 16 — Smoke validation + SRE artifacts
+
+- Full checklist: HTTPS, policies, SLOs live, runbooks exist, alert test, dig/curl
+- Verify production bar from project description
+- Link game day and on-call next steps
+
+---
+
+## Standard Validation Commands
+
+Use across topics 5, 6, 12, 15, 16:
+
+```bash
+dig +short boutique.biroltilki.art
+dig +short argocd.boutique.biroltilki.art
+curl -I https://boutique.biroltilki.art
+curl -I https://argocd.boutique.biroltilki.art
+```
+
+**Expected:** DNS returns static IP; HTTPS returns `HTTP/2 200` or `302` without TLS errors.
+
+---
+
+## After Bootstrap — Next Steps
+
+Document at end of topic 16 and in [docs/bootstrap.md](../bootstrap.md):
+
+| Step | Action | Guide |
+|------|--------|-------|
+| First deploy | CI digest PR → review → manual Argo sync | `12-boutique-deploy.md`, CONTRIBUTING.md |
+| First game day | Execute scenario 01 (bad deploy rollback) | [docs/sre/game-days/01-bad-deploy-rollback.md](../sre/game-days/01-bad-deploy-rollback.md) |
+| On-call setup | Configure rotation, read playbook | [docs/sre/oncall/README.md](../sre/oncall/README.md) |
+| Alert test | Fire test policy → PagerDuty | [docs/sre/oncall/test-alerts.md](../sre/oncall/test-alerts.md) |
+| Teardown (when done) | Destroy order, zero orphans | [docs/teardown.md](../teardown.md) |
+
+---
+
+## Related Documentation Links
+
+Every setup index and topic 16 must link:
+
+- [docs/bootstrap.md](../bootstrap.md) — executive bootstrap summary
+- [docs/dns.md](../dns.md) — DNS delegation reference
+- [docs/teardown.md](../teardown.md) — safe decommission
+
+---
+
+## Domain and Environment Defaults
+
+- Example domain: `biroltilki.art`
+- Subdomains: `boutique.biroltilki.art`, `argocd.boutique.biroltilki.art`
+- Single environment: `boutique` (Terraform env + namespace)
+- Manifest changes: PR-only; Argo CD manual sync
+
+---
+
+## Deliverable Checklist
+
+When generating or updating setup guides:
+
+- [ ] One file per topic in `docs/setup/`
+- [ ] `docs/setup/README.md` index updated
+- [ ] All 11 required sections per topic (including Next step)
+- [ ] UI steps documented where console/GitHub/PagerDuty/registrar required
+- [ ] Commands copy-pasteable; expected output shown
+- [ ] Validation includes dig/curl where hostnames are involved
+- [ ] No secrets or real credentials in examples
+- [ ] Cross-links to runbooks, architecture, and teardown docs

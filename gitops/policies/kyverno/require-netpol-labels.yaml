@@ -1,0 +1,25 @@
+# Kyverno ClusterPolicy scaffold — require NetworkPolicy compliance labels (Phase 4).
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: require-netpol-labels
+  annotations:
+    policies.kyverno.io/title: Require NetworkPolicy Labels
+    policies.kyverno.io/category: Security
+    policies.kyverno.io/severity: medium
+spec:
+  validationFailureAction: Enforce
+  background: true
+  rules:
+    - name: require-netpol-tier-label
+      match:
+        any:
+          - resources:
+              kinds:
+                - Namespace
+      validate:
+        message: "Namespaces must include label network-policy.biroltilki.art/tier."
+        pattern:
+          metadata:
+            labels:
+              network-policy.biroltilki.art/tier: "?*"

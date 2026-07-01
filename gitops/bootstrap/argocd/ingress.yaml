@@ -1,0 +1,28 @@
+# Placeholder Ingress for Argo CD UI — completed in Phase 4.
+# Requires: GKE Ingress controller, static IP, managed certificate (Terraform or GKE).
+# Host: https://argocd.boutique.biroltilki.art
+# TLS: Google-managed certificate; backend: argocd-server Service (HTTPS or SSL passthrough per install).
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: argocd-server
+  namespace: argocd
+  annotations:
+    kubernetes.io/ingress.global-static-ip-name: boutique-ingress-ip
+    networking.gke.io/managed-certificates: boutique-managed-cert
+  labels:
+    app.kubernetes.io/name: argocd-server
+    app.kubernetes.io/part-of: argocd
+spec:
+  ingressClassName: gce
+  rules:
+    - host: argocd.boutique.biroltilki.art
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: argocd-server
+                port:
+                  number: 443

@@ -1,0 +1,397 @@
+---
+description: Implementation plan and phase roadmap for boutique-gke-sre — plan before code
+alwaysApply: false
+---
+
+# Project Planning Prompt
+
+Act as **Senior Platform Architect and Technical Project Manager**. Create or follow a complete implementation plan for **boutique-gke-sre** BEFORE writing code.
+
+**Project:** Production SRE reference — Online Boutique on one private GKE cluster (GCP project `boutique-gke`), domain `biroltilki.art`.
+
+**Session rule:** One phase per AI session → validate → user commits → next phase.
+
+**Critical gate:** Do **not** skip Phase 4 before treating the cluster as production-ready.
+
+---
+
+## Executive Summary
+
+### Project Goals
+
+- Build a **production-grade SRE reference** for Online Boutique on a single private GKE cluster
+- Demonstrate enterprise patterns: GitOps, DevSecOps, observability, incident readiness
+- Serve as a **portfolio artifact** and **learning reference** for Platform/SRE engineering
+
+### Business Value
+
+- **Reliability:** SLOs, error budgets, burn-rate alerts, runbooks — operable, not theoretical
+- **Security baseline:** Digest-only images, cosign, Binary Authorization, Kyverno, ESO, NetworkPolicy
+- **Operational maturity:** On-call integration, game days, postmortems, validated teardown
+- **Reproducibility:** Terraform + GitOps — full bootstrap and teardown documented
+
+---
+
+## Requirements
+
+### Functional
+
+| Area | Requirement |
+|------|-------------|
+| Workload | Deploy Google Online Boutique (all microservices) |
+| GitOps | Argo CD with manual sync; Helm-based deploy |
+| CI/CD | GitHub Actions + WIF; build, scan, sign, digest promotion |
+| Ingress | HTTPS on `boutique.biroltilki.art` and `argocd.boutique.biroltilki.art` |
+| Observability | OTel, Managed Prometheus, Grafana, Cloud Monitoring SLOs |
+| On-call | PagerDuty routing with runbook links on every alert |
+| Lifecycle | Bootstrap guide, teardown scripts, backup/restore validation |
+
+### Non-Functional
+
+| Area | Target |
+|------|--------|
+| Availability SLO | Browse 99.9%; checkout 99.95% |
+| Latency SLO | Browse p95 <500ms; checkout p95 <1s |
+| Images | Digest-only; no `:latest` in cluster |
+| Artifacts | cosign signed + attested; Binary Authorization enforced |
+| Policy | Kyverno + NetworkPolicy; ESO-only secrets |
+| Incidents | SEV1–SEV4 taxonomy; blameless postmortem template |
+
+---
+
+## Scope
+
+### In Scope
+
+- Single GCP project (`boutique-gke`), one regional private GKE cluster
+- Full SRE + DevSecOps baseline on that cluster
+- Terraform (GCS remote state), DNS, TLS, Cloud Armor
+- Bootstrap and teardown documentation + scripts
+
+### Out of Scope
+
+- Multiple GCP projects or clusters
+- Multi-region active-active
+- Service mesh as default
+- FinOps-first optimization
+- Custom application code changes
+- Built-in status page product
+
+---
+
+## Planning Inputs
+
+### Assumptions
+
+- GCP project `boutique-gke` exists with billing enabled
+- Domain `biroltilki.art` DNS manageable (Cloud DNS or delegatable)
+- GitHub repo `boutique-gke-sre` with Actions enabled
+- PagerDuty account available for integration testing
+- User executes all provisioning; AI generates artifacts and guides
+
+### Constraints
+
+- One cluster only; no environment-per-cluster split
+- WIF for CI — no long-lived GCP service account keys in GitHub
+- Prod-style manual Argo CD sync (even for single cluster)
+- Private GKE nodes; ingress via load balancer + static IP
+
+### Risks
+
+| Risk | Mitigation |
+|------|------------|
+| Cost overrun from always-on cluster | Teardown guide; right-size node pools; autoscaling |
+| Binary Auth blocks valid deploys | Document attestor setup; test in Phase 3 before Phase 5 |
+| Kyverno blocks Boutique manifests | Policy test in CI; fix Helm values before sync |
+| Alert fatigue | Multi-window burn rates; SEV-based routing |
+| State lock / Terraform drift | GCS backend; `terraform plan` in CI |
+
+### Dependencies
+
+- GCP APIs enabled (Container, Compute, DNS, IAM, AR, Secret Manager, Monitoring)
+- GitHub OIDC → WIF pool/provider configured (Phase 3)
+- Argo CD + platform policies before app deploy (Phase 4 → 5)
+- Observability stack before SLO definition (Phase 6 before Phase 7)
+
+### Technology Stack
+
+- **GCP:** GKE, Cloud DNS, Cloud Monitoring, Cloud Logging, Managed Prometheus, Cloud Trace, Artifact Registry, WIF, Secret Manager, Binary Authorization, Workload Identity, Cloud Armor, GKE Backup/Velero
+- **K8s platform:** Argo CD, Helm, Kyverno, ESO, NetworkPolicy, Prometheus/Grafana, OTel, PDBs, HPA, Cluster Autoscaler
+- **Tooling:** Terraform, GitHub Actions, Trivy, cosign, PagerDuty, pre-commit, gitleaks
+
+### High-Level Architecture
+
+Git is the source of truth. GitHub Actions authenticates via WIF, builds container images, scans with Trivy, signs with cosign, and pushes digests to Artifact Registry. Manifests in Git reference digests only. Argo CD syncs to a single private GKE cluster where Kyverno, ESO, and NetworkPolicy enforce policy at admission and runtime. Traffic enters via HTTPS (Google-managed TLS, Cloud Armor, static IP) to Online Boutique and Argo CD. OpenTelemetry exports traces and metrics to Cloud Trace and Managed Prometheus; Grafana provides dashboards. Cloud Monitoring SLOs and burn-rate alerts route to PagerDuty with runbook links.
+
+### Repository Organization
+
+```
+boutique-gke-sre/
+├── terraform/           # VPC, GKE, DNS, IAM, WIF, monitoring resources
+├── gitops/              # Argo CD apps, Helm values, Kyverno, ESO, NetworkPolicy
+├── observability/       # OTel, Prometheus, Grafana, SLO/alert definitions
+├── docs/
+│   ├── setup/           # Topic guides (bootstrap → teardown)
+│   └── sre/             # Runbooks, SLOs, on-call, game-days, postmortems
+├── scripts/             # Game-day, validation, backup helpers (not setup replacements)
+└── .github/workflows/   # CI: WIF, Trivy, cosign, terraform validate
+```
+
+---
+
+## Milestones and Deliverables
+
+| Milestone | Deliverables |
+|-----------|--------------|
+| **Infrastructure** | Terraform modules, GCS state, VPC, private GKE, DNS records, static IP, TLS certs |
+| **GitOps & deploy** | Argo CD bootstrap, Application/Helm chart, Boutique running on HTTPS |
+| **DevSecOps** | WIF CI pipeline, Trivy gates, cosign sign/attest, Binary Authorization, Kyverno policies |
+| **SRE** | SLO catalog, burn alerts, uptime checks, PagerDuty, runbooks, game day #1 executed |
+| **Lifecycle** | Bootstrap doc, teardown scripts, backup/restore runbooks validated |
+
+---
+
+## Implementation Phases
+
+### Phase 1: Repo Scaffold + Terraform Foundation — **S**
+
+**Objectives:** Establish repo structure, tooling, and Terraform base with remote state.
+
+**Tasks:**
+- [ ] Create folder tree (`terraform/`, `gitops/`, `observability/`, `docs/`, `scripts/`, `.github/`)
+- [ ] Add README, `.pre-commit-config.yaml`, Makefile, CODEOWNERS
+- [ ] Terraform: GCS backend config, provider, project APIs module
+- [ ] Terraform: VPC, subnets, Cloud NAT, firewall baseline
+- [ ] `docs/setup/01-gcp-project-apis.md`, `02-terraform-remote-state.md`, `03-vpc-nat.md`
+
+**Expected outputs:** Repo scaffold; `terraform/` with VPC module; GCS state bucket; `make validate` passes
+
+**Validation:**
+```bash
+make validate
+cd terraform && terraform init && terraform plan
+gcloud storage ls gs://boutique-gke-tfstate  # or configured bucket name
+```
+
+---
+
+### Phase 2: GKE Cluster + DNS + Ingress + TLS — **L**
+
+**Objectives:** Provision private GKE cluster with ingress foundation and public HTTPS hostnames.
+
+**Tasks:**
+- [ ] Terraform: private GKE cluster, node pools, Workload Identity
+- [ ] Static IP, Cloud DNS zones/records for `boutique` and `argocd` subdomains
+- [ ] Ingress controller (GCE), Google-managed TLS certs
+- [ ] Cloud Armor deferred to topic 15 (Phase 7)
+- [ ] `docs/setup/04-gke-cluster.md`, `05-cloud-dns.md`, `06-ingress-tls.md`
+
+**Expected outputs:** Running private GKE cluster; DNS A records; TLS cert resources provisioned
+
+**Validation:**
+```bash
+gcloud container clusters get-credentials boutique-gke --region <region>
+kubectl get nodes
+dig boutique.biroltilki.art +short
+dig argocd.boutique.biroltilki.art +short
+```
+
+---
+
+### Phase 3: WIF, Artifact Registry, CI Pipeline Skeleton — **M**
+
+**Objectives:** Secure CI authentication and image supply chain foundation.
+
+**Tasks:**
+- [ ] Terraform: Artifact Registry repo, WIF pool/provider, CI service account + IAM
+- [ ] GitHub Actions: WIF auth, build workflow, Trivy scan (fail critical/high)
+- [ ] Push to AR with digest recorded; cosign sign + attest workflow
+- [ ] Binary Authorization policy (document attestor requirements)
+- [ ] `docs/setup/07-github-wif.md`, `08-artifact-registry-binary-auth.md`
+
+**Expected outputs:** AR repository; WIF working from GitHub Actions; sample image signed in AR
+
+**Validation:**
+```bash
+gcloud artifacts docker images list <region>-docker.pkg.dev/boutique-gke/...
+# GitHub Actions run: build + Trivy + push + cosign green
+cosign verify --certificate-oidc-issuer https://token.actions.githubusercontent.com <image>
+```
+
+---
+
+### Phase 4: Argo CD + Policies + ESO + NetworkPolicy — **L** ⚠️ REQUIRED GATE
+
+**Objectives:** GitOps control plane and platform security policies before any production workload.
+
+**Tasks:**
+- [ ] Bootstrap Argo CD; expose at `argocd.boutique.biroltilki.art` (HTTPS)
+- [ ] Deploy Kyverno + 5 minimum policies (digest, probes, resources, netpol labels, no plain Secrets)
+- [ ] Deploy External Secrets Operator + Secret Manager integration
+- [ ] Default-deny NetworkPolicy with explicit allow rules
+- [ ] Policy tests in CI (`tests/` or conftest)
+- [ ] `docs/setup/09-argocd-bootstrap.md`, `10-external-secrets.md`, `11-kyverno-policies.md`
+
+**Expected outputs:** Argo CD UI on HTTPS; Kyverno/ESO/NetworkPolicy healthy; policy tests pass
+
+**Validation:**
+```bash
+curl -I https://argocd.boutique.biroltilki.art
+kubectl get pods -n argocd
+kubectl get clusterpolicy
+kubectl apply -f gitops/policies/test/fixtures/bad-latest.yaml  # expect deny
+kubectl get externalsecrets -A
+```
+
+**Gate:** Do not proceed to Phase 5 until Phase 4 validation passes.
+
+---
+
+### Phase 5: Online Boutique Deploy — **M**
+
+**Objectives:** Deploy Online Boutique via GitOps with digest-only images.
+
+**Tasks:**
+- [ ] Helm chart / Argo Application for Online Boutique
+- [ ] All images referenced by digest (updated via CI PR)
+- [ ] Manual Argo CD sync; Binary Authorization allows signed images
+- [ ] PDBs, HPA, probes configured per Kyverno requirements
+- [ ] Smoke test storefront
+- [ ] `docs/setup/05-boutique-deploy.md`
+
+**Expected outputs:** Boutique live at `https://boutique.biroltilki.art`; all pods healthy
+
+**Validation:**
+```bash
+curl -I https://boutique.biroltilki.art
+kubectl get pods -n boutique
+# Browse storefront, add to cart, checkout flow works
+argocd app get boutique --grpc-web
+```
+
+---
+
+### Phase 6: Observability — **L**
+
+**Objectives:** Metrics, traces, dashboards, and Cloud Monitoring SLO foundation.
+
+**Tasks:**
+- [ ] Deploy OTel Collector; export to Cloud Trace + Managed Prometheus
+- [ ] Prometheus + Grafana (dashboards for Boutique services)
+- [ ] Cloud Monitoring: uptime checks, log-based metrics
+- [ ] SLO definitions (browse 99.9%, checkout 99.95%); burn-rate alert policies
+- [ ] Link alerts to runbook URLs in `docs/sre/runbooks/`
+- [ ] `docs/setup/13-observability-slos.md`
+
+**Expected outputs:** Traces in Cloud Trace; Grafana dashboards; SLOs visible in Cloud Monitoring
+
+**Validation:**
+```bash
+kubectl get pods -n observability
+# Cloud Console: SLOs show data; uptime check green
+curl https://boutique.biroltilki.art  # generate trace traffic
+gcloud monitoring slos list
+```
+
+---
+
+### Phase 7: SRE Ops — **M**
+
+**Objectives:** Incident readiness — on-call, runbooks, alert tests, first game day.
+
+**Tasks:**
+- [ ] PagerDuty service + Cloud Monitoring notification channel
+- [ ] Runbooks for each alert policy in `docs/sre/runbooks/`
+- [ ] On-call guide, incident response, SEV definitions, error budget policy
+- [ ] Postmortem template
+- [ ] Game day #1 script (e.g., bad deploy rollback or pod failure)
+- [ ] Execute game day; document results
+- [ ] `docs/setup/14-pagerduty.md`, `15-cloud-armor.md`, `16-smoke-validation.md`
+
+**Expected outputs:** Test alert reaches PagerDuty; runbooks linked; game day report
+
+**Validation:**
+```bash
+# Trigger test alert policy → PagerDuty incident created
+# Game day: execute script, verify rollback/recovery, record timeline
+ls docs/sre/runbooks/
+```
+
+---
+
+### Phase 8: Teardown + Backup/Restore — **M**
+
+**Objectives:** Prove lifecycle completeness — backup, restore, and clean teardown.
+
+**Tasks:**
+- [ ] Velero or GKE Backup configuration + backup runbook
+- [ ] Restore drill (non-production namespace or staged restore)
+- [ ] Teardown Terraform destroy order documented
+- [ ] Teardown script / guide with orphan check
+- [ ] `docs/teardown.md` (Phase 8 teardown + backup)
+
+**Expected outputs:** Backup/restore runbooks validated; teardown leaves zero billing orphans
+
+**Validation:**
+```bash
+# Backup: create backup, verify in GCS/backup storage
+# Restore: restore test workload, verify health
+# Teardown (when ready): terraform destroy; gcloud asset search-all-resources → empty
+```
+
+---
+
+## Success Criteria (Production Bar)
+
+- [ ] `https://boutique.biroltilki.art` and `https://argocd.boutique.biroltilki.art` serve valid HTTPS
+- [ ] All Kyverno policies enforced; no `:latest`; ESO-only secrets pattern
+- [ ] SLOs + burn alerts active; every alert links to a runbook
+- [ ] PagerDuty receives test incident; on-call docs complete
+- [ ] OTel traces visible in Cloud Trace
+- [ ] One game day executed and documented
+- [ ] Teardown guide validated (or dry-run checklist complete)
+- [ ] Bootstrap and backup/restore runbooks validated
+
+---
+
+## Roadmap
+
+### Complexity Summary
+
+| Phase | Focus | Size |
+|-------|-------|------|
+| 1 | Repo + Terraform foundation | S |
+| 2 | GKE + DNS + TLS | L |
+| 3 | WIF + AR + CI | M |
+| 4 | Argo CD + policies (**gate**) | L |
+| 5 | Boutique deploy | M |
+| 6 | Observability + SLOs | L |
+| 7 | SRE ops + game day | M |
+| 8 | Teardown + backup | M |
+
+### Dependency Graph
+
+```
+Phase 1 (scaffold + TF foundation)
+    └── Phase 2 (GKE + DNS + TLS)
+            └── Phase 3 (WIF + AR + CI)
+                    └── Phase 4 (Argo CD + policies) ← REQUIRED GATE
+                            └── Phase 5 (Boutique)
+                                    └── Phase 6 (Observability + SLOs)
+                                            └── Phase 7 (SRE ops + game day)
+                                                    └── Phase 8 (Teardown + backup)
+```
+
+### Incremental Development Rule
+
+1. Complete one phase per session
+2. User validates with documented commands
+3. User commits before next phase
+4. **Never skip Phase 4** before treating cluster as production-ready
+5. Reference `docs/setup/` as implementation source of truth during execution
+
+### Deliverable Location
+
+- Primary roadmap: `docs/implementation/roadmap.md`
+- Phase notes: `docs/implementation/phases/`
+- Setup guides: `docs/setup/`

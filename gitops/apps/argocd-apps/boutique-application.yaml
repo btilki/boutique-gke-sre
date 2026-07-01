@@ -1,0 +1,24 @@
+# Argo CD Application for Online Boutique — enabled in Phase 5.
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: boutique
+  namespace: argocd
+  labels:
+    app.kubernetes.io/part-of: boutique-gke-sre
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/biroltilki/boutique-gke-sre  # set to actual repo URL
+    targetRevision: main
+    path: gitops/apps/boutique
+    helm:
+      valueFiles:
+        - values.yaml
+        - values-images.yaml
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: boutique
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true

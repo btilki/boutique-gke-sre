@@ -1,0 +1,68 @@
+# OpenTelemetry Collector Deployment — boutique-gke-sre
+# Phase 6: apply via GitOps; uncomment and tune before sync.
+#
+# Prerequisites:
+#   - Namespace: observability (or platform)
+#   - ConfigMap from config.yaml mounted at /etc/otelcol/config.yaml
+#   - Workload Identity SA with cloudtrace.agent + monitoring.metricWriter
+
+# apiVersion: v1
+# kind: ServiceAccount
+# metadata:
+#   name: otel-collector
+#   namespace: observability
+#   annotations:
+#     iam.gke.io/gcp-service-account: otel-collector@boutique-gke.iam.gserviceaccount.com
+# ---
+# apiVersion: apps/v1
+# kind: Deployment
+# metadata:
+#   name: otel-collector
+#   namespace: observability
+#   labels:
+#     app.kubernetes.io/name: otel-collector
+#     app.kubernetes.io/component: collector
+# spec:
+#   replicas: 2
+#   selector:
+#     matchLabels:
+#       app.kubernetes.io/name: otel-collector
+#   template:
+#     metadata:
+#       labels:
+#         app.kubernetes.io/name: otel-collector
+#     spec:
+#       serviceAccountName: otel-collector
+#       containers:
+#         - name: otel-collector
+#           image: otel/opentelemetry-collector-contrib@sha256:REPLACE_WITH_DIGEST
+#           args: ["--config=/etc/otelcol/config.yaml"]
+#           ports:
+#             - name: otlp-grpc
+#               containerPort: 4317
+#             - name: otlp-http
+#               containerPort: 4318
+#             - name: health
+#               containerPort: 13133
+#           resources:
+#             requests:
+#               cpu: 100m
+#               memory: 256Mi
+#             limits:
+#               cpu: 500m
+#               memory: 512Mi
+#           livenessProbe:
+#             httpGet:
+#               path: /
+#               port: 13133
+#           readinessProbe:
+#             httpGet:
+#               path: /
+#               port: 13133
+#           volumeMounts:
+#             - name: config
+#               mountPath: /etc/otelcol
+#       volumes:
+#         - name: config
+#           configMap:
+#             name: otel-collector-config

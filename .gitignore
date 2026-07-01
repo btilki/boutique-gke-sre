@@ -1,0 +1,40 @@
+# Terraform
+.terraform/
+**/.terraform/
+*.tfstate
+*.tfstate.*
+*.tfvars
+!*.tfvars.example
+crash.log
+tfplan
+*.tfplan
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Secrets and credentials
+*.json
+!examples/**/*.json
+.env
+.env.*
+credentials/
+*.pem
+*.key
+
+# OS and editors
+.DS_Store
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Tools
+.pre-commit/
+dist/
+build/
+
+# Kubernetes local config (never commit cluster credentials)
+kubeconfig
+kubeconfig.*

@@ -1,0 +1,11 @@
+# Copy to terraform.tfvars and adjust for your project.
+# Never commit terraform.tfvars — it may contain environment-specific values.
+
+project_id  = "boutique-gke"
+region      = "europe-west1"
+environment = "boutique"
+domain      = "biroltilki.art"
+cluster_name = "boutique-gke"
+boutique_hostname = "boutique.biroltilki.art"
+argocd_hostname   = "argocd.boutique.biroltilki.art"
+deletion_protection = false

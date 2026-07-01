@@ -1,0 +1,442 @@
+---
+description: Enterprise repository layout for boutique-gke-sre — terraform, gitops, observability, SRE docs
+alwaysApply: false
+---
+
+# Repository Structure Prompt
+
+Design and maintain an **enterprise-grade repository structure** for **boutique-gke-sre**.
+
+## Project Context
+
+| Dimension | Value |
+|-----------|-------|
+| GCP | Single project `boutique-gke`, one private regional GKE cluster |
+| Deploy | GitOps (Argo CD), Terraform IaC, GitHub Actions + WIF |
+| Focus | SRE: observability, runbooks, game days, teardown |
+| Domain | `biroltilki.art` → `boutique.biroltilki.art`, `argocd.boutique.biroltilki.art` |
+| Environment | Single env (`boutique/`) with room to extend |
+
+## Requirements
+
+- Logical hierarchy, scalable, reusable, **documentation-first**
+- Separate **infrastructure** (Terraform) from **applications** (GitOps) from **platform policies**
+- Support single environment with extension path (e.g. `environments/stage/` later)
+- Include CI/CD, GitOps, security, scripts, SRE docs, examples, diagrams, onboarding
+- **Every directory** gets `README.md` — purpose, inputs, outputs, dependencies, usage
+- **Every Terraform module** documents: purpose, inputs, outputs, dependencies, usage
+
+## Layer Classification
+
+| Layer | Directories | What belongs |
+|-------|-------------|--------------|
+| **Infrastructure** | `terraform/` | VPC, GKE, DNS, IAM, WIF, Cloud Armor, monitoring GCP resources |
+| **Platform** | `gitops/bootstrap/`, `gitops/policies/`, `observability/` | Argo CD, Kyverno, ESO, NetworkPolicy, OTel, Prometheus, Grafana |
+| **Applications** | `gitops/apps/` | Online Boutique Helm chart, Argo Applications, per-service values |
+| **SRE operations** | `docs/sre/`, `scripts/game-days/`, `observability/monitoring/` | Runbooks, SLOs, alerts, game days, on-call |
+| **Cross-cutting** | `.github/`, `tests/`, `scripts/bootstrap|teardown/`, root docs | CI/CD, validation, lifecycle automation, onboarding |
+
+---
+
+## 1. Full Directory Tree
+
+```
+boutique-gke-sre/
+├── .github/
+│   ├── workflows/
+│   │   ├── ci.yml                      # lint, validate, policy tests
+│   │   ├── build-scan-sign.yml         # WIF → build, Trivy, cosign, AR push
+│   │   ├── manifest-digest-pr.yml      # open PR with updated image digests
+│   │   └── terraform-plan.yml          # plan on PR; apply manual/dispatch
+│   ├── ISSUE_TEMPLATE/
+│   │   ├── bug_report.md
+│   │   └── incident_followup.md
+│   ├── PULL_REQUEST_TEMPLATE.md
+│   └── CODEOWNERS
+│
+├── terraform/
+│   ├── modules/
+│   │   ├── networking/                 # VPC, subnets, NAT, firewall
+│   │   ├── gke/                        # private regional cluster, node pools
+│   │   ├── dns/                        # Cloud DNS zone, A records
+│   │   ├── ingress-edge/               # static IP, managed certs (if TF-managed)
+│   │   ├── wif/                        # WIF pool, provider, CI SA bindings
+│   │   ├── artifact-registry/          # AR repo, cleanup policies
+│   │   ├── binary-authorization/       # attestor, policy
+│   │   ├── iam/                        # Workload Identity SAs, bindings
+│   │   ├── armor/                      # Cloud Armor security policy
+│   │   ├── secret-manager/             # secret containers (not values)
+│   │   ├── monitoring/                 # uptime checks, notification channels
+│   │   └── backup/                     # GKE Backup plan / backup bucket
+│   ├── environments/
+│   │   └── boutique/
+│   │       ├── main.tf
+│   │       ├── variables.tf
+│   │       ├── outputs.tf
+│   │       ├── backend.tf                # GCS remote state
+│   │       ├── terraform.tfvars.example
+│   │       └── README.md
+│   └── README.md
+│
+├── gitops/
+│   ├── bootstrap/
+│   │   ├── argocd/
+│   │   │   ├── namespace.yaml
+│   │   │   ├── install/                  # Helm values or kustomize
+│   │   │   ├── ingress.yaml
+│   │   │   └── README.md
+│   │   ├── external-secrets/
+│   │   │   ├── operator/
+│   │   │   ├── cluster-secret-store.yaml
+│   │   │   └── README.md
+│   │   └── root-app.yaml                 # App-of-apps entry point
+│   ├── apps/
+│   │   ├── boutique/
+│   │   │   ├── Chart.yaml
+│   │   │   ├── values.yaml
+│   │   │   ├── values-images.yaml        # digest pins (CI-updated)
+│   │   │   ├── templates/
+│   │   │   └── README.md
+│   │   ├── argocd-apps/
+│   │   │   ├── boutique-application.yaml
+│   │   │   ├── observability-application.yaml
+│   │   │   └── policies-application.yaml
+│   │   └── README.md
+│   ├── policies/
+│   │   ├── kyverno/
+│   │   │   ├── require-digest.yaml
+│   │   │   ├── require-probes.yaml
+│   │   │   ├── require-resources.yaml
+│   │   │   ├── require-netpol-labels.yaml
+│   │   │   ├── block-plain-secrets.yaml
+│   │   │   └── README.md
+│   │   ├── network-policies/
+│   │   │   ├── default-deny.yaml
+│   │   │   ├── boutique-allow.yaml
+│   │   │   └── README.md
+│   │   └── README.md
+│   └── README.md
+│
+├── observability/
+│   ├── otel/
+│   │   ├── collector/
+│   │   │   ├── config.yaml
+│   │   │   └── deployment.yaml
+│   │   └── README.md
+│   ├── prometheus/
+│   │   ├── values.yaml
+│   │   └── README.md
+│   ├── grafana/
+│   │   ├── dashboards/
+│   │   ├── datasources.yaml
+│   │   └── README.md
+│   ├── monitoring/
+│   │   ├── slos/                           # SLO Terraform or YAML
+│   │   ├── alert-policies/
+│   │   ├── uptime-checks/
+│   │   ├── log-based-metrics/
+│   │   └── README.md
+│   └── README.md
+│
+├── docs/
+│   ├── architecture/
+│   │   ├── overview.md
+│   │   └── README.md
+│   ├── adr/
+│   │   ├── 001-single-cluster.md
+│   │   ├── 002-wif-over-sa-keys.md
+│   │   ├── 003-manual-argocd-sync.md
+│   │   └── README.md
+│   ├── setup/
+│   │   ├── README.md                       # ordered index + dependency graph
+│   │   ├── 01-gcp-project-apis.md
+│   │   ├── 02-terraform-remote-state.md
+│   │   ├── 03-vpc-nat.md
+│   │   ├── 04-gke-cluster.md
+│   │   ├── 05-cloud-dns.md
+│   │   ├── 06-ingress-tls.md
+│   │   ├── 07-github-wif.md
+│   │   ├── 08-artifact-registry-binary-auth.md
+│   │   ├── 09-argocd-bootstrap.md
+│   │   ├── 10-external-secrets.md
+│   │   ├── 11-kyverno-policies.md
+│   │   ├── 12-boutique-deploy.md
+│   │   ├── 13-observability-slos.md
+│   │   ├── 14-pagerduty.md
+│   │   ├── 15-cloud-armor.md
+│   │   └── 16-smoke-validation.md
+│   ├── bootstrap.md                        # end-to-end bootstrap summary
+│   ├── dns.md                              # DNS delegation + record reference
+│   ├── teardown.md                         # destroy order + orphan checks
+│   ├── implementation/
+│   │   ├── roadmap.md
+│   │   └── phases/
+│   ├── operations/
+│   │   ├── day-2-ops.md
+│   │   ├── rollback.md
+│   │   └── README.md
+│   ├── security/
+│   │   ├── threat-model.md
+│   │   ├── iam-matrix.md
+│   │   └── README.md
+│   ├── troubleshooting/
+│   │   ├── argocd-sync-failures.md
+│   │   ├── kyverno-denials.md
+│   │   └── README.md
+│   ├── sre/
+│   │   ├── runbooks/
+│   │   │   ├── browse-availability-burn.md
+│   │   │   ├── checkout-latency-burn.md
+│   │   │   ├── bad-deploy-rollback.md
+│   │   │   ├── redis-cart-down.md
+│   │   │   ├── uptime-check-failed.md
+│   │   │   └── README.md
+│   │   ├── slos/
+│   │   │   ├── catalog.md
+│   │   │   └── error-budget-policy.md
+│   │   ├── postmortems/
+│   │   │   └── template.md
+│   │   ├── game-days/
+│   │   │   ├── 01-bad-deploy-rollback.md
+│   │   │   ├── 02-zone-pod-failure.md
+│   │   │   ├── 03-redis-cart-down.md
+│   │   │   └── README.md
+│   │   ├── oncall/
+│   │   │   ├── playbook.md
+│   │   │   └── escalation.md
+│   │   ├── incident-response/
+│   │   │   ├── severity.md
+│   │   │   └── comms.md
+│   │   └── README.md
+│   └── README.md
+│
+├── scripts/
+│   ├── bootstrap/
+│   │   ├── validate-prereqs.sh
+│   │   └── README.md
+│   ├── game-days/
+│   │   ├── inject-pod-failure.sh
+│   │   ├── inject-redis-down.sh
+│   │   └── README.md
+│   ├── teardown/
+│   │   ├── pre-destroy-checklist.sh
+│   │   ├── orphan-resource-scan.sh
+│   │   └── README.md
+│   └── README.md
+│
+├── examples/
+│   ├── external-secret/
+│   ├── kyverno-policy-test/
+│   ├── wif-github-actions-snippet/
+│   └── README.md
+│
+├── tests/
+│   ├── kyverno/
+│   │   ├── require-digest-test.yaml
+│   │   └── ...
+│   ├── terraform/
+│   │   └── validate.tftest.hcl
+│   ├── manifest/
+│   │   └── kubeconform.sh
+│   └── README.md
+│
+├── assets/
+│   └── diagrams/
+│       ├── architecture.mmd
+│       ├── network-flow.mmd
+│       └── deployment-pipeline.mmd
+│
+├── .pre-commit-config.yaml
+├── .gitignore
+├── PROJECT.md
+├── ARCHITECTURE.md
+├── ROADMAP.md
+├── CONTRIBUTING.md
+├── SECURITY.md
+├── Makefile
+└── README.md
+```
+
+---
+
+## 2. Top-Level Directory Explanations
+
+| Directory | Purpose | Does NOT contain |
+|-----------|---------|------------------|
+| **`.github/`** | CI/CD workflows, PR/issue templates, CODEOWNERS for review routing | Application manifests, Terraform state, secrets |
+| **`terraform/`** | GCP infrastructure as code — cluster, network, DNS, IAM, edge, monitoring GCP resources | Kubernetes app manifests, Helm charts |
+| **`gitops/`** | Kubernetes desired state for Argo CD — bootstrap, apps, policies | VPC/GKE provisioning (that's Terraform) |
+| **`observability/`** | In-cluster and GCP monitoring config — OTel, Prometheus, Grafana, SLO/alert definitions | Runbook prose (that's `docs/sre/`) |
+| **`docs/`** | All human-facing documentation — architecture, setup, SRE, operations | Executable infra (no Terraform `.tf` here) |
+| **`scripts/`** | Operational helpers — game-day injection, teardown validation, prereq checks | Setup install scripts replacing `docs/setup/` |
+| **`examples/`** | Minimal reference configs for copy-paste learning | Production deploy paths |
+| **`tests/`** | Automated validation — Kyverno policy tests, manifest schema, Terraform tests | Live cluster integration tests (optional later) |
+| **`assets/`** | Static assets — diagram sources (`.mmd`), exported images | Generated binaries, secrets |
+
+---
+
+## 3. Second-Level Directory Explanations
+
+### `.github/`
+
+| Path | Purpose |
+|------|---------|
+| `workflows/` | GitHub Actions: lint/validate, WIF build+scan+sign, digest PR, Terraform plan |
+| `ISSUE_TEMPLATE/` | Standardized bug and incident follow-up reports |
+| `PULL_REQUEST_TEMPLATE.md` | Checklist: digest change, runbook link, game-day impact |
+| `CODEOWNERS` | Required reviewers per path (terraform, gitops, docs/sre) |
+
+### `terraform/`
+
+| Path | Purpose |
+|------|---------|
+| `modules/` | Reusable Terraform modules — each with `README.md`, `variables.tf`, `outputs.tf` |
+| `environments/boutique/` | Root module wiring for single GCP project + cluster; GCS backend config |
+
+### `gitops/`
+
+| Path | Purpose |
+|------|---------|
+| `bootstrap/` | Cluster foundation installed first — Argo CD, ESO operator, app-of-apps root |
+| `apps/` | Workload definitions — Boutique Helm chart, Argo Application CRs |
+| `policies/` | Admission and runtime policy — Kyverno ClusterPolicies, NetworkPolicies |
+
+### `observability/`
+
+| Path | Purpose |
+|------|---------|
+| `otel/` | OpenTelemetry Collector deploy + export config (Trace, Managed Prometheus) |
+| `prometheus/` | In-cluster Prometheus or agent config (if not fully managed-only) |
+| `grafana/` | Dashboards, datasource provisioning |
+| `monitoring/` | Cloud Monitoring SLOs, alert policies, uptime checks, log-based metrics |
+
+### `docs/`
+
+| Path | Purpose |
+|------|---------|
+| `architecture/` | System design, data flows; canonical `overview.md` |
+| `adr/` | Architecture Decision Records — one file per significant choice |
+| `setup/` | Topic-based setup guides (user-executed, ordered index) |
+| `bootstrap.md` | Single-page bootstrap summary linking setup guides |
+| `dns.md` | DNS delegation, record table, validation commands |
+| `teardown.md` | Destroy order, billing stop, orphan verification |
+| `implementation/` | Phase roadmap and per-phase notes |
+| `operations/` | Day-2 ops, rollback procedures |
+| `security/` | Threat model, IAM matrix, supply chain controls |
+| `troubleshooting/` | Symptom → cause → fix cross-cutting guides |
+| `sre/` | SRE depth — runbooks, SLOs, game days, on-call, incident response |
+
+### `docs/sre/` (SRE operations hub)
+
+| Path | Purpose |
+|------|---------|
+| `runbooks/` | One runbook per alert policy; linked from Cloud Monitoring |
+| `postmortems/` | Blameless template + completed reports |
+| `game-days/` | Scenario scripts, success criteria, inject steps |
+| `oncall/` | Shift handoff, tooling, escalation paths |
+| `incident-response/` | SEV definitions, comms templates |
+
+### `scripts/`
+
+| Path | Purpose |
+|------|---------|
+| `bootstrap/` | Prerequisite validation (APIs, tools, auth) — not a setup replacement |
+| `game-days/` | Chaos/latency/error injection for game day scenarios |
+| `teardown/` | Pre-destroy checklist, orphan resource scan |
+
+### `examples/`, `tests/`, `assets/`
+
+| Path | Purpose |
+|------|---------|
+| `examples/` | Snippets: ExternalSecret, Kyverno test fixture, WIF workflow excerpt |
+| `tests/` | Kyverno CLI tests, kubeconform, Terraform validate tests |
+| `assets/diagrams/` | Mermaid source for architecture, network, deployment pipeline |
+
+---
+
+## 4. Important Files
+
+### Root documentation
+
+| File | Role | Dependencies |
+|------|------|--------------|
+| **`README.md`** | Portfolio front page — overview, quick start, links to `docs/setup/` | All major dirs exist |
+| **`PROJECT.md`** | Project charter — goals, scope, non-goals, stakeholders, production bar | Architecture + roadmap |
+| **`ARCHITECTURE.md`** | Pointer/summary to `docs/architecture/overview.md`; high-level diagram | Architecture rule content |
+| **`ROADMAP.md`** | Pointer to `docs/implementation/roadmap.md`; phase status table | Project planning phases |
+| **`CONTRIBUTING.md`** | PR process, branch strategy, digest promotion, manual Argo sync policy | `.github/` templates |
+| **`SECURITY.md`** | Vulnerability reporting, security contacts, supply chain expectations | cosign, Binary Auth docs |
+| **`Makefile`** | `validate`, `lint`, `test`, `tf-plan`, `kyverno-test` targets | pre-commit, tests/ |
+| **`.pre-commit-config.yaml`** | gitleaks, terraform fmt, yaml lint, kubeconform | Local dev tooling |
+
+### Key workflows (`.github/workflows/`)
+
+| Workflow | Trigger | Purpose |
+|----------|---------|---------|
+| `ci.yml` | PR, push | pre-commit checks, manifest validate, Kyverno policy tests |
+| `build-scan-sign.yml` | push main, dispatch | WIF auth → build/mirror → Trivy → AR push → cosign sign/attest |
+| `manifest-digest-pr.yml` | after image push | Open PR updating `gitops/apps/boutique/values-images.yaml` digests |
+| `terraform-plan.yml` | PR touching `terraform/` | `terraform plan` comment; no auto-apply to prod |
+
+### Key Terraform modules (`terraform/modules/`)
+
+| Module | Inputs (examples) | Outputs (examples) |
+|--------|-------------------|---------------------|
+| `networking` | `project_id`, `region`, CIDR ranges | `vpc_id`, `subnet_ids`, `router_nat` |
+| `gke` | `cluster_name`, `node_pools`, `master_ipv4_cidr` | `cluster_endpoint`, `ca_certificate` |
+| `dns` | `domain`, `static_ip` | `name_servers`, `record_fqdns` |
+| `wif` | `github_org`, `github_repo`, `sa_roles` | `provider_name`, `sa_email` |
+| `armor` | `policy_rules`, `rate_limits` | `security_policy_id` |
+| `monitoring` | `uptime_urls`, `notification_channel_ids` | `uptime_check_ids`, `alert_policy_ids` |
+
+Each module `README.md` must include: **Purpose**, **Inputs**, **Outputs**, **Dependencies**, **Usage** example.
+
+### Key GitOps paths
+
+| File | Role |
+|------|------|
+| `gitops/bootstrap/root-app.yaml` | App-of-apps — Argo CD watches this to sync all platform + app Applications |
+| `gitops/apps/argocd-apps/boutique-application.yaml` | Argo Application CR — source: Helm chart, destination: `boutique` namespace |
+| `gitops/apps/boutique/values-images.yaml` | CI-managed digest pins — only file CI auto-updates via PR |
+| `gitops/policies/kyverno/require-digest.yaml` | Enforces image `@sha256:` — pairs with Binary Authorization |
+
+### Key bootstrap / lifecycle docs
+
+| File | Role |
+|------|------|
+| `docs/setup/README.md` | Ordered index, time estimates, dependency graph between topics |
+| `docs/bootstrap.md` | Executive bootstrap path — links to setup guides 01–07 |
+| `docs/dns.md` | Registrar NS delegation → Cloud DNS; A records for boutique + argocd |
+| `docs/teardown.md` | Destroy order: GitOps apps → cluster → LB/IP → DNS → Terraform |
+| `docs/sre/runbooks/*.md` | Linked from every Cloud Monitoring alert policy |
+
+---
+
+## 5. Extension Path (Single → Multi-Environment)
+
+Current: `terraform/environments/boutique/` and single Helm values.
+
+Future without restructure:
+
+```
+terraform/environments/
+├── boutique/          # current
+└── staging/           # optional later — same modules, different tfvars
+
+gitops/apps/boutique/
+├── values.yaml        # shared defaults
+└── values-boutique.yaml / values-staging.yaml   # env overlays via Argo Application
+```
+
+Namespaces remain the isolation boundary until a second cluster is justified (see ADR `001-single-cluster.md`).
+
+---
+
+## Output Checklist (When Generating Structure)
+
+1. Emit **full directory tree** (not abbreviated)
+2. Explain **every top-level and second-level** directory
+3. Explain **important files** — root docs, workflows, key modules, bootstrap docs
+4. Tag each area: **infrastructure** | **platform** | **applications** | **SRE operations** | **cross-cutting**
+5. Every new directory gets `README.md` before merge
+6. Do not collapse `terraform/`, `gitops/`, and `observability/` into a single `manifests/` folder

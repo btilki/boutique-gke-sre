@@ -1,0 +1,27 @@
+# Intentionally invalid pod for Kyverno deny testing — uses :latest tag.
+apiVersion: v1
+kind: Pod
+metadata:
+  name: bad-latest-pod
+  namespace: boutique
+  labels:
+    app: policy-test
+spec:
+  containers:
+    - name: frontend
+      image: us-docker.pkg.dev/boutique-gke/apps/frontend:latest
+      resources:
+        requests:
+          cpu: 50m
+          memory: 64Mi
+        limits:
+          cpu: 200m
+          memory: 128Mi
+      livenessProbe:
+        httpGet:
+          path: /
+          port: 8080
+      readinessProbe:
+        httpGet:
+          path: /
+          port: 8080

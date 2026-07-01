@@ -1,0 +1,7 @@
+# Image digest pins — updated by CI (manifest-digest-pr workflow).
+# Do not use :latest tags; Kyverno require-digest policy enforces digest-only images.
+# Example (Phase 5):
+# images:
+#   frontend:
+#     repository: europe-west1-docker.pkg.dev/boutique-gke/boutique/frontend
+#     digest: sha256:0000000000000000000000000000000000000000000000000000000000000000

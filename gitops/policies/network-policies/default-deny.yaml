@@ -1,0 +1,13 @@
+# Default-deny NetworkPolicy scaffold — applied per namespace in Phase 4.
+# Uncomment and set namespace when enabling.
+#
+# apiVersion: networking.k8s.io/v1
+# kind: NetworkPolicy
+# metadata:
+#   name: default-deny-all
+#   namespace: boutique
+# spec:
+#   podSelector: {}
+#   policyTypes:
+#     - Ingress
+#     - Egress

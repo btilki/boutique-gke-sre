@@ -1,0 +1,7 @@
+# Default reviewers
+* @biroltilki
+
+/terraform/ @biroltilki
+/gitops/ @biroltilki
+/docs/sre/ @biroltilki
+/observability/ @biroltilki

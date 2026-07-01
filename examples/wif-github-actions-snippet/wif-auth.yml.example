@@ -21,9 +21,11 @@ jobs:
         with:
           workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}
           service_account: ${{ secrets.GCP_SERVICE_ACCOUNT }}
-          # project_id: boutique-gke  # optional explicit project
+
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
 
       - name: Verify identity
-        run: gcloud auth list && gcloud config set project boutique-gke
+        run: gcloud auth print-access-token > /dev/null && gcloud config get-value account
 
       # Subsequent steps: docker push to Artifact Registry, cosign sign, etc.

@@ -119,13 +119,17 @@ jobs:
           workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}
           service_account: ${{ secrets.GCP_SERVICE_ACCOUNT }}
 
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+
       - name: Set gcloud project
         run: gcloud config set project boutique-gke
 
       - name: Verify caller identity
         env:
-          EXPECTED_SA: github-ci@boutique-gke.iam.gserviceaccount.com
+          EXPECTED_SA: ${{ secrets.GCP_SERVICE_ACCOUNT }}
         run: |
+          gcloud auth print-access-token > /dev/null
           ACTIVE="$(gcloud config get-value account 2>/dev/null)"
           echo "Active account: ${ACTIVE}"
           test "${ACTIVE}" = "${EXPECTED_SA}"
@@ -185,10 +189,10 @@ Apply complete!
 Successfully authenticated to Google Cloud
 ```
 
-**`gcloud config get-value account` in workflow:**
+**Verify caller identity step:**
 
 ```
-github-ci@boutique-gke.iam.gserviceaccount.com
+Active account: github-ci@boutique-gke.iam.gserviceaccount.com
 ```
 
 ## Validation

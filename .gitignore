@@ -38,3 +38,6 @@ build/
 # Kubernetes local config (never commit cluster credentials)
 kubeconfig
 kubeconfig.*
+
+# Cursor
+.cursor/

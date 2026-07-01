@@ -9,3 +9,7 @@ cluster_name = "boutique-gke"
 boutique_hostname = "boutique.biroltilki.art"
 argocd_hostname   = "argocd.boutique.biroltilki.art"
 deletion_protection = false
+
+# Phase 3 — GitHub WIF (topic 07)
+github_org  = "YOUR_GITHUB_ORG"   # e.g. "btilki"
+github_repo = "boutique-gke-sre"

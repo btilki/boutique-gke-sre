@@ -45,3 +45,14 @@ variable "deletion_protection" {
   type        = bool
   default     = false
 }
+
+variable "github_org" {
+  description = "GitHub organization or username that owns boutique-gke-sre (WIF trust scope)."
+  type        = string
+}
+
+variable "github_repo" {
+  description = "GitHub repository name trusted by WIF."
+  type        = string
+  default     = "boutique-gke-sre"
+}

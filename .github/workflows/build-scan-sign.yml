@@ -1,7 +1,5 @@
-# Build, scan, sign — placeholder (Phase 3)
-
-# WIF → build/mirror → Trivy → Artifact Registry → cosign sign + attest
-# Enable when terraform/modules/wif and artifact-registry are applied.
+# Build, scan, sign — WIF authentication (topic 07).
+# Full pipeline (Trivy → Artifact Registry → cosign) lands in topic 08.
 
 name: build-scan-sign
 
@@ -17,7 +15,23 @@ permissions:
   id-token: write
 
 jobs:
-  placeholder:
+  verify-wif:
+    name: Verify GCP authentication (WIF)
     runs-on: ubuntu-latest
     steps:
-      - run: echo "Phase 3 — implement WIF auth and image pipeline per docs/setup/07-github-wif.md"
+      - uses: actions/checkout@v4
+
+      - name: Authenticate to Google Cloud (WIF)
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ secrets.GCP_SERVICE_ACCOUNT }}
+
+      - name: Set gcloud project
+        run: gcloud config set project boutique-gke
+
+      - name: Verify caller identity
+        run: |
+          gcloud auth list --filter=status:ACTIVE --format='value(account)'
+          ACTIVE="$(gcloud auth list --filter=status:ACTIVE --format='value(account)')"
+          test "$ACTIVE" = "github-ci@boutique-gke.iam.gserviceaccount.com"

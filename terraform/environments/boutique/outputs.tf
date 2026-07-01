@@ -66,3 +66,15 @@ output "argocd_url" {
   description = "Argo CD URL."
   value       = "https://${var.argocd_hostname}"
 }
+
+# --- Phase 3 (available after topic 07 WIF apply) ---
+
+output "wif_provider_name" {
+  description = "GitHub OIDC WIF provider — GitHub secret GCP_WORKLOAD_IDENTITY_PROVIDER."
+  value       = try(module.wif.wif_provider_name, null)
+}
+
+output "ci_service_account_email" {
+  description = "GitHub Actions CI service account email — GitHub secret GCP_SERVICE_ACCOUNT."
+  value       = try(module.wif.ci_service_account_email, null)
+}

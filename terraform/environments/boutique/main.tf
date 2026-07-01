@@ -1,5 +1,6 @@
 # Phase 1: APIs + networking
 # Phase 2: GKE + static IP + DNS
+# Phase 3: GitHub WIF (CI authentication)
 
 module "project_apis" {
   source = "../../modules/project-apis"
@@ -56,4 +57,14 @@ module "dns" {
   argocd_hostname   = var.argocd_hostname
 
   depends_on = [module.ingress_edge]
+}
+
+module "wif" {
+  source = "../../modules/wif"
+
+  project_id  = var.project_id
+  github_org  = var.github_org
+  github_repo = var.github_repo
+
+  depends_on = [time_sleep.wait_for_apis]
 }

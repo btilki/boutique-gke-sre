@@ -14,7 +14,7 @@ The CI pipeline builds images, pushes to Artifact Registry, runs Trivy, signs wi
 - Tools: Terraform ≥ 1.5, `gcloud`, GitHub admin access on `boutique-gke-sre`
 - Access: `roles/iam.workloadIdentityPoolAdmin`, `roles/iam.serviceAccountAdmin` on `boutique-gke`
 - APIs enabled: `iam.googleapis.com`, `iamcredentials.googleapis.com`, `sts.googleapis.com` (from topic 01)
-- Terraform module: `terraform/modules/wif` (scaffold — apply when implemented in `main.tf`)
+- Terraform module: `terraform/modules/wif` (wired in `terraform/environments/boutique/main.tf`)
 
 ## Commands
 
@@ -36,31 +36,34 @@ Configure OIDC and workflow permissions **before** or immediately after Terrafor
 
 **Org-level note:** If your organization blocks write permissions, an org owner must allow **Read and write** for this repository under **Organization Settings** → **Actions** → **General** → **Workflow permissions**.
 
-### Part B — Terraform WIF module (scaffold — not yet wired)
+### Part B — Terraform WIF module
 
-> **Scaffold gate:** `terraform/modules/wif/` has no `.tf` files and `module "wif"` is **not** in `terraform/environments/boutique/main.tf`. Skip Part B until Phase 3 implementation lands. Complete **Part A** (GitHub settings) now; return for Terraform apply after the WIF module is implemented and wired.
+Set `github_org` in `terraform/environments/boutique/terraform.tfvars` (copy from `terraform.tfvars.example` if needed):
 
-The `wif` module is scaffolded at `terraform/modules/wif/`. When added to `terraform/environments/boutique/main.tf`, configure variables (example):
+```hcl
+github_org  = "btilki"   # your GitHub username or org
+github_repo = "boutique-gke-sre"
+```
+
+The `wif` module at `terraform/modules/wif/` is wired in `terraform/environments/boutique/main.tf`:
 
 ```hcl
 module "wif" {
   source = "../../modules/wif"
 
   project_id  = var.project_id
-  github_org  = var.github_org   # e.g. "biroltilki"
-  github_repo = "boutique-gke-sre"
-  ar_location = "europe-west1"
-  ar_repo_id  = "boutique"       # after artifact-registry module exists
+  github_org  = var.github_org
+  github_repo = var.github_repo
 }
 ```
 
-Plan and apply:
+Plan and apply (target WIF only if you prefer a smaller blast radius):
 
 ```bash
 gcloud config set project boutique-gke
 cd terraform/environments/boutique
 terraform init
-terraform plan -out=tfplan
+terraform plan -target=module.wif -out=tfplan
 terraform apply tfplan
 ```
 

@@ -31,7 +31,9 @@ jobs:
         run: gcloud config set project boutique-gke
 
       - name: Verify caller identity
+        env:
+          EXPECTED_SA: github-ci@boutique-gke.iam.gserviceaccount.com
         run: |
-          gcloud auth list --filter=status:ACTIVE --format='value(account)'
-          ACTIVE="$(gcloud auth list --filter=status:ACTIVE --format='value(account)')"
-          test "$ACTIVE" = "github-ci@boutique-gke.iam.gserviceaccount.com"
+          ACTIVE="$(gcloud config get-value account 2>/dev/null)"
+          echo "Active account: ${ACTIVE}"
+          test "${ACTIVE}" = "${EXPECTED_SA}"

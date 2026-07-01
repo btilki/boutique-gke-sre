@@ -123,7 +123,12 @@ jobs:
         run: gcloud config set project boutique-gke
 
       - name: Verify caller identity
-        run: gcloud auth list --filter=status:ACTIVE --format='value(account)'
+        env:
+          EXPECTED_SA: github-ci@boutique-gke.iam.gserviceaccount.com
+        run: |
+          ACTIVE="$(gcloud config get-value account 2>/dev/null)"
+          echo "Active account: ${ACTIVE}"
+          test "${ACTIVE}" = "${EXPECTED_SA}"
 ```
 
 ### Part E — Validate WIF binding (local gcloud — optional dry run)
@@ -180,11 +185,10 @@ Apply complete!
 Successfully authenticated to Google Cloud
 ```
 
-**`gcloud auth list` in workflow:**
+**`gcloud config get-value account` in workflow:**
 
 ```
-ACTIVE  ACCOUNT
-*       github-ci@boutique-gke.iam.gserviceaccount.com
+github-ci@boutique-gke.iam.gserviceaccount.com
 ```
 
 ## Validation

@@ -1,7 +1,7 @@
 # boutique-gke-sre — common operational targets
 # Phase 1: validate, lint, terraform fmt/plan
 
-.PHONY: help validate lint fmt tf-init tf-plan tf-fmt kyverno-test kubeconform-test install-hooks
+.PHONY: help validate lint fmt tf-init tf-plan tf-fmt kyverno-test kubeconform-test boutique-kyverno-test digest-only-test install-hooks
 
 TF_ENV ?= terraform/environments/boutique
 
@@ -12,8 +12,10 @@ help:
 	@echo "  make fmt          - Format Terraform and YAML"
 	@echo "  make tf-init      - terraform init in $(TF_ENV)"
 	@echo "  make tf-plan      - terraform plan in $(TF_ENV)"
-	@echo "  make kyverno-test     - Run Kyverno policy tests (requires kyverno CLI)"
-	@echo "  make kubeconform-test - Validate gitops/ YAML schemas (requires kubeconform)"
+	@echo "  make kyverno-test         - Run Kyverno policy tests (requires kyverno CLI)"
+	@echo "  make boutique-kyverno-test - Apply policies to rendered Boutique chart"
+	@echo "  make digest-only-test     - Fail if values-images.yaml uses floating tags"
+	@echo "  make kubeconform-test     - Validate gitops/ YAML schemas (requires kubeconform + helm)"
 	@echo "  make install-hooks - Install pre-commit hooks (needs pre-commit + terraform-docs)"
 
 install-hooks:
@@ -49,6 +51,12 @@ tf-fmt:
 kyverno-test:
 	@command -v kyverno >/dev/null || { echo "Install kyverno CLI: https://kyverno.io/docs/kyverno-cli/"; exit 1; }
 	kyverno test tests/kyverno/
+
+boutique-kyverno-test:
+	./tests/manifest/boutique-kyverno.sh
+
+digest-only-test:
+	./tests/manifest/digest-only.sh
 
 kubeconform-test:
 	./tests/manifest/kubeconform.sh

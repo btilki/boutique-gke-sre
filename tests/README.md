@@ -15,7 +15,9 @@ tests/
 ├── terraform/
 │   └── validate.tftest.hcl        # Terraform test framework scaffold
 ├── manifest/
-│   └── kubeconform.sh             # Schema validation for gitops/ YAML
+│   ├── kubeconform.sh             # Schema validation for gitops/ YAML + rendered Boutique chart
+│   ├── boutique-kyverno.sh        # Kyverno apply against rendered Boutique chart
+│   └── digest-only.sh             # Fail if values-images.yaml uses floating tags
 └── README.md
 ```
 
@@ -30,11 +32,13 @@ kyverno test tests/kyverno/
 
 # Manifest schemas
 ./tests/manifest/kubeconform.sh
+./tests/manifest/digest-only.sh
+./tests/manifest/boutique-kyverno.sh
 ```
 
 ## CI integration
 
-- `.github/workflows/ci.yml` — `validate` (Terraform), `kyverno` (policy tests), `manifests` (kubeconform)
+- `.github/workflows/ci.yml` — `validate` (Terraform), `kyverno` (policy tests + Boutique chart apply), `manifests` (digest-only, kubeconform)
 - `.github/workflows/terraform-plan.yml` — plan on PR
 
 ## Phase coverage

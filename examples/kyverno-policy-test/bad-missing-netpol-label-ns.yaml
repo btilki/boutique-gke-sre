@@ -1,0 +1,5 @@
+# Intentionally invalid Namespace — missing network-policy.biroltilki.art/tier label.
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: bad-missing-netpol-label-ns

@@ -100,6 +100,10 @@ helm template boutique gitops/apps/boutique/ \
 
 # Full schema validation (requires kubeconform + helm)
 ./tests/manifest/kubeconform.sh
+
+# Digest-only pins and Kyverno admission (requires kyverno CLI)
+./tests/manifest/digest-only.sh
+./tests/manifest/boutique-kyverno.sh
 ```
 
 Dry-run against the API server to catch Kyverno denials early:

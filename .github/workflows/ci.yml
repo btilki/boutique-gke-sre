@@ -52,6 +52,14 @@ jobs:
       - name: Run Kyverno policy tests
         run: kyverno test tests/kyverno/ --require-tests
 
+      - name: Set up Helm
+        uses: azure/setup-helm@v4
+        with:
+          version: ${{ env.HELM_VERSION }}
+
+      - name: Validate Boutique chart against Kyverno policies
+        run: ./tests/manifest/boutique-kyverno.sh
+
   manifests:
     runs-on: ubuntu-latest
     steps:
@@ -69,6 +77,9 @@ jobs:
           tar -xzf kubeconform.tar.gz kubeconform
           sudo mv kubeconform /usr/local/bin/
           kubeconform -v
+
+      - name: Validate digest-only image values
+        run: ./tests/manifest/digest-only.sh
 
       - name: Validate GitOps manifest schemas
         run: ./tests/manifest/kubeconform.sh

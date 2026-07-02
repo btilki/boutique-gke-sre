@@ -8,11 +8,15 @@ policies:
   - ../../gitops/policies/kyverno/require-digest.yaml
   - ../../gitops/policies/kyverno/require-probes.yaml
   - ../../gitops/policies/kyverno/require-resources.yaml
+  - ../../gitops/policies/kyverno/require-netpol-labels.yaml
+  - ../../gitops/policies/kyverno/block-plain-secrets.yaml
 resources:
   - ../../examples/kyverno-policy-test/bad-latest-pod.yaml
   - ../../examples/kyverno-policy-test/bad-missing-probes-pod.yaml
   - ../../examples/kyverno-policy-test/bad-missing-resources-pod.yaml
   - ../../examples/kyverno-policy-test/bad-init-latest-pod.yaml
+  - ../../examples/kyverno-policy-test/bad-missing-netpol-label-ns.yaml
+  - ../../examples/kyverno-policy-test/bad-plain-secret.yaml
 results:
   # require-digest — app container :latest
   - policy: require-digest
@@ -53,4 +57,18 @@ results:
     resources:
       - bad-missing-resources-pod
     kind: Pod
+    result: fail
+  # require-netpol-labels
+  - policy: require-netpol-labels
+    rule: require-netpol-tier-label
+    resources:
+      - bad-missing-netpol-label-ns
+    kind: Namespace
+    result: fail
+  # block-plain-secrets
+  - policy: block-plain-secrets
+    rule: block-secret-create
+    resources:
+      - bad-plain-secret
+    kind: Secret
     result: fail

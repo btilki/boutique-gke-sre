@@ -96,6 +96,8 @@ jobs:
           exit-code: "1"
           ignore-unfixed: true
           trivyignores: .github/trivy/upstream-mirror.trivyignore
+
+      - name: Push to Artifact Registry
         id: push
         run: |
           set -euo pipefail

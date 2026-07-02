@@ -81,3 +81,17 @@ variable "deletion_protection" {
   type        = bool
   default     = false
 }
+
+variable "binary_authorization_evaluation_mode" {
+  description = "GKE Binary Authorization evaluation mode. Use PROJECT_SINGLETON_POLICY_ENFORCE when Binary Authorization policy is active."
+  type        = string
+  default     = "DISABLED"
+
+  validation {
+    condition = contains([
+      "DISABLED",
+      "PROJECT_SINGLETON_POLICY_ENFORCE",
+    ], var.binary_authorization_evaluation_mode)
+    error_message = "binary_authorization_evaluation_mode must be DISABLED or PROJECT_SINGLETON_POLICY_ENFORCE."
+  }
+}

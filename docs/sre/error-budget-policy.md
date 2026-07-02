@@ -27,20 +27,20 @@ Cloud Monitoring SLO → remaining budget %
 
 ## Thresholds and responses
 
-| Remaining budget | Engineering response |
-|------------------|---------------------|
-| **> 50%** | Normal velocity — deploys with standard PR + manual Argo sync |
-| **25–50%** | Cautious — reduce risky changes; extra reviewer for infra |
-| **< 25%** | **Freeze** non-critical deploys; reliability work prioritized |
-| **0% (exhausted)** | **SEV2** — halt feature releases; reliability sprint |
+| Remaining budget   | Engineering response                                          |
+| ------------------ | ------------------------------------------------------------- |
+| **> 50%**          | Normal velocity — deploys with standard PR + manual Argo sync |
+| **25–50%**         | Cautious — reduce risky changes; extra reviewer for infra     |
+| **< 25%**          | **Freeze** non-critical deploys; reliability work prioritized |
+| **0% (exhausted)** | **SEV2** — halt feature releases; reliability sprint          |
 
 ## Roles
 
-| Role | Responsibility |
-|------|----------------|
-| **On-call** | Declares current budget band during incidents; pages per severity |
-| **Platform lead** | Approves exceptions to freeze; owns reliability sprint scope |
-| **All engineers** | No discretionary production sync during freeze without approval |
+| Role              | Responsibility                                                    |
+| ----------------- | ----------------------------------------------------------------- |
+| **On-call**       | Declares current budget band during incidents; pages per severity |
+| **Platform lead** | Approves exceptions to freeze; owns reliability sprint scope      |
+| **All engineers** | No discretionary production sync during freeze without approval   |
 
 ## Communication template
 
@@ -73,10 +73,10 @@ Full incident template: [incident-response/comms.md](incident-response/comms.md)
 
 ## Troubleshooting
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| Budget shows N/A | Insufficient SLI data | Wait for SLO window; check metrics |
-| Disagreement on freeze | Ambiguous band | Platform lead decision documented |
+| Symptom                | Cause                 | Fix                                |
+| ---------------------- | --------------------- | ---------------------------------- |
+| Budget shows N/A       | Insufficient SLI data | Wait for SLO window; check metrics |
+| Disagreement on freeze | Ambiguous band        | Platform lead decision documented  |
 
 ## Common mistakes
 

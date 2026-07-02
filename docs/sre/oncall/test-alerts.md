@@ -40,10 +40,10 @@ Synthetic alert or uptime check exercises the same channel path as production bu
 
 ## Troubleshooting
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| No incident | Integration key wrong | Re-create PD notification channel |
-| Delay > 5 min | Aggregation window | Lower alignment period for test only |
+| Symptom       | Cause                 | Fix                                  |
+| ------------- | --------------------- | ------------------------------------ |
+| No incident   | Integration key wrong | Re-create PD notification channel    |
+| Delay > 5 min | Aggregation window    | Lower alignment period for test only |
 
 ## Common mistakes
 

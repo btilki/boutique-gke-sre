@@ -17,12 +17,12 @@ If you discover a security issue, please report it responsibly. Do not open publ
 
 ## Supply chain
 
-| Control | Tool |
-|---------|------|
-| Image scan | Trivy (fail critical/high) |
-| Sign + attest | cosign |
-| Deploy gate | Binary Authorization |
-| Admission | Kyverno |
+| Control       | Tool                       |
+| ------------- | -------------------------- |
+| Image scan    | Trivy (fail critical/high) |
+| Sign + attest | cosign                     |
+| Deploy gate   | Binary Authorization       |
+| Admission     | Kyverno                    |
 
 ## IAM
 

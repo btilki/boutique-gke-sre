@@ -30,13 +30,13 @@ On-call responds to Cloud Monitoring → PagerDuty pages. Runbooks in `docs/sre/
 
 ## Tooling
 
-| Tool | Use |
-|------|-----|
-| PagerDuty | Acknowledge, escalate, resolve |
-| Cloud Monitoring | Alert detail, SLO dashboards |
-| Argo CD | Deploy state, manual sync |
-| `kubectl` | Pod logs, events, rollbacks |
-| GitHub | Revert PRs, digest history |
+| Tool             | Use                            |
+| ---------------- | ------------------------------ |
+| PagerDuty        | Acknowledge, escalate, resolve |
+| Cloud Monitoring | Alert detail, SLO dashboards   |
+| Argo CD          | Deploy state, manual sync      |
+| `kubectl`        | Pod logs, events, rollbacks    |
+| GitHub           | Revert PRs, digest history     |
 
 ## Escalation
 
@@ -52,10 +52,10 @@ curl -I https://boutique.biroltilki.art
 
 ## Troubleshooting
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
+| Symptom              | Cause                        | Fix                                                 |
+| -------------------- | ---------------------------- | --------------------------------------------------- |
 | Cannot reach cluster | VPN/bastion or creds expired | Refresh `gcloud container clusters get-credentials` |
-| PD app silent | Notification rules | [test-alerts.md](test-alerts.md) |
+| PD app silent        | Notification rules           | [test-alerts.md](test-alerts.md)                    |
 
 ## Common mistakes
 

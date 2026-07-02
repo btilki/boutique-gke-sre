@@ -2,16 +2,16 @@
 
 Implementation status for **boutique-gke-sre**. Detail: [docs/implementation/roadmap.md](docs/implementation/roadmap.md).
 
-| Phase | Focus | Size | Status |
-|-------|-------|------|--------|
-| **1** | Repo scaffold + Terraform foundation | S | 🔄 In progress |
-| **2** | GKE + DNS + ingress + TLS | L | ⬜ |
-| **3** | WIF + Artifact Registry + CI | M | ⬜ |
-| **4** | Argo CD + policies + ESO + NetworkPolicy (**gate**) | L | ⬜ |
-| **5** | Online Boutique deploy | M | ⬜ |
-| **6** | Observability + SLOs | L | ⬜ |
-| **7** | SRE ops + game day | M | ⬜ |
-| **8** | Teardown + backup/restore | M | ⬜ |
+| Phase | Focus                                               | Size | Status         |
+| ----- | --------------------------------------------------- | ---- | -------------- |
+| **1** | Repo scaffold + Terraform foundation                | S    | 🔄 In progress |
+| **2** | GKE + DNS + ingress + TLS                           | L    | ⬜             |
+| **3** | WIF + Artifact Registry + CI                        | M    | ⬜             |
+| **4** | Argo CD + policies + ESO + NetworkPolicy (**gate**) | L    | ⬜             |
+| **5** | Online Boutique deploy                              | M    | ⬜             |
+| **6** | Observability + SLOs                                | L    | ⬜             |
+| **7** | SRE ops + game day                                  | M    | ⬜             |
+| **8** | Teardown + backup/restore                           | M    | ⬜             |
 
 ## Dependency graph
 

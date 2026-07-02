@@ -8,12 +8,12 @@ Define SLIs and targets in Cloud Monitoring aligned with [docs/sre/slos/catalog.
 
 ## Planned artifacts
 
-| File | SLO |
-|------|-----|
-| `browse-availability.yaml` | Browse availability 99.9% |
-| `browse-latency.yaml` | Browse p95 < 500ms |
+| File                         | SLO                          |
+| ---------------------------- | ---------------------------- |
+| `browse-availability.yaml`   | Browse availability 99.9%    |
+| `browse-latency.yaml`        | Browse p95 < 500ms           |
 | `checkout-availability.yaml` | Checkout availability 99.95% |
-| `checkout-latency.yaml` | Checkout p95 < 1000ms |
+| `checkout-latency.yaml`      | Checkout p95 < 1000ms        |
 
 ## Implementation options
 

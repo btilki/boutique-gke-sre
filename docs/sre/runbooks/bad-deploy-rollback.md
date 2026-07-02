@@ -1,7 +1,7 @@
 # Runbook: bad deploy rollback
 
-**Alert policy:** `bad-deploy-rollback` (deploy failure / error-rate spike)  
-**Severity:** SEV2–SEV3  
+**Alert policy:** `bad-deploy-rollback` (deploy failure / error-rate spike)
+**Severity:** SEV2–SEV3
 **Architecture:** [Deployment flow §7](../../architecture/overview.md#7-deployment-flow)
 
 ## Purpose

@@ -8,19 +8,19 @@ Bootstrap the GitOps control plane and secret integration layer. Everything unde
 
 ## Inputs
 
-| Input | Description |
-|-------|-------------|
-| GKE cluster | Private regional cluster from Phase 2 |
-| Git repository | This repo as Argo CD source |
-| Terraform outputs | DNS, static IPs, IAM for ESO |
+| Input             | Description                           |
+| ----------------- | ------------------------------------- |
+| GKE cluster       | Private regional cluster from Phase 2 |
+| Git repository    | This repo as Argo CD source           |
+| Terraform outputs | DNS, static IPs, IAM for ESO          |
 
 ## Outputs
 
-| Output | Description |
-|--------|-------------|
-| Argo CD | `argocd/` — namespace, Ingress, Helm install |
-| ESO | `external-secrets/` — operator + ClusterSecretStore |
-| Root app | `root-app.yaml` — app-of-apps Application CR |
+| Output   | Description                                         |
+| -------- | --------------------------------------------------- |
+| Argo CD  | `argocd/` — namespace, Ingress, Helm install        |
+| ESO      | `external-secrets/` — operator + ClusterSecretStore |
+| Root app | `root-app.yaml` — app-of-apps Application CR        |
 
 ## Dependencies
 

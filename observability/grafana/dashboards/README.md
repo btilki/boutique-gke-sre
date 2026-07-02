@@ -8,11 +8,11 @@ Version-controlled Grafana dashboards synced via ConfigMap sidecar or GitOps.
 
 ## Planned dashboards
 
-| Dashboard | Focus |
-|-----------|-------|
+| Dashboard                      | Focus                                            |
+| ------------------------------ | ------------------------------------------------ |
 | `boutique-golden-signals.json` | Latency, traffic, errors, saturation per service |
-| `slo-overview.json` | Browse/checkout SLO burn and error budget |
-| `ingress-edge.json` | HTTPS edge, Cloud Armor, LB health |
+| `slo-overview.json`            | Browse/checkout SLO burn and error budget        |
+| `ingress-edge.json`            | HTTPS edge, Cloud Armor, LB health               |
 
 ## Conventions
 

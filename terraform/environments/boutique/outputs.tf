@@ -78,3 +78,18 @@ output "ci_service_account_email" {
   description = "GitHub Actions CI service account email — GitHub secret GCP_SERVICE_ACCOUNT."
   value       = try(module.wif.ci_service_account_email, null)
 }
+
+output "artifact_registry_repository" {
+  description = "Artifact Registry Docker repository path (Phase 3)."
+  value       = try(module.artifact_registry.repository_url, null)
+}
+
+output "binary_authorization_attestor" {
+  description = "Binary Authorization cosign attestor name (Phase 3)."
+  value       = try(module.binary_authorization[0].attestor_name, null)
+}
+
+output "binary_authorization_enforcement_mode" {
+  description = "Binary Authorization cluster enforcement mode (Phase 3)."
+  value       = try(module.binary_authorization[0].enforcement_mode, null)
+}

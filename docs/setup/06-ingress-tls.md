@@ -80,8 +80,8 @@ kubectl describe managedcertificate boutique-managed-cert -n argocd
 Update `gitops/bootstrap/argocd/ingress.yaml` so the `metadata.annotations` block includes:
 
 ```yaml
-    kubernetes.io/ingress.global-static-ip-name: boutique-ingress-ip
-    networking.gke.io/managed-certificates: boutique-managed-cert
+kubernetes.io/ingress.global-static-ip-name: boutique-ingress-ip
+networking.gke.io/managed-certificates: boutique-managed-cert
 ```
 
 Full reference manifest (commit after uncommenting/setting annotations):
@@ -117,13 +117,13 @@ Do **not** apply the Ingress until Argo CD is installed (topic 09). This topic p
 
 ### 5. How GCE Ingress and ManagedCertificate work together
 
-| Component | Role |
-|-----------|------|
-| `google_compute_global_address.ingress` (Terraform) | Reserves IPv4 address `boutique-ingress-ip` |
-| `kubernetes.io/ingress.global-static-ip-name` | Tells GKE Ingress controller to bind that named global address |
-| `ManagedCertificate` CR | Requests Google-managed TLS cert for listed domains |
-| `networking.gke.io/managed-certificates` | Links Ingress to certificate resource name in the same namespace |
-| Cloud DNS A records | Must point both hostnames at the static IP before cert becomes `Active` |
+| Component                                           | Role                                                                    |
+| --------------------------------------------------- | ----------------------------------------------------------------------- |
+| `google_compute_global_address.ingress` (Terraform) | Reserves IPv4 address `boutique-ingress-ip`                             |
+| `kubernetes.io/ingress.global-static-ip-name`       | Tells GKE Ingress controller to bind that named global address          |
+| `ManagedCertificate` CR                             | Requests Google-managed TLS cert for listed domains                     |
+| `networking.gke.io/managed-certificates`            | Links Ingress to certificate resource name in the same namespace        |
+| Cloud DNS A records                                 | Must point both hostnames at the static IP before cert becomes `Active` |
 
 Certificate provisioning flow:
 
@@ -220,14 +220,14 @@ Expected after topic 09 and cert Active:
 
 ## Common problems
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| ManagedCertificate `FailedNotVisible` | DNS not pointing to LB IP | Re-check topic 05; wait for DNS propagation |
-| Certificate stuck `Provisioning` > 60 min | Ingress not created or wrong static IP name | Confirm annotation `boutique-ingress-ip` matches Terraform `address_name`; apply Ingress in topic 09 |
-| `404` or default backend | Ingress host rule mismatch | Ensure `spec.rules[].host` matches cert domain exactly |
-| Wrong IP on LB | Typo in static IP annotation | `gcloud compute addresses list --global --project=boutique-gke` |
-| Cert in wrong namespace | ManagedCertificate not co-located with Ingress | Create CR in same namespace as Ingress (`argocd`) |
-| `curl` TLS error before topic 09 | No Ingress/backend yet | Expected — complete Argo CD bootstrap first |
+| Symptom                                   | Cause                                          | Fix                                                                                                  |
+| ----------------------------------------- | ---------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
+| ManagedCertificate `FailedNotVisible`     | DNS not pointing to LB IP                      | Re-check topic 05; wait for DNS propagation                                                          |
+| Certificate stuck `Provisioning` > 60 min | Ingress not created or wrong static IP name    | Confirm annotation `boutique-ingress-ip` matches Terraform `address_name`; apply Ingress in topic 09 |
+| `404` or default backend                  | Ingress host rule mismatch                     | Ensure `spec.rules[].host` matches cert domain exactly                                               |
+| Wrong IP on LB                            | Typo in static IP annotation                   | `gcloud compute addresses list --global --project=boutique-gke`                                      |
+| Cert in wrong namespace                   | ManagedCertificate not co-located with Ingress | Create CR in same namespace as Ingress (`argocd`)                                                    |
+| `curl` TLS error before topic 09          | No Ingress/backend yet                         | Expected — complete Argo CD bootstrap first                                                          |
 
 ## Recovery
 

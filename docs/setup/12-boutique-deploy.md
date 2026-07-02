@@ -136,14 +136,14 @@ kubectl get policyreport -n boutique
 
 ## Common problems
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| Sync failed — Kyverno denied | Missing probes, resources, or digest | Fix Helm templates or values; re-run dry-run |
-| `ImagePullBackOff` | Wrong digest or missing AR permission | Verify digest in AR; check node SA has `artifactregistry.reader` |
-| Binary Authorization blocked | Image not signed / attestor mismatch | Re-run CI sign+attest; verify policy in topic 08 |
-| `OutOfSync` loop | Helm hooks or ignored differences | Check `argocd app diff`; add ignoreDifferences if intentional |
-| 502 / connection timeout on URL | Ingress or managed cert not ready | Check `ManagedCertificate` status; verify DNS |
-| Cart/checkout errors | NetworkPolicy too restrictive | Confirm `boutique-allow.yaml` applied; check pod labels |
+| Symptom                         | Cause                                 | Fix                                                              |
+| ------------------------------- | ------------------------------------- | ---------------------------------------------------------------- |
+| Sync failed — Kyverno denied    | Missing probes, resources, or digest  | Fix Helm templates or values; re-run dry-run                     |
+| `ImagePullBackOff`              | Wrong digest or missing AR permission | Verify digest in AR; check node SA has `artifactregistry.reader` |
+| Binary Authorization blocked    | Image not signed / attestor mismatch  | Re-run CI sign+attest; verify policy in topic 08                 |
+| `OutOfSync` loop                | Helm hooks or ignored differences     | Check `argocd app diff`; add ignoreDifferences if intentional    |
+| 502 / connection timeout on URL | Ingress or managed cert not ready     | Check `ManagedCertificate` status; verify DNS                    |
+| Cart/checkout errors            | NetworkPolicy too restrictive         | Confirm `boutique-allow.yaml` applied; check pod labels          |
 
 ## Recovery
 

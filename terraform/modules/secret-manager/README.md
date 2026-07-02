@@ -8,14 +8,14 @@ Creates **Secret Manager secret resources** (containers only — values are popu
 
 ## Inputs
 
-| Name | Description | Type | Default |
-|------|-------------|------|---------|
-| _TBD_ | _To be defined in `variables.tf`_ | _TBD_ | _TBD_ |
+| Name  | Description                       | Type  | Default |
+| ----- | --------------------------------- | ----- | ------- |
+| _TBD_ | _To be defined in `variables.tf`_ | _TBD_ | _TBD_   |
 
 ## Outputs
 
-| Name | Description |
-|------|-------------|
+| Name  | Description                     |
+| ----- | ------------------------------- |
 | _TBD_ | _To be defined in `outputs.tf`_ |
 
 ## Dependencies

@@ -8,12 +8,12 @@ GCP-native monitoring artifacts that drive PagerDuty and error-budget policy. Co
 
 ## Layout
 
-| Directory | Contents |
-|-----------|----------|
-| `slos/` | Cloud Monitoring SLO definitions (browse, checkout) |
-| `alert-policies/` | Burn-rate and operational alert policies |
-| `uptime-checks/` | HTTPS checks for storefront and Argo CD |
-| `log-based-metrics/` | Custom SLI metrics from Cloud Logging |
+| Directory            | Contents                                            |
+| -------------------- | --------------------------------------------------- |
+| `slos/`              | Cloud Monitoring SLO definitions (browse, checkout) |
+| `alert-policies/`    | Burn-rate and operational alert policies            |
+| `uptime-checks/`     | HTTPS checks for storefront and Argo CD             |
+| `log-based-metrics/` | Custom SLI metrics from Cloud Logging               |
 
 ## Dependencies
 

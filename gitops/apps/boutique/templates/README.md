@@ -8,15 +8,15 @@ Hold Deployment, Service, Ingress, and supporting templates for all Online Bouti
 
 ## Inputs
 
-| Input | Description |
-|-------|-------------|
-| `../values.yaml` | Replicas, resources, probes, ingress host |
+| Input                   | Description                                 |
+| ----------------------- | ------------------------------------------- |
+| `../values.yaml`        | Replicas, resources, probes, ingress host   |
 | `../values-images.yaml` | Digest-pinned image references (CI-updated) |
 
 ## Outputs
 
-| Output | Description |
-|--------|-------------|
+| Output             | Description                                             |
+| ------------------ | ------------------------------------------------------- |
 | Rendered manifests | Deployments, Services, Ingress for `boutique` namespace |
 
 ## Dependencies

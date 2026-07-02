@@ -8,8 +8,8 @@ Scrape ServiceMonitors/PodMonitors from the boutique namespace and platform comp
 
 ## Layout
 
-| Path | Purpose |
-|------|---------|
+| Path          | Purpose                                 |
+| ------------- | --------------------------------------- |
 | `values.yaml` | Helm values for `kube-prometheus-stack` |
 
 ## Dependencies

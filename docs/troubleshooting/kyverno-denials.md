@@ -41,12 +41,12 @@ Expected: bad example fails; production manifests pass.
 
 ## Troubleshooting
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| `:latest` rejected | require-digest | Pin `@sha256:...` in values-images.yaml |
-| Missing probes | require-probes | Add liveness/readiness HTTP probes |
-| Plain Secret | block-plain-secrets | Use ExternalSecret pattern |
-| NetPol label missing | require-netpol-labels | Add compliance label |
+| Symptom              | Cause                 | Fix                                     |
+| -------------------- | --------------------- | --------------------------------------- |
+| `:latest` rejected   | require-digest        | Pin `@sha256:...` in values-images.yaml |
+| Missing probes       | require-probes        | Add liveness/readiness HTTP probes      |
+| Plain Secret         | block-plain-secrets   | Use ExternalSecret pattern              |
+| NetPol label missing | require-netpol-labels | Add compliance label                    |
 
 ## Common mistakes
 

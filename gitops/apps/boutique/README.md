@@ -8,18 +8,18 @@ Deploy all Online Boutique microservices with digest-pinned images, probes, reso
 
 ## Inputs
 
-| Input | Description |
-|-------|-------------|
-| `values.yaml` | Application configuration (Phase 5) |
-| `values-images.yaml` | Image digests updated by CI |
-| `templates/` | Helm templates for workloads |
+| Input                | Description                         |
+| -------------------- | ----------------------------------- |
+| `values.yaml`        | Application configuration (Phase 5) |
+| `values-images.yaml` | Image digests updated by CI         |
+| `templates/`         | Helm templates for workloads        |
 
 ## Outputs
 
-| Output | Description |
-|--------|-------------|
+| Output                         | Description                                       |
+| ------------------------------ | ------------------------------------------------- |
 | `boutique` namespace workloads | Frontend, cart, checkout, and supporting services |
-| Ingress | Public storefront on `boutique.biroltilki.art` |
+| Ingress                        | Public storefront on `boutique.biroltilki.art`    |
 
 ## Dependencies
 

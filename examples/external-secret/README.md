@@ -14,8 +14,8 @@ Demonstrate the ESO-only secrets pattern enforced by Kyverno (`block-plain-secre
 
 ## Files
 
-| File | Purpose |
-|------|---------|
+| File                         | Purpose                                       |
+| ---------------------------- | --------------------------------------------- |
 | `sample-externalsecret.yaml` | ExternalSecret referencing Secret Manager key |
 
 ## Validation

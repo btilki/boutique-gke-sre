@@ -41,11 +41,11 @@ Alternatively: **GCP Console → Network services → Load balancing → [boutiq
 
 **GCP Console → Network security → Cloud Armor → Create policy**
 
-| Field | Value |
-|-------|-------|
-| Name | `boutique-owasp-crs` |
-| Policy type | Backend security policy |
-| Default rule action | Allow |
+| Field               | Value                   |
+| ------------------- | ----------------------- |
+| Name                | `boutique-owasp-crs`    |
+| Policy type         | Backend security policy |
+| Default rule action | Allow                   |
 
 Click **Create policy**.
 
@@ -53,31 +53,31 @@ Click **Create policy**.
 
 Inside policy `boutique-owasp-crs` → **Rules** → **Add rule**
 
-| Field | Value |
-|-------|-------|
-| Description | `OWASP CRS 3.3 baseline` |
-| Priority | `1000` |
-| Match | **Advanced rule** → **Preconfigured expression** |
-| Expression | `evaluatePreconfiguredExpr('xss-stable')` |
+| Field       | Value                                            |
+| ----------- | ------------------------------------------------ |
+| Description | `OWASP CRS 3.3 baseline`                         |
+| Priority    | `1000`                                           |
+| Match       | **Advanced rule** → **Preconfigured expression** |
+| Expression  | `evaluatePreconfiguredExpr('xss-stable')`        |
 
 Add additional CRS rules (recommended baseline):
 
-| Priority | Preconfigured expression | Purpose |
-|----------|-------------------------|---------|
-| 1000 | `evaluatePreconfiguredExpr('xss-stable')` | Cross-site scripting |
-| 1001 | `evaluatePreconfiguredExpr('sqli-stable')` | SQL injection |
-| 1002 | `evaluatePreconfiguredExpr('lfi-stable')` | Local file inclusion |
-| 1003 | `evaluatePreconfiguredExpr('rfi-stable')` | Remote file inclusion |
-| 1004 | `evaluatePreconfiguredExpr('rce-stable')` | Remote code execution |
+| Priority | Preconfigured expression                   | Purpose               |
+| -------- | ------------------------------------------ | --------------------- |
+| 1000     | `evaluatePreconfiguredExpr('xss-stable')`  | Cross-site scripting  |
+| 1001     | `evaluatePreconfiguredExpr('sqli-stable')` | SQL injection         |
+| 1002     | `evaluatePreconfiguredExpr('lfi-stable')`  | Local file inclusion  |
+| 1003     | `evaluatePreconfiguredExpr('rfi-stable')`  | Remote file inclusion |
+| 1004     | `evaluatePreconfiguredExpr('rce-stable')`  | Remote code execution |
 
 Set each rule action to **Deny (403)**.
 
 Optional rate limiting rule (priority 2000):
 
-| Field | Value |
-|-------|-------|
-| Match | `true` (all requests) |
-| Action | Rate-based ban |
+| Field     | Value                             |
+| --------- | --------------------------------- |
+| Match     | `true` (all requests)             |
+| Action    | Rate-based ban                    |
 | Threshold | e.g. 100 requests per 60 s per IP |
 
 ### 4. Create policy via gcloud (alternative)
@@ -172,14 +172,14 @@ gcloud compute security-policies describe boutique-owasp-crs \
 
 ## Common problems
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| All requests 403 | Default deny or overly broad rule | Add default allow rule at max priority (2147483647) |
-| Policy not enforcing | Wrong backend service | Re-identify LB backend from Ingress status |
-| Legitimate traffic blocked | CRS false positive | Tune rule sensitivity; add preview mode first |
-| No logs | Logging not enabled | Enable Cloud Armor logging on policy |
-| `backend-services update` fails | Regional vs global mismatch | Add `--global` for external HTTP(S) LB |
-| Storefront 502 after attach | Backend health check failing | Check pod health; unrelated to Armor if probes fail |
+| Symptom                         | Cause                             | Fix                                                 |
+| ------------------------------- | --------------------------------- | --------------------------------------------------- |
+| All requests 403                | Default deny or overly broad rule | Add default allow rule at max priority (2147483647) |
+| Policy not enforcing            | Wrong backend service             | Re-identify LB backend from Ingress status          |
+| Legitimate traffic blocked      | CRS false positive                | Tune rule sensitivity; add preview mode first       |
+| No logs                         | Logging not enabled               | Enable Cloud Armor logging on policy                |
+| `backend-services update` fails | Regional vs global mismatch       | Add `--global` for external HTTP(S) LB              |
+| Storefront 502 after attach     | Backend health check failing      | Check pod health; unrelated to Armor if probes fail |
 
 ## Recovery
 

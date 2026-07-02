@@ -35,15 +35,15 @@ flowchart TB
   P6 --> P8[Phase 8: Backup + teardown validated]
 ```
 
-| Stage | Setup topics | Implementation phase |
-|-------|--------------|----------------------|
-| Foundation | 01–03 | 1 |
-| Cluster + edge | 04–06 | 2 |
-| Supply chain | 07–08 | 3 |
-| Platform **gate** | 09–11 | 4 |
-| Application | 12 | 5 |
-| SRE | 13–16 | 6–7 |
-| Lifecycle | teardown + backup | 8 |
+| Stage             | Setup topics      | Implementation phase |
+| ----------------- | ----------------- | -------------------- |
+| Foundation        | 01–03             | 1                    |
+| Cluster + edge    | 04–06             | 2                    |
+| Supply chain      | 07–08             | 3                    |
+| Platform **gate** | 09–11             | 4                    |
+| Application       | 12                | 5                    |
+| SRE               | 13–16             | 6–7                  |
+| Lifecycle         | teardown + backup | 8                    |
 
 **Critical:** Do not skip topics 09–11 (Argo CD, ESO, Kyverno) before treating the cluster as production-ready.
 
@@ -85,11 +85,11 @@ Expected: DNS returns static IP; HTTPS returns `HTTP/2 200` or `302` without TLS
 
 ## Troubleshooting
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| Stuck on Phase 1 | State bucket or APIs | [01](setup/01-gcp-project-apis.md), [02](setup/02-terraform-remote-state.md) |
-| TLS never provisions | DNS not delegated | [dns.md](dns.md), [05](setup/05-cloud-dns.md) |
-| Deploy blocked | Skipped Phase 4 gate | Complete [09–11](setup/09-argocd-bootstrap.md) |
+| Symptom              | Cause                | Fix                                                                          |
+| -------------------- | -------------------- | ---------------------------------------------------------------------------- |
+| Stuck on Phase 1     | State bucket or APIs | [01](setup/01-gcp-project-apis.md), [02](setup/02-terraform-remote-state.md) |
+| TLS never provisions | DNS not delegated    | [dns.md](dns.md), [05](setup/05-cloud-dns.md)                                |
+| Deploy blocked       | Skipped Phase 4 gate | Complete [09–11](setup/09-argocd-bootstrap.md)                               |
 
 ## Common mistakes
 

@@ -46,11 +46,11 @@ flowchart LR
 
 ## Technology stack
 
-| Layer | Technologies |
-|-------|--------------|
+| Layer          | Technologies                                                                                                                                                                               |
+| -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | **GCP-native** | GKE, Cloud DNS, Cloud Monitoring, Cloud Logging, Managed Prometheus, Cloud Trace, Artifact Registry, WIF, Secret Manager, Binary Authorization, Workload Identity, Cloud Armor, GKE Backup |
-| **Kubernetes** | Argo CD, Helm, Kyverno, ESO, NetworkPolicy, Prometheus, Grafana, OpenTelemetry, HPA, PDBs, Cluster Autoscaler |
-| **Platform** | Terraform, GitHub Actions, Trivy, cosign, PagerDuty, pre-commit, gitleaks |
+| **Kubernetes** | Argo CD, Helm, Kyverno, ESO, NetworkPolicy, Prometheus, Grafana, OpenTelemetry, HPA, PDBs, Cluster Autoscaler                                                                              |
+| **Platform**   | Terraform, GitHub Actions, Trivy, cosign, PagerDuty, pre-commit, gitleaks                                                                                                                  |
 
 ## Repository structure
 
@@ -99,18 +99,18 @@ curl -I https://argocd.boutique.biroltilki.art
 
 Bootstrap provisions GCP infrastructure, the private cluster, GitOps control plane, policies, application, observability, and on-call integration. You execute each topic guide; the repository holds Terraform, manifests, and documentation.
 
-→ Full guide: [docs/bootstrap.md](docs/bootstrap.md)  
+→ Full guide: [docs/bootstrap.md](docs/bootstrap.md)
 → Ordered setup index: [docs/setup/README.md](docs/setup/README.md)
 
 ## Configuration
 
-| Area | Location | Notes |
-|------|----------|-------|
-| Terraform vars | `terraform/environments/boutique/terraform.tfvars` | `project_id`, `region`, `domain` |
-| DNS | [docs/dns.md](docs/dns.md) | NS delegation; A records for boutique + argocd |
-| WIF | `terraform/modules/wif/` | GitHub org/repo OIDC binding (Phase 3) |
-| Secrets | Secret Manager + ESO | Never store values in Git |
-| Image digests | `gitops/apps/boutique/values-images.yaml` | CI-updated via PR only |
+| Area           | Location                                           | Notes                                          |
+| -------------- | -------------------------------------------------- | ---------------------------------------------- |
+| Terraform vars | `terraform/environments/boutique/terraform.tfvars` | `project_id`, `region`, `domain`               |
+| DNS            | [docs/dns.md](docs/dns.md)                         | NS delegation; A records for boutique + argocd |
+| WIF            | `terraform/modules/wif/`                           | GitHub org/repo OIDC binding (Phase 3)         |
+| Secrets        | Secret Manager + ESO                               | Never store values in Git                      |
+| Image digests  | `gitops/apps/boutique/values-images.yaml`          | CI-updated via PR only                         |
 
 ## Deployment
 
@@ -131,11 +131,11 @@ Build → Trivy (fail critical/high) → push AR (digest) → cosign sign + atte
   → manifest digest PR → review/merge → manual Argo sync → Binary Auth → smoke check
 ```
 
-| Workflow | Purpose |
-|----------|---------|
-| [.github/workflows/ci.yml](.github/workflows/ci.yml) | Lint, Terraform validate |
-| [.github/workflows/terraform-plan.yml](.github/workflows/terraform-plan.yml) | `terraform plan` on PR |
-| [.github/workflows/build-scan-sign.yml](.github/workflows/build-scan-sign.yml) | WIF build pipeline (Phase 3) |
+| Workflow                                                                             | Purpose                       |
+| ------------------------------------------------------------------------------------ | ----------------------------- |
+| [.github/workflows/ci.yml](.github/workflows/ci.yml)                                 | Lint, Terraform validate      |
+| [.github/workflows/terraform-plan.yml](.github/workflows/terraform-plan.yml)         | `terraform plan` on PR        |
+| [.github/workflows/build-scan-sign.yml](.github/workflows/build-scan-sign.yml)       | WIF build pipeline (Phase 3)  |
 | [.github/workflows/manifest-digest-pr.yml](.github/workflows/manifest-digest-pr.yml) | Digest promotion PR (Phase 3) |
 
 ## GitOps
@@ -147,14 +147,14 @@ Build → Trivy (fail critical/high) → push AR (digest) → cosign sign + atte
 
 ## Monitoring
 
-| Capability | Backend |
-|------------|---------|
-| SLOs | Cloud Monitoring (browse 99.9%, checkout 99.95%) |
-| Burn alerts | Multi-window → PagerDuty + runbook link |
-| Dashboards | Grafana |
-| Traces | Cloud Trace (OpenTelemetry) |
-| Uptime | Cloud Monitoring check on `boutique.biroltilki.art` |
-| Logs | Cloud Logging; log-based metrics |
+| Capability  | Backend                                             |
+| ----------- | --------------------------------------------------- |
+| SLOs        | Cloud Monitoring (browse 99.9%, checkout 99.95%)    |
+| Burn alerts | Multi-window → PagerDuty + runbook link             |
+| Dashboards  | Grafana                                             |
+| Traces      | Cloud Trace (OpenTelemetry)                         |
+| Uptime      | Cloud Monitoring check on `boutique.biroltilki.art` |
+| Logs        | Cloud Logging; log-based metrics                    |
 
 Runbooks: [docs/sre/runbooks/](docs/sre/runbooks/) · SLO catalog: [docs/sre/slos/catalog.md](docs/sre/slos/catalog.md)
 
@@ -182,27 +182,27 @@ Runbooks: [docs/sre/runbooks/](docs/sre/runbooks/) · SLO catalog: [docs/sre/slo
 
 Master index: [docs/DOCUMENTATION.md](docs/DOCUMENTATION.md) · Template: [docs/GUIDE_TEMPLATE.md](docs/GUIDE_TEMPLATE.md)
 
-| Path | Content |
-|------|---------|
-| [docs/architecture/](docs/architecture/) | System design, ADRs |
-| [docs/setup/](docs/setup/) | Topic-based setup guides (01–16) |
-| [docs/sre/runbooks/](docs/sre/runbooks/) | Alert runbooks |
-| [docs/sre/game-days/](docs/sre/game-days/) | Game-day scenarios |
-| [docs/sre/oncall/](docs/sre/oncall/) | On-call playbooks |
-| [docs/teardown.md](docs/teardown.md) | Safe decommission |
+| Path                                       | Content                          |
+| ------------------------------------------ | -------------------------------- |
+| [docs/architecture/](docs/architecture/)   | System design, ADRs              |
+| [docs/setup/](docs/setup/)                 | Topic-based setup guides (01–16) |
+| [docs/sre/runbooks/](docs/sre/runbooks/)   | Alert runbooks                   |
+| [docs/sre/game-days/](docs/sre/game-days/) | Game-day scenarios               |
+| [docs/sre/oncall/](docs/sre/oncall/)       | On-call playbooks                |
+| [docs/teardown.md](docs/teardown.md)       | Safe decommission                |
 
 ## Roadmap
 
-| Phase | Focus | Status |
-|-------|-------|--------|
-| 1 | Repo + Terraform foundation | 🔄 In progress |
-| 2 | GKE + DNS + TLS | ⬜ |
-| 3 | WIF + AR + CI | ⬜ |
-| 4 | Argo CD + policies (**gate**) | ⬜ |
-| 5 | Boutique deploy | ⬜ |
-| 6 | Observability + SLOs | ⬜ |
-| 7 | SRE ops + game day | ⬜ |
-| 8 | Teardown + backup | ⬜ |
+| Phase | Focus                         | Status         |
+| ----- | ----------------------------- | -------------- |
+| 1     | Repo + Terraform foundation   | 🔄 In progress |
+| 2     | GKE + DNS + TLS               | ⬜             |
+| 3     | WIF + AR + CI                 | ⬜             |
+| 4     | Argo CD + policies (**gate**) | ⬜             |
+| 5     | Boutique deploy               | ⬜             |
+| 6     | Observability + SLOs          | ⬜             |
+| 7     | SRE ops + game day            | ⬜             |
+| 8     | Teardown + backup             | ⬜             |
 
 → [ROADMAP.md](ROADMAP.md) · [PROJECT.md](PROJECT.md) · [docs/implementation/roadmap.md](docs/implementation/roadmap.md)
 

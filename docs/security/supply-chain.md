@@ -91,11 +91,11 @@ pre-commit run gitleaks --all-files
 
 ## Troubleshooting
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| Image denied | Binary Auth / Kyverno | [kyverno-denials.md](../troubleshooting/kyverno-denials.md) |
-| Secret not mounted | ESO / WI binding | Check ExternalSecret status |
-| CI auth fail | WIF attribute mismatch | [07-github-wif.md](../setup/07-github-wif.md) |
+| Symptom            | Cause                  | Fix                                                         |
+| ------------------ | ---------------------- | ----------------------------------------------------------- |
+| Image denied       | Binary Auth / Kyverno  | [kyverno-denials.md](../troubleshooting/kyverno-denials.md) |
+| Secret not mounted | ESO / WI binding       | Check ExternalSecret status                                 |
+| CI auth fail       | WIF attribute mismatch | [07-github-wif.md](../setup/07-github-wif.md)               |
 
 ## Common mistakes
 

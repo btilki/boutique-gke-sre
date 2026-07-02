@@ -1,7 +1,7 @@
 # Phase 2 — GKE + DNS + TLS
 
-**Status:** Not started  
-**Size:** L  
+**Status:** Not started
+**Size:** L
 **Setup guides:** [04 — GKE cluster](../setup/04-gke-cluster.md), [05 — Cloud DNS](../setup/05-cloud-dns.md), [06 — Ingress + TLS](../setup/06-ingress-tls.md)
 
 ## Objectives

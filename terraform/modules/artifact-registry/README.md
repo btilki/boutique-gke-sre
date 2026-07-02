@@ -8,15 +8,23 @@ Creates a **regional Docker Artifact Registry** repository in `europe-west1` for
 
 ## Inputs
 
-| Name | Description | Type | Default |
-|------|-------------|------|---------|
-| _TBD_ | _To be defined in `variables.tf`_ | _TBD_ | _TBD_ |
+| Name                       | Description                                | Type     | Default                                        |
+| -------------------------- | ------------------------------------------ | -------- | ---------------------------------------------- |
+| `project_id`               | GCP project ID                             | `string` | —                                              |
+| `location`                 | Regional location                          | `string` | `europe-west1`                                 |
+| `repository_id`            | Repository ID                              | `string` | `boutique`                                     |
+| `description`              | Repository description                     | `string` | Online Boutique images — digest-only promotion |
+| `ci_service_account_email` | CI SA for push (`artifactregistry.writer`) | `string` | —                                              |
+| `grant_node_pull`          | Grant reader to default Compute SA         | `bool`   | `true`                                         |
 
 ## Outputs
 
-| Name | Description |
-|------|-------------|
-| _TBD_ | _To be defined in `outputs.tf`_ |
+| Name              | Description                                     |
+| ----------------- | ----------------------------------------------- |
+| `repository_id`   | Repository ID                                   |
+| `location`        | Regional location                               |
+| `repository_name` | Full GCP resource name                          |
+| `repository_url`  | Docker path (`europe-west1-docker.pkg.dev/...`) |
 
 ## Dependencies
 

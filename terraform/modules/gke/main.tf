@@ -40,6 +40,10 @@ resource "google_container_cluster" "primary" {
       start_time = "03:00"
     }
   }
+
+  binary_authorization {
+    evaluation_mode = var.binary_authorization_evaluation_mode
+  }
 }
 
 resource "google_container_node_pool" "primary" {

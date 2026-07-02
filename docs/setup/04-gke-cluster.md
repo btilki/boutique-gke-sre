@@ -153,15 +153,15 @@ Expected:
 
 ## Common problems
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| `Error 403: Kubernetes Engine API has not been used` | Container API disabled | Enable `container.googleapis.com` per [01 — GCP project and APIs](01-gcp-project-apis.md); re-run `terraform apply` |
-| `terraform plan` shows no `module.gke` | Old `main.tf` or wrong branch | `git pull`; confirm `module "gke"` block exists in `terraform/environments/boutique/main.tf` |
-| `Insufficient regional quotas` | CPU or cluster quota | Request quota increase in GCP Console → IAM & Admin → Quotas; reduce `max_node_count` in module variables temporarily |
-| `secondary range not found` | Phase 1 networking not applied | Complete topic 03; verify `boutique-pods` and `boutique-services` secondary ranges on subnet |
-| `kubectl` timeout / connection refused | Wrong context or private endpoint misconfiguration | Re-run `get-credentials`; confirm cluster has public control plane endpoint (`enable_private_endpoint = false` in module) |
-| `terraform` state lock | Concurrent apply | Wait for other session or use `terraform force-unlock <LOCK_ID>` only if you are certain no other apply is running |
-| Node pool stuck `PROVISIONING` | Transient GCP capacity | Wait 15–20 minutes; check Cloud Logging; delete failed pool via `terraform taint` only as last resort |
+| Symptom                                              | Cause                                              | Fix                                                                                                                       |
+| ---------------------------------------------------- | -------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| `Error 403: Kubernetes Engine API has not been used` | Container API disabled                             | Enable `container.googleapis.com` per [01 — GCP project and APIs](01-gcp-project-apis.md); re-run `terraform apply`       |
+| `terraform plan` shows no `module.gke`               | Old `main.tf` or wrong branch                      | `git pull`; confirm `module "gke"` block exists in `terraform/environments/boutique/main.tf`                              |
+| `Insufficient regional quotas`                       | CPU or cluster quota                               | Request quota increase in GCP Console → IAM & Admin → Quotas; reduce `max_node_count` in module variables temporarily     |
+| `secondary range not found`                          | Phase 1 networking not applied                     | Complete topic 03; verify `boutique-pods` and `boutique-services` secondary ranges on subnet                              |
+| `kubectl` timeout / connection refused               | Wrong context or private endpoint misconfiguration | Re-run `get-credentials`; confirm cluster has public control plane endpoint (`enable_private_endpoint = false` in module) |
+| `terraform` state lock                               | Concurrent apply                                   | Wait for other session or use `terraform force-unlock <LOCK_ID>` only if you are certain no other apply is running        |
+| Node pool stuck `PROVISIONING`                       | Transient GCP capacity                             | Wait 15–20 minutes; check Cloud Logging; delete failed pool via `terraform taint` only as last resort                     |
 
 ## Recovery
 

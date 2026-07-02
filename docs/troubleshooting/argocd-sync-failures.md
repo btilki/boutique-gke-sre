@@ -39,12 +39,12 @@ curl -I https://boutique.biroltilki.art
 
 ## Troubleshooting
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| `permission denied` | Argo CD SA RBAC | Check `argocd` clusterrole bindings |
-| Helm template error | Invalid values.yaml | Fix chart locally; `helm template` |
-| Resource quota | Namespace limits | Scale down or raise quota |
-| Kyverno deny | Policy violation | [kyverno-denials.md](kyverno-denials.md) |
+| Symptom             | Cause               | Fix                                      |
+| ------------------- | ------------------- | ---------------------------------------- |
+| `permission denied` | Argo CD SA RBAC     | Check `argocd` clusterrole bindings      |
+| Helm template error | Invalid values.yaml | Fix chart locally; `helm template`       |
+| Resource quota      | Namespace limits    | Scale down or raise quota                |
+| Kyverno deny        | Policy violation    | [kyverno-denials.md](kyverno-denials.md) |
 
 ## Common mistakes
 

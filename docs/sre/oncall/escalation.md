@@ -17,12 +17,12 @@ Define when and how to escalate beyond the primary on-call engineer.
 
 ## Escalation matrix
 
-| Severity | Condition | Escalate to | Target time |
-|----------|-----------|-------------|-------------|
-| SEV1 | Checkout down or data loss risk | Secondary + platform lead | Immediate |
-| SEV2 | Browse degraded > 15 min | Secondary on-call | 15 min |
-| SEV3 | Single service degraded, workaround exists | Primary continues; notify secondary | 30 min if unresolved |
-| SEV4 | Low impact / internal | No page escalation | — |
+| Severity | Condition                                  | Escalate to                         | Target time          |
+| -------- | ------------------------------------------ | ----------------------------------- | -------------------- |
+| SEV1     | Checkout down or data loss risk            | Secondary + platform lead           | Immediate            |
+| SEV2     | Browse degraded > 15 min                   | Secondary on-call                   | 15 min               |
+| SEV3     | Single service degraded, workaround exists | Primary continues; notify secondary | 30 min if unresolved |
+| SEV4     | Low impact / internal                      | No page escalation                  | —                    |
 
 ## Steps
 
@@ -39,10 +39,10 @@ Define when and how to escalate beyond the primary on-call engineer.
 
 ## Troubleshooting
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| Escalation loop | Circular policy | Fix PagerDuty schedule |
-| Wrong person paged | Outdated roster | Update PD schedule |
+| Symptom            | Cause           | Fix                    |
+| ------------------ | --------------- | ---------------------- |
+| Escalation loop    | Circular policy | Fix PagerDuty schedule |
+| Wrong person paged | Outdated roster | Update PD schedule     |
 
 ## Common mistakes
 

@@ -8,12 +8,12 @@ Validate alerting, runbooks, on-call response, and error-budget process under co
 
 ## Scenarios
 
-| # | Scenario | Guide | Script |
-|---|----------|-------|--------|
-| 01 | Bad deploy rollback | [01-bad-deploy-rollback.md](01-bad-deploy-rollback.md) | — (Git revert + Argo sync) |
-| 02 | Zone / pod failure | [02-zone-pod-failure.md](02-zone-pod-failure.md) | `scripts/game-days/inject-pod-failure.sh` |
-| 03 | Redis / cart down | [03-redis-cart-down.md](03-redis-cart-down.md) | `scripts/game-days/inject-redis-down.sh` |
-| 04 | Alert routing | [04-alert-routing.md](04-alert-routing.md) | [oncall/test-alerts.md](../oncall/test-alerts.md) |
+| #   | Scenario            | Guide                                                  | Script                                            |
+| --- | ------------------- | ------------------------------------------------------ | ------------------------------------------------- |
+| 01  | Bad deploy rollback | [01-bad-deploy-rollback.md](01-bad-deploy-rollback.md) | — (Git revert + Argo sync)                        |
+| 02  | Zone / pod failure  | [02-zone-pod-failure.md](02-zone-pod-failure.md)       | `scripts/game-days/inject-pod-failure.sh`         |
+| 03  | Redis / cart down   | [03-redis-cart-down.md](03-redis-cart-down.md)         | `scripts/game-days/inject-redis-down.sh`          |
+| 04  | Alert routing       | [04-alert-routing.md](04-alert-routing.md)             | [oncall/test-alerts.md](../oncall/test-alerts.md) |
 
 ## Prerequisites
 

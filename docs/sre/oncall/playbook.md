@@ -38,10 +38,10 @@ Alert → acknowledge → triage → mitigate → communicate → resolve → fo
 
 ## Troubleshooting
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| Flapping alert | Threshold too tight | Tune after incident; temporary mute with care |
-| Runbook mismatch | Renamed policy | Update Cloud Monitoring user labels |
+| Symptom          | Cause               | Fix                                           |
+| ---------------- | ------------------- | --------------------------------------------- |
+| Flapping alert   | Threshold too tight | Tune after incident; temporary mute with care |
+| Runbook mismatch | Renamed policy      | Update Cloud Monitoring user labels           |
 
 ## Common mistakes
 

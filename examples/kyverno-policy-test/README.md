@@ -8,8 +8,8 @@ Show a pod spec that **must be denied** because it uses a tag (`:latest`) instea
 
 ## Files
 
-| File | Expected result |
-|------|-----------------|
+| File                  | Expected result                 |
+| --------------------- | ------------------------------- |
 | `bad-latest-pod.yaml` | Deny by `require-digest` policy |
 
 ## Usage

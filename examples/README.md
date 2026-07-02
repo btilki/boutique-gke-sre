@@ -8,11 +8,11 @@ Illustrate ESO, Kyverno testing, and GitHub Actions WIF without embedding secret
 
 ## Layout
 
-| Directory | Topic |
-|-----------|-------|
-| `external-secret/` | ExternalSecret → Secret Manager pattern |
-| `kyverno-policy-test/` | Deny-test pod using `:latest` |
-| `wif-github-actions-snippet/` | WIF auth workflow fragment |
+| Directory                     | Topic                                   |
+| ----------------------------- | --------------------------------------- |
+| `external-secret/`            | ExternalSecret → Secret Manager pattern |
+| `kyverno-policy-test/`        | Deny-test pod using `:latest`           |
+| `wif-github-actions-snippet/` | WIF auth workflow fragment              |
 
 ## Conventions
 

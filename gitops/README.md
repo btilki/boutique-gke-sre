@@ -50,29 +50,29 @@ gitops/
 └── README.md
 ```
 
-| Directory | Phase | Role |
-|-----------|-------|------|
-| `bootstrap/` | 4 | Argo CD, ESO, app-of-apps |
-| `policies/` | 4 | Kyverno, NetworkPolicy (production gate) |
-| `apps/boutique/` | 5 | Online Boutique Helm chart |
-| `apps/argocd-apps/` | 4–6 | Argo CD Application CRs |
+| Directory           | Phase | Role                                     |
+| ------------------- | ----- | ---------------------------------------- |
+| `bootstrap/`        | 4     | Argo CD, ESO, app-of-apps                |
+| `policies/`         | 4     | Kyverno, NetworkPolicy (production gate) |
+| `apps/boutique/`    | 5     | Online Boutique Helm chart               |
+| `apps/argocd-apps/` | 4–6   | Argo CD Application CRs                  |
 
 ## Inputs
 
-| Input | Source |
-|-------|--------|
-| GKE cluster | Terraform `environments/boutique/` (Phase 2) |
+| Input            | Source                                          |
+| ---------------- | ----------------------------------------------- |
+| GKE cluster      | Terraform `environments/boutique/` (Phase 2)    |
 | Container images | Artifact Registry via CI (`values-images.yaml`) |
-| Secrets | GCP Secret Manager via ESO |
-| Git repository | Argo CD source of truth |
+| Secrets          | GCP Secret Manager via ESO                      |
+| Git repository   | Argo CD source of truth                         |
 
 ## Outputs
 
-| Output | URL / resource |
-|--------|----------------|
-| Argo CD UI | https://argocd.boutique.biroltilki.art |
-| Storefront | https://boutique.biroltilki.art |
-| Enforced policies | Kyverno + NetworkPolicy baseline |
+| Output            | URL / resource                         |
+| ----------------- | -------------------------------------- |
+| Argo CD UI        | https://argocd.boutique.biroltilki.art |
+| Storefront        | https://boutique.biroltilki.art        |
+| Enforced policies | Kyverno + NetworkPolicy baseline       |
 
 ## Dependencies
 

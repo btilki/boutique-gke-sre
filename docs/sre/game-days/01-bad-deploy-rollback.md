@@ -37,10 +37,10 @@ argocd app get boutique
 
 ## Troubleshooting
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| No alert | Threshold too high | Tune policy; see game day 04 |
-| Sync won't rollback | Kyverno deny | Fix manifest per troubleshooting guide |
+| Symptom             | Cause              | Fix                                    |
+| ------------------- | ------------------ | -------------------------------------- |
+| No alert            | Threshold too high | Tune policy; see game day 04           |
+| Sync won't rollback | Kyverno deny       | Fix manifest per troubleshooting guide |
 
 ## Common mistakes
 

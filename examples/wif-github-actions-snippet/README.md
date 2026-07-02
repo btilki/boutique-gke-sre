@@ -8,8 +8,8 @@ Reference workflow fragment for authenticating to GCP from GitHub Actions using 
 
 ## Files
 
-| File | Purpose |
-|------|---------|
+| File                   | Purpose                                                   |
+| ---------------------- | --------------------------------------------------------- |
 | `wif-auth.yml.example` | Minimal `permissions` + `google-github-actions/auth` step |
 
 ## Prerequisites

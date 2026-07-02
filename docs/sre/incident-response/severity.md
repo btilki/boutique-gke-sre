@@ -25,12 +25,12 @@ Alert / user report → classify SEV → response playbook → comms → resolve
 
 ## Severity definitions
 
-| Severity | Definition | Response | Examples |
-|----------|------------|----------|----------|
-| **SEV1** | Complete outage or data loss risk | Immediate page; war room | `boutique.biroltilki.art` down; checkout 100% failing |
-| **SEV2** | Major degradation or error budget exhausted | Page on-call; stakeholder comms | Checkout SLO fast burn; budget at 0% |
-| **SEV3** | Partial degradation; workaround exists | Ticket; business-hours response | Elevated 5xx on one service; cart flaky |
-| **SEV4** | Minor; no user impact | Backlog | Dashboard gap; test alert; doc typo |
+| Severity | Definition                                  | Response                        | Examples                                              |
+| -------- | ------------------------------------------- | ------------------------------- | ----------------------------------------------------- |
+| **SEV1** | Complete outage or data loss risk           | Immediate page; war room        | `boutique.biroltilki.art` down; checkout 100% failing |
+| **SEV2** | Major degradation or error budget exhausted | Page on-call; stakeholder comms | Checkout SLO fast burn; budget at 0%                  |
+| **SEV3** | Partial degradation; workaround exists      | Ticket; business-hours response | Elevated 5xx on one service; cart flaky               |
+| **SEV4** | Minor; no user impact                       | Backlog                         | Dashboard gap; test alert; doc typo                   |
 
 ## Error budget linkage
 
@@ -52,10 +52,10 @@ Remaining error budget at **0%** → treat as **SEV2** minimum per [error-budget
 
 ## Troubleshooting
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| Everything labeled SEV1 | Alert fatigue | Tune burn thresholds |
-| Under-classification | Culture | On-call lead reviews weekly |
+| Symptom                 | Cause         | Fix                         |
+| ----------------------- | ------------- | --------------------------- |
+| Everything labeled SEV1 | Alert fatigue | Tune burn thresholds        |
+| Under-classification    | Culture       | On-call lead reviews weekly |
 
 ## Common mistakes
 

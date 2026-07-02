@@ -8,18 +8,18 @@ Reserves a **global static external IP** named `boutique-ingress-ip` used by Kub
 
 ## Inputs
 
-| Name | Description | Type | Default |
-|------|-------------|------|---------|
-| `project_id` | GCP project ID | string | required |
-| `address_name` | GCP address resource name | string | `boutique-ingress-ip` |
-| `description` | Resource description | string | Global static IP for boutique + argocd ingress |
+| Name           | Description               | Type   | Default                                        |
+| -------------- | ------------------------- | ------ | ---------------------------------------------- |
+| `project_id`   | GCP project ID            | string | required                                       |
+| `address_name` | GCP address resource name | string | `boutique-ingress-ip`                          |
+| `description`  | Resource description      | string | Global static IP for boutique + argocd ingress |
 
 ## Outputs
 
-| Name | Description |
-|------|-------------|
+| Name           | Description                                        |
+| -------------- | -------------------------------------------------- |
 | `address_name` | Static IP resource name (Ingress annotation value) |
-| `address` | Reserved IPv4 address (DNS A record target) |
+| `address`      | Reserved IPv4 address (DNS A record target)        |
 
 ## Dependencies
 

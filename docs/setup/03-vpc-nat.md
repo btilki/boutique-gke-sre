@@ -116,17 +116,17 @@ make install-hooks
 
 ## Common problems
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| CIDR overlap | Conflicts with existing VPC | Change CIDRs in `variables.tf` / module defaults |
-| API not enabled | Skipped topic 01 | Enable compute API; re-apply |
-| `cloudarmor.googleapis.com` 403 | Invalid API name (Cloud Armor uses `compute.googleapis.com`) | Use current repo; create a fresh plan — do not reuse stale `tfplan` |
-| `SERVICE_DISABLED` after API enable | GCP API propagation lag | Re-run plan/apply; repo waits 60s via `time_sleep.wait_for_apis` |
-| Apply failed mid-run | Stale saved plan | Delete `tfplan` and run `terraform plan` again before apply |
-| State lock | Concurrent apply | Wait or `terraform force-unlock` with care |
-| `quota exceeded` | Project quotas | Request quota increase in Console |
-| `terraform validate` flag `-backend` error | Terraform 1.15+ with old pre-commit config | Use `--tf-init-args=-backend=false` in `.pre-commit-config.yaml` |
-| `terraform-docs is required` | Binary not installed | `brew install terraform-docs` |
+| Symptom                                    | Cause                                                        | Fix                                                                 |
+| ------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------------- |
+| CIDR overlap                               | Conflicts with existing VPC                                  | Change CIDRs in `variables.tf` / module defaults                    |
+| API not enabled                            | Skipped topic 01                                             | Enable compute API; re-apply                                        |
+| `cloudarmor.googleapis.com` 403            | Invalid API name (Cloud Armor uses `compute.googleapis.com`) | Use current repo; create a fresh plan — do not reuse stale `tfplan` |
+| `SERVICE_DISABLED` after API enable        | GCP API propagation lag                                      | Re-run plan/apply; repo waits 60s via `time_sleep.wait_for_apis`    |
+| Apply failed mid-run                       | Stale saved plan                                             | Delete `tfplan` and run `terraform plan` again before apply         |
+| State lock                                 | Concurrent apply                                             | Wait or `terraform force-unlock` with care                          |
+| `quota exceeded`                           | Project quotas                                               | Request quota increase in Console                                   |
+| `terraform validate` flag `-backend` error | Terraform 1.15+ with old pre-commit config                   | Use `--tf-init-args=-backend=false` in `.pre-commit-config.yaml`    |
+| `terraform-docs is required`               | Binary not installed                                         | `brew install terraform-docs`                                       |
 
 ## Recovery
 

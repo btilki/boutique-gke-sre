@@ -105,12 +105,12 @@ echo -n "bootstrap-test-value" | gcloud secrets create boutique-eso-bootstrap-te
 
 Uncomment the manifest in `gitops/bootstrap/external-secrets/cluster-secret-store.yaml` and confirm these values match your cluster:
 
-| Field | Expected value |
-|-------|----------------|
-| `projectID` | `boutique-gke` |
-| `clusterLocation` | `europe-west1` |
-| `clusterName` | `boutique-gke` |
-| `serviceAccountRef.name` | `external-secrets` |
+| Field                         | Expected value     |
+| ----------------------------- | ------------------ |
+| `projectID`                   | `boutique-gke`     |
+| `clusterLocation`             | `europe-west1`     |
+| `clusterName`                 | `boutique-gke`     |
+| `serviceAccountRef.name`      | `external-secrets` |
 | `serviceAccountRef.namespace` | `external-secrets` |
 
 Apply:
@@ -184,14 +184,14 @@ kubectl -n external-secrets get sa external-secrets -o yaml | grep iam.gke.io
 
 ## Common problems
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| `ClusterSecretStore` not Ready | WI binding missing or wrong KSA name | Re-run IAM binding; verify `kubectl get sa -n external-secrets` |
-| `AccessDenied` on Secret Manager | GSA lacks `secretAccessor` | Add `roles/secretmanager.secretAccessor` to GSA |
-| `secret not found` | Wrong secret name in `remoteRef.key` | `gcloud secrets list --project=boutique-gke` |
-| ExternalSecret stuck `SecretSyncedError` | Namespace not allowed / store ref wrong | Confirm `kind: ClusterSecretStore` and store name |
-| Controller CrashLoop | CRDs not installed | Reinstall with `--set installCRDs=true` |
-| Wrong cluster in store spec | Typo in `clusterLocation` / `clusterName` | Match `terraform output cluster_name cluster_location` |
+| Symptom                                  | Cause                                     | Fix                                                             |
+| ---------------------------------------- | ----------------------------------------- | --------------------------------------------------------------- |
+| `ClusterSecretStore` not Ready           | WI binding missing or wrong KSA name      | Re-run IAM binding; verify `kubectl get sa -n external-secrets` |
+| `AccessDenied` on Secret Manager         | GSA lacks `secretAccessor`                | Add `roles/secretmanager.secretAccessor` to GSA                 |
+| `secret not found`                       | Wrong secret name in `remoteRef.key`      | `gcloud secrets list --project=boutique-gke`                    |
+| ExternalSecret stuck `SecretSyncedError` | Namespace not allowed / store ref wrong   | Confirm `kind: ClusterSecretStore` and store name               |
+| Controller CrashLoop                     | CRDs not installed                        | Reinstall with `--set installCRDs=true`                         |
+| Wrong cluster in store spec              | Typo in `clusterLocation` / `clusterName` | Match `terraform output cluster_name cluster_location`          |
 
 ## Recovery
 

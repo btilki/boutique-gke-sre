@@ -14,11 +14,11 @@ Production deploys require immutable, scanned, and signed artifacts. Artifact Re
 - Tools: `gcloud`, Terraform ≥ 1.5, `cosign` (optional local test), `docker` or `crane`
 - Access: `roles/artifactregistry.admin`, `roles/binaryauthorization.admin` on `boutique-gke`
 - GKE cluster `boutique-gke` running (topic 04)
-- Terraform modules: `terraform/modules/artifact-registry`, `terraform/modules/binary-authorization` (scaffold — prefer Terraform when wired in `main.tf`)
+- Terraform modules wired in `terraform/environments/boutique/main.tf`: `artifact-registry`, `binary-authorization` (requires `cosign_public_key_pem` in `terraform.tfvars` for Binary Auth)
 
 ## Commands
 
-### Part A — Artifact Registry (GCP Console UI)
+### Part A — Artifact Registry (Alternative — GCP Console UI)
 
 1. Open [Google Cloud Console](https://console.cloud.google.com/) → select project **`boutique-gke`**.
 2. Navigate **Artifacts** → **Artifact Registry** (or search “Artifact Registry”).
@@ -43,9 +43,9 @@ Production deploys require immutable, scanned, and signed artifacts. Artifact Re
 2. Add rule: delete **untagged** images older than **30** days
 3. Save
 
-### Part B — Artifact Registry (Terraform — when module is wired)
+### Part B — Artifact Registry (Terraform — recommended)
 
-When `module "artifact_registry"` exists in `terraform/environments/boutique/main.tf`:
+`module "artifact_registry"` is wired in `terraform/environments/boutique/main.tf`. IAM for CI push and node pull is included in the module — skip Part C if you use this path.
 
 ```bash
 gcloud config set project boutique-gke
@@ -56,20 +56,23 @@ terraform apply tfplan
 terraform output artifact_registry_repository
 ```
 
-Example module block:
+Example module block (as in `main.tf`):
 
 ```hcl
 module "artifact_registry" {
   source = "../../modules/artifact-registry"
 
-  project_id    = var.project_id
-  location      = "europe-west1"
-  repository_id = "boutique"
-  description   = "Online Boutique images — digest-only promotion"
+  project_id               = var.project_id
+  location                 = var.region
+  repository_id            = "boutique"
+  description              = "Online Boutique images — digest-only promotion"
+  ci_service_account_email = module.wif.ci_service_account_email
 }
 ```
 
-### Part C — Grant CI service account push access
+### Part C — Grant CI service account push access (Alternative — Console or manual)
+
+**Skip this part** if you applied `module.artifact_registry` via Terraform — the module grants `artifactregistry.writer` (CI SA) and `artifactregistry.reader` (default Compute SA for node pulls).
 
 Replace `github-ci@boutique-gke.iam.gserviceaccount.com` if your CI SA name differs:
 
@@ -92,7 +95,7 @@ gcloud artifacts repositories add-iam-policy-binding boutique \
   --role="roles/artifactregistry.reader"
 ```
 
-### Part D — Binary Authorization (GCP Console UI)
+### Part D — Binary Authorization (Alternative — GCP Console UI)
 
 1. Console → **Security** → **Binary Authorization** (search “Binary Authorization”).
 2. If prompted, click **Enable Binary Authorization API** / **Get started**.
@@ -107,7 +110,7 @@ gcloud artifacts repositories add-iam-policy-binding boutique \
 7. **Name:** `boutique-cosign-attestor`
 8. **Description:** `Trust cosign signatures from CI pipeline`
 9. **Public key (manual):** Paste cosign **public** key PEM from your CI signing setup (generate with `cosign generate-key-pair` in a secure environment — store private key in GitHub Secrets as `COSIGN_PRIVATE_KEY`, never in Git).
-10. **Signature algorithm:** RSA-PKCS1 2048-bit (or match your cosign key type)
+10. **Signature algorithm:** ECDSA P-256 (default from `cosign generate-key-pair`) — or match your cosign key type if you used non-default options
 11. Click **Create**
 12. Return to **Policy** → attach attestor `boutique-cosign-attestor` to the admission rule.
 13. **Save** policy.
@@ -118,25 +121,38 @@ gcloud artifacts repositories add-iam-policy-binding boutique \
 2. Deploy a test pod — check **Binary Authorization** logs in Cloud Logging
 3. Switch to **Enforce** before topic 12 production Boutique deploy
 
-### Part E — Binary Authorization (Terraform — when module is wired)
+### Part E — Binary Authorization (Terraform — recommended)
+
+**Before apply:** generate a cosign key pair (Part F) and add `cosign_public_key_pem` to `terraform/environments/boutique/terraform.tfvars` (see `terraform.tfvars.example`). Binary Authorization is created only when `cosign_public_key_pem` is non-empty.
 
 ```bash
 cd terraform/environments/boutique
-terraform plan -target=module.binary_authorization -out=tfplan
+terraform plan \
+  -target='module.binary_authorization[0]' \
+  -target=module.gke \
+  -out=tfplan
 terraform apply tfplan
+terraform output binary_authorization_attestor
+terraform output binary_authorization_enforcement_mode
 ```
 
-Example module block:
+> **zsh:** Quote the `binary_authorization[0]` target — unquoted `[0]` is treated as a glob and fails with `no matches found`.
+
+Example module block (as in `main.tf`):
 
 ```hcl
 module "binary_authorization" {
+  count  = local.binary_authorization_enabled ? 1 : 0
   source = "../../modules/binary-authorization"
 
-  project_id   = var.project_id
-  cluster_name = module.gke.cluster_name
-  location     = "europe-west1"
-  ar_location  = "europe-west1"
-  ar_repo_id   = "boutique"
+  project_id                 = var.project_id
+  cluster_name               = var.cluster_name
+  location                   = var.region
+  cosign_public_key_pem      = var.cosign_public_key_pem
+  enforcement_mode           = var.binary_authorization_enforcement_mode
+  cosign_signature_algorithm = "ECDSA_P256_SHA256"
+
+  depends_on = [module.project_apis, module.gke]
 }
 ```
 
@@ -158,12 +174,12 @@ GKE schedules pod (or rejects if unsigned)
 
 Key concepts:
 
-| Term | Meaning |
-|------|---------|
-| **Attestor** | GCP resource holding trusted cosign **public** keys |
+| Term            | Meaning                                                                                  |
+| --------------- | ---------------------------------------------------------------------------------------- |
+| **Attestor**    | GCP resource holding trusted cosign **public** keys                                      |
 | **Attestation** | Cryptographic statement that an image met a policy (signature + optional SLSA predicate) |
-| **Note** | Container Analysis note linking attestations to images in AR |
-| **Policy** | Which images require which attestors at deploy time |
+| **Note**        | Container Analysis note linking attestations to images in AR                             |
+| **Policy**      | Which images require which attestors at deploy time                                      |
 
 Generate cosign key pair (run locally in a secure session — **do not commit private key**):
 
@@ -218,7 +234,7 @@ IMAGE                                                          DIGEST
 europe-west1-docker.pkg.dev/boutique-gke/boutique/hello-world  sha256:abc123...
 ```
 
-**Binary Authorization policy:** Mode `ENFORCED` (or `DRYRUN_AUDIT_ONLY` during testing) with attestor `boutique-cosign-attestor` attached.
+**Binary Authorization policy:** `ENFORCED_BLOCK_AND_AUDIT_LOG` (or `DRYRUN_AUDIT_LOG_ONLY` during bootstrap) with attestor `boutique-cosign-attestor` attached to cluster `europe-west1.boutique-gke`.
 
 **`cosign verify`:**
 
@@ -241,10 +257,10 @@ gcloud artifacts docker images list \
   europe-west1-docker.pkg.dev/boutique-gke/boutique \
   --include-tags
 
-gcloud beta binary-authorization policy export \
+gcloud container binauthz policy export \
   --project=boutique-gke
 
-gcloud beta binary-authorization attestors list \
+gcloud container binauthz attestors list \
   --project=boutique-gke
 ```
 
@@ -256,23 +272,24 @@ Expected:
 
 ## Common problems
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| `denied: Permission "artifactregistry.repositories.uploadArtifacts"` | CI SA missing writer | Part C IAM binding |
-| `ImagePullBackOff` on cluster | Nodes cannot pull from AR | Grant `artifactregistry.reader` to node SA or WI pull SA |
-| Pod denied by Binary Authorization | Unsigned image or enforce without attest | Sign with cosign in CI; or use dry-run until pipeline signs |
-| `attestor not found` | Name mismatch in policy vs attestor | Align names in Console and Terraform |
-| cosign verify fails | Wrong key or tag used instead of digest | Always reference `@sha256:...` digest in GitOps |
-| Terraform module not found | Phase 3 not merged | Use Console steps in Parts A and D until modules are wired |
+| Symptom                                                              | Cause                                    | Fix                                                                               |
+| -------------------------------------------------------------------- | ---------------------------------------- | --------------------------------------------------------------------------------- |
+| `denied: Permission "artifactregistry.repositories.uploadArtifacts"` | CI SA missing writer                     | Re-apply `module.artifact_registry` or Part C IAM binding                         |
+| `ImagePullBackOff` on cluster                                        | Nodes cannot pull from AR                | Re-apply `module.artifact_registry` or grant `artifactregistry.reader` to node SA |
+| Pod denied by Binary Authorization                                   | Unsigned image or enforce without attest | Sign with cosign in CI; or use dry-run until pipeline signs                       |
+| `attestor not found`                                                 | Name mismatch in policy vs attestor      | Align names in Console and Terraform                                              |
+| cosign verify fails                                                  | Wrong key or tag used instead of digest  | Always reference `@sha256:...` digest in GitOps                                   |
+| `zsh: no matches found: -target=module.binary_authorization[0]`      | Unquoted `[0]` glob in zsh               | Quote target: `-target='module.binary_authorization[0]'`                          |
+| Binary Authorization module not created                              | Empty `cosign_public_key_pem` in tfvars  | Add public key PEM from `cosign.pub` to `terraform.tfvars`                        |
 
 ## Recovery
 
 **Disable enforcement temporarily (incident only):**
 
 ```bash
-gcloud beta binary-authorization policy export > /tmp/binauth-policy.yaml
+gcloud container binauthz policy export > /tmp/binauth-policy.yaml
 # Edit globalPolicyEvaluationMode or per-cluster rule to DISABLE / dry-run
-gcloud beta binary-authorization policy import /tmp/binauth-policy.yaml \
+gcloud container binauthz policy import /tmp/binauth-policy.yaml \
   --project=boutique-gke
 ```
 
@@ -290,7 +307,7 @@ gcloud artifacts docker images delete \
 
 ```bash
 cd terraform/environments/boutique
-terraform destroy -target=module.binary_authorization
+terraform destroy -target='module.binary_authorization[0]'
 terraform destroy -target=module.artifact_registry
 ```
 
@@ -298,7 +315,7 @@ terraform destroy -target=module.artifact_registry
 
 - Reference images by **digest** in GitOps (`image@sha256:...`) — tags are human hints only
 - Enable AR cleanup for untagged manifests to control cost
-- Start Binary Authorization in **dry run**, then enforce before topic 12
+- Start Binary Authorization in **dry run** (`DRYRUN_AUDIT_LOG_ONLY`), then set `binary_authorization_enforcement_mode = "ENFORCED_BLOCK_AND_AUDIT_LOG"` before topic 12
 - Store cosign private key in GitHub Encrypted Secrets; public key in Terraform or Console attestor
 - Pair with Trivy CI gate (fail critical/high) before push
 - One repository per application family; separate dev/prod only if you add environments later

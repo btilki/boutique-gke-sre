@@ -38,10 +38,10 @@ Each policy documentation includes runbook URL under `docs/sre/runbooks/`.
 
 ## Troubleshooting
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| No page | Wrong channel | Re-link PagerDuty integration |
-| Duplicate pages | Overlapping policies | Deduplicate alert conditions |
+| Symptom         | Cause                | Fix                           |
+| --------------- | -------------------- | ----------------------------- |
+| No page         | Wrong channel        | Re-link PagerDuty integration |
+| Duplicate pages | Overlapping policies | Deduplicate alert conditions  |
 
 ## Common mistakes
 

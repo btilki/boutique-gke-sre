@@ -2,9 +2,9 @@
 
 Root modules per deployment target.
 
-| Environment | Path | Description |
-|-------------|------|-------------|
-| `boutique` | [boutique/](boutique/) | Single GCP project + cluster (current) |
+| Environment | Path                   | Description                            |
+| ----------- | ---------------------- | -------------------------------------- |
+| `boutique`  | [boutique/](boutique/) | Single GCP project + cluster (current) |
 
 ## Extension
 

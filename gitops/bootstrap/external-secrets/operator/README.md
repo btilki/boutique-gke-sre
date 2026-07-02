@@ -8,18 +8,18 @@ Install ESO so application secrets are sourced from GCP Secret Manager via `Exte
 
 ## Inputs
 
-| Input | Description |
-|-------|-------------|
-| GKE cluster | Private regional cluster |
-| Workload Identity | GSA bound to ESO controller SA (Terraform `iam` module) |
-| Helm chart | `external-secrets/external-secrets` (version pinned in Phase 4) |
+| Input             | Description                                                     |
+| ----------------- | --------------------------------------------------------------- |
+| GKE cluster       | Private regional cluster                                        |
+| Workload Identity | GSA bound to ESO controller SA (Terraform `iam` module)         |
+| Helm chart        | `external-secrets/external-secrets` (version pinned in Phase 4) |
 
 ## Outputs
 
-| Output | Description |
-|--------|-------------|
-| ESO controller | Watches `ExternalSecret` / `ClusterSecretStore` CRs |
-| CRDs | `ExternalSecret`, `SecretStore`, `ClusterSecretStore`, etc. |
+| Output         | Description                                                 |
+| -------------- | ----------------------------------------------------------- |
+| ESO controller | Watches `ExternalSecret` / `ClusterSecretStore` CRs         |
+| CRDs           | `ExternalSecret`, `SecretStore`, `ClusterSecretStore`, etc. |
 
 ## Dependencies
 

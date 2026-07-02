@@ -1,6 +1,6 @@
 # Runbook: checkout latency burn
 
-**Alert policy:** `checkout-latency-burn`  
+**Alert policy:** `checkout-latency-burn`
 **SLO:** Checkout p95 < 1000ms — [catalog](../slos/catalog.md)
 
 > Full steps expanded in Phase 6–7.

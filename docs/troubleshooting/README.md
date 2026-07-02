@@ -14,10 +14,10 @@ Fast path from observable failure to documented fix without duplicating full run
 
 ## Guides
 
-| Guide | Symptoms |
-|-------|----------|
+| Guide                                              | Symptoms                                      |
+| -------------------------------------------------- | --------------------------------------------- |
 | [argocd-sync-failures.md](argocd-sync-failures.md) | Argo CD OutOfSync, sync errors, degraded apps |
-| [kyverno-denials.md](kyverno-denials.md) | Resource blocked by Kyverno admission |
+| [kyverno-denials.md](kyverno-denials.md)           | Resource blocked by Kyverno admission         |
 
 ## Public URLs
 

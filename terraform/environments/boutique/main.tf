@@ -1,6 +1,10 @@
 # Phase 1: APIs + networking
 # Phase 2: GKE + static IP + DNS
-# Phase 3: GitHub WIF (CI authentication)
+# Phase 3: GitHub WIF + Artifact Registry + Binary Authorization
+
+locals {
+  binary_authorization_enabled = var.cosign_public_key_pem != ""
+}
 
 module "project_apis" {
   source = "../../modules/project-apis"
@@ -35,14 +39,15 @@ module "ingress_edge" {
 module "gke" {
   source = "../../modules/gke"
 
-  project_id          = var.project_id
-  region              = var.region
-  cluster_name        = var.cluster_name
-  network_name        = module.networking.network_name
-  subnet_name         = module.networking.subnet_name
-  pods_range_name     = module.networking.pods_range_name
-  services_range_name = module.networking.services_range_name
-  deletion_protection = var.deletion_protection
+  project_id                           = var.project_id
+  region                               = var.region
+  cluster_name                         = var.cluster_name
+  network_name                         = module.networking.network_name
+  subnet_name                          = module.networking.subnet_name
+  pods_range_name                      = module.networking.pods_range_name
+  services_range_name                  = module.networking.services_range_name
+  deletion_protection                  = var.deletion_protection
+  binary_authorization_evaluation_mode = local.binary_authorization_enabled ? "PROJECT_SINGLETON_POLICY_ENFORCE" : "DISABLED"
 
   depends_on = [module.networking]
 }
@@ -67,4 +72,30 @@ module "wif" {
   github_repo = var.github_repo
 
   depends_on = [time_sleep.wait_for_apis]
+}
+
+module "artifact_registry" {
+  source = "../../modules/artifact-registry"
+
+  project_id               = var.project_id
+  location                 = var.region
+  repository_id            = "boutique"
+  description              = "Online Boutique images — digest-only promotion"
+  ci_service_account_email = module.wif.ci_service_account_email
+
+  depends_on = [module.project_apis, module.wif]
+}
+
+module "binary_authorization" {
+  count  = local.binary_authorization_enabled ? 1 : 0
+  source = "../../modules/binary-authorization"
+
+  project_id                 = var.project_id
+  cluster_name               = var.cluster_name
+  location                   = var.region
+  cosign_public_key_pem      = var.cosign_public_key_pem
+  enforcement_mode           = var.binary_authorization_enforcement_mode
+  cosign_signature_algorithm = "ECDSA_P256_SHA256"
+
+  depends_on = [module.project_apis, module.gke]
 }

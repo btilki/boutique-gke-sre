@@ -8,17 +8,17 @@ Document how Argo CD is installed on the cluster. The actual Helm release is app
 
 ## Inputs
 
-| Input | Description |
-|-------|-------------|
-| GKE cluster | Private regional cluster from Phase 2 |
-| `namespace.yaml` | `argocd` namespace in parent directory |
-| Helm chart | `argo/argo-cd` (version pinned in Phase 4) |
+| Input            | Description                                |
+| ---------------- | ------------------------------------------ |
+| GKE cluster      | Private regional cluster from Phase 2      |
+| `namespace.yaml` | `argocd` namespace in parent directory     |
+| Helm chart       | `argo/argo-cd` (version pinned in Phase 4) |
 
 ## Outputs
 
-| Output | Description |
-|--------|-------------|
-| Argo CD server | UI and API in `argocd` namespace |
+| Output           | Description                       |
+| ---------------- | --------------------------------- |
+| Argo CD server   | UI and API in `argocd` namespace  |
 | Application CRDs | `Application`, `AppProject`, etc. |
 
 ## Dependencies

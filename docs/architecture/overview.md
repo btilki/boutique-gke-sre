@@ -12,32 +12,32 @@ Canonical system design for the production SRE reference: Google Online Boutique
 
 ### Functional
 
-| ID | Requirement |
-|----|-------------|
-| F1 | Run full Online Boutique microservice stack from upstream container images |
-| F2 | Public HTTPS storefront at `https://boutique.biroltilki.art` |
-| F3 | Argo CD UI at `https://argocd.boutique.biroltilki.art` with manual sync |
-| F4 | GitOps deploy: all cluster state from Git; changes via PR only |
-| F5 | CI builds/scans/signs images; promotes digests to manifests via PR |
-| F6 | Secrets from Secret Manager via ESO — never plain Secrets in Git |
-| F7 | Observability: metrics, logs, traces exportable to GCP backends |
-| F8 | SLOs with burn-rate alerts routed to PagerDuty + runbook links |
-| F9 | Bootstrap, backup/restore, and teardown documented and validated |
+| ID  | Requirement                                                                |
+| --- | -------------------------------------------------------------------------- |
+| F1  | Run full Online Boutique microservice stack from upstream container images |
+| F2  | Public HTTPS storefront at `https://boutique.biroltilki.art`               |
+| F3  | Argo CD UI at `https://argocd.boutique.biroltilki.art` with manual sync    |
+| F4  | GitOps deploy: all cluster state from Git; changes via PR only             |
+| F5  | CI builds/scans/signs images; promotes digests to manifests via PR         |
+| F6  | Secrets from Secret Manager via ESO — never plain Secrets in Git           |
+| F7  | Observability: metrics, logs, traces exportable to GCP backends            |
+| F8  | SLOs with burn-rate alerts routed to PagerDuty + runbook links             |
+| F9  | Bootstrap, backup/restore, and teardown documented and validated           |
 
 ### Non-functional
 
-| ID | Requirement | Target |
-|----|-------------|--------|
-| NF1 | Browse availability SLO | 99.9% monthly |
-| NF2 | Checkout availability SLO | 99.95% monthly |
-| NF3 | Browse latency SLO | p95 < 500ms |
-| NF4 | Checkout latency SLO | p95 < 1000ms |
-| NF5 | Image immutability | Digest-only; reject `:latest` |
-| NF6 | Supply chain | cosign sign + attest; Binary Authorization at deploy |
-| NF7 | Policy enforcement | Kyverno admission + NetworkPolicy default-deny |
-| NF8 | Node privacy | Private GKE nodes; egress via Cloud NAT |
-| NF9 | Incident readiness | SEV1–SEV4 taxonomy; runbook per alert |
-| NF10 | Recoverability | Backup/restore runbook for Redis/cart state |
+| ID   | Requirement               | Target                                               |
+| ---- | ------------------------- | ---------------------------------------------------- |
+| NF1  | Browse availability SLO   | 99.9% monthly                                        |
+| NF2  | Checkout availability SLO | 99.95% monthly                                       |
+| NF3  | Browse latency SLO        | p95 < 500ms                                          |
+| NF4  | Checkout latency SLO      | p95 < 1000ms                                         |
+| NF5  | Image immutability        | Digest-only; reject `:latest`                        |
+| NF6  | Supply chain              | cosign sign + attest; Binary Authorization at deploy |
+| NF7  | Policy enforcement        | Kyverno admission + NetworkPolicy default-deny       |
+| NF8  | Node privacy              | Private GKE nodes; egress via Cloud NAT              |
+| NF9  | Incident readiness        | SEV1–SEV4 taxonomy; runbook per alert                |
+| NF10 | Recoverability            | Backup/restore runbook for Redis/cart state          |
 
 ---
 
@@ -56,16 +56,16 @@ Canonical system design for the production SRE reference: Google Online Boutique
 
 ## 3. Assumptions
 
-| Assumption | Detail |
-|------------|--------|
-| Domain ownership | `biroltilki.art` registered; NS delegatable to Cloud DNS |
-| GCP project | `boutique-gke` exists with billing and owner access |
-| GitHub | Org/repo with Actions; OIDC trust to WIF pool |
-| PagerDuty | Account with service + integration key for alert routing |
-| Region | Single GCP region (`europe-west1`) with 3 zones for regional cluster |
-| Traffic | Portfolio/demo levels; not hyperscale |
-| Images | Mirrored to Artifact Registry with digest pinning |
-| Team model | Platform engineer + SRE patterns; on-call documented |
+| Assumption       | Detail                                                               |
+| ---------------- | -------------------------------------------------------------------- |
+| Domain ownership | `biroltilki.art` registered; NS delegatable to Cloud DNS             |
+| GCP project      | `boutique-gke` exists with billing and owner access                  |
+| GitHub           | Org/repo with Actions; OIDC trust to WIF pool                        |
+| PagerDuty        | Account with service + integration key for alert routing             |
+| Region           | Single GCP region (`europe-west1`) with 3 zones for regional cluster |
+| Traffic          | Portfolio/demo levels; not hyperscale                                |
+| Images           | Mirrored to Artifact Registry with digest pinning                    |
+| Team model       | Platform engineer + SRE patterns; on-call documented                 |
 
 ---
 
@@ -121,19 +121,19 @@ flowchart TB
 
 ## 5. Component diagram
 
-| Layer | Components | Responsibility |
-|-------|------------|----------------|
-| **IaC** | Terraform (`terraform/`) | VPC, GKE, DNS, static IP, IAM, WIF, AR, Binary Auth, monitoring |
-| **Edge** | Cloud DNS, static IP, GCE Ingress, managed certs, Cloud Armor | HTTPS, WAF, routing |
-| **GitOps** | Argo CD (`gitops/bootstrap/`, `gitops/apps/`) | Sync cluster state; manual sync gate |
-| **Policy** | Kyverno (`gitops/policies/kyverno/`) | Admission: digest, probes, resources, labels, no plain Secrets |
-| **Secrets** | ESO (`gitops/bootstrap/external-secrets/`) | Secret Manager → Kubernetes Secrets |
-| **Network** | NetworkPolicy (`gitops/policies/network-policies/`) | Default-deny; explicit service graph |
-| **Application** | Online Boutique Helm (`gitops/apps/boutique/`) | Microservices + frontend |
-| **Observability** | OTel, Prometheus, Grafana (`observability/`) | Collect, store, visualize |
-| **SRE** | Cloud Monitoring, PagerDuty (`observability/monitoring/`, `docs/sre/`) | SLOs, alerts, runbooks, game days |
-| **CI** | GitHub Actions (`.github/workflows/`) | WIF auth, scan, sign, digest PR |
-| **Backup** | GKE Backup / Velero (`scripts/`, runbooks) | Redis/cart state protection |
+| Layer             | Components                                                             | Responsibility                                                  |
+| ----------------- | ---------------------------------------------------------------------- | --------------------------------------------------------------- |
+| **IaC**           | Terraform (`terraform/`)                                               | VPC, GKE, DNS, static IP, IAM, WIF, AR, Binary Auth, monitoring |
+| **Edge**          | Cloud DNS, static IP, GCE Ingress, managed certs, Cloud Armor          | HTTPS, WAF, routing                                             |
+| **GitOps**        | Argo CD (`gitops/bootstrap/`, `gitops/apps/`)                          | Sync cluster state; manual sync gate                            |
+| **Policy**        | Kyverno (`gitops/policies/kyverno/`)                                   | Admission: digest, probes, resources, labels, no plain Secrets  |
+| **Secrets**       | ESO (`gitops/bootstrap/external-secrets/`)                             | Secret Manager → Kubernetes Secrets                             |
+| **Network**       | NetworkPolicy (`gitops/policies/network-policies/`)                    | Default-deny; explicit service graph                            |
+| **Application**   | Online Boutique Helm (`gitops/apps/boutique/`)                         | Microservices + frontend                                        |
+| **Observability** | OTel, Prometheus, Grafana (`observability/`)                           | Collect, store, visualize                                       |
+| **SRE**           | Cloud Monitoring, PagerDuty (`observability/monitoring/`, `docs/sre/`) | SLOs, alerts, runbooks, game days                               |
+| **CI**            | GitHub Actions (`.github/workflows/`)                                  | WIF auth, scan, sign, digest PR                                 |
+| **Backup**        | GKE Backup / Velero (`scripts/`, runbooks)                             | Redis/cart state protection                                     |
 
 ---
 
@@ -195,7 +195,7 @@ Secret Manager (GCP)
 12. Smoke: curl -I https://boutique.biroltilki.art
 ```
 
-**Rollback:** Revert digest in Git → manual Argo sync → previous ReplicaSet restored.  
+**Rollback:** Revert digest in Git → manual Argo sync → previous ReplicaSet restored.
 → [Runbook: bad deploy rollback](../sre/runbooks/bad-deploy-rollback.md)
 
 ---
@@ -223,13 +223,13 @@ boutique-vpc (custom, regional)
 
 ### NetworkPolicy model (default-deny)
 
-| Namespace | Ingress from | Egress to |
-|-----------|--------------|-----------|
-| `boutique` | Ingress controller, same-namespace | DNS, service deps, OTel collector |
-| `argocd` | Ingress (argocd host) | Git, Kubernetes API |
-| `monitoring` | All namespaces (scrape) | Managed Prometheus, Grafana deps |
-| `kyverno` | Kubernetes API | Admission webhook targets |
-| `external-secrets` | Kubernetes API | Secret Manager (Private Google Access) |
+| Namespace          | Ingress from                       | Egress to                              |
+| ------------------ | ---------------------------------- | -------------------------------------- |
+| `boutique`         | Ingress controller, same-namespace | DNS, service deps, OTel collector      |
+| `argocd`           | Ingress (argocd host)              | Git, Kubernetes API                    |
+| `monitoring`       | All namespaces (scrape)            | Managed Prometheus, Grafana deps       |
+| `kyverno`          | Kubernetes API                     | Admission webhook targets              |
+| `external-secrets` | Kubernetes API                     | Secret Manager (Private Google Access) |
 
 Pods require label `network-policy/boutique: "true"` (enforced by Kyverno policy #4).
 
@@ -239,17 +239,17 @@ Pods require label `network-policy/boutique: "true"` (enforced by Kyverno policy
 
 ## 9. Security boundaries
 
-| Boundary | Mechanism | Notes |
-|----------|-----------|-------|
-| CI → GCP | WIF (OIDC trust GitHub repo/ref) | Short-lived tokens; scoped SA per workflow |
-| Pod → GCP | Workload Identity | ESO SA in `external-secrets` |
-| Image trust | cosign + Binary Authorization | Unsigned images rejected at deploy |
-| Admission | Kyverno | Blocks `:latest`, missing probes, plain Secrets |
-| Runtime network | NetworkPolicy | Default-deny; explicit allows |
-| Edge | Cloud Armor | OWASP CRS baseline |
-| Secrets | Secret Manager + ESO | gitleaks in pre-commit |
-| Audit | Cloud Audit Logs | Admin and data access |
-| TLS | Google-managed certs | Auto-renewal on Ingress |
+| Boundary        | Mechanism                        | Notes                                           |
+| --------------- | -------------------------------- | ----------------------------------------------- |
+| CI → GCP        | WIF (OIDC trust GitHub repo/ref) | Short-lived tokens; scoped SA per workflow      |
+| Pod → GCP       | Workload Identity                | ESO SA in `external-secrets`                    |
+| Image trust     | cosign + Binary Authorization    | Unsigned images rejected at deploy              |
+| Admission       | Kyverno                          | Blocks `:latest`, missing probes, plain Secrets |
+| Runtime network | NetworkPolicy                    | Default-deny; explicit allows                   |
+| Edge            | Cloud Armor                      | OWASP CRS baseline                              |
+| Secrets         | Secret Manager + ESO             | gitleaks in pre-commit                          |
+| Audit           | Cloud Audit Logs                 | Admin and data access                           |
+| TLS             | Google-managed certs             | Auto-renewal on Ingress                         |
 
 **Trust zones:**
 
@@ -268,29 +268,29 @@ Internet (untrusted)
 
 ## 10. Failure scenarios
 
-| Scenario | Impact | Detection | Mitigation |
-|----------|--------|-----------|------------|
-| Zone loss | Reduced capacity | Node NotReady; PDB violations | Regional cluster; HPA; Cluster Autoscaler |
-| Bad deploy | Errors, failed rollout | Argo degraded; SLO burn | Git revert + Argo sync; [bad-deploy-rollback](../sre/runbooks/bad-deploy-rollback.md) |
-| Redis/cart down | Cart/checkout failures | cartservice health; checkout SLO | Restart StatefulSet; [redis-cart-down](../sre/runbooks/redis-cart-down.md); backup restore |
-| Ingress/TLS failure | External outage | Uptime check failed | Cert status, Ingress events, static IP |
-| Kyverno/ESO down | Deploys/secrets blocked | Platform health alerts | PDB; priority Argo sync |
-| Monitoring pipeline down | Blind spots | Metric heartbeat missing | OTel HPA; Cloud Logging fallback |
-| Binary Auth misconfig | All deploys blocked | Admission failures | Fix attestor in Terraform; break-glass doc |
-| WIF/CI failure | No image promotion | Actions failure | Validate pool/provider; no key fallback |
+| Scenario                 | Impact                  | Detection                        | Mitigation                                                                                 |
+| ------------------------ | ----------------------- | -------------------------------- | ------------------------------------------------------------------------------------------ |
+| Zone loss                | Reduced capacity        | Node NotReady; PDB violations    | Regional cluster; HPA; Cluster Autoscaler                                                  |
+| Bad deploy               | Errors, failed rollout  | Argo degraded; SLO burn          | Git revert + Argo sync; [bad-deploy-rollback](../sre/runbooks/bad-deploy-rollback.md)      |
+| Redis/cart down          | Cart/checkout failures  | cartservice health; checkout SLO | Restart StatefulSet; [redis-cart-down](../sre/runbooks/redis-cart-down.md); backup restore |
+| Ingress/TLS failure      | External outage         | Uptime check failed              | Cert status, Ingress events, static IP                                                     |
+| Kyverno/ESO down         | Deploys/secrets blocked | Platform health alerts           | PDB; priority Argo sync                                                                    |
+| Monitoring pipeline down | Blind spots             | Metric heartbeat missing         | OTel HPA; Cloud Logging fallback                                                           |
+| Binary Auth misconfig    | All deploys blocked     | Admission failures               | Fix attestor in Terraform; break-glass doc                                                 |
+| WIF/CI failure           | No image promotion      | Actions failure                  | Validate pool/provider; no key fallback                                                    |
 
 ---
 
 ## 11. Scalability
 
-| Mechanism | Use |
-|-----------|-----|
-| HPA | frontend, checkout, cart — CPU/request-based |
-| Cluster Autoscaler | Scale nodes when pods pending |
-| Regional cluster | Control plane HA; nodes across 3 zones |
-| PDBs | minAvailable on critical services |
-| Resource requests/limits | Kyverno-required; prevents noisy neighbor |
-| GCE load balancer | L7 scaling at ingress |
+| Mechanism                | Use                                          |
+| ------------------------ | -------------------------------------------- |
+| HPA                      | frontend, checkout, cart — CPU/request-based |
+| Cluster Autoscaler       | Scale nodes when pods pending                |
+| Regional cluster         | Control plane HA; nodes across 3 zones       |
+| PDBs                     | minAvailable on critical services            |
+| Resource requests/limits | Kyverno-required; prevents noisy neighbor    |
+| GCE load balancer        | L7 scaling at ingress                        |
 
 Single-cluster limits: no hard blast-radius between logical envs; namespace quotas cap consumption. Sufficient for reference traffic.
 
@@ -298,13 +298,13 @@ Single-cluster limits: no hard blast-radius between logical envs; namespace quot
 
 ## 12. Disaster recovery
 
-| Asset | RPO | RTO | Method |
-|-------|-----|-----|--------|
-| Redis (cart) | < 1h | < 30m | GKE Backup / Velero; [redis-restore](../sre/runbooks/redis-restore.md) |
-| Git state | 0 | minutes | GitHub; Argo resync |
-| Terraform state | 0 | hours | GCS versioned backend |
-| Secrets | 0 | minutes | Secret Manager versions; ESO resync |
-| Cluster | N/A | hours | Terraform re-apply; [cluster-rebuild](../sre/runbooks/cluster-rebuild.md) |
+| Asset           | RPO  | RTO     | Method                                                                    |
+| --------------- | ---- | ------- | ------------------------------------------------------------------------- |
+| Redis (cart)    | < 1h | < 30m   | GKE Backup / Velero; [redis-restore](../sre/runbooks/redis-restore.md)    |
+| Git state       | 0    | minutes | GitHub; Argo resync                                                       |
+| Terraform state | 0    | hours   | GCS versioned backend                                                     |
+| Secrets         | 0    | minutes | Secret Manager versions; ESO resync                                       |
+| Cluster         | N/A  | hours   | Terraform re-apply; [cluster-rebuild](../sre/runbooks/cluster-rebuild.md) |
 
 Teardown destroy order: [teardown.md](../teardown.md)
 
@@ -312,23 +312,23 @@ Teardown destroy order: [teardown.md](../teardown.md)
 
 ## 13. Observability — signal ownership
 
-| Signal | Owner | Backend | Consumer |
-|--------|-------|---------|----------|
-| SLOs / SLIs | SRE | Cloud Monitoring | Error budgets, burn alerts → PagerDuty |
-| Uptime | SRE | Cloud Monitoring | `boutique.biroltilki.art` external check |
-| Dashboards | Platform | Grafana | On-call, game days |
-| Metrics | Platform | Managed Prometheus | Grafana, SLO queries |
-| Traces | Platform | Cloud Trace | Checkout path debugging |
-| Logs | Platform | Cloud Logging | Log-based metrics, triage |
-| Errors | App/SRE | Error Reporting | Exception aggregation |
-| Alerts | SRE | Cloud Monitoring | PagerDuty + runbook URL |
+| Signal      | Owner    | Backend            | Consumer                                 |
+| ----------- | -------- | ------------------ | ---------------------------------------- |
+| SLOs / SLIs | SRE      | Cloud Monitoring   | Error budgets, burn alerts → PagerDuty   |
+| Uptime      | SRE      | Cloud Monitoring   | `boutique.biroltilki.art` external check |
+| Dashboards  | Platform | Grafana            | On-call, game days                       |
+| Metrics     | Platform | Managed Prometheus | Grafana, SLO queries                     |
+| Traces      | Platform | Cloud Trace        | Checkout path debugging                  |
+| Logs        | Platform | Cloud Logging      | Log-based metrics, triage                |
+| Errors      | App/SRE  | Error Reporting    | Exception aggregation                    |
+| Alerts      | SRE      | Cloud Monitoring   | PagerDuty + runbook URL                  |
 
 **SLO catalog:** [docs/sre/slos/catalog.md](../sre/slos/catalog.md)
 
-| Service | SLI | Target |
-|---------|-----|--------|
-| Browse (frontend) | Availability + p95 latency | 99.9% / <500ms |
-| Checkout | Availability + p95 latency | 99.95% / <1000ms |
+| Service           | SLI                        | Target           |
+| ----------------- | -------------------------- | ---------------- |
+| Browse (frontend) | Availability + p95 latency | 99.9% / <500ms   |
+| Checkout          | Availability + p95 latency | 99.95% / <1000ms |
 
 ---
 
@@ -345,15 +345,15 @@ Teardown destroy order: [teardown.md](../teardown.md)
 
 ## 15. Tradeoffs
 
-| Decision | Chosen | Rejected | Rationale |
-|----------|--------|----------|-----------|
-| One cluster | Namespace isolation | Multi-project/cluster | Cost, simplicity; patterns transferable |
-| Manual Argo sync | Operator approves | Auto-sync | No surprise deploys; prod discipline |
-| No service mesh | NetworkPolicy + Ingress | Istio/Linkerd | Ops burden exceeds Boutique needs |
-| Upstream images | Mirror + digest pin | Custom fork | SRE depth over app dev |
-| GCE Ingress | GCP LB + Armor | nginx-only | Native TLS, Armor, static IP |
-| WIF | OIDC federation | SA JSON keys | Security baseline |
-| ESO-only secrets | Secret Manager | Sealed Secrets / plain K8s | GCP-native audit trail |
+| Decision         | Chosen                  | Rejected                   | Rationale                               |
+| ---------------- | ----------------------- | -------------------------- | --------------------------------------- |
+| One cluster      | Namespace isolation     | Multi-project/cluster      | Cost, simplicity; patterns transferable |
+| Manual Argo sync | Operator approves       | Auto-sync                  | No surprise deploys; prod discipline    |
+| No service mesh  | NetworkPolicy + Ingress | Istio/Linkerd              | Ops burden exceeds Boutique needs       |
+| Upstream images  | Mirror + digest pin     | Custom fork                | SRE depth over app dev                  |
+| GCE Ingress      | GCP LB + Armor          | nginx-only                 | Native TLS, Armor, static IP            |
+| WIF              | OIDC federation         | SA JSON keys               | Security baseline                       |
+| ESO-only secrets | Secret Manager          | Sealed Secrets / plain K8s | GCP-native audit trail                  |
 
 ADRs: [001](../adr/001-single-cluster.md) · [002](../adr/002-wif-over-sa-keys.md) · [003](../adr/003-manual-argocd-sync.md)
 

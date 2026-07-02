@@ -1,6 +1,6 @@
 # Runbook: Redis / cart down
 
-**Alert policy:** `redis-cart-down`  
+**Alert policy:** `redis-cart-down`
 **Architecture:** [Failure scenarios §10](../../architecture/overview.md#10-failure-scenarios)
 
 > Full steps expanded in Phase 7; game day 03.

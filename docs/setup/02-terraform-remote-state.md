@@ -83,12 +83,12 @@ gcloud storage ls gs://boutique-gke-tfstate/boutique/
 
 ## Common problems
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| `bucket doesn't exist` | Bucket not created or wrong name | Create bucket; match `backend.tf` |
-| `Error 409` on bucket create | Name globally taken | Choose unique name; update backend |
-| `Access denied` on init | ADC lacks storage access | `gcloud auth application-default login` |
-| Backend config change | Bucket renamed | `terraform init -migrate-state` |
+| Symptom                      | Cause                            | Fix                                     |
+| ---------------------------- | -------------------------------- | --------------------------------------- |
+| `bucket doesn't exist`       | Bucket not created or wrong name | Create bucket; match `backend.tf`       |
+| `Error 409` on bucket create | Name globally taken              | Choose unique name; update backend      |
+| `Access denied` on init      | ADC lacks storage access         | `gcloud auth application-default login` |
+| Backend config change        | Bucket renamed                   | `terraform init -migrate-state`         |
 
 ## Recovery
 

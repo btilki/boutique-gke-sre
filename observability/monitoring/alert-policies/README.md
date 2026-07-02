@@ -8,13 +8,13 @@ PagerDuty-routed alerts with runbook links for SRE response.
 
 ## Planned policies
 
-| Policy | Runbook |
-|--------|---------|
+| Policy                     | Runbook                                                                                              |
+| -------------------------- | ---------------------------------------------------------------------------------------------------- |
 | `browse-availability-burn` | [docs/sre/runbooks/browse-availability-burn.md](../../docs/sre/runbooks/browse-availability-burn.md) |
-| `checkout-latency-burn` | [docs/sre/runbooks/checkout-latency-burn.md](../../docs/sre/runbooks/checkout-latency-burn.md) |
-| `uptime-check-failed` | [docs/sre/runbooks/uptime-check-failed.md](../../docs/sre/runbooks/uptime-check-failed.md) |
-| `bad-deploy-rollback` | [docs/sre/runbooks/bad-deploy-rollback.md](../../docs/sre/runbooks/bad-deploy-rollback.md) |
-| `redis-cart-down` | [docs/sre/runbooks/redis-cart-down.md](../../docs/sre/runbooks/redis-cart-down.md) |
+| `checkout-latency-burn`    | [docs/sre/runbooks/checkout-latency-burn.md](../../docs/sre/runbooks/checkout-latency-burn.md)       |
+| `uptime-check-failed`      | [docs/sre/runbooks/uptime-check-failed.md](../../docs/sre/runbooks/uptime-check-failed.md)           |
+| `bad-deploy-rollback`      | [docs/sre/runbooks/bad-deploy-rollback.md](../../docs/sre/runbooks/bad-deploy-rollback.md)           |
+| `redis-cart-down`          | [docs/sre/runbooks/redis-cart-down.md](../../docs/sre/runbooks/redis-cart-down.md)                   |
 
 ## Notification routing
 

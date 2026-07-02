@@ -8,10 +8,10 @@ Supplement LB and GKE metrics with application-level signals (e.g. checkout erro
 
 ## Planned metrics
 
-| Metric | Log filter (sketch) | Use |
-|--------|---------------------|-----|
-| `boutique/checkout_errors` | `resource.type="k8s_container" severity>=ERROR "checkout"` | Checkout SLI |
-| `boutique/frontend_5xx` | HTTP 5xx from ingress or frontend logs | Browse availability |
+| Metric                     | Log filter (sketch)                                        | Use                 |
+| -------------------------- | ---------------------------------------------------------- | ------------------- |
+| `boutique/checkout_errors` | `resource.type="k8s_container" severity>=ERROR "checkout"` | Checkout SLI        |
+| `boutique/frontend_5xx`    | HTTP 5xx from ingress or frontend logs                     | Browse availability |
 
 ## Implementation
 

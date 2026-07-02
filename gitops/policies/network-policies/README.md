@@ -8,18 +8,18 @@ Implement zero-trust network segmentation: deny all traffic by default, then all
 
 ## Inputs
 
-| Input | File | Description |
-|-------|------|-------------|
-| Default deny | `default-deny.yaml` | Block all ingress/egress per namespace |
-| Allow rules | `boutique-allow.yaml` | Service-to-service paths in `boutique` namespace |
-| Namespace labels | Kyverno `require-netpol-labels` | Tier label on namespaces |
+| Input            | File                            | Description                                      |
+| ---------------- | ------------------------------- | ------------------------------------------------ |
+| Default deny     | `default-deny.yaml`             | Block all ingress/egress per namespace           |
+| Allow rules      | `boutique-allow.yaml`           | Service-to-service paths in `boutique` namespace |
+| Namespace labels | Kyverno `require-netpol-labels` | Tier label on namespaces                         |
 
 ## Outputs
 
-| Output | Description |
-|--------|-------------|
-| `default-deny-all` | Baseline deny policy per namespace |
-| `boutique-allow` | Explicit allow rules for storefront microservices |
+| Output             | Description                                       |
+| ------------------ | ------------------------------------------------- |
+| `default-deny-all` | Baseline deny policy per namespace                |
+| `boutique-allow`   | Explicit allow rules for storefront microservices |
 
 ## Dependencies
 

@@ -41,10 +41,10 @@ Expected: new pod Running; storefront HTTP 200.
 
 ## Troubleshooting
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| Pending pod | Insufficient capacity | Check cluster autoscaler |
-| Repeated crashes | Bad image on new node | Check events |
+| Symptom          | Cause                 | Fix                      |
+| ---------------- | --------------------- | ------------------------ |
+| Pending pod      | Insufficient capacity | Check cluster autoscaler |
+| Repeated crashes | Bad image on new node | Check events             |
 
 ## Common mistakes
 

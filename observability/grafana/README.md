@@ -8,10 +8,10 @@ Visualize SLIs, golden signals, and infrastructure health. Complements Cloud Mon
 
 ## Layout
 
-| Path | Purpose |
-|------|---------|
+| Path               | Purpose                                                           |
+| ------------------ | ----------------------------------------------------------------- |
 | `datasources.yaml` | Provisioning config for Prometheus, Cloud Monitoring, Cloud Trace |
-| `dashboards/` | JSON dashboard exports (golden signals, SLO overview) |
+| `dashboards/`      | JSON dashboard exports (golden signals, SLO overview)             |
 
 ## Public URLs
 

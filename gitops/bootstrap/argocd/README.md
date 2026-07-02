@@ -8,19 +8,19 @@ Bootstrap manifests for Argo CD on `argocd.boutique.biroltilki.art`. Argo CD rec
 
 ## Inputs
 
-| Input | Description |
-|-------|-------------|
-| GKE cluster | Private regional cluster (`boutique-gke`) |
-| DNS | `argocd.boutique.biroltilki.art` → static IP (Terraform) |
-| TLS | Google-managed certificate on Ingress |
+| Input       | Description                                              |
+| ----------- | -------------------------------------------------------- |
+| GKE cluster | Private regional cluster (`boutique-gke`)                |
+| DNS         | `argocd.boutique.biroltilki.art` → static IP (Terraform) |
+| TLS         | Google-managed certificate on Ingress                    |
 
 ## Outputs
 
-| Output | Description |
-|--------|-------------|
-| `argocd` namespace | Control-plane namespace |
-| Argo CD server | HTTPS UI at https://argocd.boutique.biroltilki.art |
-| Sync target | Root app-of-apps in `../root-app.yaml` |
+| Output             | Description                                        |
+| ------------------ | -------------------------------------------------- |
+| `argocd` namespace | Control-plane namespace                            |
+| Argo CD server     | HTTPS UI at https://argocd.boutique.biroltilki.art |
+| Sync target        | Root app-of-apps in `../root-app.yaml`             |
 
 ## Dependencies
 

@@ -29,22 +29,22 @@ SLI time series (Cloud Monitoring)
 
 ## Burn-rate windows
 
-| Window | Burn rate multiplier | Typical response |
-|--------|---------------------|------------------|
-| 1h | 14.4× | Page — fast burn |
-| 6h | 6× | Page |
-| 1d | 3× | Ticket |
-| 3d | 1× | Ticket — slow burn |
+| Window | Burn rate multiplier | Typical response   |
+| ------ | -------------------- | ------------------ |
+| 1h     | 14.4×                | Page — fast burn   |
+| 6h     | 6×                   | Page               |
+| 1d     | 3×                   | Ticket             |
+| 3d     | 1×                   | Ticket — slow burn |
 
 **Why multi-window:** A single long window misses fast outages; a single short window causes false pages during brief blips. Combining windows reduces false positives while catching real incidents ([Google SRE workbook](https://sre.google/workbook/alerting-on-slos/)).
 
 ## Alert policy → runbook mapping
 
-| Alert policy name | Runbook |
-|-------------------|---------|
+| Alert policy name          | Runbook                                                                |
+| -------------------------- | ---------------------------------------------------------------------- |
 | `browse-availability-burn` | [browse-availability-burn.md](../runbooks/browse-availability-burn.md) |
-| `checkout-latency-burn` | [checkout-latency-burn.md](../runbooks/checkout-latency-burn.md) |
-| `uptime-check-failed` | [uptime-check-failed.md](../runbooks/uptime-check-failed.md) |
+| `checkout-latency-burn`    | [checkout-latency-burn.md](../runbooks/checkout-latency-burn.md)       |
+| `uptime-check-failed`      | [uptime-check-failed.md](../runbooks/uptime-check-failed.md)           |
 
 Every policy **must** include runbook URL in documentation or notification metadata, e.g.:
 
@@ -70,11 +70,11 @@ https://github.com/<org>/boutique-gke-sre/blob/main/docs/sre/runbooks/browse-ava
 
 ## Troubleshooting
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| No pages | Threshold too high | Lower burn multiplier on 1h window |
-| Alert storm | Missing multi-window AND | Require both short and long window |
-| Missing runbook | Label not set | Add `runbook_url` user label |
+| Symptom         | Cause                    | Fix                                |
+| --------------- | ------------------------ | ---------------------------------- |
+| No pages        | Threshold too high       | Lower burn multiplier on 1h window |
+| Alert storm     | Missing multi-window AND | Require both short and long window |
+| Missing runbook | Label not set            | Add `runbook_url` user label       |
 
 ## Common mistakes
 

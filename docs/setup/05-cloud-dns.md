@@ -78,7 +78,7 @@ Perform these steps at the registrar where you purchased `biroltilki.art` (Googl
    - Example slot 2: `ns-cloud-b1.googledomains.com`
    - Example slot 3: `ns-cloud-c1.googledomains.com`
    - Example slot 4: `ns-cloud-d1.googledomains.com`
-   (Your Terraform output values are authoritative — use those, not these examples.)
+     (Your Terraform output values are authoritative — use those, not these examples.)
 7. **Do not** create A records at the registrar when using custom nameservers; Cloud DNS owns all records after delegation.
 8. Click **Save**, **Apply**, or **Update nameservers**.
 9. Confirm the registrar shows the four `ns-cloud-*.googledomains.com` entries as active.
@@ -165,14 +165,14 @@ dig @8.8.8.8 +short argocd.boutique.biroltilki.art
 
 ## Common problems
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| `dig +short` returns empty | NS not delegated or propagation incomplete | Re-check registrar custom nameservers; wait up to 48 h; flush local DNS cache |
-| `dig` returns old/wrong IP | Stale registrar A records or split DNS | Ensure registrar uses **custom nameservers only**, not hybrid DNS |
-| `terraform apply` fails on `module.dns` | `ingress_edge` not applied | `terraform apply -target=module.ingress_edge` then re-apply `module.dns` |
-| NS correct but A record missing | Terraform drift or wrong zone | `gcloud dns record-sets list --zone=biroltilki-art --project=boutique-gke`; re-run `terraform apply` |
-| `403` on Cloud DNS API | API or IAM | Enable `dns.googleapis.com`; grant `roles/dns.admin` |
-| Partial NS set at registrar | Fewer than four nameservers | Add all four from `terraform output dns_name_servers` |
+| Symptom                                 | Cause                                      | Fix                                                                                                  |
+| --------------------------------------- | ------------------------------------------ | ---------------------------------------------------------------------------------------------------- |
+| `dig +short` returns empty              | NS not delegated or propagation incomplete | Re-check registrar custom nameservers; wait up to 48 h; flush local DNS cache                        |
+| `dig` returns old/wrong IP              | Stale registrar A records or split DNS     | Ensure registrar uses **custom nameservers only**, not hybrid DNS                                    |
+| `terraform apply` fails on `module.dns` | `ingress_edge` not applied                 | `terraform apply -target=module.ingress_edge` then re-apply `module.dns`                             |
+| NS correct but A record missing         | Terraform drift or wrong zone              | `gcloud dns record-sets list --zone=biroltilki-art --project=boutique-gke`; re-run `terraform apply` |
+| `403` on Cloud DNS API                  | API or IAM                                 | Enable `dns.googleapis.com`; grant `roles/dns.admin`                                                 |
+| Partial NS set at registrar             | Fewer than four nameservers                | Add all four from `terraform output dns_name_servers`                                                |
 
 ## Recovery
 

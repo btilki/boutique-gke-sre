@@ -1,7 +1,7 @@
 # Phase 1 — Repo scaffold + Terraform foundation
 
-**Status:** In progress  
-**Size:** S  
+**Status:** In progress
+**Size:** S
 **Setup guides:** [01](../setup/01-gcp-project-apis.md), [02](../setup/02-terraform-remote-state.md), [03](../setup/03-vpc-nat.md)
 
 ## Objectives

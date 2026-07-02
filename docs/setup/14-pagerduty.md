@@ -30,12 +30,12 @@ Without a tested integration, the first real outage may be the first time you di
 
 **PagerDuty UI → Services → Service Directory → + New Service**
 
-| Field | Value |
-|-------|-------|
-| Name | `boutique-gke-production` |
-| Description | Online Boutique on GKE — burn alerts and uptime |
-| Escalation policy | Your on-call rotation (create if needed) |
-| Alert grouping | Intelligent (recommended) |
+| Field             | Value                                           |
+| ----------------- | ----------------------------------------------- |
+| Name              | `boutique-gke-production`                       |
+| Description       | Online Boutique on GKE — burn alerts and uptime |
+| Escalation policy | Your on-call rotation (create if needed)        |
+| Alert grouping    | Intelligent (recommended)                       |
 
 Save the service.
 
@@ -43,10 +43,10 @@ Save the service.
 
 **Service → Integrations → Add an integration**
 
-| Field | Value |
-|-------|-------|
-| Integration type | **Events API V2** |
-| Name | `Google Cloud Monitoring` |
+| Field            | Value                     |
+| ---------------- | ------------------------- |
+| Integration type | **Events API V2**         |
+| Name             | `Google Cloud Monitoring` |
 
 Click **Add integration**. Copy the **Integration Key** (32-character hex string). Store it in Secret Manager — do not commit to Git:
 
@@ -61,10 +61,10 @@ echo -n "YOUR_INTEGRATION_KEY" | gcloud secrets create pagerduty-integration-key
 
 **GCP Console → Monitoring → Alerting → Edit notification channels → PagerDuty**
 
-| Field | Value |
-|-------|-------|
-| Channel type | PagerDuty |
-| Service key | Integration key from step 2 |
+| Field        | Value                           |
+| ------------ | ------------------------------- |
+| Channel type | PagerDuty                       |
+| Service key  | Integration key from step 2     |
 | Display name | `pagerduty-boutique-production` |
 
 Click **Test connection** if available. Save the channel.
@@ -95,11 +95,11 @@ For each production alert policy from topic 13:
 
 Attach `pagerduty-boutique-production` to:
 
-| Policy | Runbook |
-|--------|---------|
+| Policy                     | Runbook                                                                    |
+| -------------------------- | -------------------------------------------------------------------------- |
 | `browse-availability-burn` | [browse-availability-burn.md](../sre/runbooks/browse-availability-burn.md) |
-| `checkout-latency-burn` | [checkout-latency-burn.md](../sre/runbooks/checkout-latency-burn.md) |
-| `uptime-check-failed` | [uptime-check-failed.md](../sre/runbooks/uptime-check-failed.md) |
+| `checkout-latency-burn`    | [checkout-latency-burn.md](../sre/runbooks/checkout-latency-burn.md)       |
+| `uptime-check-failed`      | [uptime-check-failed.md](../sre/runbooks/uptime-check-failed.md)           |
 
 Ensure each policy documentation field or user label includes `runbook_url` pointing to the GitHub runbook.
 
@@ -169,14 +169,14 @@ Full procedure: [test-alerts.md](../sre/oncall/test-alerts.md)
 
 ## Common problems
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| No incident in PagerDuty | Wrong integration key | Re-create channel; verify key matches PD integration |
-| Test connection fails | Typo in service key | Copy key again from PD → Integrations |
-| Incident delayed > 5 min | Long aggregation alignment period | Reduce alignment period on test policy only |
-| Duplicate pages | Multiple channels on same policy | Deduplicate notification channels |
-| Pages wrong person | Escalation policy misconfigured | PD → Escalation policies → verify schedule |
-| 403 creating channel | Insufficient IAM | Grant `roles/monitoring.notificationChannelEditor` |
+| Symptom                  | Cause                             | Fix                                                  |
+| ------------------------ | --------------------------------- | ---------------------------------------------------- |
+| No incident in PagerDuty | Wrong integration key             | Re-create channel; verify key matches PD integration |
+| Test connection fails    | Typo in service key               | Copy key again from PD → Integrations                |
+| Incident delayed > 5 min | Long aggregation alignment period | Reduce alignment period on test policy only          |
+| Duplicate pages          | Multiple channels on same policy  | Deduplicate notification channels                    |
+| Pages wrong person       | Escalation policy misconfigured   | PD → Escalation policies → verify schedule           |
+| 403 creating channel     | Insufficient IAM                  | Grant `roles/monitoring.notificationChannelEditor`   |
 
 ## Recovery
 

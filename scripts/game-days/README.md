@@ -8,10 +8,10 @@ Automate controlled fault injection referenced by [docs/sre/game-days/](../../do
 
 ## Scripts
 
-| Script | Scenario | Guide |
-|--------|----------|-------|
+| Script                  | Scenario                        | Guide                                                                     |
+| ----------------------- | ------------------------------- | ------------------------------------------------------------------------- |
 | `inject-pod-failure.sh` | Single pod delete / zone stress | [02-zone-pod-failure.md](../../docs/sre/game-days/02-zone-pod-failure.md) |
-| `inject-redis-down.sh` | Scale Redis cart to zero | [03-redis-cart-down.md](../../docs/sre/game-days/03-redis-cart-down.md) |
+| `inject-redis-down.sh`  | Scale Redis cart to zero        | [03-redis-cart-down.md](../../docs/sre/game-days/03-redis-cart-down.md)   |
 
 ## Safety
 

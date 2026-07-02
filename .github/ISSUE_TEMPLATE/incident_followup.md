@@ -3,7 +3,7 @@ name: Incident follow-up
 about: Track action items after an incident or game day
 title: "[incident] "
 labels: incident
-assignees: ''
+assignees: ""
 ---
 
 ## Incident reference

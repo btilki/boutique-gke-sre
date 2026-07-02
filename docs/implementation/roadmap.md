@@ -6,16 +6,16 @@ Phased delivery for **boutique-gke-sre** — one phase per session: validate →
 
 ## Phase status
 
-| Phase | Focus | Size | Status | Setup topics |
-|-------|-------|------|--------|--------------|
-| **1** | Repo scaffold + Terraform foundation | S | ✅ Complete | 01–03 |
-| **2** | GKE + DNS + ingress + TLS | L | 🔄 Current | 04–06 |
-| **3** | WIF + Artifact Registry + CI | M | ⬜ | 07–08 |
-| **4** | Argo CD + policies + ESO + NetworkPolicy | L | ⬜ **gate** | 09–11 |
-| **5** | Online Boutique deploy | M | ⬜ | 12 |
-| **6** | Observability + SLOs | L | ⬜ | 13 |
-| **7** | SRE ops + game day | M | ⬜ | 14–16 |
-| **8** | Teardown + backup/restore | M | ⬜ | teardown doc |
+| Phase | Focus                                    | Size | Status      | Setup topics |
+| ----- | ---------------------------------------- | ---- | ----------- | ------------ |
+| **1** | Repo scaffold + Terraform foundation     | S    | ✅ Complete | 01–03        |
+| **2** | GKE + DNS + ingress + TLS                | L    | 🔄 Current  | 04–06        |
+| **3** | WIF + Artifact Registry + CI             | M    | ⬜          | 07–08        |
+| **4** | Argo CD + policies + ESO + NetworkPolicy | L    | ⬜ **gate** | 09–11        |
+| **5** | Online Boutique deploy                   | M    | ⬜          | 12           |
+| **6** | Observability + SLOs                     | L    | ⬜          | 13           |
+| **7** | SRE ops + game day                       | M    | ⬜          | 14–16        |
+| **8** | Teardown + backup/restore                | M    | ⬜          | teardown doc |
 
 ## Phase 1 — complete
 

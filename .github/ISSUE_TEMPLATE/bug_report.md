@@ -3,7 +3,7 @@ name: Bug report
 about: Report a defect in platform config, docs, or automation
 title: "[bug] "
 labels: bug
-assignees: ''
+assignees: ""
 ---
 
 ## Summary

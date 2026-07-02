@@ -8,10 +8,10 @@ Receive OTLP from application workloads and export to Google Cloud observability
 
 ## Layout
 
-| Path | Purpose |
-|------|---------|
-| `collector/config.yaml` | Collector pipeline configuration (receivers, processors, exporters) |
-| `collector/deployment.yaml` | Kubernetes Deployment, ServiceAccount, and volume mounts |
+| Path                        | Purpose                                                             |
+| --------------------------- | ------------------------------------------------------------------- |
+| `collector/config.yaml`     | Collector pipeline configuration (receivers, processors, exporters) |
+| `collector/deployment.yaml` | Kubernetes Deployment, ServiceAccount, and volume mounts            |
 
 ## Dependencies
 

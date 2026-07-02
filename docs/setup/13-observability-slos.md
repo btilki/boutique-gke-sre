@@ -89,22 +89,22 @@ Navigate: **GCP Console → Monitoring → SLOs → Create SLO**
 
 #### Browse availability — 99.9%
 
-| Field | Value |
-|-------|-------|
-| Service | Online Boutique / HTTPS LB or custom service |
-| SLI type | Availability — good requests / total requests |
-| Filter | Request host = `boutique.biroltilki.art` (or frontend metric label) |
-| Goal | **99.9%** over rolling **30 days** |
-| Name | `browse-availability` |
+| Field    | Value                                                               |
+| -------- | ------------------------------------------------------------------- |
+| Service  | Online Boutique / HTTPS LB or custom service                        |
+| SLI type | Availability — good requests / total requests                       |
+| Filter   | Request host = `boutique.biroltilki.art` (or frontend metric label) |
+| Goal     | **99.9%** over rolling **30 days**                                  |
+| Name     | `browse-availability`                                               |
 
 #### Checkout availability — 99.95%
 
-| Field | Value |
-|-------|-------|
-| SLI type | Availability — successful checkouts / attempts |
-| Metric | Custom or log-based metric from `checkoutservice` (see `observability/monitoring/log-based-metrics/`) |
-| Goal | **99.95%** over rolling **30 days** |
-| Name | `checkout-availability` |
+| Field    | Value                                                                                                 |
+| -------- | ----------------------------------------------------------------------------------------------------- |
+| SLI type | Availability — successful checkouts / attempts                                                        |
+| Metric   | Custom or log-based metric from `checkoutservice` (see `observability/monitoring/log-based-metrics/`) |
+| Goal     | **99.95%** over rolling **30 days**                                                                   |
+| Name     | `checkout-availability`                                                                               |
 
 Reference definitions: `observability/monitoring/slos/` and [catalog.md](../sre/slos/catalog.md).
 
@@ -121,11 +121,11 @@ Navigate: **GCP Console → Monitoring → Alerting → Create policy**
 For each SLO, add **SLO burn rate** conditions per [burn-rate-alerting.md](../sre/slos/burn-rate-alerting.md):
 
 | Window | Burn multiplier | Response |
-|--------|-----------------|----------|
-| 1 h | 14.4× | Page |
-| 6 h | 6× | Page |
-| 1 d | 3× | Ticket |
-| 3 d | 1× | Ticket |
+| ------ | --------------- | -------- |
+| 1 h    | 14.4×           | Page     |
+| 6 h    | 6×              | Page     |
+| 1 d    | 3×              | Ticket   |
+| 3 d    | 1×              | Ticket   |
 
 **Browse availability burn** policy:
 
@@ -145,13 +145,13 @@ Planned policy manifests: `observability/monitoring/alert-policies/`
 
 Navigate: **Monitoring → Uptime checks → Create**
 
-| Field | Value |
-|-------|-------|
-| Protocol | HTTPS |
-| Host | `boutique.biroltilki.art` |
-| Path | `/` |
-| Period | 1 min |
-| Regions | 3+ |
+| Field    | Value                     |
+| -------- | ------------------------- |
+| Protocol | HTTPS                     |
+| Host     | `boutique.biroltilki.art` |
+| Path     | `/`                       |
+| Period   | 1 min                     |
+| Regions  | 3+                        |
 
 Alert policy: `uptime-check-failed` → runbook `docs/sre/runbooks/uptime-check-failed.md`
 
@@ -197,13 +197,13 @@ ls docs/sre/runbooks/browse-availability-burn.md \
 
 ## Common problems
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| No traces in Cloud Trace | WI not configured on collector SA | Verify annotation and IAM roles |
-| SLO shows "no data" | Insufficient metric traffic | Generate requests; verify LB/OTel metrics |
-| Grafana datasource error | MP not linked or WI missing | Check `datasources.yaml`; verify GMP permissions |
-| Burn alert never fires | Threshold too high | Lower 1 h window multiplier for test |
-| High cardinality costs | Per-pod labels on SLI | Aggregate at service level per catalog guidance |
+| Symptom                  | Cause                             | Fix                                              |
+| ------------------------ | --------------------------------- | ------------------------------------------------ |
+| No traces in Cloud Trace | WI not configured on collector SA | Verify annotation and IAM roles                  |
+| SLO shows "no data"      | Insufficient metric traffic       | Generate requests; verify LB/OTel metrics        |
+| Grafana datasource error | MP not linked or WI missing       | Check `datasources.yaml`; verify GMP permissions |
+| Burn alert never fires   | Threshold too high                | Lower 1 h window multiplier for test             |
+| High cardinality costs   | Per-pod labels on SLI             | Aggregate at service level per catalog guidance  |
 
 ## Recovery
 

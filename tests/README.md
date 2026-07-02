@@ -39,12 +39,12 @@ kyverno test tests/kyverno/
 
 ## Phase coverage
 
-| Phase | Tests |
-|-------|-------|
-| 1 | `make validate`, terraform fmt/validate |
-| 3 | `tests/terraform/validate.tftest.hcl` |
-| 4 | `tests/kyverno/`, `examples/kyverno-policy-test/` |
-| 6 | Observability manifest kubeconform |
+| Phase | Tests                                             |
+| ----- | ------------------------------------------------- |
+| 1     | `make validate`, terraform fmt/validate           |
+| 3     | `tests/terraform/validate.tftest.hcl`             |
+| 4     | `tests/kyverno/`, `examples/kyverno-policy-test/` |
+| 6     | Observability manifest kubeconform                |
 
 ## Further reading
 

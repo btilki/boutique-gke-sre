@@ -8,15 +8,23 @@ Enforces **Binary Authorization** on the private GKE cluster so only **cosign-si
 
 ## Inputs
 
-| Name | Description | Type | Default |
-|------|-------------|------|---------|
-| _TBD_ | _To be defined in `variables.tf`_ | _TBD_ | _TBD_ |
+| Name                         | Description           | Type     | Default                    |
+| ---------------------------- | --------------------- | -------- | -------------------------- |
+| `project_id`                 | GCP project ID        | `string` | —                          |
+| `cluster_name`               | GKE cluster name      | `string` | —                          |
+| `location`                   | Cluster region        | `string` | `europe-west1`             |
+| `attestor_id`                | Attestor resource ID  | `string` | `boutique-cosign-attestor` |
+| `cosign_public_key_pem`      | Cosign public key PEM | `string` | —                          |
+| `cosign_signature_algorithm` | PKIX algorithm        | `string` | `ECDSA_P256_SHA256`        |
+| `enforcement_mode`           | Cluster enforcement   | `string` | `DRYRUN_AUDIT_LOG_ONLY`    |
 
 ## Outputs
 
-| Name | Description |
-|------|-------------|
-| _TBD_ | _To be defined in `outputs.tf`_ |
+| Name                   | Description                                            |
+| ---------------------- | ------------------------------------------------------ |
+| `attestor_name`        | Attestor resource name                                 |
+| `cluster_admission_id` | Policy cluster specifier (`europe-west1.boutique-gke`) |
+| `enforcement_mode`     | Active enforcement mode                                |
 
 ## Dependencies
 
@@ -27,15 +35,21 @@ Enforces **Binary Authorization** on the private GKE cluster so only **cosign-si
 
 ## Usage
 
+In `terraform/environments/boutique/main.tf` (requires `cosign_public_key_pem` in `terraform.tfvars`):
+
 ```hcl
 module "binary_authorization" {
+  count  = local.binary_authorization_enabled ? 1 : 0
   source = "../../modules/binary-authorization"
 
-  project_id   = var.project_id
-  cluster_name = module.gke.cluster_name
-  location     = "europe-west1"
-  ar_location  = module.artifact_registry.location
-  ar_repo_id   = module.artifact_registry.repository_id
+  project_id                 = var.project_id
+  cluster_name               = var.cluster_name
+  location                   = var.region
+  cosign_public_key_pem      = var.cosign_public_key_pem
+  enforcement_mode           = var.binary_authorization_enforcement_mode
+  cosign_signature_algorithm = "ECDSA_P256_SHA256"
+
+  depends_on = [module.project_apis, module.gke]
 }
 ```
 

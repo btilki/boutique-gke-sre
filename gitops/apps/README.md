@@ -8,19 +8,19 @@ Define deployable applications and how Argo CD discovers them. Child Application
 
 ## Inputs
 
-| Input | Description |
-|-------|-------------|
-| `boutique/` | Online Boutique Helm chart |
+| Input          | Description                                           |
+| -------------- | ----------------------------------------------------- |
+| `boutique/`    | Online Boutique Helm chart                            |
 | `argocd-apps/` | Application CRs for boutique, observability, policies |
-| Argo CD | Root sync from `../bootstrap/root-app.yaml` |
+| Argo CD        | Root sync from `../bootstrap/root-app.yaml`           |
 
 ## Outputs
 
-| Output | Description |
-|--------|-------------|
-| `boutique` Application | Storefront workloads (Phase 5) |
+| Output                      | Description                         |
+| --------------------------- | ----------------------------------- |
+| `boutique` Application      | Storefront workloads (Phase 5)      |
 | `observability` Application | OTel, Prometheus, Grafana (Phase 6) |
-| `policies` Application | Kyverno + NetworkPolicy (Phase 4) |
+| `policies` Application      | Kyverno + NetworkPolicy (Phase 4)   |
 
 ## Dependencies
 

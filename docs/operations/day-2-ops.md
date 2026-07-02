@@ -40,11 +40,11 @@ Expected: HTTP 200 on storefront; Argo CD apps Healthy/Synced.
 
 ## Troubleshooting
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| Cert expiry warning | Managed cert provisioning delay | [dns.md](../dns.md), re-check ingress |
-| Sync drift | Manual cluster edits | Revert; sync from Git |
-| SLO burn | Deploy or dependency fault | Matching runbook in `docs/sre/runbooks/` |
+| Symptom             | Cause                           | Fix                                      |
+| ------------------- | ------------------------------- | ---------------------------------------- |
+| Cert expiry warning | Managed cert provisioning delay | [dns.md](../dns.md), re-check ingress    |
+| Sync drift          | Manual cluster edits            | Revert; sync from Git                    |
+| SLO burn            | Deploy or dependency fault      | Matching runbook in `docs/sre/runbooks/` |
 
 ## Common mistakes
 

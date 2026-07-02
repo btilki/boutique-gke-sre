@@ -91,10 +91,10 @@ Verify in GCP Console (optional):
 
 In GitHub: **Settings** → **Secrets and variables** → **Actions** → **New repository secret**
 
-| Secret name | Value |
-|-------------|-------|
-| `GCP_WORKLOAD_IDENTITY_PROVIDER` | Full provider resource name from `terraform output wif_provider_name` |
-| `GCP_SERVICE_ACCOUNT` | CI service account email from `terraform output ci_service_account_email` (e.g. `github-ci@boutique-gke.iam.gserviceaccount.com`) |
+| Secret name                      | Value                                                                                                                             |
+| -------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| `GCP_WORKLOAD_IDENTITY_PROVIDER` | Full provider resource name from `terraform output wif_provider_name`                                                             |
+| `GCP_SERVICE_ACCOUNT`            | CI service account email from `terraform output ci_service_account_email` (e.g. `github-ci@boutique-gke.iam.gserviceaccount.com`) |
 
 **Do not** create `GCP_SA_KEY`, `GOOGLE_CREDENTIALS`, or any JSON key secret.
 
@@ -216,14 +216,14 @@ In GitHub:
 
 ## Common problems
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| `invalid_grant` / `unable to acquire impersonated credentials` | Wrong provider name or SA email in secrets | Re-copy from `terraform output`; no typos |
-| `Permission 'iam.serviceAccounts.getAccessToken' denied` | Missing `workloadIdentityUser` on CI SA | Re-apply `wif` module; check attribute.repository matches org/repo |
-| `id-token: write` missing | Workflow permissions | Add `permissions: id-token: write` at job or workflow level |
-| `denied: Permission "artifactregistry.repositories.uploadArtifacts"` | SA lacks AR writer | Grant `roles/artifactregistry.writer` (topic 08) |
-| Org policy blocks WIF | Restrictive org constraint | Org admin allows WIF for `boutique-gke` |
-| Workflow read-only | GitHub **Workflow permissions** set to read | UI: Settings → Actions → General → Read and write |
+| Symptom                                                              | Cause                                       | Fix                                                                |
+| -------------------------------------------------------------------- | ------------------------------------------- | ------------------------------------------------------------------ |
+| `invalid_grant` / `unable to acquire impersonated credentials`       | Wrong provider name or SA email in secrets  | Re-copy from `terraform output`; no typos                          |
+| `Permission 'iam.serviceAccounts.getAccessToken' denied`             | Missing `workloadIdentityUser` on CI SA     | Re-apply `wif` module; check attribute.repository matches org/repo |
+| `id-token: write` missing                                            | Workflow permissions                        | Add `permissions: id-token: write` at job or workflow level        |
+| `denied: Permission "artifactregistry.repositories.uploadArtifacts"` | SA lacks AR writer                          | Grant `roles/artifactregistry.writer` (topic 08)                   |
+| Org policy blocks WIF                                                | Restrictive org constraint                  | Org admin allows WIF for `boutique-gke`                            |
+| Workflow read-only                                                   | GitHub **Workflow permissions** set to read | UI: Settings → Actions → General → Read and write                  |
 
 ## Recovery
 

@@ -8,10 +8,10 @@ Support safe project teardown documented in [docs/teardown.md](../../docs/teardo
 
 ## Scripts
 
-| Script | Purpose |
-|--------|---------|
+| Script                     | Purpose                                         |
+| -------------------------- | ----------------------------------------------- |
 | `pre-destroy-checklist.sh` | Verify backups and flag resources still present |
-| `orphan-resource-scan.sh` | Read-only `gcloud` inventory of common orphans |
+| `orphan-resource-scan.sh`  | Read-only `gcloud` inventory of common orphans  |
 
 ## Usage
 

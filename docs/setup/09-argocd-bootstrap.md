@@ -80,10 +80,10 @@ Pin the chart version to a known release; check [argo-helm releases](https://git
 
 Edit `gitops/bootstrap/argocd/ingress.yaml` to uncomment and set annotations before applying:
 
-| Annotation | Value |
-|------------|-------|
+| Annotation                                    | Value                 |
+| --------------------------------------------- | --------------------- |
 | `kubernetes.io/ingress.global-static-ip-name` | `boutique-ingress-ip` |
-| `networking.gke.io/managed-certificates` | `argocd-managed-cert` |
+| `networking.gke.io/managed-certificates`      | `argocd-managed-cert` |
 
 Create the Google-managed certificate CR if not already present:
 
@@ -178,14 +178,14 @@ kubectl -n argocd get secret argocd-initial-admin-secret
 
 ## Common problems
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| `connection refused` on Argo CD URL | Ingress or managed cert not ready | Wait 15–60 min; check `ManagedCertificate` status is `Active` |
-| TLS error / wrong certificate | DNS not pointing at static IP | Compare `dig +short` output to `terraform output ingress_static_ip` |
-| `502 Bad Gateway` on Argo CD URL | `server.insecure` not set while using HTTP backend on Ingress | Ensure `configs.params.server.insecure: true` in Helm values |
-| `boutique-root` `InvalidSpecError` | Wrong `repoURL` or private repo without credentials | Set correct Git URL; add repo credentials via Argo CD UI or `argocd repo add` |
-| Helm install timeout | API server slow or insufficient nodes | `kubectl get events -n argocd`; increase `--timeout`; verify node pool |
-| Cannot decode admin password | Secret not created yet | Wait for `argocd-server` pod Ready; re-run secret get command |
+| Symptom                             | Cause                                                         | Fix                                                                           |
+| ----------------------------------- | ------------------------------------------------------------- | ----------------------------------------------------------------------------- |
+| `connection refused` on Argo CD URL | Ingress or managed cert not ready                             | Wait 15–60 min; check `ManagedCertificate` status is `Active`                 |
+| TLS error / wrong certificate       | DNS not pointing at static IP                                 | Compare `dig +short` output to `terraform output ingress_static_ip`           |
+| `502 Bad Gateway` on Argo CD URL    | `server.insecure` not set while using HTTP backend on Ingress | Ensure `configs.params.server.insecure: true` in Helm values                  |
+| `boutique-root` `InvalidSpecError`  | Wrong `repoURL` or private repo without credentials           | Set correct Git URL; add repo credentials via Argo CD UI or `argocd repo add` |
+| Helm install timeout                | API server slow or insufficient nodes                         | `kubectl get events -n argocd`; increase `--timeout`; verify node pool        |
+| Cannot decode admin password        | Secret not created yet                                        | Wait for `argocd-server` pod Ready; re-run secret get command                 |
 
 ## Recovery
 

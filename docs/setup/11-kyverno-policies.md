@@ -10,13 +10,13 @@ Install the Kyverno admission controller, deploy the five minimum ClusterPolicie
 
 Kyverno is the policy enforcement layer between GitOps and running pods. It implements the production baseline from the project description:
 
-| Policy file | Rule |
-|-------------|------|
-| `require-digest.yaml` | Reject `:latest`; require `@sha256:` digest |
-| `require-probes.yaml` | Liveness + readiness probes required |
-| `require-resources.yaml` | CPU/memory requests and limits required |
+| Policy file                  | Rule                                              |
+| ---------------------------- | ------------------------------------------------- |
+| `require-digest.yaml`        | Reject `:latest`; require `@sha256:` digest       |
+| `require-probes.yaml`        | Liveness + readiness probes required              |
+| `require-resources.yaml`     | CPU/memory requests and limits required           |
 | `require-netpol-labels.yaml` | Namespace tier label for NetworkPolicy compliance |
-| `block-plain-secrets.yaml` | Block plain `Secret` resources (ESO-only) |
+| `block-plain-secrets.yaml`   | Block plain `Secret` resources (ESO-only)         |
 
 NetworkPolicies in `gitops/policies/network-policies/` (`default-deny.yaml`, `boutique-allow.yaml`) restrict pod-to-pod traffic. Together with ESO (topic 10) and Binary Authorization (topic 08), this gate ensures only hardened workloads deploy.
 
@@ -163,14 +163,14 @@ kubectl apply --dry-run=server -f examples/kyverno-policy-test/bad-latest-pod.ya
 
 ## Common problems
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| Policies not enforcing | Wrong webhook configuration / Kyverno not Ready | `kubectl -n kyverno logs deploy/kyverno-admission-controller` |
-| `kyverno test` fails — policy not found | Test YAML still commented | Uncomment paths in `tests/kyverno/require-digest-test.yaml` |
-| Valid pod denied | Missing probes, resources, or namespace label | Compare manifest against each ClusterPolicy |
-| Argo CD sync conflict | Helm-installed Kyverno + GitOps overlap | Choose one install path; prefer GitOps for policies only |
-| NetworkPolicy blocks traffic unexpectedly | `default-deny` without allow rules | Apply `boutique-allow.yaml`; verify namespace labels |
-| `block-plain-secrets` blocks ESO secrets | Policy match too broad | ESO creates Secrets via controller — ensure policy exempts ESO SA or uses correct match rules |
+| Symptom                                   | Cause                                           | Fix                                                                                           |
+| ----------------------------------------- | ----------------------------------------------- | --------------------------------------------------------------------------------------------- |
+| Policies not enforcing                    | Wrong webhook configuration / Kyverno not Ready | `kubectl -n kyverno logs deploy/kyverno-admission-controller`                                 |
+| `kyverno test` fails — policy not found   | Test YAML still commented                       | Uncomment paths in `tests/kyverno/require-digest-test.yaml`                                   |
+| Valid pod denied                          | Missing probes, resources, or namespace label   | Compare manifest against each ClusterPolicy                                                   |
+| Argo CD sync conflict                     | Helm-installed Kyverno + GitOps overlap         | Choose one install path; prefer GitOps for policies only                                      |
+| NetworkPolicy blocks traffic unexpectedly | `default-deny` without allow rules              | Apply `boutique-allow.yaml`; verify namespace labels                                          |
+| `block-plain-secrets` blocks ESO secrets  | Policy match too broad                          | ESO creates Secrets via controller — ensure policy exempts ESO SA or uses correct match rules |
 
 ## Recovery
 

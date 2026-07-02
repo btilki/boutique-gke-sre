@@ -8,10 +8,10 @@ Detect total storefront and Argo CD edge failures independent of in-cluster metr
 
 ## Planned checks
 
-| Check | URL | Interval |
-|-------|-----|----------|
-| `boutique-storefront` | https://boutique.biroltilki.art | 60s |
-| `argocd-ui` | https://argocd.boutique.biroltilki.art/healthz | 300s |
+| Check                 | URL                                            | Interval |
+| --------------------- | ---------------------------------------------- | -------- |
+| `boutique-storefront` | https://boutique.biroltilki.art                | 60s      |
+| `argocd-ui`           | https://argocd.boutique.biroltilki.art/healthz | 300s     |
 
 ## Alert linkage
 

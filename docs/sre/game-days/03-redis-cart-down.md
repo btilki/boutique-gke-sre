@@ -42,10 +42,10 @@ kubectl get deploy redis-cart -n boutique
 
 ## Troubleshooting
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| No alert | Cart still cached | Clear session; retry checkout |
-| Slow recovery | PVC attach delay | Check Redis pod events |
+| Symptom       | Cause             | Fix                           |
+| ------------- | ----------------- | ----------------------------- |
+| No alert      | Cart still cached | Clear session; retry checkout |
+| Slow recovery | PVC attach delay  | Check Redis pod events        |
 
 ## Common mistakes
 

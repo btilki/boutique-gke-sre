@@ -8,24 +8,24 @@ Creates a Cloud DNS managed zone for the root domain (e.g. `biroltilki.art`) and
 
 ## Inputs
 
-| Name | Description | Type | Default |
-|------|-------------|------|---------|
-| `project_id` | GCP project ID | string | required |
-| `domain` | Root DNS domain | string | required |
-| `static_ip_address` | Global static IP for A records | string | required |
-| `boutique_hostname` | Storefront FQDN | string | `boutique.biroltilki.art` |
-| `argocd_hostname` | Argo CD FQDN | string | `argocd.boutique.biroltilki.art` |
-| `managed_zone_name` | Cloud DNS zone resource name | string | `biroltilki-art` |
-| `ttl` | Record TTL in seconds | number | `300` |
+| Name                | Description                    | Type   | Default                          |
+| ------------------- | ------------------------------ | ------ | -------------------------------- |
+| `project_id`        | GCP project ID                 | string | required                         |
+| `domain`            | Root DNS domain                | string | required                         |
+| `static_ip_address` | Global static IP for A records | string | required                         |
+| `boutique_hostname` | Storefront FQDN                | string | `boutique.biroltilki.art`        |
+| `argocd_hostname`   | Argo CD FQDN                   | string | `argocd.boutique.biroltilki.art` |
+| `managed_zone_name` | Cloud DNS zone resource name   | string | `biroltilki-art`                 |
+| `ttl`               | Record TTL in seconds          | number | `300`                            |
 
 ## Outputs
 
-| Name | Description |
-|------|-------------|
-| `managed_zone_name` | Cloud DNS zone name |
-| `name_servers` | NS records for registrar delegation |
-| `boutique_fqdn` | Boutique A record FQDN |
-| `argocd_fqdn` | Argo CD A record FQDN |
+| Name                | Description                         |
+| ------------------- | ----------------------------------- |
+| `managed_zone_name` | Cloud DNS zone name                 |
+| `name_servers`      | NS records for registrar delegation |
+| `boutique_fqdn`     | Boutique A record FQDN              |
+| `argocd_fqdn`       | Argo CD A record FQDN               |
 
 ## Dependencies
 

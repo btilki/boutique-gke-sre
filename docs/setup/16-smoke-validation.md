@@ -90,7 +90,7 @@ kubectl -n boutique get pods -o jsonpath='{range .items[*]}{.spec.containers[0].
 
 ```bash
 # Binary Authorization policy exists (topic 08)
-gcloud beta binary-authorization policy export --project=boutique-gke 2>/dev/null | head -20
+gcloud container binauthz policy export --project=boutique-gke 2>/dev/null | head -20
 
 # Artifact Registry repository
 gcloud artifacts repositories list --project=boutique-gke --location=europe-west1
@@ -112,9 +112,9 @@ ls docs/sre/runbooks/*.md | wc -l
 
 Verify SLO targets against [catalog.md](../sre/slos/catalog.md):
 
-| SLO | Target |
-|-----|--------|
-| Browse availability | 99.9% |
+| SLO                   | Target |
+| --------------------- | ------ |
+| Browse availability   | 99.9%  |
 | Checkout availability | 99.95% |
 
 ### 7. Alerting and on-call
@@ -172,17 +172,17 @@ kubectl get networkpolicy -A
 
 When bootstrap is complete:
 
-| Area | Expected state |
-|------|----------------|
-| DNS / TLS | Both hostnames resolve; HTTPS 200/302 |
-| Argo CD | Synced apps; manual sync only |
-| ESO | ClusterSecretStore Ready |
-| Kyverno | 5 ClusterPolicies enforcing |
-| Boutique | Healthy; digest-only images |
-| Observability | OTel + Grafana Running; SLOs listed |
-| Alerting | PagerDuty channel; test incident succeeded |
-| Cloud Armor | CRS policy attached; storefront reachable |
-| SRE docs | Runbooks, on-call, game days, teardown exist |
+| Area          | Expected state                               |
+| ------------- | -------------------------------------------- |
+| DNS / TLS     | Both hostnames resolve; HTTPS 200/302        |
+| Argo CD       | Synced apps; manual sync only                |
+| ESO           | ClusterSecretStore Ready                     |
+| Kyverno       | 5 ClusterPolicies enforcing                  |
+| Boutique      | Healthy; digest-only images                  |
+| Observability | OTel + Grafana Running; SLOs listed          |
+| Alerting      | PagerDuty channel; test incident succeeded   |
+| Cloud Armor   | CRS policy attached; storefront reachable    |
+| SRE docs      | Runbooks, on-call, game days, teardown exist |
 
 ## Validation
 
@@ -210,14 +210,14 @@ curl -I https://argocd.boutique.biroltilki.art
 
 ## Common problems
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| One checklist item fails | Skipped or partial prior topic | Return to the failing topic guide |
-| `curl` TLS error | Cert or DNS regression | Topics 05–06 |
-| Kyverno deny count ≠ 5 | Policy not applied | Topic 11 |
-| SLO missing | Topic 13 incomplete | Create SLO in Console |
-| No PagerDuty test record | Topic 14 skipped | [test-alerts.md](../sre/oncall/test-alerts.md) |
-| Images without digest | CI not wired | Topic 08 + 12 |
+| Symptom                  | Cause                          | Fix                                            |
+| ------------------------ | ------------------------------ | ---------------------------------------------- |
+| One checklist item fails | Skipped or partial prior topic | Return to the failing topic guide              |
+| `curl` TLS error         | Cert or DNS regression         | Topics 05–06                                   |
+| Kyverno deny count ≠ 5   | Policy not applied             | Topic 11                                       |
+| SLO missing              | Topic 13 incomplete            | Create SLO in Console                          |
+| No PagerDuty test record | Topic 14 skipped               | [test-alerts.md](../sre/oncall/test-alerts.md) |
+| Images without digest    | CI not wired                   | Topic 08 + 12                                  |
 
 ## Recovery
 
@@ -250,12 +250,12 @@ For environment teardown when the reference is no longer needed: [teardown.md](.
 
 Bootstrap is complete. Proceed to operational readiness:
 
-| Step | Action | Guide |
-|------|--------|-------|
-| First game day | Bad deploy rollback scenario | [game-days/01-bad-deploy-rollback.md](../sre/game-days/01-bad-deploy-rollback.md) |
-| On-call setup | Rotation and playbook | [oncall/README.md](../sre/oncall/README.md) |
-| Alert drill | Re-test PagerDuty routing | [oncall/test-alerts.md](../sre/oncall/test-alerts.md) |
-| CI deploy path | Digest PR → review → Argo sync | [12-boutique-deploy.md](12-boutique-deploy.md) |
-| Teardown | Safe decommission when finished | [teardown.md](../teardown.md) |
+| Step           | Action                          | Guide                                                                             |
+| -------------- | ------------------------------- | --------------------------------------------------------------------------------- |
+| First game day | Bad deploy rollback scenario    | [game-days/01-bad-deploy-rollback.md](../sre/game-days/01-bad-deploy-rollback.md) |
+| On-call setup  | Rotation and playbook           | [oncall/README.md](../sre/oncall/README.md)                                       |
+| Alert drill    | Re-test PagerDuty routing       | [oncall/test-alerts.md](../sre/oncall/test-alerts.md)                             |
+| CI deploy path | Digest PR → review → Argo sync  | [12-boutique-deploy.md](12-boutique-deploy.md)                                    |
+| Teardown       | Safe decommission when finished | [teardown.md](../teardown.md)                                                     |
 
 Executive summary: [bootstrap.md](../bootstrap.md)

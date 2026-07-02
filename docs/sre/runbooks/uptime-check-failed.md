@@ -1,6 +1,6 @@
 # Runbook: uptime check failed
 
-**Alert policy:** `uptime-check-failed`  
+**Alert policy:** `uptime-check-failed`
 **Target:** https://boutique.biroltilki.art
 
 > Full steps expanded in Phase 6–7.

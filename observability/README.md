@@ -33,10 +33,10 @@ observability/
 
 ## Public endpoints
 
-| Service | URL |
-|---------|-----|
-| Storefront | https://boutique.biroltilki.art |
-| Argo CD | https://argocd.boutique.biroltilki.art |
+| Service    | URL                                    |
+| ---------- | -------------------------------------- |
+| Storefront | https://boutique.biroltilki.art        |
+| Argo CD    | https://argocd.boutique.biroltilki.art |
 
 ## Data flow
 

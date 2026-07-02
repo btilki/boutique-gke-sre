@@ -14,11 +14,11 @@ See `variables.tf` and `terraform.tfvars.example`.
 
 See `outputs.tf`:
 
-| Phase | Outputs |
-|-------|---------|
-| **1** (topic 03) | `network_name`, `subnet_name`, `pods_range_name`, `services_range_name`, `enabled_apis` |
+| Phase                | Outputs                                                                                                   |
+| -------------------- | --------------------------------------------------------------------------------------------------------- |
+| **1** (topic 03)     | `network_name`, `subnet_name`, `pods_range_name`, `services_range_name`, `enabled_apis`                   |
 | **2** (topics 04–06) | `cluster_name`, `cluster_location`, `ingress_static_ip`, `dns_name_servers`, `boutique_url`, `argocd_url` |
-| **3** (topic 07) | `wif_provider_name`, `ci_service_account_email` |
+| **3** (topic 07)     | `wif_provider_name`, `ci_service_account_email`                                                           |
 
 Phase 2 outputs return `null` until the corresponding modules are applied.
 

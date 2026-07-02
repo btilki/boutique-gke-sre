@@ -63,12 +63,12 @@ dig +short boutique.biroltilki.art
 
 ## Troubleshooting
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| `terraform destroy` fails on LB | Ingress still exists | `kubectl delete ingress --all -A`; wait |
-| Orphan global IP | Manual address not in TF | `gcloud compute addresses delete` |
-| NAT/router dependency | Order | Destroy cluster first; see module README |
-| Still billed for GKE | Cluster remains | `gcloud container clusters list` |
+| Symptom                         | Cause                    | Fix                                      |
+| ------------------------------- | ------------------------ | ---------------------------------------- |
+| `terraform destroy` fails on LB | Ingress still exists     | `kubectl delete ingress --all -A`; wait  |
+| Orphan global IP                | Manual address not in TF | `gcloud compute addresses delete`        |
+| NAT/router dependency           | Order                    | Destroy cluster first; see module README |
+| Still billed for GKE            | Cluster remains          | `gcloud container clusters list`         |
 
 ## Common mistakes
 

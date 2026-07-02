@@ -56,10 +56,10 @@ At your registrar for `biroltilki.art`:
 gcloud dns record-sets list --zone=biroltilki-art --project=boutique-gke
 ```
 
-| Hostname | Type | Target |
-|----------|------|--------|
-| `boutique.biroltilki.art` | A | Terraform static global IP |
-| `argocd.boutique.biroltilki.art` | A | Same static IP |
+| Hostname                         | Type | Target                     |
+| -------------------------------- | ---- | -------------------------- |
+| `boutique.biroltilki.art`        | A    | Terraform static global IP |
+| `argocd.boutique.biroltilki.art` | A    | Same static IP             |
 
 ## Validation
 
@@ -70,17 +70,17 @@ curl -I https://boutique.biroltilki.art
 curl -I https://argocd.boutique.biroltilki.art
 ```
 
-**Expected DNS:** Both return the same global static IP.  
+**Expected DNS:** Both return the same global static IP.
 **Expected HTTPS:** After certs provision (15–60 min): `HTTP/2 200` or `302`, no certificate errors.
 
 ## Troubleshooting
 
-| Symptom | Cause | Fix |
-|---------|-------|-----|
-| `dig` empty | NS not delegated or wrong zone | Re-check registrar NS |
-| Wrong IP | Stale record | Update A record in Cloud DNS |
-| TLS stuck "Provisioning" | DNS not pointing to LB IP | Wait for propagation; check Ingress events |
-| Cert active but 404 | Ingress rules | [06 — Ingress + TLS](setup/06-ingress-tls.md) |
+| Symptom                  | Cause                          | Fix                                           |
+| ------------------------ | ------------------------------ | --------------------------------------------- |
+| `dig` empty              | NS not delegated or wrong zone | Re-check registrar NS                         |
+| Wrong IP                 | Stale record                   | Update A record in Cloud DNS                  |
+| TLS stuck "Provisioning" | DNS not pointing to LB IP      | Wait for propagation; check Ingress events    |
+| Cert active but 404      | Ingress rules                  | [06 — Ingress + TLS](setup/06-ingress-tls.md) |
 
 ## Common mistakes
 

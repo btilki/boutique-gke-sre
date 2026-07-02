@@ -8,17 +8,17 @@ Configure External Secrets Operator (ESO) and a `ClusterSecretStore` for GCP Sec
 
 ## Inputs
 
-| Input | Description |
-|-------|-------------|
-| Secret Manager | Secret containers provisioned by Terraform (`secret-manager` module) |
-| Workload Identity | ESO controller GSA ↔ KSA binding |
-| `operator/` | Helm install for ESO |
+| Input             | Description                                                          |
+| ----------------- | -------------------------------------------------------------------- |
+| Secret Manager    | Secret containers provisioned by Terraform (`secret-manager` module) |
+| Workload Identity | ESO controller GSA ↔ KSA binding                                     |
+| `operator/`       | Helm install for ESO                                                 |
 
 ## Outputs
 
-| Output | Description |
-|--------|-------------|
-| ESO deployment | Controller in `external-secrets` namespace |
+| Output               | Description                                               |
+| -------------------- | --------------------------------------------------------- |
+| ESO deployment       | Controller in `external-secrets` namespace                |
 | `ClusterSecretStore` | Cluster-wide GCP SM backend (`cluster-secret-store.yaml`) |
 
 ## Dependencies

@@ -136,32 +136,24 @@ jobs:
           import json
           import os
 
+          invocation = (
+              f"https://github.com/{os.environ['GITHUB_REPOSITORY']}"
+              f"/actions/runs/{os.environ['GITHUB_RUN_ID']}"
+          )
+          # cosign --predicate expects the SLSA provenance body only (not the in-toto Statement).
           predicate = {
-              "_type": "https://in-toto.io/Statement/v1",
-              "subject": [
-                  {
-                      "name": os.environ["IMAGE"],
-                      "digest": {"sha256": os.environ["DIGEST_HEX"]},
-                  }
-              ],
-              "predicateType": "https://slsa.dev/provenance/v1",
-              "predicate": {
-                  "buildDefinition": {
-                      "buildType": "https://github.com/Attestations/GitHubActionsWorkflow@v1",
-                      "externalParameters": {
-                          "workflow": {
-                              "repository": os.environ["GITHUB_REPOSITORY"],
-                              "ref": os.environ["GITHUB_REF"],
-                              "path": ".github/workflows/build-scan-sign.yml",
-                          }
-                      },
+              "builder": {"id": invocation},
+              "buildType": "https://github.com/Attestations/GitHubActionsWorkflow@v1",
+              "metadata": {
+                  "buildInvocationID": invocation,
+                  "completeness": {
+                      "parameters": True,
+                      "environment": False,
+                      "materials": False,
                   },
-                  "runDetails": {
-                      "builder": {
-                          "id": f"https://github.com/{os.environ['GITHUB_REPOSITORY']}/actions/runs/{os.environ['GITHUB_RUN_ID']}"
-                      }
-                  },
+                  "reproducible": False,
               },
+              "materials": [],
           }
           with open(os.environ["PREDICATE"], "w", encoding="utf-8") as handle:
               json.dump(predicate, handle)

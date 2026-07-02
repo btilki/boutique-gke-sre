@@ -16,5 +16,8 @@ spec:
     server: https://kubernetes.default.svc
     namespace: observability
   syncPolicy:
+    managedNamespaceMetadata:
+      labels:
+        network-policy.biroltilki.art/tier: platform
     syncOptions:
       - CreateNamespace=true

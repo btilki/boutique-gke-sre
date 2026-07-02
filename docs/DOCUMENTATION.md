@@ -64,6 +64,6 @@ You execute setup steps in [setup/](setup/). Guides are the source of truth — 
 - [x] Error budget + severity linked
 - [x] All setup guides 01–16 written (SETUP format)
 - [ ] Terraform Phase 3+ modules implemented (WIF, AR, Binary Auth)
-- [ ] Helm chart templates + digest pins for Boutique deploy
+- [x] Helm chart templates + digest pins for Boutique deploy (Phase 5 / topic 12)
 - [ ] OTel collector manifests uncommented for observability sync
 - [ ] Alert policies in GCP link to runbook URLs (Phase 6–7)

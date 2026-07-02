@@ -131,12 +131,12 @@ Build → Trivy (fail critical/high) → push AR (digest) → cosign sign + atte
   → manifest digest PR → review/merge → manual Argo sync → Binary Auth → smoke check
 ```
 
-| Workflow                                                                             | Purpose                       |
-| ------------------------------------------------------------------------------------ | ----------------------------- |
-| [.github/workflows/ci.yml](.github/workflows/ci.yml)                                 | Lint, Terraform validate      |
-| [.github/workflows/terraform-plan.yml](.github/workflows/terraform-plan.yml)         | `terraform plan` on PR        |
-| [.github/workflows/build-scan-sign.yml](.github/workflows/build-scan-sign.yml)       | WIF build pipeline (Phase 3)  |
-| [.github/workflows/manifest-digest-pr.yml](.github/workflows/manifest-digest-pr.yml) | Digest promotion PR (Phase 3) |
+| Workflow                                                                             | Purpose                                                                   |
+| ------------------------------------------------------------------------------------ | ------------------------------------------------------------------------- |
+| [.github/workflows/ci.yml](.github/workflows/ci.yml)                                 | Terraform validate, Kyverno tests, Boutique chart validation, kubeconform |
+| [.github/workflows/terraform-plan.yml](.github/workflows/terraform-plan.yml)         | `terraform plan` on PR                                                    |
+| [.github/workflows/build-scan-sign.yml](.github/workflows/build-scan-sign.yml)       | WIF build pipeline (Phase 3)                                              |
+| [.github/workflows/manifest-digest-pr.yml](.github/workflows/manifest-digest-pr.yml) | Digest promotion PR (Phase 3)                                             |
 
 ## GitOps
 
@@ -173,7 +173,7 @@ Runbooks: [docs/sre/runbooks/](docs/sre/runbooks/) · SLO catalog: [docs/sre/slo
 
 - **Local / CI:** `make validate` — pre-commit, Terraform fmt/validate
 - **Policies:** `make kyverno-test` — Kyverno policy tests ([tests/kyverno/](tests/kyverno/))
-- **Manifests:** [tests/manifest/kubeconform.sh](tests/manifest/kubeconform.sh)
+- **Manifests:** [tests/manifest/kubeconform.sh](tests/manifest/kubeconform.sh), [digest-only.sh](tests/manifest/digest-only.sh), [boutique-kyverno.sh](tests/manifest/boutique-kyverno.sh)
 - **Alerts:** Fire test policy → PagerDuty incident ([docs/sre/oncall/test-alerts.md](docs/sre/oncall/test-alerts.md))
 - **Game days:** [scripts/game-days/](scripts/game-days/) · [docs/sre/game-days/](docs/sre/game-days/)
 - **Smoke:** HTTPS headers + checkout flow on live storefront URL

@@ -22,9 +22,9 @@ Manual sync ensures a human explicitly promotes each revision after PR review.
 - **Scaffold gate:** `gitops/apps/boutique/templates/` must contain Helm templates and `values-images.yaml` must have uncommented digest pins before sync succeeds
 - Artifact Registry images built and signed (topic 08); digests recorded in `values-images.yaml`
 - Argo CD CLI logged in or UI access at https://argocd.boutique.biroltilki.art
-- `boutique` namespace labeled: `network-policy.biroltilki.art/tier=application`
-- NetworkPolicies applied including `boutique-frontend-ingress` (frontend pods must have label `app: frontend`)
-- Tools: `kubectl`, `argocd` CLI, `curl`, `dig`, `helm` (local template and CI parity)
+- `boutique` namespace labeled: `network-policy.biroltilki.art/tier=application` (topic 11; Argo CD also applies via `managedNamespaceMetadata` on sync)
+- NetworkPolicies applied from topic 11, including [`gitops/policies/network-policies/boutique-frontend-ingress.yaml`](../../gitops/policies/network-policies/boutique-frontend-ingress.yaml) (frontend pods must have label `app: frontend`)
+- Tools: `kubectl`, `argocd` CLI, `curl`, `dig`, `helm`; optional: `kyverno` CLI, `kubeconform` (for `./tests/manifest/` scripts in step 2)
 
 ## Commands
 
@@ -32,10 +32,10 @@ Manual sync ensures a human explicitly promotes each revision after PR review.
 
 On the **first** Boutique deploy, mirror upstream images into Artifact Registry and record digests via CI — do not hand-edit digests or pull from deprecated registries.
 
-| Image set        | Upstream source                                                                  |
-| ---------------- | -------------------------------------------------------------------------------- |
-| 10 microservices | `us-central1-docker.pkg.dev/google-samples/microservices-demo:<service>:v0.10.5` |
-| `redis-cart`     | `docker.io/library/redis:7.2-alpine`                                             |
+| Image set        | Upstream source                                                                                                |
+| ---------------- | -------------------------------------------------------------------------------------------------------------- |
+| 10 microservices | `us-central1-docker.pkg.dev/google-samples/microservices-demo/<service>:v0.10.5` (e.g. `.../frontend:v0.10.5`) |
+| `redis-cart`     | `docker.io/library/redis:7.2-alpine`                                                                           |
 
 **Do not use** `gcr.io/google-samples/microservices-demo` or tag `v0.10.2` — those paths are obsolete and will fail image pull.
 
@@ -82,10 +82,10 @@ images:
     digest: sha256:abc123...
 ```
 
-Confirm no floating tags:
+Confirm no floating tags (CI parity):
 
 ```bash
-grep -E ':latest|tag:' gitops/apps/boutique/values-images.yaml && echo "FAIL: floating tag found" || echo "OK: digest-only"
+./tests/manifest/digest-only.sh
 ```
 
 ### 2. Local render check (optional, before sync)
@@ -151,12 +151,13 @@ kubectl -n boutique get ingress
 kubectl -n boutique describe ingress
 ```
 
-The boutique Ingress should use the same global static IP (`boutique-ingress-ip`) and a Google-managed certificate for `boutique.biroltilki.art` (configured in Helm templates or overlay — see `gitops/apps/boutique/templates/`).
+The boutique Ingress must reference the **`boutique-ingress-ip`** static IP (distinct from `argocd-ingress-ip` used in topic 09) and a Google-managed certificate for `boutique.biroltilki.art` (configured in Helm templates — see `gitops/apps/boutique/templates/`).
 
 ## Expected output
 
 - `argocd app sync boutique` completes with `Sync Status: Synced`, `Health: Healthy`
-- `kubectl -n boutique get pods` — all microservice pods `Running`, `READY` matches desired
+- `kubectl -n boutique get pods` — **11/11** pods `Running`, `READY 1/1` (10 microservices + `redis-cart`)
+- `kubectl -n boutique get managedcertificate` — certificate status **Active**
 - `kubectl -n boutique get svc,ingress` — frontend Service and Ingress present
 - `curl -I https://boutique.biroltilki.art` returns `HTTP/2 200`
 - Browsing the URL in a browser shows the Online Boutique storefront
@@ -164,7 +165,13 @@ The boutique Ingress should use the same global static IP (`boutique-ingress-ip`
 ## Validation
 
 ```bash
-# DNS points at the static ingress IP
+# Digest-only image values (CI parity)
+./tests/manifest/digest-only.sh
+
+# Kyverno admission on rendered chart (optional; requires kyverno CLI)
+./tests/manifest/boutique-kyverno.sh
+
+# DNS points at the boutique static ingress IP
 dig +short boutique.biroltilki.art
 
 # Storefront HTTPS healthy
@@ -173,8 +180,11 @@ curl -I https://boutique.biroltilki.art
 # Argo CD application healthy
 argocd app get boutique
 
-# All pods ready
+# All pods ready (expect 11)
 kubectl -n boutique get pods
+
+# TLS certificate active
+kubectl -n boutique get managedcertificate
 
 # Images use digests (spot-check frontend)
 kubectl -n boutique get pod -l app=frontend -o jsonpath='{.items[0].spec.containers[0].image}'
@@ -184,22 +194,21 @@ kubectl -n boutique get pod -l app=frontend -o jsonpath='{.items[0].spec.contain
 kubectl get policyreport -n boutique
 ```
 
-**Pass criteria:** Storefront loads over HTTPS; all pods Running; Argo CD `boutique` app Synced/Healthy; images show `@sha256:` digests.
+**Pass criteria:** Storefront loads over HTTPS; 11/11 pods Running; ManagedCertificate Active; Argo CD `boutique` app Synced/Healthy; images show `@sha256:` digests.
 
 ## Common problems
 
-| Symptom                          | Cause                                 | Fix                                                                                   |
-| -------------------------------- | ------------------------------------- | ------------------------------------------------------------------------------------- |
-| CI Trivy fails on upstream CVEs  | New version or expanded CVE database  | Review logs; update `.github/trivy/upstream-mirror.trivyignore` per README            |
-| `build-scan-sign` image pull 404 | Wrong upstream registry/tag           | Use `us-central1-docker.pkg.dev/.../microservices-demo` `v0.10.5`, not `gcr.io`       |
-| No digest PR after CI green      | `manifest-digest-pr` not triggered    | Confirm `build-scan-sign` completed; check Actions tab for workflow_run failure       |
-| Sync failed — Kyverno denied     | Missing probes, resources, or digest  | Fix Helm templates or values; re-run dry-run                                          |
-| `ImagePullBackOff`               | Wrong digest or missing AR permission | Verify digest in AR; check node SA has `artifactregistry.reader`                      |
-| Binary Authorization blocked     | Image not signed / attestor mismatch  | Re-run CI sign+attest; verify policy in topic 08                                      |
-| `OutOfSync` loop                 | Helm hooks or ignored differences     | Check `argocd app diff`; add ignoreDifferences if intentional                         |
-| 502 / connection timeout on URL  | Ingress or managed cert not ready     | Check `ManagedCertificate` status; verify DNS                                         |
-| Cart/checkout errors             | NetworkPolicy too restrictive         | Confirm all NetPol files synced; `app.kubernetes.io/part-of: boutique` on all pods    |
-| 502 on storefront URL            | Frontend ingress blocked              | Apply `boutique-frontend-ingress.yaml`; verify `app: frontend` on frontend Deployment |
+| Symptom                          | Cause                                 | Fix                                                                                                                                                                                       |
+| -------------------------------- | ------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| CI Trivy fails on upstream CVEs  | New version or expanded CVE database  | Review logs; update `.github/trivy/upstream-mirror.trivyignore` per README                                                                                                                |
+| `build-scan-sign` image pull 404 | Wrong upstream registry/tag           | Use `us-central1-docker.pkg.dev/google-samples/microservices-demo/<service>:v0.10.5`, not `gcr.io`                                                                                        |
+| No digest PR after CI green      | `manifest-digest-pr` not triggered    | Confirm `build-scan-sign` completed; check Actions tab for workflow_run failure                                                                                                           |
+| Sync failed — Kyverno denied     | Missing probes, resources, or digest  | Fix Helm templates or values; re-run dry-run                                                                                                                                              |
+| `ImagePullBackOff`               | Wrong digest or missing AR permission | Verify digest in AR; check node SA has `artifactregistry.reader`                                                                                                                          |
+| Binary Authorization blocked     | Image not signed / attestor mismatch  | Re-run CI sign+attest; verify policy in topic 08                                                                                                                                          |
+| `OutOfSync` loop                 | Helm hooks or ignored differences     | Check `argocd app diff`; add ignoreDifferences if intentional                                                                                                                             |
+| 502 / storefront timeout         | Cert not Active, DNS wrong, or NetPol | Check `ManagedCertificate` Active; `dig` vs `boutique-ingress-ip`; apply `gitops/policies/network-policies/boutique-frontend-ingress.yaml`; verify `app: frontend` on frontend Deployment |
+| Cart/checkout errors             | NetworkPolicy too restrictive         | Confirm all NetPol files synced; `app.kubernetes.io/part-of: boutique` on all pods                                                                                                        |
 
 ## Recovery
 

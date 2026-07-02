@@ -47,7 +47,7 @@ Secrets: Secret Manager → ESO → Pod (never plain Secret in Git)
 - CI opens PR with digest updates only
 - Kyverno `require-digest` rejects `:latest` and missing digest
 
-→ [gitops/policies/kyverno/require-digest.yaml](../../gitops/policies/kyverno/require-digest.yaml)
+→ [setup/12-boutique-deploy.md](../setup/12-boutique-deploy.md) (§0 bootstrap) · [build-scan-sign.yml](../../.github/workflows/build-scan-sign.yml) · [require-digest.yaml](../../gitops/policies/kyverno/require-digest.yaml)
 
 ## Binary Authorization
 

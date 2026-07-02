@@ -37,7 +37,19 @@ spec:
           resources:
             {{- toYaml $svc.resources | nindent 12 }}
           livenessProbe:
-            {{- include "boutique.livenessProbe" (dict "port" $probePort "protocol" $svc.protocol) | nindent 12 }}
+            {{- $liveness := dict "port" $probePort "protocol" $svc.protocol }}
+            {{- if $svc.livenessProbe }}
+            {{- $_ := set $liveness "livenessPath" $svc.livenessProbe.path }}
+            {{- $_ := set $liveness "livenessHeaders" $svc.livenessProbe.httpHeaders }}
+            {{- $_ := set $liveness "livenessInitialDelaySeconds" $svc.livenessProbe.initialDelaySeconds }}
+            {{- end }}
+            {{- include "boutique.livenessProbe" $liveness | nindent 12 }}
           readinessProbe:
-            {{- include "boutique.readinessProbe" (dict "port" $probePort "protocol" $svc.protocol) | nindent 12 }}
+            {{- $readiness := dict "port" $probePort "protocol" $svc.protocol }}
+            {{- if $svc.readinessProbe }}
+            {{- $_ := set $readiness "readinessPath" $svc.readinessProbe.path }}
+            {{- $_ := set $readiness "readinessHeaders" $svc.readinessProbe.httpHeaders }}
+            {{- $_ := set $readiness "readinessInitialDelaySeconds" $svc.readinessProbe.initialDelaySeconds }}
+            {{- end }}
+            {{- include "boutique.readinessProbe" $readiness | nindent 12 }}
 {{- end }}

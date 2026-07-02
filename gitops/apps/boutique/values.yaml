@@ -50,6 +50,9 @@ services:
     protocol: grpc
     replicas: 1
     env:
+      PRODUCT_CATALOG_SERVICE_ADDR: productcatalogservice:3550
+      CART_SERVICE_ADDR: cartservice:7070
+      CURRENCY_SERVICE_ADDR: currencyservice:7000
       PAYMENT_SERVICE_ADDR: paymentservice:50051
       EMAIL_SERVICE_ADDR: emailservice:5000
       SHIPPING_SERVICE_ADDR: shippingservice:50051
@@ -66,7 +69,8 @@ services:
     port: 7000
     protocol: grpc
     replicas: 1
-    env: {}
+    env:
+      DISABLE_PROFILER: "1"
     resources:
       requests:
         cpu: 100m
@@ -79,9 +83,10 @@ services:
     appLabel: emailservice
     port: 5000
     containerPort: 8080
-    protocol: http
+    protocol: grpc
     replicas: 1
-    env: {}
+    env:
+      DISABLE_PROFILER: "1"
     resources:
       requests:
         cpu: 100m
@@ -104,7 +109,20 @@ services:
       PRODUCT_CATALOG_SERVICE_ADDR: productcatalogservice:3550
       RECOMMENDATION_SERVICE_ADDR: recommendationservice:8080
       SHIPPING_SERVICE_ADDR: shippingservice:50051
+      SHOPPING_ASSISTANT_SERVICE_ADDR: shoppingassistantservice:80
       ENABLE_PROFILER: "0"
+    livenessProbe:
+      path: /_healthz
+      initialDelaySeconds: 10
+      httpHeaders:
+        - name: Cookie
+          value: shop_session-id=x-liveness-probe
+    readinessProbe:
+      path: /_healthz
+      initialDelaySeconds: 10
+      httpHeaders:
+        - name: Cookie
+          value: shop_session-id=x-readiness-probe
     resources:
       requests:
         cpu: 100m
@@ -118,7 +136,8 @@ services:
     port: 50051
     protocol: grpc
     replicas: 1
-    env: {}
+    env:
+      DISABLE_PROFILER: "1"
     resources:
       requests:
         cpu: 100m
@@ -144,10 +163,11 @@ services:
   recommendationservice:
     appLabel: recommendationservice
     port: 8080
-    protocol: http
+    protocol: grpc
     replicas: 1
     env:
       PRODUCT_CATALOG_SERVICE_ADDR: productcatalogservice:3550
+      DISABLE_PROFILER: "1"
     resources:
       requests:
         cpu: 100m

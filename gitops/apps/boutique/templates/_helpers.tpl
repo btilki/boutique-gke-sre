@@ -35,20 +35,25 @@ Digest-pinned image reference from values-images.yaml.
 
 {{/*
 Liveness probe — HTTP for web services, TCP for gRPC.
+Optional per-service overrides via livenessPath / livenessHeaders in probe dict.
 */}}
 {{- define "boutique.livenessProbe" -}}
 {{- if eq .protocol "http" }}
 httpGet:
-  path: /
+  path: {{ default "/" .livenessPath }}
   port: {{ .port }}
-initialDelaySeconds: 10
+  {{- with .livenessHeaders }}
+  httpHeaders:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+initialDelaySeconds: {{ default 10 .livenessInitialDelaySeconds }}
 periodSeconds: 10
 timeoutSeconds: 5
 failureThreshold: 3
 {{- else }}
 tcpSocket:
   port: {{ .port }}
-initialDelaySeconds: 15
+initialDelaySeconds: {{ default 15 .livenessInitialDelaySeconds }}
 periodSeconds: 10
 timeoutSeconds: 5
 failureThreshold: 3
@@ -57,20 +62,25 @@ failureThreshold: 3
 
 {{/*
 Readiness probe — HTTP for web services, TCP for gRPC.
+Optional per-service overrides via readinessPath / readinessHeaders in probe dict.
 */}}
 {{- define "boutique.readinessProbe" -}}
 {{- if eq .protocol "http" }}
 httpGet:
-  path: /
+  path: {{ default "/" .readinessPath }}
   port: {{ .port }}
-initialDelaySeconds: 5
+  {{- with .readinessHeaders }}
+  httpHeaders:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+initialDelaySeconds: {{ default 5 .readinessInitialDelaySeconds }}
 periodSeconds: 5
 timeoutSeconds: 3
 failureThreshold: 3
 {{- else }}
 tcpSocket:
   port: {{ .port }}
-initialDelaySeconds: 10
+initialDelaySeconds: {{ default 10 .readinessInitialDelaySeconds }}
 periodSeconds: 5
 timeoutSeconds: 3
 failureThreshold: 3

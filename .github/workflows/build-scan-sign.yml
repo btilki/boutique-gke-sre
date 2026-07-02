@@ -47,6 +47,8 @@ jobs:
           - shippingservice
           - redis-cart
     steps:
+      - uses: actions/checkout@v4
+
       - name: Authenticate to Google Cloud (WIF)
         uses: google-github-actions/auth@v2
         with:
@@ -93,8 +95,7 @@ jobs:
           severity: CRITICAL,HIGH
           exit-code: "1"
           ignore-unfixed: true
-
-      - name: Push to Artifact Registry
+          trivyignores: .github/trivy/upstream-mirror.trivyignore
         id: push
         run: |
           set -euo pipefail
@@ -115,13 +116,59 @@ jobs:
         env:
           COSIGN_PRIVATE_KEY: ${{ secrets.COSIGN_PRIVATE_KEY }}
           COSIGN_PASSWORD: ${{ secrets.COSIGN_PASSWORD }}
+          IMAGE: ${{ env.AR_REGION }}-docker.pkg.dev/${{ env.GCP_PROJECT }}/${{ env.AR_REPOSITORY }}/${{ matrix.service }}
+          DIGEST: ${{ steps.push.outputs.digest }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          GITHUB_REF: ${{ github.ref }}
+          GITHUB_RUN_ID: ${{ github.run_id }}
         run: |
           set -euo pipefail
-          IMAGE="${{ env.AR_REGION }}-docker.pkg.dev/${{ env.GCP_PROJECT }}/${{ env.AR_REPOSITORY }}/${{ matrix.service }}"
-          REF="${IMAGE}@${{ steps.push.outputs.digest }}"
+          DIGEST_HEX="${DIGEST#sha256:}"
+          REF="${IMAGE}@${DIGEST}"
+          PREDICATE="${RUNNER_TEMP}/slsa-predicate.json"
+          export DIGEST_HEX PREDICATE
+
           cosign sign --yes --key "env://COSIGN_PRIVATE_KEY" "${REF}"
+
+          python3 <<'PY'
+          import json
+          import os
+
+          predicate = {
+              "_type": "https://in-toto.io/Statement/v1",
+              "subject": [
+                  {
+                      "name": os.environ["IMAGE"],
+                      "digest": {"sha256": os.environ["DIGEST_HEX"]},
+                  }
+              ],
+              "predicateType": "https://slsa.dev/provenance/v1",
+              "predicate": {
+                  "buildDefinition": {
+                      "buildType": "https://github.com/Attestations/GitHubActionsWorkflow@v1",
+                      "externalParameters": {
+                          "workflow": {
+                              "repository": os.environ["GITHUB_REPOSITORY"],
+                              "ref": os.environ["GITHUB_REF"],
+                              "path": ".github/workflows/build-scan-sign.yml",
+                          }
+                      },
+                  },
+                  "runDetails": {
+                      "builder": {
+                          "id": f"https://github.com/{os.environ['GITHUB_REPOSITORY']}/actions/runs/{os.environ['GITHUB_RUN_ID']}"
+                      }
+                  },
+              },
+          }
+          with open(os.environ["PREDICATE"], "w", encoding="utf-8") as handle:
+              json.dump(predicate, handle)
+          PY
+
           cosign attest --yes --key "env://COSIGN_PRIVATE_KEY" \
-            --predicate-type "slsaprovenance" "${REF}"
+            --type slsaprovenance \
+            --predicate "${PREDICATE}" \
+            "${REF}"
 
       - name: Record digest artifact
         run: |

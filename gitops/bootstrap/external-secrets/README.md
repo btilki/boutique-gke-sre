@@ -30,5 +30,5 @@ Configure External Secrets Operator (ESO) and a `ClusterSecretStore` for GCP Sec
 ## Usage
 
 1. Install operator: see `operator/README.md`
-2. Uncomment and apply `cluster-secret-store.yaml` after WI is configured
+2. Apply `cluster-secret-store.yaml` after Workload Identity is configured
 3. Application teams use `ExternalSecret` CRs in app namespaces (Phase 5)

@@ -1,0 +1,19 @@
+# Intentionally invalid pod — digest-pinned but missing health probes.
+apiVersion: v1
+kind: Pod
+metadata:
+  name: bad-missing-probes-pod
+  namespace: boutique
+  labels:
+    app: policy-test
+spec:
+  containers:
+    - name: frontend
+      image: us-docker.pkg.dev/boutique-gke/apps/frontend@sha256:0000000000000000000000000000000000000000000000000000000000000001
+      resources:
+        requests:
+          cpu: 50m
+          memory: 64Mi
+        limits:
+          cpu: 200m
+          memory: 128Mi

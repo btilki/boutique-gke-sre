@@ -36,10 +36,10 @@ TARGETS=(
 for target in "${TARGETS[@]}"; do
   if [[ -d "${target}" ]]; then
     echo "--- ${target} ---"
-    find "${target}" -name '*.yaml' -o -name '*.yml' | while read -r f; do
+    find "${target}" \( -name '*.yaml' -o -name '*.yml' \) | while read -r f; do
       kubeconform "${ARGS[@]}" "${f}" || exit 1
     done
   fi
 done
 
-echo "kubeconform stub complete."
+echo "kubeconform validation complete."

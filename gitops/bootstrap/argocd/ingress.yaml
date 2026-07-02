@@ -8,8 +8,10 @@ metadata:
   name: argocd-server
   namespace: argocd
   annotations:
-    kubernetes.io/ingress.global-static-ip-name: boutique-ingress-ip
-    networking.gke.io/managed-certificates: boutique-managed-cert
+    # GKE processes Ingress only via this annotation; spec.ingressClassName alone is ignored.
+    kubernetes.io/ingress.class: "gce"
+    kubernetes.io/ingress.global-static-ip-name: argocd-ingress-ip
+    networking.gke.io/managed-certificates: argocd-managed-cert
   labels:
     app.kubernetes.io/name: argocd-server
     app.kubernetes.io/part-of: argocd
@@ -25,4 +27,4 @@ spec:
               service:
                 name: argocd-server
                 port:
-                  number: 443
+                  number: 80

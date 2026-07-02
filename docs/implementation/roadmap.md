@@ -2,7 +2,7 @@
 
 Phased delivery for **boutique-gke-sre** — one phase per session: validate → commit → next.
 
-**Architecture:** Canonical design published in [architecture/overview.md](../architecture/overview.md) (16 sections) with diagram sources in `assets/diagrams/`.
+**Architecture:** Canonical design published in [architecture/overview.md](../architecture/overview.md) (16 sections) with diagram sources in `diagrams/`.
 
 ## Phase status
 

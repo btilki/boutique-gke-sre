@@ -1,5 +1,5 @@
-# Boutique allow-list NetworkPolicy — explicit service-to-service paths (Phase 4).
-# Ingress from GLB health checks + storefront; refine selectors in topic 12 if needed.
+# Boutique allow-list NetworkPolicy — east-west paths for all Boutique workloads (Phase 4).
+# External storefront traffic: boutique-frontend-ingress.yaml (frontend:8080 only).
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:

@@ -1,0 +1,56 @@
+# Kyverno CLI tests — minimum policy suite (topics 09–11 / Phase 4 gate)
+# Run from repo root: kyverno test tests/kyverno/
+apiVersion: cli.kyverno.io/v1alpha1
+kind: Test
+metadata:
+  name: boutique-gke-policy-suite
+policies:
+  - ../../gitops/policies/kyverno/require-digest.yaml
+  - ../../gitops/policies/kyverno/require-probes.yaml
+  - ../../gitops/policies/kyverno/require-resources.yaml
+resources:
+  - ../../examples/kyverno-policy-test/bad-latest-pod.yaml
+  - ../../examples/kyverno-policy-test/bad-missing-probes-pod.yaml
+  - ../../examples/kyverno-policy-test/bad-missing-resources-pod.yaml
+  - ../../examples/kyverno-policy-test/bad-init-latest-pod.yaml
+results:
+  # require-digest — app container :latest
+  - policy: require-digest
+    rule: reject-latest-tag
+    resources:
+      - bad-latest-pod
+    kind: Pod
+    result: fail
+  - policy: require-digest
+    rule: require-digest
+    resources:
+      - bad-latest-pod
+    kind: Pod
+    result: fail
+  # require-digest — initContainer :latest
+  - policy: require-digest
+    rule: reject-latest-tag
+    resources:
+      - bad-init-latest-pod
+    kind: Pod
+    result: fail
+  - policy: require-digest
+    rule: require-digest
+    resources:
+      - bad-init-latest-pod
+    kind: Pod
+    result: fail
+  # require-probes
+  - policy: require-probes
+    rule: require-liveness-readiness
+    resources:
+      - bad-missing-probes-pod
+    kind: Pod
+    result: fail
+  # require-resources — app container
+  - policy: require-resources
+    rule: require-requests-limits
+    resources:
+      - bad-missing-resources-pod
+    kind: Pod
+    result: fail

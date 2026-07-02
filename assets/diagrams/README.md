@@ -1,6 +1,6 @@
-# Diagram sources
+# Diagram assets
 
-Mermaid (`.mmd`) sources for architecture documentation. Render in GitHub, VS Code, or export to `assets/` as PNG/SVG.
+Mermaid sources live in **[docs/diagrams/](../../docs/diagrams/)** (canonical). This folder holds the same `.mmd` files for portfolio exports and backward-compatible links.
 
 | File                                               | Description                       |
 | -------------------------------------------------- | --------------------------------- |

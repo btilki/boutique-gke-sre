@@ -62,10 +62,10 @@ Secrets: Secret Manager → ESO → Pod (never plain Secret in Git)
 1. Reject `:latest`; require digest
 2. Require liveness + readiness probes
 3. Require CPU/memory requests and limits
-4. Require NetworkPolicy compliance labels (`network-policy/boutique: "true"`)
+4. Require NetworkPolicy compliance labels (`network-policy.biroltilki.art/tier` on namespaces)
 5. Block plain Secret resources (ESO-only)
 
-Tests: `make kyverno-test` · [tests/kyverno/](../../tests/kyverno/)
+Tests: `make kyverno-test` · `tests/kyverno/` · CI jobs `kyverno` + `manifests` in `.github/workflows/ci.yml`
 
 ## NetworkPolicy default-deny
 

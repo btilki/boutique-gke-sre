@@ -1,0 +1,21 @@
+# Storefront ingress — allow external HTTPS traffic to frontend only (topic 12).
+# GCE Ingress forwards user traffic to frontend:8080; health checks use boutique-allow CIDR rules.
+# Requires frontend pods to carry label app=frontend (Online Boutique default).
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: boutique-frontend-ingress
+  namespace: boutique
+  labels:
+    network-policy.biroltilki.art/tier: application
+spec:
+  podSelector:
+    matchLabels:
+      app: frontend
+  policyTypes:
+    - Ingress
+  ingress:
+    # External clients via GCE Ingress / global load balancer (TLS terminates at edge)
+    - ports:
+        - protocol: TCP
+          port: 8080

@@ -1,0 +1,37 @@
+# Intentionally invalid pod — valid app container; initContainer uses :latest tag.
+apiVersion: v1
+kind: Pod
+metadata:
+  name: bad-init-latest-pod
+  namespace: boutique
+  labels:
+    app: policy-test
+spec:
+  initContainers:
+    - name: init-migrate
+      image: us-docker.pkg.dev/boutique-gke/apps/migrate:latest
+      resources:
+        requests:
+          cpu: 50m
+          memory: 64Mi
+        limits:
+          cpu: 200m
+          memory: 128Mi
+  containers:
+    - name: frontend
+      image: us-docker.pkg.dev/boutique-gke/apps/frontend@sha256:0000000000000000000000000000000000000000000000000000000000000003
+      resources:
+        requests:
+          cpu: 50m
+          memory: 64Mi
+        limits:
+          cpu: 200m
+          memory: 128Mi
+      livenessProbe:
+        httpGet:
+          path: /
+          port: 8080
+      readinessProbe:
+        httpGet:
+          path: /
+          port: 8080

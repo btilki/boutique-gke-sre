@@ -18,11 +18,11 @@ Kyverno is the policy enforcement layer between GitOps and running pods. It impl
 | `require-netpol-labels.yaml` | Namespace tier label for NetworkPolicy compliance |
 | `block-plain-secrets.yaml`   | Block plain `Secret` resources (ESO-only)         |
 
-NetworkPolicies in `gitops/policies/network-policies/` (`default-deny.yaml`, `boutique-allow.yaml`) restrict pod-to-pod traffic. Together with ESO (topic 10) and Binary Authorization (topic 08), this gate ensures only hardened workloads deploy.
+NetworkPolicies in `gitops/policies/network-policies/` (`default-deny.yaml`, `boutique-allow.yaml`, `boutique-frontend-ingress.yaml`) restrict pod-to-pod traffic and allow storefront ingress. Together with ESO (topic 10) and Binary Authorization (topic 08), this gate ensures only hardened workloads deploy.
 
 ## Prerequisites
 
-- Prior guides: [09-argocd-bootstrap.md](09-argocd-bootstrap.md), [10-external-secrets.md](10-external-secrets.md)
+- Prior guides: [09-argocd-bootstrap.md](09-argocd-bootstrap.md), [10-external-secrets.md](10-external-secrets.md) — including `eso-bootstrap-test` ExternalSecret synced
 - Argo CD running; `boutique-root` Application registered
 - Tools: `kubectl`, `helm`, `kyverno` CLI (optional, for policy tests)
 - Install Kyverno CLI: `brew install kyverno` or see [Kyverno docs](https://kyverno.io/docs/kyverno-cli/)
@@ -64,6 +64,7 @@ kubectl get clusterpolicy
 ```bash
 kubectl apply -f gitops/policies/network-policies/default-deny.yaml
 kubectl apply -f gitops/policies/network-policies/boutique-allow.yaml
+kubectl apply -f gitops/policies/network-policies/boutique-frontend-ingress.yaml
 ```
 
 Label the `boutique` namespace for NetworkPolicy compliance (required by `require-netpol-labels`):
@@ -88,14 +89,15 @@ Manual sync only — confirm in the Argo CD UI that `policies` shows `Synced`.
 
 ### 5. Run Kyverno CLI policy tests
 
-The test manifest lives at `tests/kyverno/require-digest-test.yaml`. Before running, uncomment the `policies` and `results` sections so they reference `gitops/policies/kyverno/require-digest.yaml` and expect a `fail` result for `bad-latest-pod`.
+The test manifest is `tests/kyverno/kyverno-test.yaml` (Kyverno CLI 1.6+ default filename). It runs **6 assertions** across `require-digest`, `require-probes`, and `require-resources` using fixtures in `examples/kyverno-policy-test/`.
 
 ```bash
 # From repository root
 kyverno test tests/kyverno/
+# or: make kyverno-test
 ```
 
-Expected test output includes a **fail** result for `bad-latest-pod` when applying the `require-digest` policy.
+Expected: `Test Summary: 6 tests passed and 0 tests failed` — each row shows **Pass** because policies correctly rejected invalid fixtures (expected `fail` outcome).
 
 ### 6. Live cluster deny test (`:latest` fixture)
 
@@ -128,7 +130,7 @@ Kyverno should deny this — use ESO `ExternalSecret` instead.
 
 - `kubectl get pods -n kyverno` — Kyverno admission and background controllers `Running`
 - `kubectl get clusterpolicy` — five policies listed, `Ready: true`
-- `kyverno test tests/kyverno/` — tests pass; `bad-latest-pod` result is `fail` (policy correctly rejects)
+- `kyverno test tests/kyverno/` — 6 tests passed (digest, probes, resources fixtures)
 - `kubectl apply --dry-run=server` on `bad-latest-pod.yaml` — `Error from server: admission webhook ... denied`
 - Plain Secret dry-run — denied by `block-plain-secrets`
 
@@ -149,8 +151,11 @@ kubectl get clusterpolicy -o wide
 # All five policies present
 kubectl get clusterpolicy | grep -E 'require-digest|require-probes|require-resources|require-netpol-labels|block-plain-secrets'
 
-# NetworkPolicies applied
-kubectl get networkpolicy -A
+# NetworkPolicies applied (boutique namespace)
+kubectl get networkpolicy -n boutique
+
+# ESO still allowed to materialize Secrets (topic 10)
+kubectl -n boutique get externalsecret eso-bootstrap-test
 
 # CLI test suite
 kyverno test tests/kyverno/
@@ -159,17 +164,17 @@ kyverno test tests/kyverno/
 kubectl apply --dry-run=server -f examples/kyverno-policy-test/bad-latest-pod.yaml 2>&1 | grep -i denied
 ```
 
-**Pass criteria:** All five ClusterPolicies Ready; `kyverno test` passes; `:latest` pod and plain Secret denied at admission.
+**Pass criteria:** All five ClusterPolicies Ready; three NetworkPolicies in `boutique`; `kyverno test` passes (6 assertions); `:latest` pod and plain Secret denied at admission; `eso-bootstrap-test` ExternalSecret synced.
 
 ## Common problems
 
 | Symptom                                   | Cause                                           | Fix                                                                                           |
 | ----------------------------------------- | ----------------------------------------------- | --------------------------------------------------------------------------------------------- |
 | Policies not enforcing                    | Wrong webhook configuration / Kyverno not Ready | `kubectl -n kyverno logs deploy/kyverno-admission-controller`                                 |
-| `kyverno test` fails — policy not found   | Test YAML still commented                       | Uncomment paths in `tests/kyverno/require-digest-test.yaml`                                   |
+| `kyverno test` fails — policy not found   | Wrong test filename or path                     | Use `tests/kyverno/kyverno-test.yaml` (default for Kyverno CLI 1.6+)                          |
 | Valid pod denied                          | Missing probes, resources, or namespace label   | Compare manifest against each ClusterPolicy                                                   |
 | Argo CD sync conflict                     | Helm-installed Kyverno + GitOps overlap         | Choose one install path; prefer GitOps for policies only                                      |
-| NetworkPolicy blocks traffic unexpectedly | `default-deny` without allow rules              | Apply `boutique-allow.yaml`; verify namespace labels                                          |
+| NetworkPolicy blocks traffic unexpectedly | Missing allow rules or frontend label           | Apply all three NetPol files; frontend pods need `app: frontend`                              |
 | `block-plain-secrets` blocks ESO secrets  | Policy match too broad                          | ESO creates Secrets via controller — ensure policy exempts ESO SA or uses correct match rules |
 
 ## Recovery
@@ -187,7 +192,7 @@ kubectl patch clusterpolicy require-digest -p '{"spec":{"validationFailureAction
 
 ## Best practices
 
-- Run `kyverno test tests/kyverno/` in CI on every PR that touches `gitops/policies/kyverno/`
+- Run `kyverno test tests/kyverno/` and `./tests/manifest/kubeconform.sh` in CI on every PR (`kyverno` and `manifests` jobs in `.github/workflows/ci.yml`)
 - Use `validationFailureAction: Enforce` in production; `Audit` only during policy development
 - Sync policies via Argo CD (`policies` Application) so cluster state matches Git
 - Document any policy exceptions in an ADR — avoid cluster-wide `exclude` blocks without review

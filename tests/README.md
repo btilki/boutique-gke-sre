@@ -11,7 +11,7 @@ Automated gates in CI and local pre-commit. Expanded in Phase 3 (Terraform) and 
 ```
 tests/
 ├── kyverno/
-│   └── require-digest-test.yaml   # Kyverno CLI test manifest
+│   └── kyverno-test.yaml          # Kyverno CLI test manifest (default filename)
 ├── terraform/
 │   └── validate.tftest.hcl        # Terraform test framework scaffold
 ├── manifest/
@@ -34,7 +34,7 @@ kyverno test tests/kyverno/
 
 ## CI integration
 
-- `.github/workflows/ci.yml` — lint, terraform validate, policy tests
+- `.github/workflows/ci.yml` — `validate` (Terraform), `kyverno` (policy tests), `manifests` (kubeconform)
 - `.github/workflows/terraform-plan.yml` — plan on PR
 
 ## Phase coverage

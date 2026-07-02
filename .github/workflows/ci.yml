@@ -11,6 +11,10 @@ on:
 permissions:
   contents: read
 
+env:
+  KYVERNO_CLI_VERSION: "1.18.1"
+  KUBECONFORM_VERSION: "0.6.7"
+
 jobs:
   validate:
     runs-on: ubuntu-latest
@@ -30,3 +34,35 @@ jobs:
           cd terraform/environments/boutique
           terraform init -backend=false
           terraform validate
+
+  kyverno:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Kyverno CLI
+        run: |
+          curl -sLo kyverno.tar.gz \
+            "https://github.com/kyverno/kyverno/releases/download/v${KYVERNO_CLI_VERSION}/kyverno-cli_v${KYVERNO_CLI_VERSION}_linux_x86_64.tar.gz"
+          tar -xzf kyverno.tar.gz kyverno
+          sudo mv kyverno /usr/local/bin/
+          kyverno version
+
+      - name: Run Kyverno policy tests
+        run: kyverno test tests/kyverno/ --require-tests
+
+  manifests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install kubeconform
+        run: |
+          curl -sLo kubeconform.tar.gz \
+            "https://github.com/yannh/kubeconform/releases/download/v${KUBECONFORM_VERSION}/kubeconform-linux-amd64.tar.gz"
+          tar -xzf kubeconform.tar.gz kubeconform
+          sudo mv kubeconform /usr/local/bin/
+          kubeconform -v
+
+      - name: Validate GitOps manifest schemas
+        run: ./tests/manifest/kubeconform.sh

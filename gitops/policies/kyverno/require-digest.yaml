@@ -1,4 +1,4 @@
-# Kyverno ClusterPolicy scaffold — reject :latest and require image digest (Phase 4).
+# Kyverno ClusterPolicy — reject :latest and require image digest (Phase 4).
 apiVersion: kyverno.io/v1
 kind: ClusterPolicy
 metadata:
@@ -27,6 +27,13 @@ spec:
                   - key: "{{ element.image }}"
                     operator: Equals
                     value: "*:latest"
+          - list: "request.object.spec.initContainers || `[]`"
+            deny:
+              conditions:
+                any:
+                  - key: "{{ element.image }}"
+                    operator: Equals
+                    value: "*:latest"
     - name: require-digest
       match:
         any:
@@ -42,4 +49,11 @@ spec:
                 all:
                   - key: "{{ element.image }}"
                     operator: NotEquals
-                    value: "*@*"
+                    value: "*@sha256:*"
+          - list: "request.object.spec.initContainers || `[]`"
+            deny:
+              conditions:
+                all:
+                  - key: "{{ element.image }}"
+                    operator: NotEquals
+                    value: "*@sha256:*"

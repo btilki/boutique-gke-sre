@@ -26,7 +26,8 @@ boutique-gke-sre/
 ├── scripts/              # Bootstrap validation, game-days, teardown
 ├── examples/             # Reference snippets
 ├── tests/                # Kyverno, Terraform, manifest validation
-├── assets/diagrams/      # Mermaid diagram sources
+├── docs/diagrams/        # Mermaid diagram sources (canonical)
+├── assets/diagrams/      # Legacy mirror / export target
 ├── README.md             # Portfolio front page
 ├── PROJECT.md            # Charter and production bar
 ├── ARCHITECTURE.md       # Executive architecture index

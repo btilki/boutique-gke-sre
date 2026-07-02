@@ -7,6 +7,7 @@ Master index: **[DOCUMENTATION.md](DOCUMENTATION.md)** · Guide template: **[GUI
 | [bootstrap.md](bootstrap.md)         | End-to-end bootstrap summary                                |
 | [setup/](setup/)                     | Topic-based setup guides (01–16)                            |
 | [architecture/](architecture/)       | System design ([overview.md](architecture/overview.md))     |
+| [diagrams/](diagrams/)               | Mermaid diagram sources (architecture, network, CI/CD)      |
 | [security/](security/)               | Threat model, IAM, [supply chain](security/supply-chain.md) |
 | [operations/](operations/)           | Day-2 ops, rollback                                         |
 | [troubleshooting/](troubleshooting/) | Argo CD, Kyverno cross-cutting fixes                        |

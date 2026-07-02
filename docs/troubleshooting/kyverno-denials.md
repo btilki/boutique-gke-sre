@@ -71,4 +71,4 @@ Expected: bad example fails; production manifests pass.
 ## Further reading
 
 - [setup/11-kyverno-policies.md](../setup/11-kyverno-policies.md)
-- [tests/kyverno/require-digest-test.yaml](../../tests/kyverno/require-digest-test.yaml)
+- [tests/kyverno/kyverno-test.yaml](../../tests/kyverno/kyverno-test.yaml)

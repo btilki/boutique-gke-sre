@@ -1,0 +1,20 @@
+# Intentionally invalid pod — digest-pinned with probes but no resource requests/limits.
+apiVersion: v1
+kind: Pod
+metadata:
+  name: bad-missing-resources-pod
+  namespace: boutique
+  labels:
+    app: policy-test
+spec:
+  containers:
+    - name: frontend
+      image: us-docker.pkg.dev/boutique-gke/apps/frontend@sha256:0000000000000000000000000000000000000000000000000000000000000002
+      livenessProbe:
+        httpGet:
+          path: /
+          port: 8080
+      readinessProbe:
+        httpGet:
+          path: /
+          port: 8080

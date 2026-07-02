@@ -1,4 +1,5 @@
-# Kyverno ClusterPolicy scaffold — require liveness and readiness probes (Phase 4).
+# Kyverno ClusterPolicy — require liveness and readiness probes (Phase 4).
+# Applies to app containers only; initContainers are short-lived and do not use probes.
 apiVersion: kyverno.io/v1
 kind: ClusterPolicy
 metadata:
@@ -24,9 +25,9 @@ spec:
             deny:
               conditions:
                 any:
-                  - key: "{{ element.livenessProbe }}"
+                  - key: "{{ element.livenessProbe || '' }}"
                     operator: Equals
                     value: ""
-                  - key: "{{ element.readinessProbe }}"
+                  - key: "{{ element.readinessProbe || '' }}"
                     operator: Equals
                     value: ""

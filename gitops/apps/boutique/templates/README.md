@@ -22,6 +22,7 @@ Hold Deployment, Service, Ingress, and supporting templates for all Online Bouti
 ## Dependencies
 
 - Phase 4 gate complete (Argo CD, Kyverno, ESO, NetworkPolicy)
+- Pod labels: `app.kubernetes.io/part-of: boutique` (east-west); `app: frontend` on frontend (public ingress)
 - Artifact Registry images signed and attested (CI pipeline)
 
 ## Usage

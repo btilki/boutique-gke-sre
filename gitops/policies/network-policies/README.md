@@ -8,18 +8,20 @@ Implement zero-trust network segmentation: deny all traffic by default, then all
 
 ## Inputs
 
-| Input            | File                            | Description                                      |
-| ---------------- | ------------------------------- | ------------------------------------------------ |
-| Default deny     | `default-deny.yaml`             | Block all ingress/egress per namespace           |
-| Allow rules      | `boutique-allow.yaml`           | Service-to-service paths in `boutique` namespace |
-| Namespace labels | Kyverno `require-netpol-labels` | Tier label on namespaces                         |
+| Input              | File                             | Description                                    |
+| ------------------ | -------------------------------- | ---------------------------------------------- |
+| Default deny       | `default-deny.yaml`              | Block all ingress/egress per namespace         |
+| Allow rules        | `boutique-allow.yaml`            | East-west + DNS + GLB health checks            |
+| Storefront ingress | `boutique-frontend-ingress.yaml` | External HTTPS to `app: frontend` on port 8080 |
+| Namespace labels   | Kyverno `require-netpol-labels`  | Tier label on namespaces                       |
 
 ## Outputs
 
-| Output             | Description                                       |
-| ------------------ | ------------------------------------------------- |
-| `default-deny-all` | Baseline deny policy per namespace                |
-| `boutique-allow`   | Explicit allow rules for storefront microservices |
+| Output                      | Description                                 |
+| --------------------------- | ------------------------------------------- |
+| `default-deny-all`          | Baseline deny policy per namespace          |
+| `boutique-allow`            | Microservice mesh + health-check ingress    |
+| `boutique-frontend-ingress` | Public ingress to frontend pods on TCP 8080 |
 
 ## Dependencies
 
@@ -32,7 +34,7 @@ Implement zero-trust network segmentation: deny all traffic by default, then all
 Uncomment scaffolds and apply after namespace creation. Synced with policies Application:
 
 ```bash
-kubectl apply -f default-deny.yaml -f boutique-allow.yaml
+kubectl apply -f default-deny.yaml -f boutique-allow.yaml -f boutique-frontend-ingress.yaml
 ```
 
 Validate connectivity with game-day scripts in `../../../scripts/game-days/`.

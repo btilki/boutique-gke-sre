@@ -23,6 +23,7 @@ Manual sync ensures a human explicitly promotes each revision after PR review.
 - Artifact Registry images built and signed (topic 08); digests recorded in `values-images.yaml`
 - Argo CD CLI logged in or UI access at https://argocd.boutique.biroltilki.art
 - `boutique` namespace labeled: `network-policy.biroltilki.art/tier=application`
+- NetworkPolicies applied including `boutique-frontend-ingress` (frontend pods must have label `app: frontend`)
 - Tools: `kubectl`, `argocd` CLI, `curl`, `dig`, `helm` (optional for local template)
 
 ## Commands
@@ -136,14 +137,15 @@ kubectl get policyreport -n boutique
 
 ## Common problems
 
-| Symptom                         | Cause                                 | Fix                                                              |
-| ------------------------------- | ------------------------------------- | ---------------------------------------------------------------- |
-| Sync failed — Kyverno denied    | Missing probes, resources, or digest  | Fix Helm templates or values; re-run dry-run                     |
-| `ImagePullBackOff`              | Wrong digest or missing AR permission | Verify digest in AR; check node SA has `artifactregistry.reader` |
-| Binary Authorization blocked    | Image not signed / attestor mismatch  | Re-run CI sign+attest; verify policy in topic 08                 |
-| `OutOfSync` loop                | Helm hooks or ignored differences     | Check `argocd app diff`; add ignoreDifferences if intentional    |
-| 502 / connection timeout on URL | Ingress or managed cert not ready     | Check `ManagedCertificate` status; verify DNS                    |
-| Cart/checkout errors            | NetworkPolicy too restrictive         | Confirm `boutique-allow.yaml` applied; check pod labels          |
+| Symptom                         | Cause                                 | Fix                                                                                   |
+| ------------------------------- | ------------------------------------- | ------------------------------------------------------------------------------------- |
+| Sync failed — Kyverno denied    | Missing probes, resources, or digest  | Fix Helm templates or values; re-run dry-run                                          |
+| `ImagePullBackOff`              | Wrong digest or missing AR permission | Verify digest in AR; check node SA has `artifactregistry.reader`                      |
+| Binary Authorization blocked    | Image not signed / attestor mismatch  | Re-run CI sign+attest; verify policy in topic 08                                      |
+| `OutOfSync` loop                | Helm hooks or ignored differences     | Check `argocd app diff`; add ignoreDifferences if intentional                         |
+| 502 / connection timeout on URL | Ingress or managed cert not ready     | Check `ManagedCertificate` status; verify DNS                                         |
+| Cart/checkout errors            | NetworkPolicy too restrictive         | Confirm all NetPol files synced; `app.kubernetes.io/part-of: boutique` on all pods    |
+| 502 on storefront URL           | Frontend ingress blocked              | Apply `boutique-frontend-ingress.yaml`; verify `app: frontend` on frontend Deployment |
 
 ## Recovery
 

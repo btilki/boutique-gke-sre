@@ -8,17 +8,17 @@ Centralize security and compliance policies reconciled by Argo CD before applica
 
 ## Inputs
 
-| Input            | Path                | Description                        |
-| ---------------- | ------------------- | ---------------------------------- |
-| Kyverno policies | `kyverno/`          | Five minimum ClusterPolicies       |
-| Network policies | `network-policies/` | Default-deny + boutique allow-list |
+| Input            | Path                | Description                                     |
+| ---------------- | ------------------- | ----------------------------------------------- |
+| Kyverno policies | `kyverno/`          | Five minimum ClusterPolicies                    |
+| Network policies | `network-policies/` | Default-deny, east-west allow, frontend ingress |
 
 ## Outputs
 
-| Output                | Description                                |
-| --------------------- | ------------------------------------------ |
-| Admission enforcement | Digest, probes, resources, labels, secrets |
-| Network segmentation  | Default-deny with explicit allows          |
+| Output                | Description                                             |
+| --------------------- | ------------------------------------------------------- |
+| Admission enforcement | Digest, probes, resources, labels, secrets              |
+| Network segmentation  | Default-deny; boutique-allow; boutique-frontend-ingress |
 
 ## Dependencies
 

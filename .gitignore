@@ -42,3 +42,4 @@ kubeconfig.*
 
 # Cursor
 .cursor/
+image.png

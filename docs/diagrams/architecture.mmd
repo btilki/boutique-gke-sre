@@ -1,0 +1,39 @@
+flowchart TB
+  subgraph Git["Source of Truth"]
+    GH[GitHub Repo]
+  end
+
+  subgraph CI["CI — GitHub Actions + WIF"]
+    GHA[Build · Trivy · cosign]
+  end
+
+  subgraph GCP["GCP Project: boutique-gke"]
+    AR[Artifact Registry]
+    BA[Binary Authorization]
+    SM[Secret Manager]
+    CM[Cloud Monitoring]
+    DNS[Cloud DNS]
+    CA[Cloud Armor]
+
+    subgraph GKE["Private GKE Cluster"]
+      AC[Argo CD]
+      KY[Kyverno]
+      ESO[External Secrets]
+      NP[NetworkPolicy]
+      OB[Online Boutique]
+      OT[OTel Collector]
+      GF[Grafana]
+    end
+  end
+
+  PD[PagerDuty]
+
+  GH --> GHA --> AR
+  GH --> AC
+  AC --> OB
+  ESO --> SM
+  OB --> OT --> CM
+  CA --> OB
+  DNS --> CA
+  BA --> GKE
+  CM --> PD

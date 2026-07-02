@@ -4,7 +4,7 @@ Canonical system design for the production SRE reference: Google Online Boutique
 
 **Public URLs:** https://boutique.biroltilki.art · https://argocd.boutique.biroltilki.art
 
-**Diagram sources:** [assets/diagrams/](../../assets/diagrams/)
+**Diagram sources:** [docs/diagrams/](../diagrams/)
 
 ---
 
@@ -231,9 +231,9 @@ boutique-vpc (custom, regional)
 | `kyverno`          | Kubernetes API                     | Admission webhook targets              |
 | `external-secrets` | Kubernetes API                     | Secret Manager (Private Google Access) |
 
-Pods require label `network-policy/boutique: "true"` (enforced by Kyverno policy #4).
+Namespaces must include label `network-policy.biroltilki.art/tier` (enforced by Kyverno policy `require-netpol-labels`).
 
-→ [network-flow.mmd](../../assets/diagrams/network-flow.mmd)
+→ [network-flow.mmd](../diagrams/network-flow.mmd)
 
 ---
 

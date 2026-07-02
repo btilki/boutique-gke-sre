@@ -1,4 +1,4 @@
-# Kyverno ClusterPolicy scaffold — require CPU/memory requests and limits (Phase 4).
+# Kyverno ClusterPolicy — require CPU/memory requests and limits (Phase 4).
 apiVersion: kyverno.io/v1
 kind: ClusterPolicy
 metadata:
@@ -18,9 +18,25 @@ spec:
               kinds:
                 - Pod
       validate:
-        message: "Containers must set cpu/memory requests and limits."
+        message: "Containers and initContainers must set cpu/memory requests and limits."
         foreach:
           - list: "request.object.spec.containers"
+            deny:
+              conditions:
+                any:
+                  - key: "{{ element.resources.requests.cpu || '' }}"
+                    operator: Equals
+                    value: ""
+                  - key: "{{ element.resources.requests.memory || '' }}"
+                    operator: Equals
+                    value: ""
+                  - key: "{{ element.resources.limits.cpu || '' }}"
+                    operator: Equals
+                    value: ""
+                  - key: "{{ element.resources.limits.memory || '' }}"
+                    operator: Equals
+                    value: ""
+          - list: "request.object.spec.initContainers || `[]`"
             deny:
               conditions:
                 any:

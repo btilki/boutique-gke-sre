@@ -101,9 +101,9 @@ echo -n "bootstrap-test-value" | gcloud secrets create boutique-eso-bootstrap-te
   --data-file=-
 ```
 
-### 5. Enable and apply the ClusterSecretStore
+### 5. Apply the ClusterSecretStore
 
-Uncomment the manifest in `gitops/bootstrap/external-secrets/cluster-secret-store.yaml` and confirm these values match your cluster:
+Confirm values in `gitops/bootstrap/external-secrets/cluster-secret-store.yaml` match your cluster:
 
 | Field                         | Expected value     |
 | ----------------------------- | ------------------ |
@@ -116,7 +116,6 @@ Uncomment the manifest in `gitops/bootstrap/external-secrets/cluster-secret-stor
 Apply:
 
 ```bash
-# After uncommenting the YAML in the repository file:
 kubectl apply -f gitops/bootstrap/external-secrets/cluster-secret-store.yaml
 ```
 
@@ -153,7 +152,7 @@ kubectl create namespace boutique --dry-run=client -o yaml | kubectl apply -f -
 ## Expected output
 
 - Helm install: `STATUS: deployed`
-- `kubectl -n external-secrets get pods` — controller pod `Running`
+- `kubectl -n external-secrets get pods` — all ESO pods `Running` (typically 3: controller, cert-controller, webhook)
 - `kubectl get clustersecretstore gcp-secret-manager` — `Ready=True` in status
 - `kubectl -n boutique get externalsecret eso-bootstrap-test` — `SecretSynced` / `Ready=True`
 - `kubectl -n boutique get secret eso-bootstrap-test` — Secret exists with key `test-key`
@@ -184,14 +183,14 @@ kubectl -n external-secrets get sa external-secrets -o yaml | grep iam.gke.io
 
 ## Common problems
 
-| Symptom                                  | Cause                                     | Fix                                                             |
-| ---------------------------------------- | ----------------------------------------- | --------------------------------------------------------------- |
-| `ClusterSecretStore` not Ready           | WI binding missing or wrong KSA name      | Re-run IAM binding; verify `kubectl get sa -n external-secrets` |
-| `AccessDenied` on Secret Manager         | GSA lacks `secretAccessor`                | Add `roles/secretmanager.secretAccessor` to GSA                 |
-| `secret not found`                       | Wrong secret name in `remoteRef.key`      | `gcloud secrets list --project=boutique-gke`                    |
-| ExternalSecret stuck `SecretSyncedError` | Namespace not allowed / store ref wrong   | Confirm `kind: ClusterSecretStore` and store name               |
-| Controller CrashLoop                     | CRDs not installed                        | Reinstall with `--set installCRDs=true`                         |
-| Wrong cluster in store spec              | Typo in `clusterLocation` / `clusterName` | Match `terraform output cluster_name cluster_location`          |
+| Symptom                                  | Cause                                                                | Fix                                                                                          |
+| ---------------------------------------- | -------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- |
+| `ClusterSecretStore` not Ready           | WI binding missing or wrong KSA name                                 | Re-run IAM binding; verify `kubectl get sa -n external-secrets`                              |
+| `AccessDenied` on Secret Manager         | GSA lacks `secretAccessor`                                           | Add `roles/secretmanager.secretAccessor` to GSA                                              |
+| `secret not found`                       | Wrong secret name in `remoteRef.key` or secret not created in step 4 | `gcloud secrets list --project=boutique-gke`; re-run step 4 or `gcloud secrets versions add` |
+| ExternalSecret stuck `SecretSyncedError` | Namespace not allowed / store ref wrong                              | Confirm `kind: ClusterSecretStore` and store name                                            |
+| Controller CrashLoop                     | CRDs not installed                                                   | Reinstall with `--set installCRDs=true`                                                      |
+| Wrong cluster in store spec              | Typo in `clusterLocation` / `clusterName`                            | Match `terraform output cluster_name cluster_location`                                       |
 
 ## Recovery
 

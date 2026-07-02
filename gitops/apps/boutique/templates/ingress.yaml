@@ -1,0 +1,41 @@
+{{- if .Values.ingress.enabled }}
+---
+apiVersion: networking.gke.io/v1
+kind: ManagedCertificate
+metadata:
+  name: {{ .Values.ingress.managedCertName }}
+  namespace: {{ .Values.namespace }}
+  labels:
+    app.kubernetes.io/part-of: {{ .Values.global.partOf }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+spec:
+  domains:
+    - {{ .Values.ingress.host }}
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: boutique-frontend
+  namespace: {{ .Values.namespace }}
+  annotations:
+    kubernetes.io/ingress.class: "gce"
+    kubernetes.io/ingress.global-static-ip-name: {{ .Values.ingress.staticIpName }}
+    networking.gke.io/managed-certificates: {{ .Values.ingress.managedCertName }}
+  labels:
+    app.kubernetes.io/name: frontend
+    app.kubernetes.io/part-of: {{ .Values.global.partOf }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+spec:
+  ingressClassName: gce
+  rules:
+    - host: {{ .Values.ingress.host }}
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: frontend
+                port:
+                  number: {{ (index .Values.services "frontend").port }}
+{{- end }}

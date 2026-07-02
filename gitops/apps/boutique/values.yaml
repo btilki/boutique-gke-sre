@@ -1,3 +1,183 @@
-# Online Boutique Helm values — populated in Phase 5.
-# Service replicas, resource requests/limits, probes, and ingress for boutique.biroltilki.art.
-# Image references use digest pins from values-images.yaml (CI-updated).
+# Online Boutique Helm values — application configuration.
+# Image digests live in values-images.yaml (CI-updated); never use floating tags here.
+
+global:
+  partOf: boutique
+  imagePullPolicy: IfNotPresent
+
+namespace: boutique
+
+ingress:
+  enabled: true
+  host: boutique.biroltilki.art
+  staticIpName: boutique-ingress-ip
+  managedCertName: boutique-managed-cert
+
+# Microservice definitions — keys must match values-images.yaml image keys.
+services:
+  adservice:
+    appLabel: adservice
+    port: 9555
+    protocol: grpc
+    replicas: 1
+    env: {}
+    resources:
+      requests:
+        cpu: 100m
+        memory: 128Mi
+      limits:
+        cpu: 200m
+        memory: 256Mi
+
+  cartservice:
+    appLabel: cartservice
+    port: 7070
+    protocol: grpc
+    replicas: 1
+    env:
+      REDIS_ADDR: redis-cart:6379
+    resources:
+      requests:
+        cpu: 100m
+        memory: 128Mi
+      limits:
+        cpu: 200m
+        memory: 256Mi
+
+  checkoutservice:
+    appLabel: checkoutservice
+    port: 5050
+    protocol: grpc
+    replicas: 1
+    env:
+      PAYMENT_SERVICE_ADDR: paymentservice:50051
+      EMAIL_SERVICE_ADDR: emailservice:5000
+      SHIPPING_SERVICE_ADDR: shippingservice:50051
+    resources:
+      requests:
+        cpu: 100m
+        memory: 128Mi
+      limits:
+        cpu: 200m
+        memory: 256Mi
+
+  currencyservice:
+    appLabel: currencyservice
+    port: 7000
+    protocol: grpc
+    replicas: 1
+    env: {}
+    resources:
+      requests:
+        cpu: 100m
+        memory: 128Mi
+      limits:
+        cpu: 200m
+        memory: 256Mi
+
+  emailservice:
+    appLabel: emailservice
+    port: 5000
+    containerPort: 8080
+    protocol: http
+    replicas: 1
+    env: {}
+    resources:
+      requests:
+        cpu: 100m
+        memory: 128Mi
+      limits:
+        cpu: 200m
+        memory: 256Mi
+
+  frontend:
+    appLabel: frontend
+    port: 8080
+    protocol: http
+    replicas: 1
+    exposeIngress: true
+    env:
+      AD_SERVICE_ADDR: adservice:9555
+      CART_SERVICE_ADDR: cartservice:7070
+      CHECKOUT_SERVICE_ADDR: checkoutservice:5050
+      CURRENCY_SERVICE_ADDR: currencyservice:7000
+      PRODUCT_CATALOG_SERVICE_ADDR: productcatalogservice:3550
+      RECOMMENDATION_SERVICE_ADDR: recommendationservice:8080
+      SHIPPING_SERVICE_ADDR: shippingservice:50051
+      ENABLE_PROFILER: "0"
+    resources:
+      requests:
+        cpu: 100m
+        memory: 128Mi
+      limits:
+        cpu: 300m
+        memory: 256Mi
+
+  paymentservice:
+    appLabel: paymentservice
+    port: 50051
+    protocol: grpc
+    replicas: 1
+    env: {}
+    resources:
+      requests:
+        cpu: 100m
+        memory: 128Mi
+      limits:
+        cpu: 200m
+        memory: 256Mi
+
+  productcatalogservice:
+    appLabel: productcatalogservice
+    port: 3550
+    protocol: grpc
+    replicas: 1
+    env: {}
+    resources:
+      requests:
+        cpu: 100m
+        memory: 128Mi
+      limits:
+        cpu: 200m
+        memory: 256Mi
+
+  recommendationservice:
+    appLabel: recommendationservice
+    port: 8080
+    protocol: http
+    replicas: 1
+    env:
+      PRODUCT_CATALOG_SERVICE_ADDR: productcatalogservice:3550
+    resources:
+      requests:
+        cpu: 100m
+        memory: 128Mi
+      limits:
+        cpu: 200m
+        memory: 256Mi
+
+  shippingservice:
+    appLabel: shippingservice
+    port: 50051
+    protocol: grpc
+    replicas: 1
+    env: {}
+    resources:
+      requests:
+        cpu: 100m
+        memory: 128Mi
+      limits:
+        cpu: 200m
+        memory: 256Mi
+
+redis:
+  name: redis-cart
+  port: 6379
+  replicas: 1
+  resources:
+    requests:
+      cpu: 50m
+      memory: 64Mi
+    limits:
+      cpu: 100m
+      memory: 128Mi

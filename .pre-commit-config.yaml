@@ -9,6 +9,8 @@ repos:
       - id: end-of-file-fixer
       - id: check-yaml
         args: [--allow-multiple-documents]
+        # Helm templates are not valid YAML until rendered (Go template syntax).
+        exclude: ^gitops/.+/templates/.*\.yaml$
       - id: check-added-large-files
         args: [--maxkb=500]
       - id: check-merge-conflict
@@ -38,9 +40,11 @@ repos:
     hooks:
       - id: yamllint
         args: [-c, .yamllint.yml]
+        exclude: ^gitops/.+/templates/.*\.yaml$
 
   - repo: https://github.com/pre-commit/mirrors-prettier
     rev: v4.0.0-alpha.8
     hooks:
       - id: prettier
         types_or: [markdown, yaml]
+        exclude: ^gitops/.+/templates/.*\.yaml$

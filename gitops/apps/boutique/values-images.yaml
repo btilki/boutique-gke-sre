@@ -1,7 +1,39 @@
 # Image digest pins — updated by CI (manifest-digest-pr workflow).
-# Do not use :latest tags; Kyverno require-digest policy enforces digest-only images.
-# Example (Phase 5):
-# images:
-#   frontend:
-#     repository: europe-west1-docker.pkg.dev/boutique-gke/boutique/frontend
-#     digest: sha256:0000000000000000000000000000000000000000000000000000000000000000
+# No floating tags — Kyverno require-digest policy enforces digest-only images.
+# Bootstrap source: us-central1-docker.pkg.dev/google-samples/microservices-demo:v0.10.5
+# Registry path: europe-west1-docker.pkg.dev/boutique-gke/boutique/<service>
+
+images:
+  adservice:
+    repository: europe-west1-docker.pkg.dev/boutique-gke/boutique/adservice
+    digest: sha256:2abbc0505d527711ff8ba233aaf6e0590f72acd86c016332ea3a5f2595ea70a8
+  cartservice:
+    repository: europe-west1-docker.pkg.dev/boutique-gke/boutique/cartservice
+    digest: sha256:85c4fee0ddb6eada076003abcbff17ac3daf8e18dde68c7bde03b15fc8e17417
+  checkoutservice:
+    repository: europe-west1-docker.pkg.dev/boutique-gke/boutique/checkoutservice
+    digest: sha256:403f4056479bcf2d36a865bf037ba2de0f84a60408519cee1b80e705e99f622a
+  currencyservice:
+    repository: europe-west1-docker.pkg.dev/boutique-gke/boutique/currencyservice
+    digest: sha256:1ced46aa236c5093a3cc6642f67edf50e0deccdc07262871ffacf6173fc8c6fa
+  emailservice:
+    repository: europe-west1-docker.pkg.dev/boutique-gke/boutique/emailservice
+    digest: sha256:c6de94237cad0708ec674085a54a52d9856be37d9bf2d6ec2ddfe7b725d02bb2
+  frontend:
+    repository: europe-west1-docker.pkg.dev/boutique-gke/boutique/frontend
+    digest: sha256:50ca57c513de1ef22a97b6ef76989a73878d4a3873f85b5314bfc207853d5475
+  paymentservice:
+    repository: europe-west1-docker.pkg.dev/boutique-gke/boutique/paymentservice
+    digest: sha256:d9bc5e83c671660ce825420fea552b0ab067f441e6387607091fa35b15dc1e1f
+  productcatalogservice:
+    repository: europe-west1-docker.pkg.dev/boutique-gke/boutique/productcatalogservice
+    digest: sha256:6e0d2218e0edecf671230d54cbbb565209d3a7592215d9167aca918dcb251e14
+  recommendationservice:
+    repository: europe-west1-docker.pkg.dev/boutique-gke/boutique/recommendationservice
+    digest: sha256:969f8f14ee769da1df9b831a4aa0c5e30a4d43a231a887d04fa3019c2b78548b
+  shippingservice:
+    repository: europe-west1-docker.pkg.dev/boutique-gke/boutique/shippingservice
+    digest: sha256:0d2be86f0280a0a5594de9593eecd47ca2380e90946a3434b30d956373599b44
+  redis-cart:
+    repository: europe-west1-docker.pkg.dev/boutique-gke/boutique/redis-cart
+    digest: sha256:18e7e254e2fe1fa185f9434450649b33c1efb9a7dcda9daaf1ce0dfb133bc16b

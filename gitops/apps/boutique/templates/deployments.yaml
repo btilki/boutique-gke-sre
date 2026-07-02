@@ -1,0 +1,43 @@
+{{- range $name, $svc := .Values.services }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ $name }}
+  namespace: {{ $.Values.namespace }}
+  labels:
+    {{- include "boutique.labels" (dict "appLabel" $svc.appLabel "Values" $.Values "Release" $.Release) | nindent 4 }}
+spec:
+  replicas: {{ $svc.replicas }}
+  selector:
+    matchLabels:
+      {{- include "boutique.selectorLabels" (dict "appLabel" $svc.appLabel "Release" $.Release) | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "boutique.selectorLabels" (dict "appLabel" $svc.appLabel "Release" $.Release) | nindent 8 }}
+        app.kubernetes.io/part-of: {{ $.Values.global.partOf }}
+    spec:
+      containers:
+        - name: server
+          image: {{ include "boutique.image" (dict "root" $ "imageKey" $name) }}
+          imagePullPolicy: {{ $.Values.global.imagePullPolicy }}
+          {{- $probePort := default $svc.port $svc.containerPort }}
+          ports:
+            - name: grpc
+              containerPort: {{ default $svc.port $svc.containerPort }}
+              protocol: TCP
+          env:
+            - name: PORT
+              value: {{ default $svc.port $svc.containerPort | quote }}
+            {{- range $key, $value := $svc.env }}
+            - name: {{ $key }}
+              value: {{ $value | quote }}
+            {{- end }}
+          resources:
+            {{- toYaml $svc.resources | nindent 12 }}
+          livenessProbe:
+            {{- include "boutique.livenessProbe" (dict "port" $probePort "protocol" $svc.protocol) | nindent 12 }}
+          readinessProbe:
+            {{- include "boutique.readinessProbe" (dict "port" $probePort "protocol" $svc.protocol) | nindent 12 }}
+{{- end }}

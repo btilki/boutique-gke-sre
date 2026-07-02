@@ -9,7 +9,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/biroltilki/boutique-gke-sre # set to actual repo URL
+    repoURL: https://github.com/btilki/boutique-gke-sre
     targetRevision: main
     path: gitops/apps/boutique
     helm:

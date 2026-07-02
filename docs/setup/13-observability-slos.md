@@ -132,7 +132,7 @@ For each SLO, add **SLO burn rate** conditions per [burn-rate-alerting.md](../sr
 - Condition: SLO burn rate on `browse-availability`
 - Notification channel: add in topic 14 (PagerDuty)
 - Documentation / user label `runbook_url`:
-  `https://github.com/biroltilki/boutique-gke-sre/blob/main/docs/sre/runbooks/browse-availability-burn.md`
+  `https://github.com/btilki/boutique-gke-sre/blob/main/docs/sre/runbooks/browse-availability-burn.md`
 
 **Checkout latency burn** policy:
 

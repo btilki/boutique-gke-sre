@@ -113,7 +113,7 @@ Save this password securely. It is shown once; change it after first login or co
 
 ### 6. Register the root app-of-apps
 
-Update `gitops/bootstrap/root-app.yaml` so `spec.source.repoURL` matches your fork (default: `https://github.com/biroltilki/boutique-gke-sre`), then apply:
+Update `gitops/bootstrap/root-app.yaml` so `spec.source.repoURL` matches your fork (default: `https://github.com/btilki/boutique-gke-sre`), then apply:
 
 ```bash
 kubectl apply -f gitops/bootstrap/root-app.yaml

@@ -117,7 +117,7 @@ Monitoring → Alerting → Notification channels → `pagerduty-boutique-produc
 2. Name: `TEST-pagerduty-routing`
 3. Condition: metric threshold on a always-nonzero metric (e.g. `uptime_check/check_passed` < 1 for a synthetic check) OR use metric `logging.googleapis.com/user/test_alert` if configured
 4. Notification: `pagerduty-boutique-production`
-5. Documentation: `runbook_url=https://github.com/biroltilki/boutique-gke-sre/blob/main/docs/sre/oncall/test-alerts.md`
+5. Documentation: `runbook_url=https://github.com/btilki/boutique-gke-sre/blob/main/docs/sre/oncall/test-alerts.md`
 6. Trigger the condition or wait for firing
 7. Confirm incident in PagerDuty within **2 minutes**
 8. Acknowledge and resolve in PagerDuty

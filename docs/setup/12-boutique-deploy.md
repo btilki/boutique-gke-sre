@@ -24,9 +24,51 @@ Manual sync ensures a human explicitly promotes each revision after PR review.
 - Argo CD CLI logged in or UI access at https://argocd.boutique.biroltilki.art
 - `boutique` namespace labeled: `network-policy.biroltilki.art/tier=application`
 - NetworkPolicies applied including `boutique-frontend-ingress` (frontend pods must have label `app: frontend`)
-- Tools: `kubectl`, `argocd` CLI, `curl`, `dig`, `helm` (optional for local template)
+- Tools: `kubectl`, `argocd` CLI, `curl`, `dig`, `helm` (local template and CI parity)
 
 ## Commands
+
+### 0. Bootstrap images (first deploy only)
+
+On the **first** Boutique deploy, mirror upstream images into Artifact Registry and record digests via CI — do not hand-edit digests or pull from deprecated registries.
+
+| Image set        | Upstream source                                                                  |
+| ---------------- | -------------------------------------------------------------------------------- |
+| 10 microservices | `us-central1-docker.pkg.dev/google-samples/microservices-demo:<service>:v0.10.5` |
+| `redis-cart`     | `docker.io/library/redis:7.2-alpine`                                             |
+
+**Do not use** `gcr.io/google-samples/microservices-demo` or tag `v0.10.2` — those paths are obsolete and will fail image pull.
+
+#### Run the CI mirror pipeline
+
+1. Confirm GitHub Secrets from topic 07–08: `GCP_WORKLOAD_IDENTITY_PROVIDER`, `GCP_SERVICE_ACCOUNT`, `COSIGN_PRIVATE_KEY`, `COSIGN_PASSWORD`
+2. GitHub → **Actions** → **build-scan-sign** → **Run workflow**
+3. Leave defaults unless intentionally upgrading:
+   - `upstream_version`: `v0.10.5`
+   - `redis_tag`: `7.2-alpine`
+4. Wait for all 11 matrix jobs to succeed (mirror → Trivy → push → cosign sign/attest)
+
+The workflow mirrors from the upstream table above into:
+
+```text
+europe-west1-docker.pkg.dev/boutique-gke/boutique/<service>:<tag>
+```
+
+#### Trivy baseline for upstream mirrors
+
+Third-party images may report known CVEs that upstream has not patched. The mirror workflow uses [`.github/trivy/upstream-mirror.trivyignore`](../../.github/trivy/upstream-mirror.trivyignore) as a documented accepted-risk baseline — see [`.github/trivy/README.md`](../../.github/trivy/README.md) for review policy.
+
+Regenerate the ignore file when `upstream_version` or `redis_tag` changes.
+
+#### Digest promotion PR
+
+After a green `build-scan-sign` run, **manifest-digest-pr** opens (or updates) a PR that writes digests into `gitops/apps/boutique/values-images.yaml`.
+
+1. Review the PR — confirm every image uses `@sha256:` pins
+2. Merge to `main`
+3. Continue with step 1 below
+
+**Re-deploys:** skip this section; merge new digest PRs from CI after image rebuilds only.
 
 ### 1. Verify digest-only image values
 
@@ -48,11 +90,16 @@ grep -E ':latest|tag:' gitops/apps/boutique/values-images.yaml && echo "FAIL: fl
 
 ### 2. Local render check (optional, before sync)
 
+Same command CI runs in `tests/manifest/kubeconform.sh`:
+
 ```bash
 helm template boutique gitops/apps/boutique/ \
   -f gitops/apps/boutique/values.yaml \
   -f gitops/apps/boutique/values-images.yaml \
   | head -50
+
+# Full schema validation (requires kubeconform + helm)
+./tests/manifest/kubeconform.sh
 ```
 
 Dry-run against the API server to catch Kyverno denials early:
@@ -137,15 +184,18 @@ kubectl get policyreport -n boutique
 
 ## Common problems
 
-| Symptom                         | Cause                                 | Fix                                                                                   |
-| ------------------------------- | ------------------------------------- | ------------------------------------------------------------------------------------- |
-| Sync failed — Kyverno denied    | Missing probes, resources, or digest  | Fix Helm templates or values; re-run dry-run                                          |
-| `ImagePullBackOff`              | Wrong digest or missing AR permission | Verify digest in AR; check node SA has `artifactregistry.reader`                      |
-| Binary Authorization blocked    | Image not signed / attestor mismatch  | Re-run CI sign+attest; verify policy in topic 08                                      |
-| `OutOfSync` loop                | Helm hooks or ignored differences     | Check `argocd app diff`; add ignoreDifferences if intentional                         |
-| 502 / connection timeout on URL | Ingress or managed cert not ready     | Check `ManagedCertificate` status; verify DNS                                         |
-| Cart/checkout errors            | NetworkPolicy too restrictive         | Confirm all NetPol files synced; `app.kubernetes.io/part-of: boutique` on all pods    |
-| 502 on storefront URL           | Frontend ingress blocked              | Apply `boutique-frontend-ingress.yaml`; verify `app: frontend` on frontend Deployment |
+| Symptom                          | Cause                                 | Fix                                                                                   |
+| -------------------------------- | ------------------------------------- | ------------------------------------------------------------------------------------- |
+| CI Trivy fails on upstream CVEs  | New version or expanded CVE database  | Review logs; update `.github/trivy/upstream-mirror.trivyignore` per README            |
+| `build-scan-sign` image pull 404 | Wrong upstream registry/tag           | Use `us-central1-docker.pkg.dev/.../microservices-demo` `v0.10.5`, not `gcr.io`       |
+| No digest PR after CI green      | `manifest-digest-pr` not triggered    | Confirm `build-scan-sign` completed; check Actions tab for workflow_run failure       |
+| Sync failed — Kyverno denied     | Missing probes, resources, or digest  | Fix Helm templates or values; re-run dry-run                                          |
+| `ImagePullBackOff`               | Wrong digest or missing AR permission | Verify digest in AR; check node SA has `artifactregistry.reader`                      |
+| Binary Authorization blocked     | Image not signed / attestor mismatch  | Re-run CI sign+attest; verify policy in topic 08                                      |
+| `OutOfSync` loop                 | Helm hooks or ignored differences     | Check `argocd app diff`; add ignoreDifferences if intentional                         |
+| 502 / connection timeout on URL  | Ingress or managed cert not ready     | Check `ManagedCertificate` status; verify DNS                                         |
+| Cart/checkout errors             | NetworkPolicy too restrictive         | Confirm all NetPol files synced; `app.kubernetes.io/part-of: boutique` on all pods    |
+| 502 on storefront URL            | Frontend ingress blocked              | Apply `boutique-frontend-ingress.yaml`; verify `app: frontend` on frontend Deployment |
 
 ## Recovery
 

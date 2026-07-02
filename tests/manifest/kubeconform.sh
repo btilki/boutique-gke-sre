@@ -42,4 +42,25 @@ for target in "${TARGETS[@]}"; do
   fi
 done
 
+# Rendered Helm charts — values-images.yaml must contain real digest pins for a valid render.
+HELM_CHARTS=(
+  "${REPO_ROOT}/gitops/apps/boutique"
+)
+
+command -v helm >/dev/null || {
+  echo "helm not installed; required for Helm chart validation"
+  exit 1
+}
+
+for chart in "${HELM_CHARTS[@]}"; do
+  if [[ -f "${chart}/Chart.yaml" ]]; then
+    chart_name="$(basename "${chart}")"
+    echo "--- helm template ${chart_name} ---"
+    helm template "${chart_name}" "${chart}" \
+      -f "${chart}/values.yaml" \
+      -f "${chart}/values-images.yaml" \
+      | kubeconform "${ARGS[@]}" - || exit 1
+  fi
+done
+
 echo "kubeconform validation complete."

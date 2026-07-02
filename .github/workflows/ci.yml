@@ -14,6 +14,7 @@ permissions:
 env:
   KYVERNO_CLI_VERSION: "1.18.1"
   KUBECONFORM_VERSION: "0.6.7"
+  HELM_VERSION: "v3.16.4"
 
 jobs:
   validate:
@@ -55,6 +56,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
+      - name: Set up Helm
+        uses: azure/setup-helm@v4
+        with:
+          version: ${{ env.HELM_VERSION }}
 
       - name: Install kubeconform
         run: |

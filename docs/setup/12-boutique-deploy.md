@@ -22,7 +22,7 @@ Manual sync ensures a human explicitly promotes each revision after PR review.
 - **Scaffold gate:** `gitops/apps/boutique/templates/` must contain Helm templates and `values-images.yaml` must have uncommented digest pins before sync succeeds
 - Artifact Registry images built and signed (topic 08); digests recorded in `values-images.yaml`
 - Argo CD CLI logged in or UI access at https://argocd.boutique.biroltilki.art
-- `boutique` namespace labeled: `network-policy-tier=application`
+- `boutique` namespace labeled: `network-policy.biroltilki.art/tier=application`
 - Tools: `kubectl`, `argocd` CLI, `curl`, `dig`, `helm` (optional for local template)
 
 ## Commands

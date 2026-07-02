@@ -70,7 +70,7 @@ Label the `boutique` namespace for NetworkPolicy compliance (required by `requir
 
 ```bash
 kubectl label namespace boutique \
-  network-policy-tier=application \
+  network-policy.biroltilki.art/tier=application \
   --overwrite
 ```
 

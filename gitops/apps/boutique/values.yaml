@@ -4,6 +4,19 @@
 global:
   partOf: boutique
   imagePullPolicy: IfNotPresent
+  # Pod hardening — aligned with Online Boutique v0.10.5 upstream manifests.
+  podSecurityContext:
+    fsGroup: 1000
+    runAsGroup: 1000
+    runAsNonRoot: true
+    runAsUser: 1000
+  containerSecurityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - ALL
+    privileged: false
+    readOnlyRootFilesystem: true
 
 namespace: boutique
 

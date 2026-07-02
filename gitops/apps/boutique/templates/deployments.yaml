@@ -18,10 +18,18 @@ spec:
         {{- include "boutique.selectorLabels" (dict "appLabel" $svc.appLabel "Release" $.Release) | nindent 8 }}
         app.kubernetes.io/part-of: {{ $.Values.global.partOf }}
     spec:
+      {{- with $.Values.global.podSecurityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       containers:
         - name: server
           image: {{ include "boutique.image" (dict "root" $ "imageKey" $name) }}
           imagePullPolicy: {{ $.Values.global.imagePullPolicy }}
+          {{- with $.Values.global.containerSecurityContext }}
+          securityContext:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
           {{- $probePort := default $svc.port $svc.containerPort }}
           ports:
             - name: grpc

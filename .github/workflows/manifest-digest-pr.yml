@@ -1,18 +1,138 @@
-# Manifest digest PR — placeholder (Phase 3)
-
-# Opens PR updating gitops/apps/boutique/values-images.yaml after image push.
+# Open a PR updating gitops/apps/boutique/values-images.yaml with image digests.
+# Triggered after a successful build-scan-sign run, or manually (requires digest artifact).
 
 name: manifest-digest-pr
 
 on:
+  workflow_run:
+    workflows: [build-scan-sign]
+    types: [completed]
   workflow_dispatch:
+    inputs:
+      run_id:
+        description: "build-scan-sign workflow run ID (defaults to latest successful run)"
+        required: false
 
 permissions:
   contents: write
   pull-requests: write
+  actions: read
+
+env:
+  GCP_PROJECT: boutique-gke
+  AR_REGION: europe-west1
+  AR_REPOSITORY: boutique
+  VALUES_FILE: gitops/apps/boutique/values-images.yaml
 
 jobs:
-  placeholder:
+  digest-pr:
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.workflow_run.conclusion == 'success' &&
+       github.event.workflow_run.event == 'workflow_dispatch')
     runs-on: ubuntu-latest
     steps:
-      - run: echo "Phase 3 — wire digest promotion per docs/setup/08-artifact-registry-binary-auth.md"
+      - uses: actions/checkout@v4
+
+      - name: Resolve source workflow run
+        id: source
+        env:
+          GH_TOKEN: ${{ github.token }}
+          INPUT_RUN_ID: ${{ inputs.run_id }}
+          EVENT_RUN_ID: ${{ github.event.workflow_run.id }}
+        run: |
+          set -euo pipefail
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            if [[ -n "${INPUT_RUN_ID}" ]]; then
+              RUN_ID="${INPUT_RUN_ID}"
+            else
+              RUN_ID="$(gh run list --workflow build-scan-sign.yml --status success --limit 1 --json databaseId --jq '.[0].databaseId')"
+            fi
+          else
+            RUN_ID="${EVENT_RUN_ID}"
+          fi
+          if [[ -z "${RUN_ID}" || "${RUN_ID}" == "null" ]]; then
+            echo "No successful build-scan-sign run found" >&2
+            exit 1
+          fi
+          echo "run_id=${RUN_ID}" >> "${GITHUB_OUTPUT}"
+
+      - name: Download digest manifest
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          gh run download "${{ steps.source.outputs.run_id }}" \
+            --name boutique-image-digests \
+            --dir /tmp/digests
+
+      - name: Update values-images.yaml
+        run: |
+          set -euo pipefail
+          python3 <<'PY'
+          import json
+          import re
+          from pathlib import Path
+
+          digests = json.loads(Path("/tmp/digests/digests.json").read_text())
+          values_path = Path("${{ env.VALUES_FILE }}")
+          prefix = f"${{ env.AR_REGION }}-docker.pkg.dev/${{ env.GCP_PROJECT }}/${{ env.AR_REPOSITORY }}"
+          content = values_path.read_text()
+
+          for service, digest in sorted(digests.items()):
+              repo_pattern = (
+                  rf"(  {re.escape(service)}:\n"
+                  rf"    repository: ){re.escape(prefix)}/{re.escape(service)}"
+              )
+              content, repo_count = re.subn(repo_pattern, rf"\g<1>{prefix}/{service}", content, count=1)
+
+              digest_pattern = (
+                  rf"(  {re.escape(service)}:\n"
+                  rf"    repository: {re.escape(prefix)}/{re.escape(service)}\n"
+                  rf"    digest: )sha256:[a-f0-9]+"
+              )
+              content, digest_count = re.subn(digest_pattern, rf"\g<1>{digest}", content, count=1)
+              if digest_count != 1:
+                  raise SystemExit(f"failed to update digest for {service}")
+
+          values_path.write_text(content)
+          print("Updated digests:")
+          for service, digest in sorted(digests.items()):
+              print(f"  {service}: {digest}")
+          PY
+
+      - name: Validate digest-only values
+        run: |
+          set -euo pipefail
+          if grep -E ':latest|tag:|PLACEHOLDER' "${{ env.VALUES_FILE }}"; then
+            echo "FAIL: floating tag or placeholder found" >&2
+            exit 1
+          fi
+          python3 <<'PY'
+          import re
+          from pathlib import Path
+
+          content = Path("${{ env.VALUES_FILE }}").read_text()
+          pattern = re.compile(r"^\s+digest: (sha256:[a-f0-9]{64})\s*$", re.MULTILINE)
+          digests = pattern.findall(content)
+          if len(digests) != 11:
+              raise SystemExit(f"expected 11 digests, found {len(digests)}")
+          print("OK: digest-only")
+          PY
+
+      - name: Create digest promotion PR
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ github.token }}
+          branch: ci/digest-promotion-${{ github.run_id }}
+          delete-branch: true
+          commit-message: "ci: promote Boutique image digests from build-scan-sign"
+          title: "ci: promote Boutique image digests"
+          body: |
+            Automated digest promotion from [build-scan-sign](https://github.com/${{ github.repository }}/actions/runs/${{ steps.source.outputs.run_id }}).
+
+            - Updates `${{ env.VALUES_FILE }}` only
+            - Review diff, merge, then manually sync Argo CD `boutique`
+          labels: |
+            dependencies
+            gitops

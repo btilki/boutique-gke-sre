@@ -1,26 +1,52 @@
-# Build, scan, sign — WIF authentication (topic 07).
-# Full pipeline (Trivy → Artifact Registry → cosign) lands in topic 08.
+# Mirror Online Boutique images → Trivy scan → Artifact Registry → cosign sign/attest.
+# Required GitHub Secrets: GCP_WORKLOAD_IDENTITY_PROVIDER, GCP_SERVICE_ACCOUNT,
+#   COSIGN_PRIVATE_KEY, COSIGN_PASSWORD
+# On success, triggers manifest-digest-pr via workflow_run.
 
 name: build-scan-sign
 
 on:
   workflow_dispatch:
-  # push:
-  #   branches: [main]
-  #   paths:
-  #     - ".github/workflows/build-scan-sign.yml"
+    inputs:
+      upstream_version:
+        description: "Online Boutique upstream image tag"
+        required: true
+        default: "v0.10.5"
+      redis_tag:
+        description: "Redis image tag for redis-cart"
+        required: true
+        default: "7.2-alpine"
 
 permissions:
   contents: read
   id-token: write
 
-jobs:
-  verify-wif:
-    name: Verify GCP authentication (WIF)
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
+env:
+  GCP_PROJECT: boutique-gke
+  AR_REGION: europe-west1
+  AR_REPOSITORY: boutique
+  UPSTREAM_REGISTRY: us-central1-docker.pkg.dev/google-samples/microservices-demo
 
+jobs:
+  mirror-scan-sign:
+    name: ${{ matrix.service }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        service:
+          - adservice
+          - cartservice
+          - checkoutservice
+          - currencyservice
+          - emailservice
+          - frontend
+          - paymentservice
+          - productcatalogservice
+          - recommendationservice
+          - shippingservice
+          - redis-cart
+    steps:
       - name: Authenticate to Google Cloud (WIF)
         uses: google-github-actions/auth@v2
         with:
@@ -30,15 +56,126 @@ jobs:
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v2
 
-      - name: Set gcloud project
-        run: gcloud config set project boutique-gke
+      - name: Configure Docker for Artifact Registry
+        run: gcloud auth configure-docker ${{ env.AR_REGION }}-docker.pkg.dev --quiet
 
-      - name: Verify caller identity
+      - name: Resolve image coordinates
+        id: coords
         env:
-          EXPECTED_SA: ${{ secrets.GCP_SERVICE_ACCOUNT }}
+          SERVICE: ${{ matrix.service }}
+          VERSION: ${{ inputs.upstream_version }}
+          REDIS_TAG: ${{ inputs.redis_tag }}
         run: |
-          # Proves WIF → SA impersonation (uses credentials wired by auth + setup-gcloud)
-          gcloud auth print-access-token > /dev/null
-          ACTIVE="$(gcloud config get-value account 2>/dev/null)"
-          echo "Active account: ${ACTIVE}"
-          test "${ACTIVE}" = "${EXPECTED_SA}"
+          set -euo pipefail
+          if [[ "${SERVICE}" == "redis-cart" ]]; then
+            SOURCE="docker.io/library/redis:${REDIS_TAG}"
+            PROMOTE_TAG="${REDIS_TAG}"
+          else
+            SOURCE="${UPSTREAM_REGISTRY}/${SERVICE}:${VERSION}"
+            PROMOTE_TAG="${VERSION}"
+          fi
+          DEST="${AR_REGION}-docker.pkg.dev/${GCP_PROJECT}/${AR_REPOSITORY}/${SERVICE}:${PROMOTE_TAG}"
+          echo "source=${SOURCE}" >> "${GITHUB_OUTPUT}"
+          echo "dest=${DEST}" >> "${GITHUB_OUTPUT}"
+          echo "promote_tag=${PROMOTE_TAG}" >> "${GITHUB_OUTPUT}"
+
+      - name: Pull and tag upstream image
+        run: |
+          set -euo pipefail
+          docker pull "${{ steps.coords.outputs.source }}"
+          docker tag "${{ steps.coords.outputs.source }}" "${{ steps.coords.outputs.dest }}"
+
+      - name: Trivy scan (fail on CRITICAL/HIGH)
+        uses: aquasecurity/trivy-action@0.28.0
+        with:
+          image-ref: ${{ steps.coords.outputs.dest }}
+          format: table
+          severity: CRITICAL,HIGH
+          exit-code: "1"
+          ignore-unfixed: true
+
+      - name: Push to Artifact Registry
+        id: push
+        run: |
+          set -euo pipefail
+          docker push "${{ steps.coords.outputs.dest }}"
+          DIGEST="$(gcloud artifacts docker images describe "${{ steps.coords.outputs.dest }}" \
+            --format='value(image_summary.digest)')"
+          if [[ -z "${DIGEST}" ]]; then
+            echo "Failed to resolve digest after push" >&2
+            exit 1
+          fi
+          echo "digest=${DIGEST}" >> "${GITHUB_OUTPUT}"
+          echo "${{ matrix.service }}=${DIGEST}"
+
+      - name: Install cosign
+        uses: sigstore/cosign-installer@v3.7.0
+
+      - name: cosign sign and attest
+        env:
+          COSIGN_PRIVATE_KEY: ${{ secrets.COSIGN_PRIVATE_KEY }}
+          COSIGN_PASSWORD: ${{ secrets.COSIGN_PASSWORD }}
+        run: |
+          set -euo pipefail
+          IMAGE="${{ env.AR_REGION }}-docker.pkg.dev/${{ env.GCP_PROJECT }}/${{ env.AR_REPOSITORY }}/${{ matrix.service }}"
+          REF="${IMAGE}@${{ steps.push.outputs.digest }}"
+          cosign sign --yes --key "env://COSIGN_PRIVATE_KEY" "${REF}"
+          cosign attest --yes --key "env://COSIGN_PRIVATE_KEY" \
+            --predicate-type "slsaprovenance" "${REF}"
+
+      - name: Record digest artifact
+        run: |
+          echo "${{ steps.push.outputs.digest }}" > "${RUNNER_TEMP}/digest.txt"
+
+      - name: Upload service digest
+        uses: actions/upload-artifact@v4
+        with:
+          name: digest-${{ matrix.service }}
+          path: ${{ runner.temp }}/digest.txt
+          retention-days: 7
+
+  aggregate-digests:
+    name: aggregate-digests
+    needs: mirror-scan-sign
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download all digest artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: digests
+          pattern: digest-*
+          merge-multiple: false
+
+      - name: Build digests manifest
+        run: |
+          set -euo pipefail
+          python3 <<'PY'
+          import json
+          from pathlib import Path
+
+          root = Path("digests")
+          out = {}
+          for path in sorted(root.glob("digest-*/digest.txt")):
+              service = path.parts[-2].removeprefix("digest-")
+              digest = path.read_text().strip()
+              if not digest.startswith("sha256:"):
+                  raise SystemExit(f"invalid digest for {service}: {digest!r}")
+              out[service] = digest
+          expected = {
+              "adservice", "cartservice", "checkoutservice", "currencyservice",
+              "emailservice", "frontend", "paymentservice", "productcatalogservice",
+              "recommendationservice", "shippingservice", "redis-cart",
+          }
+          missing = expected - out.keys()
+          if missing:
+              raise SystemExit(f"missing digests: {sorted(missing)}")
+          Path("digests.json").write_text(json.dumps(out, indent=2) + "\n")
+          print(json.dumps(out, indent=2))
+          PY
+
+      - name: Upload combined digests
+        uses: actions/upload-artifact@v4
+        with:
+          name: boutique-image-digests
+          path: digests.json
+          retention-days: 7

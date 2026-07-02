@@ -24,8 +24,9 @@ Deploy all Online Boutique microservices with digest-pinned images, probes, reso
 ## Dependencies
 
 - Phase 4: Argo CD, Kyverno policies, NetworkPolicies, ESO
-- CI: `build-scan-sign.yml` + `manifest-digest-pr.yml`
+- CI: `build-scan-sign.yml` (mirror → Trivy → AR → cosign) + `manifest-digest-pr.yml`
 - Binary Authorization at deploy time
+- Pod `securityContext` hardened per upstream v0.10.5 (`global.podSecurityContext` in `values.yaml`)
 
 ## Usage
 

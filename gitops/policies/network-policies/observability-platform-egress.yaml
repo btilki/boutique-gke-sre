@@ -1,0 +1,28 @@
+# Observability platform egress — DNS + HTTPS to GCP APIs via Cloud NAT.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: observability-platform-egress
+  namespace: observability
+  labels:
+    network-policy.biroltilki.art/tier: platform
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/part-of: boutique-gke-sre
+  policyTypes:
+    - Egress
+  egress:
+    - to:
+        - namespaceSelector: {}
+      ports:
+        - protocol: UDP
+          port: 53
+        - protocol: TCP
+          port: 53
+    - to:
+        - ipBlock:
+            cidr: 0.0.0.0/0
+      ports:
+        - protocol: TCP
+          port: 443

@@ -1,0 +1,13 @@
+# Default-deny NetworkPolicy — observability namespace (topic 13 security hardening).
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: default-deny-all
+  namespace: observability
+  labels:
+    network-policy.biroltilki.art/tier: platform
+spec:
+  podSelector: {}
+  policyTypes:
+    - Ingress
+    - Egress

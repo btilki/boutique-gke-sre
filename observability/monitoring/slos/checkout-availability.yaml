@@ -1,0 +1,33 @@
+# Reference: checkout-availability SLO (Cloud Monitoring)
+# Created via Monitoring API — topic 13 step 4.
+# Service: boutique-checkout | Goal: 99.95% | Window: 30 days
+#
+# Console: https://console.cloud.google.com/monitoring/services/service/boutique-checkout/slos/checkout-availability?project=boutique-gke
+#
+# SLI: successful checkouts (payment went through) / PlaceOrder attempts
+# Metrics: logging.googleapis.com/user/boutique/checkout_success
+#          logging.googleapis.com/user/boutique/checkout_attempts
+
+displayName: checkout-availability
+goal: 0.9995
+rollingPeriod: 2592000s # 30 days
+
+service:
+  serviceId: boutique-checkout
+  displayName: Online Boutique (checkout)
+
+serviceLevelIndicator:
+  requestBased:
+    goodTotalRatio:
+      goodServiceFilter: |
+        metric.type="logging.googleapis.com/user/boutique/checkout_success"
+        resource.type="k8s_container"
+        resource.labels.namespace_name="boutique"
+      totalServiceFilter: |
+        metric.type="logging.googleapis.com/user/boutique/checkout_attempts"
+        resource.type="k8s_container"
+        resource.labels.namespace_name="boutique"
+
+logBasedMetrics:
+  - observability/monitoring/log-based-metrics/checkout-attempts.yaml
+  - observability/monitoring/log-based-metrics/checkout-success.yaml

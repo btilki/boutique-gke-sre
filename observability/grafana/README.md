@@ -8,10 +8,41 @@ Visualize SLIs, golden signals, and infrastructure health. Complements Cloud Mon
 
 ## Layout
 
-| Path               | Purpose                                                           |
-| ------------------ | ----------------------------------------------------------------- |
-| `datasources.yaml` | Provisioning config for Prometheus, Cloud Monitoring, Cloud Trace |
-| `dashboards/`      | JSON dashboard exports (golden signals, SLO overview)             |
+| Path                 | Purpose                                               |
+| -------------------- | ----------------------------------------------------- |
+| `datasources.yaml`   | Provisioning config for GMP + Cloud Monitoring        |
+| `deployment.yaml`    | Deployment, ServiceAccount (Workload Identity)        |
+| `service.yaml`       | ClusterIP Service (port 80 → Grafana 3000)            |
+| `kustomization.yaml` | ConfigMap generator + resource bundle                 |
+| `dashboards/`        | JSON dashboard exports (golden signals, SLO overview) |
+
+## GCP service account
+
+`grafana@boutique-gke.iam.gserviceaccount.com` — `roles/monitoring.viewer` + Workload Identity binding to `observability/grafana`.
+
+## Admin credentials (ESO — not plain kubectl Secret)
+
+Kyverno `block-plain-secrets` denies manual `kubectl create secret`. Store credentials in **Secret Manager**, then sync via `ExternalSecret`:
+
+```bash
+# Replace with a strong password; never commit this value
+read -s GRAFANA_PASSWORD
+echo -n "{\"admin-user\":\"admin\",\"admin-password\":\"${GRAFANA_PASSWORD}\"}" | \
+  gcloud secrets create grafana-admin \
+    --project=boutique-gke \
+    --replication-policy=automatic \
+    --data-file=-
+```
+
+If the secret already exists, add a new version instead:
+
+```bash
+read -s GRAFANA_PASSWORD
+echo -n "{\"admin-user\":\"admin\",\"admin-password\":\"${GRAFANA_PASSWORD}\"}" | \
+  gcloud secrets versions add grafana-admin --data-file=-
+```
+
+`external-secret.yaml` materializes Kubernetes Secret `grafana-admin` in `observability`.
 
 ## Public URLs
 

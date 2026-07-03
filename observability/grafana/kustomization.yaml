@@ -1,0 +1,20 @@
+# Grafana bundle — datasource provisioning + Deployment (Phase 6, topic 13 step 3).
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: observability
+
+labels:
+  - pairs:
+      app.kubernetes.io/part-of: boutique-gke-sre
+    includeSelectors: false
+
+configMapGenerator:
+  - name: grafana-datasources
+    files:
+      - datasources.yaml
+
+resources:
+  - external-secret.yaml
+  - deployment.yaml
+  - service.yaml

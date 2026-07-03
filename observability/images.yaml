@@ -1,0 +1,11 @@
+# Platform image digests — boutique-gke-sre observability stack
+# Update after running .github/workflows/mirror-platform-images.yml
+platform:
+  otel-collector-contrib:
+    repository: europe-west1-docker.pkg.dev/boutique-gke/boutique/platform/otel-collector-contrib
+    tag: "0.96.0"
+    digest: sha256:8edf386cdd1f4dc4393e34680e298dcc577296279febf243cf122155fa560c39
+  grafana:
+    repository: europe-west1-docker.pkg.dev/boutique-gke/boutique/platform/grafana
+    tag: "10.4.2"
+    digest: sha256:3aa2a03d88ad9628485f78e89adcd5b18bcde1aced3e6146bbbd7a718b82b797

@@ -8,12 +8,15 @@ Implement zero-trust network segmentation: deny all traffic by default, then all
 
 ## Inputs
 
-| Input              | File                             | Description                                    |
-| ------------------ | -------------------------------- | ---------------------------------------------- |
-| Default deny       | `default-deny.yaml`              | Block all ingress/egress per namespace         |
-| Allow rules        | `boutique-allow.yaml`            | East-west + DNS + GLB health checks            |
-| Storefront ingress | `boutique-frontend-ingress.yaml` | External HTTPS to `app: frontend` on port 8080 |
-| Namespace labels   | Kyverno `require-netpol-labels`  | Tier label on namespaces                       |
+| Input              | File                                   | Description                                    |
+| ------------------ | -------------------------------------- | ---------------------------------------------- |
+| Default deny       | `default-deny.yaml`                    | Block all ingress/egress per namespace         |
+| Allow rules        | `boutique-allow.yaml`                  | East-west + DNS + GLB health checks            |
+| Storefront ingress | `boutique-frontend-ingress.yaml`       | External HTTPS to `app: frontend` on port 8080 |
+| Observability deny | `observability-default-deny.yaml`      | Default deny in `observability` namespace      |
+| OTel ingress       | `observability-collector-ingress.yaml` | OTLP from `boutique` only                      |
+| Platform egress    | `observability-platform-egress.yaml`   | DNS + HTTPS egress for observability pods      |
+| Namespace labels   | Kyverno `require-netpol-labels`        | Tier label on namespaces                       |
 
 ## Outputs
 

@@ -31,6 +31,19 @@ spec:
         - podSelector:
             matchLabels:
               app.kubernetes.io/part-of: boutique
+    # OTLP telemetry to observability collector
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: observability
+          podSelector:
+            matchLabels:
+              app.kubernetes.io/name: otel-collector
+      ports:
+        - protocol: TCP
+          port: 4317
+        - protocol: TCP
+          port: 4318
     # DNS resolution (kube-dns / Cloud DNS sidecar)
     - to:
         - namespaceSelector: {}

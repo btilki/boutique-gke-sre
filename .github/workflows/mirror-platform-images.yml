@@ -1,0 +1,115 @@
+# Mirror observability platform images → Trivy → Artifact Registry → cosign.
+# Run after topic 13; update digests in observability/*/deployment.yaml via PR.
+#
+# Required secrets: GCP_WORKLOAD_IDENTITY_PROVIDER, GCP_SERVICE_ACCOUNT,
+#   COSIGN_PRIVATE_KEY, COSIGN_PASSWORD
+
+name: mirror-platform-images
+
+on:
+  workflow_dispatch:
+    inputs:
+      otel_version:
+        description: "OpenTelemetry Collector Contrib tag"
+        required: true
+        default: "0.96.0"
+      grafana_version:
+        description: "Grafana OSS tag"
+        required: true
+        default: "10.4.2"
+
+permissions:
+  contents: read
+  id-token: write
+
+env:
+  GCP_PROJECT: boutique-gke
+  AR_REGION: europe-west1
+  AR_REPOSITORY: boutique
+  PLATFORM_PREFIX: platform
+
+jobs:
+  mirror-scan-sign:
+    name: ${{ matrix.image }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        image: [otel-collector-contrib, grafana]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Resolve upstream source
+        id: coords
+        env:
+          OTEL_VERSION: ${{ inputs.otel_version }}
+          GRAFANA_VERSION: ${{ inputs.grafana_version }}
+        run: |
+          set -euo pipefail
+          case "${{ matrix.image }}" in
+            otel-collector-contrib)
+              echo "source=otel/opentelemetry-collector-contrib:${OTEL_VERSION}" >> "${GITHUB_OUTPUT}"
+              ;;
+            grafana)
+              echo "source=grafana/grafana:${GRAFANA_VERSION}" >> "${GITHUB_OUTPUT}"
+              ;;
+          esac
+
+      - name: Authenticate to Google Cloud (WIF)
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ secrets.GCP_SERVICE_ACCOUNT }}
+
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: Configure Docker for Artifact Registry
+        run: gcloud auth configure-docker ${{ env.AR_REGION }}-docker.pkg.dev --quiet
+
+      - name: Pull, tag, and push
+        id: push
+        env:
+          SOURCE: ${{ steps.coords.outputs.source }}
+          DEST: ${{ env.AR_REGION }}-docker.pkg.dev/${{ env.GCP_PROJECT }}/${{ env.AR_REPOSITORY }}/${{ env.PLATFORM_PREFIX }}/${{ matrix.image }}
+        run: |
+          set -euo pipefail
+          docker pull "${SOURCE}"
+          docker tag "${SOURCE}" "${DEST}"
+          docker push "${DEST}"
+          DIGEST="$(gcloud artifacts docker images describe "${DEST}" \
+            --format='value(image_summary.digest)')"
+          echo "digest=${DIGEST}" >> "${GITHUB_OUTPUT}"
+          echo "${{ matrix.image }}=${DIGEST}"
+
+      - name: Trivy scan (fail on CRITICAL/HIGH)
+        uses: aquasecurity/trivy-action@a9c7b0f06e461e9d4b4d1711f154ee024b8d7ab8
+        with:
+          image-ref: ${{ env.AR_REGION }}-docker.pkg.dev/${{ env.GCP_PROJECT }}/${{ env.AR_REPOSITORY }}/${{ env.PLATFORM_PREFIX }}/${{ matrix.image }}@${{ steps.push.outputs.digest }}
+          format: table
+          severity: CRITICAL,HIGH
+          exit-code: "1"
+          ignore-unfixed: true
+
+      - name: Install cosign
+        uses: sigstore/cosign-installer@v3.7.0
+
+      - name: cosign sign and attest
+        env:
+          COSIGN_PRIVATE_KEY: ${{ secrets.COSIGN_PRIVATE_KEY }}
+          COSIGN_PASSWORD: ${{ secrets.COSIGN_PASSWORD }}
+          IMAGE: ${{ env.AR_REGION }}-docker.pkg.dev/${{ env.GCP_PROJECT }}/${{ env.AR_REPOSITORY }}/${{ env.PLATFORM_PREFIX }}/${{ matrix.image }}
+          DIGEST: ${{ steps.push.outputs.digest }}
+        run: |
+          set -euo pipefail
+          REF="${IMAGE}@${DIGEST}"
+          cosign sign --yes --key "env://COSIGN_PRIVATE_KEY" "${REF}"
+
+      - name: Upload digest artifact
+        run: echo "${{ steps.push.outputs.digest }}" > "${RUNNER_TEMP}/digest.txt"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: digest-${{ matrix.image }}
+          path: ${{ runner.temp }}/digest.txt
+          retention-days: 7

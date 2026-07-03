@@ -1,0 +1,27 @@
+# Reference: boutique-storefront HTTPS uptime check
+# Created via scripts/create-uptime-check.sh — topic 13 step 6.
+#
+# Console: https://console.cloud.google.com/monitoring/uptime?project=boutique-gke
+
+displayName: boutique-storefront
+uptimeCheckId: boutique-storefront-wQXshv8BfKA
+monitoredResource:
+  type: uptime_url
+  labels:
+    host: boutique.biroltilki.art
+    project_id: boutique-gke
+httpCheck:
+  protocol: HTTPS
+  path: /
+  port: 443
+  validateSsl: true
+  acceptedResponseStatusCodes:
+    - statusClass: STATUS_CLASS_2XX
+period: 60s
+timeout: 10s
+selectedRegions:
+  - USA_IOWA
+  - EUROPE
+  - ASIA_PACIFIC
+
+alertPolicy: uptime-check-failed

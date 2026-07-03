@@ -1,0 +1,25 @@
+# Reference: uptime-check-failed alert policy
+# Created via scripts/create-uptime-check.sh — topic 13 step 6.
+#
+# Triggers when boutique-storefront uptime check fails from 2+ regions for 5 min.
+# Notification channels: add PagerDuty in topic 14.
+
+displayName: uptime-check-failed
+combiner: OR
+enabled: true
+
+userLabels:
+  runbook: uptime-check-failed
+  target: boutique-storefront
+
+documentation:
+  runbook: https://github.com/btilki/boutique-gke-sre/blob/main/docs/sre/runbooks/uptime-check-failed.md
+
+conditions:
+  - displayName: boutique-storefront uptime check failed
+    metric: monitoring.googleapis.com/uptime_check/check_passed
+    comparison: COMPARISON_LT
+    threshold: 1
+    duration: 300s
+    alignment: ALIGN_NEXT_OLDER
+    reducer: REDUCE_COUNT_FALSE

@@ -1,0 +1,12 @@
+# Log-based metric: checkout PlaceOrder attempts
+# API: logging.googleapis.com/v2/projects/boutique-gke/metrics/boutique%2Fcheckout_attempts
+name: boutique/checkout_attempts
+description: Checkout PlaceOrder attempts (checkoutservice)
+filter: |
+  resource.type="k8s_container"
+  resource.labels.namespace_name="boutique"
+  labels."k8s-pod/app"="checkoutservice"
+  (jsonPayload.message=~"\[PlaceOrder\]" OR textPayload=~"\[PlaceOrder\]")
+metricDescriptor:
+  metricKind: DELTA
+  valueType: INT64

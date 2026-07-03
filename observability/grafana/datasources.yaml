@@ -1,34 +1,25 @@
 # Grafana datasource provisioning — boutique-gke-sre
-# Phase 6: mount as ConfigMap; Grafana sidecar or provisioning volume.
-#
-# Datasources:
-#   - Google Managed Prometheus (default metrics)
-#   - Cloud Monitoring (GCP-native SLOs and uptime checks)
-#   - Cloud Trace (trace-to-metrics correlation, optional)
+# Mounted at /etc/grafana/provisioning/datasources/datasources.yaml
+# Requires Workload Identity on Grafana SA (roles/monitoring.viewer).
+apiVersion: 1
+datasources:
+  - name: Google Managed Prometheus
+    uid: gmp
+    type: prometheus
+    access: proxy
+    isDefault: true
+    url: https://monitoring.googleapis.com/v1/projects/boutique-gke/location/global/prometheus
+    jsonData:
+      httpMethod: POST
+      authenticationType: gce
+      manageAlerts: false
+      prometheusType: Prometheus
+      prometheusVersion: 2.40.0
 
-# apiVersion: 1
-# datasources:
-#   - name: Google Managed Prometheus
-#     type: prometheus
-#     access: proxy
-#     isDefault: true
-#     jsonData:
-#       httpMethod: POST
-#       prometheusType: Mimir
-#       prometheusVersion: 2.40.0
-#     secureJsonData: {}
-#     # url: set via Grafana GCE/Workload Identity plugin or proxy
-#
-#   - name: Cloud Monitoring
-#     type: stackdriver
-#     access: proxy
-#     jsonData:
-#       authenticationType: gce
-#       defaultProject: boutique-gke
-#
-#   - name: Cloud Trace
-#     type: googlecloud-trace
-#     access: proxy
-#     jsonData:
-#       authenticationType: gce
-#       defaultProject: boutique-gke
+  - name: Cloud Monitoring
+    uid: gcm
+    type: stackdriver
+    access: proxy
+    jsonData:
+      authenticationType: gce
+      defaultProject: boutique-gke

@@ -37,10 +37,20 @@ spec:
         app.kubernetes.io/part-of: boutique-gke-sre
     spec:
       serviceAccountName: otel-collector
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
+        runAsGroup: 10001
+        fsGroup: 10001
       containers:
         - name: otel-collector
-          # otel/opentelemetry-collector-contrib:0.96.0
-          image: otel/opentelemetry-collector-contrib@sha256:ef20ffeb9ae06d75f94bd031cde7713a1d1bcad20e5ebc0f7dc6c2ee52b8ae4a
+          # platform/otel-collector-contrib:0.96.0 — mirrored via mirror-platform-images workflow
+          image: europe-west1-docker.pkg.dev/boutique-gke/boutique/platform/otel-collector-contrib@sha256:8edf386cdd1f4dc4393e34680e298dcc577296279febf243cf122155fa560c39
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: ["ALL"]
           args: ["--config=/etc/otelcol/config.yaml"]
           ports:
             - name: otlp-grpc
@@ -67,7 +77,11 @@ spec:
           volumeMounts:
             - name: config
               mountPath: /etc/otelcol
+            - name: tmp
+              mountPath: /tmp
       volumes:
         - name: config
           configMap:
             name: otel-collector-config
+        - name: tmp
+          emptyDir: {}

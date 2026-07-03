@@ -1,0 +1,30 @@
+# Reference: browse-availability SLO (Cloud Monitoring)
+# Created via Monitoring API — topic 13 step 4.
+# Service: boutique-frontend | Goal: 99.9% | Window: 30 days
+#
+# Console: https://console.cloud.google.com/monitoring/services/service/boutique-frontend/slos/browse-availability?project=boutique-gke
+#
+# SLI: non-5xx HTTPS LB requests / total requests for boutique frontend url_map.
+
+displayName: browse-availability
+goal: 0.999
+rollingPeriod: 2592000s # 30 days
+
+service:
+  serviceId: boutique-frontend
+  displayName: Online Boutique (browse)
+
+serviceLevelIndicator:
+  requestBased:
+    goodTotalRatio:
+      goodServiceFilter: |
+        metric.type="loadbalancing.googleapis.com/https/request_count"
+        resource.type="https_lb_rule"
+        resource.label.url_map_name="k8s2-um-jbuc2mne-boutique-boutique-frontend-lvll6m53"
+        metric.label.response_code_class!="500"
+      totalServiceFilter: |
+        metric.type="loadbalancing.googleapis.com/https/request_count"
+        resource.type="https_lb_rule"
+        resource.label.url_map_name="k8s2-um-jbuc2mne-boutique-boutique-frontend-lvll6m53"
+
+# Host filter note: url_map is scoped to boutique frontend ingress (boutique.biroltilki.art).

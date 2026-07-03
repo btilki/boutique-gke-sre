@@ -1,0 +1,12 @@
+# Log-based metric: successful checkouts (payment completed)
+# API: logging.googleapis.com/v2/projects/boutique-gke/metrics/boutique%2Fcheckout_success
+name: boutique/checkout_success
+description: Successful checkouts (payment completed)
+filter: |
+  resource.type="k8s_container"
+  resource.labels.namespace_name="boutique"
+  labels."k8s-pod/app"="checkoutservice"
+  (jsonPayload.message=~"payment went through" OR textPayload=~"payment went through")
+metricDescriptor:
+  metricKind: DELTA
+  valueType: INT64

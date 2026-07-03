@@ -3,8 +3,6 @@
 **Alert policy:** `browse-availability-burn`
 **SLO:** Browse 99.9% availability — [catalog](../slos/catalog.md)
 
-> Full steps expanded in Phase 6–7 when alert policies are live.
-
 ## Purpose
 
 Respond to multi-window burn on frontend availability SLI.

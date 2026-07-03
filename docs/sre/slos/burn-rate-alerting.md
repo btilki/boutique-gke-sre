@@ -36,15 +36,17 @@ SLI time series (Cloud Monitoring)
 | 1d     | 3×                   | Ticket             |
 | 3d     | 1×                   | Ticket — slow burn |
 
+> **Cloud Monitoring API:** Maximum burn-rate lookback is **24 h**. Use a second **24 h / 1×** condition as the slow-burn ticket window when creating policies via API or `scripts/create-burn-rate-policies.sh`.
+
 **Why multi-window:** A single long window misses fast outages; a single short window causes false pages during brief blips. Combining windows reduces false positives while catching real incidents ([Google SRE workbook](https://sre.google/workbook/alerting-on-slos/)).
 
 ## Alert policy → runbook mapping
 
-| Alert policy name          | Runbook                                                                |
-| -------------------------- | ---------------------------------------------------------------------- |
-| `browse-availability-burn` | [browse-availability-burn.md](../runbooks/browse-availability-burn.md) |
-| `checkout-latency-burn`    | [checkout-latency-burn.md](../runbooks/checkout-latency-burn.md)       |
-| `uptime-check-failed`      | [uptime-check-failed.md](../runbooks/uptime-check-failed.md)           |
+| Alert policy name            | Runbook                                                                    |
+| ---------------------------- | -------------------------------------------------------------------------- |
+| `browse-availability-burn`   | [browse-availability-burn.md](../runbooks/browse-availability-burn.md)     |
+| `checkout-availability-burn` | [checkout-availability-burn.md](../runbooks/checkout-availability-burn.md) |
+| `uptime-check-failed`        | [uptime-check-failed.md](../runbooks/uptime-check-failed.md)               |
 
 Every policy **must** include runbook URL in documentation or notification metadata, e.g.:
 

@@ -30,7 +30,6 @@ fi
 TARGETS=(
   "${REPO_ROOT}/gitops/bootstrap"
   "${REPO_ROOT}/gitops/policies"
-  "${REPO_ROOT}/observability"
 )
 
 for target in "${TARGETS[@]}"; do
@@ -41,6 +40,18 @@ for target in "${TARGETS[@]}"; do
     done
   fi
 done
+
+# observability/ mixes Kustomize resources with reference YAML (monitoring/, images.yaml).
+# Validate only what Argo CD applies: rendered Kustomize output.
+OBSERVABILITY="${REPO_ROOT}/observability"
+if [[ -d "${OBSERVABILITY}" ]]; then
+  echo "--- kubectl kustomize observability ---"
+  command -v kubectl >/dev/null || {
+    echo "kubectl not installed; required for observability kustomize validation"
+    exit 1
+  }
+  kubectl kustomize "${OBSERVABILITY}" | kubeconform "${ARGS[@]}" - || exit 1
+fi
 
 # Rendered Helm charts — values-images.yaml must contain real digest pins for a valid render.
 HELM_CHARTS=(

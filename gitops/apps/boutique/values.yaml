@@ -4,6 +4,11 @@
 global:
   partOf: boutique
   imagePullPolicy: IfNotPresent
+  # OpenTelemetry — upstream google-cloud-operations pattern (v0.10.5).
+  # NetworkPolicy boutique-allow permits OTLP gRPC to observability/otel-collector.
+  tracing:
+    enabled: true
+    collectorServiceAddr: otel-collector.observability.svc:4317
   # Pod hardening — aligned with Online Boutique v0.10.5 upstream manifests.
   podSecurityContext:
     fsGroup: 1000

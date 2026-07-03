@@ -73,6 +73,6 @@ echo "Creating checkout-availability-burn..."
 create_policy "$(build_policy \
   "checkout-availability-burn" \
   "${CHECKOUT_SLO}" \
-  "https://github.com/btilki/boutique-gke-sre/blob/main/docs/sre/runbooks/checkout-latency-burn.md" \
-  "checkout-latency-burn" \
+  "https://github.com/btilki/boutique-gke-sre/blob/main/docs/sre/runbooks/checkout-availability-burn.md" \
+  "checkout-availability-burn" \
   "Multi-window burn-rate alert for checkout-availability SLO (99.95% / 30d).")" | python3 -m json.tool

@@ -71,13 +71,13 @@ Multi-window burn rates per [burn-rate-alerting.md](burn-rate-alerting.md):
 
 ## Alert → runbook mapping
 
-| Alert policy               | Runbook                                                                |
-| -------------------------- | ---------------------------------------------------------------------- |
-| `browse-availability-burn` | [browse-availability-burn.md](../runbooks/browse-availability-burn.md) |
-| `checkout-latency-burn`    | [checkout-latency-burn.md](../runbooks/checkout-latency-burn.md)       |
-| `uptime-check-failed`      | [uptime-check-failed.md](../runbooks/uptime-check-failed.md)           |
-| `bad-deploy-rollback`      | [bad-deploy-rollback.md](../runbooks/bad-deploy-rollback.md)           |
-| `redis-cart-down`          | [redis-cart-down.md](../runbooks/redis-cart-down.md)                   |
+| Alert policy                 | Runbook                                                                    |
+| ---------------------------- | -------------------------------------------------------------------------- |
+| `browse-availability-burn`   | [browse-availability-burn.md](../runbooks/browse-availability-burn.md)     |
+| `checkout-availability-burn` | [checkout-availability-burn.md](../runbooks/checkout-availability-burn.md) |
+| `uptime-check-failed`        | [uptime-check-failed.md](../runbooks/uptime-check-failed.md)               |
+| `bad-deploy-rollback`        | [bad-deploy-rollback.md](../runbooks/bad-deploy-rollback.md)               |
+| `redis-cart-down`            | [redis-cart-down.md](../runbooks/redis-cart-down.md)                       |
 
 ## Observability ownership
 

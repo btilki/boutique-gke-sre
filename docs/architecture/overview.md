@@ -73,7 +73,7 @@ Canonical system design for the production SRE reference: Google Online Boutique
 
 Git is the single source of truth. Engineers merge PRs that update Helm values (image digests) and platform manifests. GitHub Actions authenticates to GCP via Workload Identity Federation, builds or mirrors images, scans with Trivy, signs with cosign, and pushes to Artifact Registry. Argo CD watches the repo and syncs desired state to a **single private regional GKE cluster**. Platform components (Kyverno, ESO, NetworkPolicy) enforce security at admission and runtime.
 
-Online Boutique runs in the `boutique` namespace; Argo CD in `argocd`; observability in `monitoring`. North-south traffic enters through a Google Cloud external HTTP(S) load balancer with a static IP, Google-managed TLS certificates, and Cloud Armor. OpenTelemetry exports to Cloud Trace and Managed Prometheus; Grafana visualizes health. Cloud Monitoring hosts SLOs, uptime checks, and burn-rate alerts that route to PagerDuty with runbook links in `docs/sre/runbooks/`.
+Online Boutique runs in the `boutique` namespace; Argo CD in `argocd`; observability stack in `observability`. North-south traffic enters through a Google Cloud external HTTP(S) load balancer with a static IP, Google-managed TLS certificates, and Cloud Armor. OpenTelemetry exports to Cloud Trace and Managed Prometheus; Grafana visualizes health. Cloud Monitoring hosts SLOs, uptime checks, and burn-rate alerts that route to PagerDuty with runbook links in `docs/sre/runbooks/`.
 
 ```mermaid
 flowchart TB
@@ -159,7 +159,7 @@ User browser
 
 ```
 App pods (OTel SDK / collector)
-  → OTel Collector (monitoring namespace)
+  → OTel Collector (observability namespace)
   → Cloud Trace (traces)
   → Managed Prometheus (metrics)
   → Cloud Logging (stdout / logging exporter)
@@ -227,7 +227,7 @@ boutique-vpc (custom, regional)
 | ------------------ | ---------------------------------- | -------------------------------------- |
 | `boutique`         | Ingress controller, same-namespace | DNS, service deps, OTel collector      |
 | `argocd`           | Ingress (argocd host)              | Git, Kubernetes API                    |
-| `monitoring`       | All namespaces (scrape)            | Managed Prometheus, Grafana deps       |
+| `observability`    | `boutique` (OTLP), same-namespace  | Cloud Trace, Managed Prometheus, DNS   |
 | `kyverno`          | Kubernetes API                     | Admission webhook targets              |
 | `external-secrets` | Kubernetes API                     | Secret Manager (Private Google Access) |
 

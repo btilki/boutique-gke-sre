@@ -2,18 +2,18 @@
 # Created via scripts/create-burn-rate-policies.sh — topic 13 step 5.
 #
 # SLO: projects/334181791139/services/boutique-checkout/serviceLevelObjectives/checkout-availability
-# Runbook maps to checkout-latency-burn (closest published runbook for checkout path).
+# Runbook maps to checkout-availability-burn (checkout availability SLO).
 
 displayName: checkout-availability-burn
 combiner: OR
 enabled: true
 
 userLabels:
-  runbook: checkout-latency-burn
+  runbook: checkout-availability-burn
   slo: checkout-availability
 
 documentation:
-  runbook: https://github.com/btilki/boutique-gke-sre/blob/main/docs/sre/runbooks/checkout-latency-burn.md
+  runbook: https://github.com/btilki/boutique-gke-sre/blob/main/docs/sre/runbooks/checkout-availability-burn.md
 
 conditions:
   - displayName: Fast burn 1h (page)

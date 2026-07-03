@@ -95,11 +95,11 @@ For each production alert policy from topic 13:
 
 Attach `pagerduty-boutique-production` to:
 
-| Policy                     | Runbook                                                                    |
-| -------------------------- | -------------------------------------------------------------------------- |
-| `browse-availability-burn` | [browse-availability-burn.md](../sre/runbooks/browse-availability-burn.md) |
-| `checkout-latency-burn`    | [checkout-latency-burn.md](../sre/runbooks/checkout-latency-burn.md)       |
-| `uptime-check-failed`      | [uptime-check-failed.md](../sre/runbooks/uptime-check-failed.md)           |
+| Policy                       | Runbook                                                                        |
+| ---------------------------- | ------------------------------------------------------------------------------ |
+| `browse-availability-burn`   | [browse-availability-burn.md](../sre/runbooks/browse-availability-burn.md)     |
+| `checkout-availability-burn` | [checkout-availability-burn.md](../sre/runbooks/checkout-availability-burn.md) |
+| `uptime-check-failed`        | [uptime-check-failed.md](../sre/runbooks/uptime-check-failed.md)               |
 
 Ensure each policy documentation field or user label includes `runbook_url` pointing to the GitHub runbook.
 

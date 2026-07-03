@@ -102,7 +102,8 @@ gcloud artifacts repositories list --project=boutique-gke --location=europe-west
 
 ```bash
 kubectl -n observability get pods
-gcloud monitoring slos list --project=boutique-gke
+gcloud monitoring services list --project=boutique-gke
+# Verify browse-availability and checkout-availability SLOs in Console (Monitoring → Services)
 
 # Runbooks on disk
 ls docs/sre/runbooks/*.md | wc -l
@@ -143,7 +144,7 @@ gcloud compute security-policies describe boutique-owasp-crs --project=boutique-
 ```bash
 # Runbooks
 test -f docs/sre/runbooks/browse-availability-burn.md && echo OK browse runbook
-test -f docs/sre/runbooks/checkout-latency-burn.md && echo OK checkout runbook
+test -f docs/sre/runbooks/checkout-availability-burn.md && echo OK checkout runbook
 test -f docs/sre/runbooks/bad-deploy-rollback.md && echo OK rollback runbook
 
 # On-call docs

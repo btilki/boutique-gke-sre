@@ -12,7 +12,7 @@ Respond to multi-window burn on frontend availability SLI.
 1. Check uptime: `curl -I https://boutique.biroltilki.art`
 2. Cloud Console → Monitoring → SLOs → browse availability
 3. `kubectl get pods -n boutique -l app=frontend`
-4. Check Ingress and Cloud Armor backend health
+4. Check Ingress and Cloud Armor backend health — see [setup/15-cloud-armor.md](../../setup/15-cloud-armor.md) Validation
 
 ## Common causes
 

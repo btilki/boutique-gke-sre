@@ -3,6 +3,7 @@
 #
 # SLO: projects/334181791139/services/boutique-checkout/serviceLevelObjectives/checkout-availability
 # Runbook maps to checkout-availability-burn (checkout availability SLO).
+# Notification channels: pagerduty-boutique-production (topic 14)
 
 displayName: checkout-availability-burn
 combiner: OR

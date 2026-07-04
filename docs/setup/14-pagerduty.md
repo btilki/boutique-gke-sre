@@ -21,7 +21,8 @@ Without a tested integration, the first real outage may be the first time you di
 - Prior guide: [13-observability-slos.md](13-observability-slos.md)
 - SLOs and alert policies created (browse/checkout burn, uptime check)
 - PagerDuty account with permission to create services and integrations
-- Tools: `gcloud`, browser access to GCP Console and PagerDuty
+- **PagerDuty signup email:** use a **domain/work address** (e.g. `you@biroltilki.art`). Consumer Gmail is often blocked on trial signup. If DNS for your domain uses **Google Cloud DNS**, configure MX/SPF/DKIM for outbound mail before signup (Namecheap Private Email or similar).
+- Tools: `gcloud`, `curl`, browser access to GCP Console and PagerDuty
 - Mobile device with PagerDuty app configured for push notifications
 
 ## Commands
@@ -43,18 +44,34 @@ Save the service.
 
 **Service → Integrations → Add an integration**
 
-| Field            | Value                     |
-| ---------------- | ------------------------- |
-| Integration type | **Events API V2**         |
-| Name             | `Google Cloud Monitoring` |
+| Field            | Value                      |
+| ---------------- | -------------------------- |
+| Integration type | **Events API V2** (not v1) |
+| Name             | `Google Cloud Monitoring`  |
 
-Click **Add integration**. Copy the **Integration Key** (32-character hex string). Store it in Secret Manager — do not commit to Git:
+**Important:** During service creation, PagerDuty may offer **Events API v1** and **Events API V2**. Google Cloud Monitoring requires **V2 only**. Remove v1 if selected by mistake.
+
+If you added the integration during the service wizard, verify the type is **Events API V2** before copying the key.
+
+Copy the **Integration Key** (32-character hex string). Store it in Secret Manager — do not commit to Git. Use a prompt so the key is not stored in shell history:
 
 ```bash
-echo -n "YOUR_INTEGRATION_KEY" | gcloud secrets create pagerduty-integration-key \
+gcloud config set project boutique-gke
+
+read -s PD_KEY
+echo -n "$PD_KEY" | gcloud secrets create pagerduty-integration-key \
   --project=boutique-gke \
   --replication-policy=automatic \
   --data-file=-
+unset PD_KEY
+```
+
+If the secret already exists, add a new version instead:
+
+```bash
+read -s PD_KEY
+echo -n "$PD_KEY" | gcloud secrets versions add pagerduty-integration-key --data-file=-
+unset PD_KEY
 ```
 
 ### 3. Create Cloud Monitoring notification channel
@@ -69,29 +86,32 @@ echo -n "YOUR_INTEGRATION_KEY" | gcloud secrets create pagerduty-integration-key
 
 Click **Test connection** if available. Save the channel.
 
-Via gcloud (alternative):
+List channels (verify creation):
 
 ```bash
-gcloud alpha monitoring channels create \
-  --project=boutique-gke \
-  --type=pagerduty \
-  --display-name="pagerduty-boutique-production" \
-  --channel-labels=service_key=YOUR_INTEGRATION_KEY
-```
-
-List channels to get the resource name:
-
-```bash
-gcloud alpha monitoring channels list --project=boutique-gke \
-  --filter='displayName="pagerduty-boutique-production"' \
-  --format='value(name)'
+curl -s -H "Authorization: Bearer $(gcloud auth print-access-token)" \
+  "https://monitoring.googleapis.com/v3/projects/boutique-gke/notificationChannels" \
+  | python3 -c "import sys,json; [print(c['displayName'], c['type'], c.get('enabled')) for c in json.load(sys.stdin).get('notificationChannels',[])]"
 ```
 
 ### 4. Attach channel to alert policies
 
+**Option A — GCP Console (manual)**
+
 For each production alert policy from topic 13:
 
 **Monitoring → Alerting → [policy name] → Edit → Notifications → Add notification channel**
+
+**Option B — Script (recommended)**
+
+From the repo root (requires GSM secret from step 2; creates channel if missing):
+
+```bash
+cd /path/to/boutique-gke-sre
+./scripts/attach-pagerduty-channel.sh
+```
+
+If you see `permission denied`, run `bash scripts/attach-pagerduty-channel.sh` or `chmod +x scripts/attach-pagerduty-channel.sh`.
 
 Attach `pagerduty-boutique-production` to:
 
@@ -146,13 +166,18 @@ Record the test date in your on-call handoff log per [test-alerts.md](../sre/onc
 ## Validation
 
 ```bash
-# Notification channel exists
-gcloud alpha monitoring channels list --project=boutique-gke \
-  --filter='displayName:"pagerduty"'
+# Notification channel exists and is enabled
+curl -s -H "Authorization: Bearer $(gcloud auth print-access-token)" \
+  "https://monitoring.googleapis.com/v3/projects/boutique-gke/notificationChannels" \
+  | python3 -c "import sys,json; [print(c['displayName'], c['type'], c.get('enabled')) for c in json.load(sys.stdin).get('notificationChannels',[])]"
 
-# Alert policies reference notification channels
-gcloud alpha monitoring policies list --project=boutique-gke --format=json \
-  | grep -A2 notificationChannels
+# Alert policies reference notification channels (expect 1 each)
+curl -s -H "Authorization: Bearer $(gcloud auth print-access-token)" \
+  "https://monitoring.googleapis.com/v3/projects/boutique-gke/alertPolicies" \
+  | python3 -c "import sys,json; [print(p['displayName'], 'channels=', len(p.get('notificationChannels',[]))) for p in json.load(sys.stdin).get('alertPolicies',[]) if p['displayName'] in ('browse-availability-burn','checkout-availability-burn','uptime-check-failed')]"
+
+# Secret container exists (metadata only — does not print the key)
+gcloud secrets describe pagerduty-integration-key --project=boutique-gke --format='value(name)'
 
 # Storefront still healthy (unrelated but standard check)
 curl -I https://boutique.biroltilki.art
@@ -172,7 +197,9 @@ Full procedure: [test-alerts.md](../sre/oncall/test-alerts.md)
 | Symptom                  | Cause                             | Fix                                                  |
 | ------------------------ | --------------------------------- | ---------------------------------------------------- |
 | No incident in PagerDuty | Wrong integration key             | Re-create channel; verify key matches PD integration |
+| No incident in PagerDuty | **Events API v1** selected        | Remove v1; use **Events API V2** only                |
 | Test connection fails    | Typo in service key               | Copy key again from PD → Integrations                |
+| Script permission denied | File not executable               | `bash scripts/attach-pagerduty-channel.sh`           |
 | Incident delayed > 5 min | Long aggregation alignment period | Reduce alignment period on test policy only          |
 | Duplicate pages          | Multiple channels on same policy  | Deduplicate notification channels                    |
 | Pages wrong person       | Escalation policy misconfigured   | PD → Escalation policies → verify schedule           |
@@ -180,7 +207,7 @@ Full procedure: [test-alerts.md](../sre/oncall/test-alerts.md)
 
 ## Recovery
 
-- **Rotate integration key:** PD → Integrations → New key → update GCP notification channel → delete old key
+- **Rotate integration key:** PD → Integrations → New key → `read -s` + `gcloud secrets versions add pagerduty-integration-key --data-file=-` → update GCP notification channel service key → delete old PD key
 - **Disable paging:** Remove notification channel from policies (alerts still fire in Console)
 - **False page storm:** PD → service → disable escalations temporarily; fix alert threshold
 - **Delete test policy:** Monitoring → Alerting → `TEST-*` → Delete

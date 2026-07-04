@@ -25,7 +25,7 @@ Synthetic alert or uptime check exercises the same channel path as production bu
 1. Cloud Console → Monitoring → Alerting → **Create policy**
 2. Add condition: **Metric threshold** on a test metric OR use **Uptime check** on internal test path
 3. Set notification channel → PagerDuty boutique service
-4. Add user label: `runbook_url=https://github.com/.../docs/sre/oncall/test-alerts.md`
+4. Add user label: `runbook_url=https://github.com/btilki/boutique-gke-sre/blob/main/docs/sre/oncall/test-alerts.md`
 5. Set `severity=test` in documentation or display name
 6. Trigger condition (or use **TEST NOTIFICATION** on channel if available)
 7. Confirm push/SMS/email on on-call device

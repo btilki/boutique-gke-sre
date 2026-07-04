@@ -53,14 +53,16 @@ Click **Create policy**.
 
 Inside policy `boutique-owasp-crs` → **Rules** → **Add rule**
 
-| Field       | Value                                            |
-| ----------- | ------------------------------------------------ |
-| Description | `OWASP CRS 3.3 baseline`                         |
-| Priority    | `1000`                                           |
-| Match       | **Advanced rule** → **Preconfigured expression** |
-| Expression  | `evaluatePreconfiguredExpr('xss-stable')`        |
+**Console UI:** Use **Advanced mode** → **Match condition editor** tab (not the builder dropdown alone). Paste each expression below. Set **Action** to **Deny (403)** and leave **Preview** off for enforce mode.
 
-Add additional CRS rules (recommended baseline):
+| Field       | Value                                          |
+| ----------- | ---------------------------------------------- |
+| Description | `OWASP CRS - XSS` (per rule below)             |
+| Priority    | `1000` (increment per rule)                    |
+| Match       | **Advanced rule** → **Match condition editor** |
+| Expression  | `evaluatePreconfiguredExpr('xss-stable')`      |
+
+Add **five** CRS rules (full baseline):
 
 | Priority | Preconfigured expression                   | Purpose               |
 | -------- | ------------------------------------------ | --------------------- |
@@ -80,7 +82,11 @@ Optional rate limiting rule (priority 2000):
 | Action    | Rate-based ban                    |
 | Threshold | e.g. 100 requests per 60 s per IP |
 
-### 4. Create policy via gcloud (alternative)
+> **If you used Console for steps 2–3, skip step 4** and continue at step 5.
+
+### 4. Create policy via gcloud (alternative to steps 2–3)
+
+Creates the same five-rule baseline as step 3:
 
 ```bash
 gcloud compute security-policies create boutique-owasp-crs \
@@ -100,6 +106,27 @@ gcloud compute security-policies rules create 1001 \
   --expression="evaluatePreconfiguredExpr('sqli-stable')" \
   --action=deny-403 \
   --description="OWASP CRS - SQLi"
+
+gcloud compute security-policies rules create 1002 \
+  --project=boutique-gke \
+  --security-policy=boutique-owasp-crs \
+  --expression="evaluatePreconfiguredExpr('lfi-stable')" \
+  --action=deny-403 \
+  --description="OWASP CRS - LFI"
+
+gcloud compute security-policies rules create 1003 \
+  --project=boutique-gke \
+  --security-policy=boutique-owasp-crs \
+  --expression="evaluatePreconfiguredExpr('rfi-stable')" \
+  --action=deny-403 \
+  --description="OWASP CRS - RFI"
+
+gcloud compute security-policies rules create 1004 \
+  --project=boutique-gke \
+  --security-policy=boutique-owasp-crs \
+  --expression="evaluatePreconfiguredExpr('rce-stable')" \
+  --action=deny-403 \
+  --description="OWASP CRS - RCE"
 ```
 
 ### 5. Attach policy to boutique backend service
@@ -126,18 +153,34 @@ curl -s -o /dev/null -w "%{http_code}\n" https://boutique.biroltilki.art
 
 Expected: `200` or `302` — normal storefront responses.
 
-### 7. Verify WAF blocks attack patterns (optional)
+### 7. Verify WAF blocks attack patterns (required for production bar)
 
-Send a request with a common SQLi probe (expect **403** from Cloud Armor):
+Send controlled attack probes (expect **403** from Cloud Armor):
 
 ```bash
-curl -s -o /dev/null -w "%{http_code}\n" \
+# SQLi probe
+curl -s -o /dev/null -w "sqli %{http_code}\n" \
   "https://boutique.biroltilki.art/?id=1'%20OR%201=1--"
+
+# XSS probe (optional second check)
+curl -s -o /dev/null -w "xss %{http_code}\n" \
+  "https://boutique.biroltilki.art/?q=%3Cscript%3Ealert(1)%3C/script%3E"
 ```
 
-Expected: `403` (blocked at edge). Exact status depends on which CRS rule matches.
+Expected: `403` for each probe (blocked at edge).
 
-Check Cloud Armor logs: **Console → Cloud Armor → boutique-owasp-crs → Logs**.
+### 8. Enable Cloud Armor logging
+
+Required for audit, false-positive tuning, and topic 16 smoke validation:
+
+```bash
+gcloud compute security-policies update boutique-owasp-crs \
+  --project=boutique-gke \
+  --log-level=NORMAL \
+  --global
+```
+
+Re-run a probe from step 7, then confirm deny entries: **Console → Cloud Armor → boutique-owasp-crs → Logs** (or Cloud Logging → Logs Explorer).
 
 ## Expected output
 
@@ -145,6 +188,7 @@ Check Cloud Armor logs: **Console → Cloud Armor → boutique-owasp-crs → Log
 - Backend service for boutique Ingress shows attached policy
 - Normal `curl -I https://boutique.biroltilki.art` returns `HTTP/2 200` or `302`
 - Malicious test URL returns `403`
+- WAF logging enabled at `NORMAL` level
 - Cloud Armor request logs show `deny` entries for blocked requests
 
 ## Validation
@@ -162,30 +206,39 @@ gcloud compute backend-services describe "${BACKEND_SERVICE}" \
   --global \
   --format='value(securityPolicy)'
 
-# Policy rules present
+# Policy rules present (expect priorities 1000-1004 deny, default allow)
 gcloud compute security-policies describe boutique-owasp-crs \
   --project=boutique-gke \
   --format='table(rules.priority,rules.description,rules.action)'
+
+# WAF logging enabled
+gcloud compute security-policies describe boutique-owasp-crs \
+  --project=boutique-gke \
+  --format='value(advancedOptionsConfig.logLevel)'
+
+# Attack probe blocked at edge
+curl -s -o /dev/null -w "sqli %{http_code}\n" \
+  "https://boutique.biroltilki.art/?id=1'%20OR%201=1--"
 ```
 
-**Pass criteria:** Storefront accessible; Cloud Armor policy attached; CRS rules active; attack probe blocked with 403.
+**Pass criteria:** Storefront accessible; Cloud Armor policy attached; CRS rules active; logging `NORMAL`; attack probe returns `403`.
 
 ## Common problems
 
-| Symptom                         | Cause                             | Fix                                                 |
-| ------------------------------- | --------------------------------- | --------------------------------------------------- |
-| All requests 403                | Default deny or overly broad rule | Add default allow rule at max priority (2147483647) |
-| Policy not enforcing            | Wrong backend service             | Re-identify LB backend from Ingress status          |
-| Legitimate traffic blocked      | CRS false positive                | Tune rule sensitivity; add preview mode first       |
-| No logs                         | Logging not enabled               | Enable Cloud Armor logging on policy                |
-| `backend-services update` fails | Regional vs global mismatch       | Add `--global` for external HTTP(S) LB              |
-| Storefront 502 after attach     | Backend health check failing      | Check pod health; unrelated to Armor if probes fail |
+| Symptom                         | Cause                             | Fix                                                                                                             |
+| ------------------------------- | --------------------------------- | --------------------------------------------------------------------------------------------------------------- |
+| All requests 403                | Default deny or overly broad rule | Add default allow rule at max priority (2147483647)                                                             |
+| Policy not enforcing            | Wrong backend service             | Re-identify LB backend from Ingress status                                                                      |
+| Legitimate traffic blocked      | CRS false positive                | Tune rule sensitivity; add preview mode first                                                                   |
+| No logs                         | Logging not enabled               | `gcloud compute security-policies update boutique-owasp-crs --project=boutique-gke --log-level=NORMAL --global` |
+| `backend-services update` fails | Regional vs global mismatch       | Add `--global` for external HTTP(S) LB                                                                          |
+| Storefront 502 after attach     | Backend health check failing      | Check pod health; unrelated to Armor if probes fail                                                             |
 
 ## Recovery
 
-- **Detach policy (break-glass):** `gcloud compute backend-services update "${BACKEND_SERVICE}" --security-policy="" --global`
+- **Detach policy (break-glass):** `gcloud compute backend-services update "${BACKEND_SERVICE}" --project=boutique-gke --security-policy="" --global`
 - **Preview mode:** Set rule action to `allow` with `preview: true` to log without blocking
-- **Delete policy:** Detach first, then `gcloud compute security-policies delete boutique-owasp-crs`
+- **Delete policy:** Detach first, then `gcloud compute security-policies delete boutique-owasp-crs --project=boutique-gke`
 - **Rollback rule:** Delete specific rule priority; CRS rules are independent
 
 ## Best practices
@@ -198,7 +251,8 @@ gcloud compute security-policies describe boutique-owasp-crs \
 
 ## Security notes
 
-- Cloud Armor protects north-south traffic only; east-west traffic uses NetworkPolicy
+- Cloud Armor protects **boutique storefront** north-south traffic only (topic 15); Argo CD uses a separate backend without this policy unless you add one
+- East-west traffic uses NetworkPolicy
 - OWASP CRS is a baseline — not a substitute for secure application code
 - Rate limiting mitigates volumetric abuse but tune thresholds to avoid blocking NATed users
 - Cloud Armor logs may contain request URLs — handle per data retention policy

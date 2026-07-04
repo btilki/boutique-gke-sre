@@ -128,16 +128,42 @@ Confirm from topic 14:
 - [ ] Runbook URLs visible in alert policy documentation
 
 ```bash
-gcloud alpha monitoring channels list --project=boutique-gke --filter='displayName:"pagerduty"'
+# Notification channel exists and is enabled
+curl -s -H "Authorization: Bearer $(gcloud auth print-access-token)" \
+  "https://monitoring.googleapis.com/v3/projects/boutique-gke/notificationChannels" \
+  | python3 -c "import sys,json; [print(c['displayName'], c['type'], c.get('enabled')) for c in json.load(sys.stdin).get('notificationChannels',[])]"
+
+# Burn and uptime policies attached (expect channels=1 each)
+curl -s -H "Authorization: Bearer $(gcloud auth print-access-token)" \
+  "https://monitoring.googleapis.com/v3/projects/boutique-gke/alertPolicies" \
+  | python3 -c "import sys,json; [print(p['displayName'], 'channels=', len(p.get('notificationChannels',[]))) for p in json.load(sys.stdin).get('alertPolicies',[]) if p['displayName'] in ('browse-availability-burn','checkout-availability-burn','uptime-check-failed')]"
 ```
 
 ### 8. Edge security — Cloud Armor
 
 ```bash
-gcloud compute security-policies describe boutique-owasp-crs --project=boutique-gke --format='value(name)'
+export BACKEND_SERVICE="<boutique-frontend-backend-name>"
+
+# Policy exists
+gcloud compute security-policies describe boutique-owasp-crs \
+  --project=boutique-gke --format='value(name)'
+
+# Attached to boutique backend (not Argo CD)
+gcloud compute backend-services describe "${BACKEND_SERVICE}" \
+  --project=boutique-gke --global \
+  --format='value(securityPolicy.basename())'
+
+# Storefront reachable
+curl -sI https://boutique.biroltilki.art | head -1
+
+# WAF logging and block probe
+gcloud compute security-policies describe boutique-owasp-crs \
+  --project=boutique-gke --format='value(advancedOptionsConfig.logLevel)'
+curl -s -o /dev/null -w "sqli %{http_code}\n" \
+  "https://boutique.biroltilki.art/?id=1'%20OR%201=1--"
 ```
 
-**Pass:** Policy exists; boutique backend service has policy attached; storefront still reachable.
+**Pass:** Policy `boutique-owasp-crs` exists; attached to boutique backend; storefront HTTP 200; logging `NORMAL`; SQLi probe returns `403`.
 
 ### 9. SRE artifact verification
 

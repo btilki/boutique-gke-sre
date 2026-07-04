@@ -24,8 +24,9 @@ export INTEGRATION_KEY
 TOKEN=$(gcloud auth print-access-token)
 
 echo "=== Resolve or create notification channel ==="
-CHANNEL_ID=$(gcloud alpha monitoring channels list --project="${PROJECT}" \
-  --filter="displayName=${CHANNEL_NAME}" --format='value(name)' | head -1)
+CHANNEL_ID=$(curl -s -H "Authorization: Bearer ${TOKEN}" \
+  "https://monitoring.googleapis.com/v3/projects/${PROJECT}/notificationChannels" \
+  | python3 -c "import sys,json; ch=[c for c in json.load(sys.stdin).get('notificationChannels',[]) if c.get('displayName')=='${CHANNEL_NAME}']; print(ch[0]['name'] if ch else '')")
 
 if [[ -z "${CHANNEL_ID}" ]]; then
   echo "Creating channel ${CHANNEL_NAME}..."
@@ -50,7 +51,7 @@ attach_channel() {
   local policy_name="$1"
   local policy_resource
   policy_resource=$(gcloud monitoring policies list --project="${PROJECT}" \
-    --filter="displayName=${policy_name}" --format='value(name)' | head -1)
+    --filter="displayName=\"${policy_name}\"" --format='value(name)' | head -1)
   if [[ -z "${policy_resource}" ]]; then
     echo "WARN: policy ${policy_name} not found — skip" >&2
     return

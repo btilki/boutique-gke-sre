@@ -4,7 +4,7 @@ WAF security policy for the ingress load balancer.
 
 ## Purpose
 
-Defines a **Cloud Armor security policy** with baseline WAF rules (OWASP CRS, rate limiting, geo restrictions as configured) and attaches it to the backend service behind the GKE ingress. Protects `boutique.biroltilki.art` and `argocd.boutique.biroltilki.art` at the Google Cloud load balancer edge. Tuned during SRE ops after observability baselines exist.
+Defines a **Cloud Armor security policy** with baseline WAF rules (OWASP CRS, rate limiting, geo restrictions as configured) and attaches it to the **boutique storefront** GCE backend service behind the GKE Ingress. Protects `https://boutique.biroltilki.art` at the load balancer edge. **Argo CD** (`argocd.boutique.biroltilki.art`) is out of scope for topic 15 — attach a separate policy if required. Tuned during SRE ops after observability baselines exist.
 
 ## Inputs
 
@@ -32,8 +32,8 @@ module "armor" {
   source = "../../modules/armor"
 
   project_id          = var.project_id
-  policy_name         = "boutique-ingress-waf"
-  backend_service_id  = var.ingress_backend_service_id
+  policy_name         = "boutique-owasp-crs"
+  backend_service_id  = var.boutique_frontend_backend_service_id
   enable_owasp_rules  = true
 }
 ```

@@ -4,7 +4,7 @@
 #
 # SLO: projects/334181791139/services/boutique-frontend/serviceLevelObjectives/browse-availability
 # Combiner: OR (any condition fires)
-# Notification channels: add PagerDuty in topic 14
+# Notification channels: pagerduty-boutique-production (topic 14)
 
 displayName: browse-availability-burn
 combiner: OR

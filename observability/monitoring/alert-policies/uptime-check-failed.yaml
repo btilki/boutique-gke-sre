@@ -2,7 +2,7 @@
 # Created via scripts/create-uptime-check.sh — topic 13 step 6.
 #
 # Triggers when boutique-storefront uptime check fails from 2+ regions for 5 min.
-# Notification channels: add PagerDuty in topic 14.
+# Notification channels: pagerduty-boutique-production (topic 14).
 
 displayName: uptime-check-failed
 combiner: OR

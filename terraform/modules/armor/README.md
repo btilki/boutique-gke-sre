@@ -1,43 +1,58 @@
 # Cloud Armor module
 
-WAF security policy for the ingress load balancer.
+WAF security policy for GKE Ingress backend services.
 
 ## Purpose
 
-Defines a **Cloud Armor security policy** with baseline WAF rules (OWASP CRS, rate limiting, geo restrictions as configured) and attaches it to the **boutique storefront** GCE backend service behind the GKE Ingress. Protects `https://boutique.biroltilki.art` at the load balancer edge. **Argo CD** (`argocd.boutique.biroltilki.art`) is out of scope for topic 15 — attach a separate policy if required. Tuned during SRE ops after observability baselines exist.
+Creates a **Cloud Armor security policy** with rate limiting, optional IP allowlist, and OWASP CRS baseline rules. Used for Argo CD edge hardening (`argocd-edge`) after topic 16 smoke validation.
+
+Storefront policy `boutique-owasp-crs` may be created via Console (topic 15) or a second module instance.
 
 ## Inputs
 
-| Name  | Description                       | Type  | Default |
-| ----- | --------------------------------- | ----- | ------- |
-| _TBD_ | _To be defined in `variables.tf`_ | _TBD_ | _TBD_   |
+| Name                      | Description                             | Type         | Default  |
+| ------------------------- | --------------------------------------- | ------------ | -------- |
+| `project_id`              | GCP project ID                          | string       | —        |
+| `policy_name`             | Security policy resource name           | string       | —        |
+| `description`             | Policy description                      | string       | `""`     |
+| `allowed_source_cidrs`    | Admin IP allowlist (deny others if set) | list(string) | `[]`     |
+| `rate_limit_count`        | Requests per IP per interval            | number       | `60`     |
+| `rate_limit_interval_sec` | Rate limit window                       | number       | `60`     |
+| `enable_owasp_crs`        | SQLi + XSS preconfigured rules          | bool         | `true`   |
+| `log_level`               | `NORMAL` or `VERBOSE`                   | string       | `NORMAL` |
 
 ## Outputs
 
-| Name  | Description                     |
-| ----- | ------------------------------- |
-| _TBD_ | _To be defined in `outputs.tf`_ |
+| Name               | Description      |
+| ------------------ | ---------------- |
+| `policy_name`      | Policy name      |
+| `policy_self_link` | Policy self link |
+| `policy_id`        | Policy ID        |
 
 ## Dependencies
 
-- `project-apis` module (Compute API enabled)
-- `ingress-edge` module (load balancer / backend service to attach policy)
-- `gke` module (ingress controller and backend services running)
-- `monitoring` module (alerting on blocked requests, Phase 6–7)
+- `project-apis` module (Compute API)
+- GKE Ingress creates backend service (attach via `scripts/attach-argocd-armor.sh`)
 
 ## Usage
 
 ```hcl
-module "armor" {
+module "armor_argocd" {
   source = "../../modules/armor"
 
-  project_id          = var.project_id
-  policy_name         = "boutique-owasp-crs"
-  backend_service_id  = var.boutique_frontend_backend_service_id
-  enable_owasp_rules  = true
+  project_id           = var.project_id
+  policy_name          = "argocd-edge"
+  allowed_source_cidrs = var.argocd_armor_allowed_cidrs
+  rate_limit_count     = 30
 }
+```
+
+Attach to Argo CD backend after `terraform apply`:
+
+```bash
+./scripts/attach-argocd-armor.sh
 ```
 
 ## Implementation phase
 
-**Phase 7** — Cloud Armor on storefront ([docs/setup/15-cloud-armor.md](../../../docs/setup/15-cloud-armor.md)). Baseline ingress may exist from Phase 2; hardened WAF policy lands in topic 15.
+**Post topic 16** — Argo CD edge hardening. See [docs/security/edge-hardening.md](../../../docs/security/edge-hardening.md).

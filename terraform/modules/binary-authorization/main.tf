@@ -53,6 +53,13 @@ resource "google_binary_authorization_policy" "policy" {
     name_pattern = "gcr.io/config-management/*"
   }
 
+  dynamic "admission_whitelist_patterns" {
+    for_each = var.platform_image_whitelist_patterns
+    content {
+      name_pattern = admission_whitelist_patterns.value
+    }
+  }
+
   default_admission_rule {
     evaluation_mode  = "ALWAYS_ALLOW"
     enforcement_mode = "DRYRUN_AUDIT_LOG_ONLY"

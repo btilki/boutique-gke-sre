@@ -74,14 +74,23 @@ make validate
 
 ### When bootstrap is complete
 
+Run the full checklist in [16 — Smoke validation](setup/16-smoke-validation.md). Quick HTTPS check:
+
 ```bash
+# Dual static IPs (boutique-ingress-ip + argocd-ingress-ip)
+gcloud compute addresses list --global --project=boutique-gke \
+  --filter="name:(boutique-ingress-ip OR argocd-ingress-ip)" \
+  --format="table(name,address)"
+
 dig +short boutique.biroltilki.art
 dig +short argocd.boutique.biroltilki.art
 curl -I https://boutique.biroltilki.art
 curl -I https://argocd.boutique.biroltilki.art
 ```
 
-Expected: DNS returns static IP; HTTPS returns `HTTP/2 200` or `302` without TLS errors.
+Expected: each hostname resolves to its matching static IP; HTTPS returns `HTTP/2 200` or `302` without TLS errors.
+
+Post-smoke hardening (Binary Auth enforce, Argo CD WAF): [security/edge-hardening.md](security/edge-hardening.md).
 
 ## Troubleshooting
 
@@ -119,4 +128,4 @@ Expected: DNS returns static IP; HTTPS returns `HTTP/2 200` or `302` without TLS
 - [dns.md](dns.md) · [teardown.md](teardown.md)
 - [architecture/overview.md](architecture/overview.md)
 - [implementation/roadmap.md](implementation/roadmap.md)
-- After bootstrap: [game-days/01-bad-deploy-rollback.md](sre/game-days/01-bad-deploy-rollback.md), [oncall/README.md](sre/oncall/README.md)
+- After bootstrap: [16-smoke-validation.md](setup/16-smoke-validation.md), [edge-hardening.md](security/edge-hardening.md), [game-days/01-bad-deploy-rollback.md](sre/game-days/01-bad-deploy-rollback.md), [oncall/README.md](sre/oncall/README.md)

@@ -99,3 +99,18 @@ module "binary_authorization" {
 
   depends_on = [module.project_apis, module.gke]
 }
+
+# Argo CD edge WAF — attach to GKE ingress backend via scripts/attach-argocd-armor.sh
+module "armor_argocd" {
+  count  = var.enable_argocd_armor ? 1 : 0
+  source = "../../modules/armor"
+
+  project_id              = var.project_id
+  policy_name             = "argocd-edge"
+  description             = "Rate limit + OWASP CRS for argocd.boutique.biroltilki.art"
+  allowed_source_cidrs    = var.argocd_armor_allowed_cidrs
+  rate_limit_count        = 30
+  rate_limit_interval_sec = 60
+
+  depends_on = [time_sleep.wait_for_apis]
+}

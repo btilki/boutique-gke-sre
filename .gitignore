@@ -43,3 +43,6 @@ kubeconfig.*
 # Cursor
 .cursor/
 image.png
+
+# Accidental diagram duplicates (do not commit)
+docs/diagrams/image copy*.png

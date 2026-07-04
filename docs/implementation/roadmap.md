@@ -9,13 +9,13 @@ Phased delivery for **boutique-gke-sre** — one phase per session: validate →
 | Phase | Focus                                    | Size | Status      | Setup topics |
 | ----- | ---------------------------------------- | ---- | ----------- | ------------ |
 | **1** | Repo scaffold + Terraform foundation     | S    | ✅ Complete | 01–03        |
-| **2** | GKE + DNS + ingress + TLS                | L    | 🔄 Current  | 04–06        |
-| **3** | WIF + Artifact Registry + CI             | M    | ⬜          | 07–08        |
-| **4** | Argo CD + policies + ESO + NetworkPolicy | L    | ⬜ **gate** | 09–11        |
-| **5** | Online Boutique deploy                   | M    | ⬜          | 12           |
-| **6** | Observability + SLOs                     | L    | ⬜          | 13           |
-| **7** | SRE ops + game day                       | M    | ⬜          | 14–16        |
-| **8** | Teardown + backup/restore                | M    | ⬜          | teardown doc |
+| **2** | GKE + DNS + ingress + TLS                | L    | ✅ Complete | 04–06        |
+| **3** | WIF + Artifact Registry + CI             | M    | ✅ Complete | 07–08        |
+| **4** | Argo CD + policies + ESO + NetworkPolicy | L    | ✅ Complete | 09–11        |
+| **5** | Online Boutique deploy                   | M    | ✅ Complete | 12           |
+| **6** | Observability + SLOs                     | L    | ✅ Complete | 13           |
+| **7** | SRE ops + smoke validation               | M    | ✅ Complete | 14–16        |
+| **8** | Teardown + backup/restore                | M    | 🔄 Current  | teardown doc |
 
 ## Phase 1 — complete
 
@@ -55,7 +55,13 @@ gcloud compute routers nats describe boutique-nat \
 
 **Optional post-review apply:** If the repo gained `sts.googleapis.com` or `time_sleep.wait_for_apis` after your first apply, run a small targeted plan/apply for `module.project_apis` and `time_sleep.wait_for_apis` before Phase 2.
 
-## Phase 2 — current
+## Phases 2–7 — complete
+
+Bootstrap through setup topic 16 (smoke validation) is complete. See [16-smoke-validation.md](../setup/16-smoke-validation.md) and post-bootstrap [edge-hardening.md](../security/edge-hardening.md).
+
+**Next:** Phase 8 — teardown and backup/restore validation ([teardown.md](../teardown.md)).
+
+## Phase 2 — complete (historical)
 
 ## Dependency graph
 

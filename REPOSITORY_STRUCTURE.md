@@ -51,7 +51,7 @@ boutique-gke-sre/
 | `artifact-registry`    | 3     | Scaffold    |
 | `binary-authorization` | 3     | Scaffold    |
 | `iam`                  | 3–4   | Scaffold    |
-| `armor`                | 7     | Scaffold    |
+| `armor`                | 7     | Implemented |
 | `secret-manager`       | 4     | Scaffold    |
 | `monitoring`           | 6–7   | Scaffold    |
 | `backup`               | 8     | Scaffold    |

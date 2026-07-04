@@ -24,20 +24,24 @@ Work through this checklist in order. Record pass/fail for each item.
 
 ### 1. Infrastructure and HTTPS
 
+This project uses **two static IPs** (topic 09/12): `boutique-ingress-ip` for the storefront, `argocd-ingress-ip` for Argo CD.
+
 ```bash
-# DNS — both hostnames resolve to the Terraform static IP
+# DNS
 dig +short boutique.biroltilki.art
 dig +short argocd.boutique.biroltilki.art
 
-# Compare to Terraform
-cd terraform/environments/boutique && terraform output ingress_static_ip
+# Compare to reserved addresses (not a single shared IP)
+gcloud compute addresses list --global --project=boutique-gke \
+  --filter="name:(boutique-ingress-ip OR argocd-ingress-ip)" \
+  --format="table(name,address)"
 
 # HTTPS — no TLS errors
 curl -I https://boutique.biroltilki.art
 curl -I https://argocd.boutique.biroltilki.art
 ```
 
-**Pass:** Both `dig` results match static IP; both `curl` return `HTTP/2 200` or `302`.
+**Pass:** `boutique.biroltilki.art` matches `boutique-ingress-ip`; `argocd.boutique.biroltilki.art` matches `argocd-ingress-ip`; both `curl` return `HTTP/2 200` or `302`.
 
 ### 2. GKE cluster health
 
@@ -54,6 +58,8 @@ kubectl get pods -A | grep -v Running | grep -v Completed
 # Argo CD
 kubectl -n argocd get pods
 argocd app list
+# CLI session expired? Use kubectl instead:
+kubectl -n argocd get applications
 
 # Manual sync only — no automated block on root app
 kubectl -n argocd get application boutique-root -o yaml | grep -c 'automated:' || true
@@ -77,6 +83,7 @@ kubectl apply --dry-run=server -f examples/kyverno-policy-test/bad-latest-pod.ya
 
 ```bash
 argocd app get boutique
+# Or: kubectl -n argocd get application boutique
 kubectl -n boutique get pods
 kubectl -n boutique get ingress
 
@@ -92,24 +99,40 @@ kubectl -n boutique get pods -o jsonpath='{range .items[*]}{.spec.containers[0].
 # Binary Authorization policy exists (topic 08)
 gcloud container binauthz policy export --project=boutique-gke 2>/dev/null | head -20
 
+# Cluster rule enforce mode (post topic 16 hardening)
+gcloud container binauthz policy export --project=boutique-gke \
+  | grep -A1 'europe-west1.boutique-gke'
+
 # Artifact Registry repository
 gcloud artifacts repositories list --project=boutique-gke --location=europe-west1
 ```
 
-**Pass:** Binary Auth policy requires attestation; AR repository exists.
+**Pass:** Binary Auth policy requires attestation; cluster rule `ENFORCED_BLOCK_AND_AUDIT_LOG` (or `DRYRUN` during bootstrap); AR repository exists.
 
 ### 6. Observability and SLOs
 
 ```bash
 kubectl -n observability get pods
-gcloud monitoring services list --project=boutique-gke
-# Verify browse-availability and checkout-availability SLOs in Console (Monitoring → Services)
+
+# List Monitoring services (gcloud has no `monitoring services` subcommand)
+curl -s -H "Authorization: Bearer $(gcloud auth print-access-token)" \
+  "https://monitoring.googleapis.com/v3/projects/boutique-gke/services" \
+  | python3 -c "import sys,json; [print(s.get('displayName')) for s in json.load(sys.stdin).get('services',[])]"
+
+# Confirm SLO targets (browse 99.9%, checkout 99.95%)
+curl -s -H "Authorization: Bearer $(gcloud auth print-access-token)" \
+  "https://monitoring.googleapis.com/v3/projects/boutique-gke/services/boutique-frontend/serviceLevelObjectives/browse-availability" \
+  | python3 -c "import sys,json; s=json.load(sys.stdin); print(s['displayName'], s['goal'])"
+
+curl -s -H "Authorization: Bearer $(gcloud auth print-access-token)" \
+  "https://monitoring.googleapis.com/v3/projects/boutique-gke/services/boutique-checkout/serviceLevelObjectives/checkout-availability" \
+  | python3 -c "import sys,json; s=json.load(sys.stdin); print(s['displayName'], s['goal'])"
 
 # Runbooks on disk
 ls docs/sre/runbooks/*.md | wc -l
 ```
 
-**Pass:** OTel/Grafana running; browse **99.9%** and checkout **99.95%** SLOs exist; runbooks present for each alert policy.
+**Pass:** OTel/Grafana running; services include boutique frontend/checkout; SLO goals `0.999` and `0.9995`; runbooks present for each alert policy.
 
 Verify SLO targets against [catalog.md](../sre/slos/catalog.md):
 
@@ -142,7 +165,10 @@ curl -s -H "Authorization: Bearer $(gcloud auth print-access-token)" \
 ### 8. Edge security — Cloud Armor
 
 ```bash
-export BACKEND_SERVICE="<boutique-frontend-backend-name>"
+# Discover boutique frontend backend (topic 15)
+export BACKEND_SERVICE="$(gcloud compute backend-services list --project=boutique-gke --global \
+  --filter='name~boutique.*frontend' --format='value(name)' | head -1)"
+echo "Boutique backend: ${BACKEND_SERVICE}"
 
 # Policy exists
 gcloud compute security-policies describe boutique-owasp-crs \
@@ -159,11 +185,24 @@ curl -sI https://boutique.biroltilki.art | head -1
 # WAF logging and block probe
 gcloud compute security-policies describe boutique-owasp-crs \
   --project=boutique-gke --format='value(advancedOptionsConfig.logLevel)'
-curl -s -o /dev/null -w "sqli %{http_code}\n" \
+curl -s -o /dev/null -w "boutique sqli %{http_code}\n" \
   "https://boutique.biroltilki.art/?id=1'%20OR%201=1--"
 ```
 
 **Pass:** Policy `boutique-owasp-crs` exists; attached to boutique backend; storefront HTTP 200; logging `NORMAL`; SQLi probe returns `403`.
+
+### 8b. Edge security — Argo CD WAF (post topic 16 hardening)
+
+```bash
+gcloud compute backend-services list --project=boutique-gke --global \
+  --filter='name~argocd' --format='table(name,securityPolicy.basename())'
+
+curl -sI https://argocd.boutique.biroltilki.art | head -1
+curl -s -o /dev/null -w "argocd sqli %{http_code}\n" \
+  "https://argocd.boutique.biroltilki.art/?id=1'%20OR%201=1--"
+```
+
+**Pass:** Argo CD backend shows `argocd-edge`; normal traffic `200`; SQLi probe `403`. See [edge-hardening.md](../security/edge-hardening.md).
 
 ### 9. SRE artifact verification
 
@@ -193,23 +232,35 @@ test -f docs/teardown.md && echo OK teardown
 kubectl get networkpolicy -A
 ```
 
-**Pass:** `default-deny` and `boutique-allow` policies exist.
+**Pass:** `default-deny-all` and `boutique-allow` policies exist in the `boutique` namespace (see `gitops/policies/network-policies/`).
+
+### 11. Secret scan (repository hygiene)
+
+```bash
+# From repository root; requires pre-commit hooks installed
+pre-commit run gitleaks --all-files
+```
+
+**Pass:** No secrets detected in tracked files.
 
 ## Expected output
 
 When bootstrap is complete:
 
-| Area          | Expected state                               |
-| ------------- | -------------------------------------------- |
-| DNS / TLS     | Both hostnames resolve; HTTPS 200/302        |
-| Argo CD       | Synced apps; manual sync only                |
-| ESO           | ClusterSecretStore Ready                     |
-| Kyverno       | 5 ClusterPolicies enforcing                  |
-| Boutique      | Healthy; digest-only images                  |
-| Observability | OTel + Grafana Running; SLOs listed          |
-| Alerting      | PagerDuty channel; test incident succeeded   |
-| Cloud Armor   | CRS policy attached; storefront reachable    |
-| SRE docs      | Runbooks, on-call, game days, teardown exist |
+| Area          | Expected state                                                   |
+| ------------- | ---------------------------------------------------------------- |
+| DNS / TLS     | Both hostnames resolve to correct static IPs; HTTPS 200/302      |
+| Argo CD       | Synced apps; manual sync only                                    |
+| ESO           | ClusterSecretStore Ready                                         |
+| Kyverno       | 5 ClusterPolicies enforcing                                      |
+| Boutique      | Healthy; digest-only images                                      |
+| Supply chain  | Binary Auth ENFORCED on cluster; AR repo exists                  |
+| Observability | OTel + Grafana Running; SLOs listed                              |
+| Alerting      | PagerDuty channel; test incident succeeded                       |
+| Cloud Armor   | `boutique-owasp-crs` + `argocd-edge` attached; probes return 403 |
+| NetworkPolicy | `default-deny-all` + `boutique-allow` in boutique                |
+| Secret scan   | gitleaks passes on tracked files                                 |
+| SRE docs      | Runbooks, on-call, game days, teardown exist                     |
 
 ## Validation
 
@@ -231,20 +282,25 @@ curl -I https://argocd.boutique.biroltilki.art
 - [ ] ESO + Secret Manager; Kyverno + NetworkPolicy
 - [ ] Trivy + cosign + Binary Authorization (CI path from topic 07–08)
 - [ ] SLOs + burn alerts + PagerDuty + OTel traces
-- [ ] Cloud Armor on storefront
+- [ ] Cloud Armor on storefront and Argo CD (`argocd-edge`)
+- [ ] Binary Authorization `ENFORCED_BLOCK_AND_AUDIT_LOG` on cluster (post hardening)
 - [ ] Runbooks + on-call docs + alert test completed
+- [ ] gitleaks / secret scan passed (step 11)
 - [ ] Teardown runbook validated (read-through)
 
 ## Common problems
 
-| Symptom                  | Cause                          | Fix                                            |
-| ------------------------ | ------------------------------ | ---------------------------------------------- |
-| One checklist item fails | Skipped or partial prior topic | Return to the failing topic guide              |
-| `curl` TLS error         | Cert or DNS regression         | Topics 05–06                                   |
-| Kyverno deny count ≠ 5   | Policy not applied             | Topic 11                                       |
-| SLO missing              | Topic 13 incomplete            | Create SLO in Console                          |
-| No PagerDuty test record | Topic 14 skipped               | [test-alerts.md](../sre/oncall/test-alerts.md) |
-| Images without digest    | CI not wired                   | Topic 08 + 12                                  |
+| Symptom                            | Cause                          | Fix                                                                                       |
+| ---------------------------------- | ------------------------------ | ----------------------------------------------------------------------------------------- |
+| One checklist item fails           | Skipped or partial prior topic | Return to the failing topic guide                                                         |
+| `curl` TLS error                   | Cert or DNS regression         | Topics 05–06                                                                              |
+| Kyverno deny count ≠ 5             | Policy not applied             | Topic 11                                                                                  |
+| SLO missing                        | Topic 13 incomplete            | Create SLO in Console                                                                     |
+| No PagerDuty test record           | Topic 14 skipped               | [test-alerts.md](../sre/oncall/test-alerts.md)                                            |
+| Images without digest              | CI not wired                   | Topic 08 + 12                                                                             |
+| Argo CD `502`                      | No pods / empty endpoints      | Topic 09; Kyverno may block Helm — see [edge-hardening.md](../security/edge-hardening.md) |
+| `dig` IP mismatch                  | Dual-IP design                 | Boutique → `boutique-ingress-ip`; Argo CD → `argocd-ingress-ip`                           |
+| `gcloud monitoring services` fails | Invalid CLI subcommand         | Use Monitoring API curls in step 6 above                                                  |
 
 ## Recovery
 
@@ -270,19 +326,20 @@ For environment teardown when the reference is no longer needed: [teardown.md](.
 
 - Smoke tests use read-only checks where possible; attack probes (Cloud Armor) only in controlled tests
 - Do not expose Argo CD admin credentials during team walkthroughs
-- Confirm no GCP JSON keys exist in GitHub or local repos: `gitleaks detect` (if pre-commit configured)
+- Run step 11 (`gitleaks`) before marking bootstrap complete
 - Review IAM bindings quarterly after bootstrap
 
 ## Next step
 
 Bootstrap is complete. Proceed to operational readiness:
 
-| Step           | Action                          | Guide                                                                             |
-| -------------- | ------------------------------- | --------------------------------------------------------------------------------- |
-| First game day | Bad deploy rollback scenario    | [game-days/01-bad-deploy-rollback.md](../sre/game-days/01-bad-deploy-rollback.md) |
-| On-call setup  | Rotation and playbook           | [oncall/README.md](../sre/oncall/README.md)                                       |
-| Alert drill    | Re-test PagerDuty routing       | [oncall/test-alerts.md](../sre/oncall/test-alerts.md)                             |
-| CI deploy path | Digest PR → review → Argo sync  | [12-boutique-deploy.md](12-boutique-deploy.md)                                    |
-| Teardown       | Safe decommission when finished | [teardown.md](../teardown.md)                                                     |
+| Step           | Action                            | Guide                                                                             |
+| -------------- | --------------------------------- | --------------------------------------------------------------------------------- |
+| Edge hardening | Binary Auth enforce + Argo CD WAF | [edge-hardening.md](../security/edge-hardening.md)                                |
+| First game day | Bad deploy rollback scenario      | [game-days/01-bad-deploy-rollback.md](../sre/game-days/01-bad-deploy-rollback.md) |
+| On-call setup  | Rotation and playbook             | [oncall/README.md](../sre/oncall/README.md)                                       |
+| Alert drill    | Re-test PagerDuty routing         | [oncall/test-alerts.md](../sre/oncall/test-alerts.md)                             |
+| CI deploy path | Digest PR → review → Argo sync    | [12-boutique-deploy.md](12-boutique-deploy.md)                                    |
+| Teardown       | Safe decommission when finished   | [teardown.md](../teardown.md)                                                     |
 
 Executive summary: [bootstrap.md](../bootstrap.md)

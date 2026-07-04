@@ -93,3 +93,8 @@ output "binary_authorization_enforcement_mode" {
   description = "Binary Authorization cluster enforcement mode (Phase 3)."
   value       = try(module.binary_authorization[0].enforcement_mode, null)
 }
+
+output "argocd_armor_policy_name" {
+  description = "Cloud Armor policy for Argo CD edge — attach with scripts/attach-argocd-armor.sh."
+  value       = try(module.armor_argocd[0].policy_name, null)
+}

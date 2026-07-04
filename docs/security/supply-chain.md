@@ -53,9 +53,11 @@ Secrets: Secret Manager → ESO → Pod (never plain Secret in Git)
 
 - Deploy-time: only cosign-signed + attested images from Artifact Registry
 - Attestor bound to CI service account
+- **Enforce mode:** `ENFORCED_BLOCK_AND_AUDIT_LOG` after topic 16 (see [edge-hardening.md](edge-hardening.md))
+- Platform controller images whitelisted until mirrored to AR with attestations
 - **Break-glass:** documented in runbook only for emergencies — not normal ops
 
-→ [setup/08-artifact-registry-binary-auth.md](../setup/08-artifact-registry-binary-auth.md)
+→ [setup/08-artifact-registry-binary-auth.md](../setup/08-artifact-registry-binary-auth.md) · [edge-hardening.md](edge-hardening.md)
 
 ## Kyverno minimum policies
 
@@ -109,8 +111,8 @@ pre-commit run gitleaks --all-files
 
 ## Production considerations
 
-- Binary Auth misconfiguration blocks all deploys — test in Phase 3 before Phase 5
-- Cloud Armor added at edge in Phase 7 ([15-cloud-armor.md](../setup/15-cloud-armor.md))
+- Binary Auth misconfiguration blocks all deploys — test enforce mode after smoke validation
+- Cloud Armor on storefront ([15-cloud-armor.md](../setup/15-cloud-armor.md)) and Argo CD ([edge-hardening.md](edge-hardening.md))
 
 ## Security considerations
 

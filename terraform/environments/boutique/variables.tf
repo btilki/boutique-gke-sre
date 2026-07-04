@@ -64,7 +64,19 @@ variable "cosign_public_key_pem" {
 }
 
 variable "binary_authorization_enforcement_mode" {
-  description = "Binary Authorization cluster enforcement: DRYRUN_AUDIT_LOG_ONLY during bootstrap; ENFORCED_BLOCK_AND_AUDIT_LOG before topic 12."
+  description = "Binary Authorization cluster enforcement: DRYRUN_AUDIT_LOG_ONLY during bootstrap; ENFORCED_BLOCK_AND_AUDIT_LOG after smoke validation."
   type        = string
   default     = "DRYRUN_AUDIT_LOG_ONLY"
+}
+
+variable "argocd_armor_allowed_cidrs" {
+  description = "Optional source CIDRs allowed to reach Argo CD (e.g. office/VPN). Empty = public with rate limit + WAF only."
+  type        = list(string)
+  default     = []
+}
+
+variable "enable_argocd_armor" {
+  description = "Create Cloud Armor policy argocd-edge for the Argo CD ingress backend."
+  type        = bool
+  default     = true
 }

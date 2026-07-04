@@ -35,3 +35,5 @@ Bootstrap manifests for Argo CD on `argocd.boutique.biroltilki.art`. Argo CD rec
 4. Register root Application: `kubectl apply -f ../root-app.yaml`
 
 Manual sync only — see ADR `003-manual-argocd-sync.md`.
+
+**Edge security (post topic 16):** Cloud Armor policy `argocd-edge` — [edge-hardening.md](../../../docs/security/edge-hardening.md).

@@ -17,9 +17,14 @@ github_repo = "boutique-gke-sre"
 # Phase 3 — Binary Authorization (topic 08)
 # Generate with: cosign generate-key-pair  (creates cosign.key + cosign.pub)
 # Paste cosign.pub contents below. Never commit cosign.key.
-# binary_authorization_enforcement_mode = "DRYRUN_AUDIT_LOG_ONLY"  # default; switch to ENFORCED_BLOCK_AND_AUDIT_LOG before topic 12
+# binary_authorization_enforcement_mode = "DRYRUN_AUDIT_LOG_ONLY"  # bootstrap default (topic 08)
+# binary_authorization_enforcement_mode = "ENFORCED_BLOCK_AND_AUDIT_LOG"  # post topic 16 — see docs/security/edge-hardening.md
 # cosign_public_key_pem = <<-EOT
 # -----BEGIN PUBLIC KEY-----
 # ...
 # -----END PUBLIC KEY-----
 # EOT
+
+# Phase 7+ — Argo CD edge hardening (post topic 16)
+# enable_argocd_armor = true
+# argocd_armor_allowed_cidrs = ["203.0.113.10/32"]  # optional office/VPN IP; empty = public + WAF

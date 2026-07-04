@@ -38,7 +38,7 @@ variable "cosign_signature_algorithm" {
 }
 
 variable "enforcement_mode" {
-  description = "Cluster admission enforcement: DRYRUN_AUDIT_LOG_ONLY during bootstrap; ENFORCED_BLOCK_AND_AUDIT_LOG before topic 12."
+  description = "Cluster admission enforcement: DRYRUN_AUDIT_LOG_ONLY during bootstrap; ENFORCED_BLOCK_AND_AUDIT_LOG after signed images are validated."
   type        = string
   default     = "DRYRUN_AUDIT_LOG_ONLY"
 
@@ -46,4 +46,17 @@ variable "enforcement_mode" {
     condition     = contains(["DRYRUN_AUDIT_LOG_ONLY", "ENFORCED_BLOCK_AND_AUDIT_LOG"], var.enforcement_mode)
     error_message = "enforcement_mode must be DRYRUN_AUDIT_LOG_ONLY or ENFORCED_BLOCK_AND_AUDIT_LOG."
   }
+}
+
+variable "platform_image_whitelist_patterns" {
+  description = "Image name patterns exempt from cosign attestation (platform controllers not mirrored to AR with attestations)."
+  type        = list(string)
+  default = [
+    "quay.io/argoproj/*",
+    "ghcr.io/kyverno/*",
+    "ghcr.io/external-secrets/*",
+    "docker.io/redis*",
+    "docker.io/bitnami/*",
+    "registry.k8s.io/*",
+  ]
 }

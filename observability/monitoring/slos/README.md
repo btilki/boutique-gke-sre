@@ -25,10 +25,12 @@ Define SLIs and targets in Cloud Monitoring aligned with [docs/sre/slos/catalog.
 Verify in **GCP Console → Monitoring → Services** (`boutique-frontend`, `boutique-checkout`), or:
 
 ```bash
-gcloud monitoring services list --project=boutique-gke
+curl -s -H "Authorization: Bearer $(gcloud auth print-access-token)" \
+  "https://monitoring.googleapis.com/v3/projects/boutique-gke/services/boutique-frontend/serviceLevelObjectives/browse-availability" \
+  | python3 -c "import sys,json; s=json.load(sys.stdin); print(s['displayName'], s['goal'])"
 ```
 
-> Stable `gcloud` has no `monitoring slos list` subcommand.
+> Stable `gcloud` has no `monitoring services list` subcommand. Use Console or the Monitoring REST API.
 
 ## Further reading
 

@@ -123,14 +123,23 @@ Navigate: **GCP Console → Monitoring → Services → Create SLO**
 
 Reference definitions: `observability/monitoring/slos/` and [catalog.md](../sre/slos/catalog.md).
 
-Verify SLOs in Console (**Monitoring → Services → SLOs**) or:
+Verify SLOs in Console (**Monitoring → Services → SLOs**) or via Monitoring API:
 
 ```bash
-gcloud monitoring services list --project=boutique-gke
-# Then open each service in Console to confirm browse-availability and checkout-availability SLOs
+curl -s -H "Authorization: Bearer $(gcloud auth print-access-token)" \
+  "https://monitoring.googleapis.com/v3/projects/boutique-gke/services" \
+  | python3 -c "import sys,json; [print(s.get('displayName')) for s in json.load(sys.stdin).get('services',[])]"
+
+curl -s -H "Authorization: Bearer $(gcloud auth print-access-token)" \
+  "https://monitoring.googleapis.com/v3/projects/boutique-gke/services/boutique-frontend/serviceLevelObjectives/browse-availability" \
+  | python3 -c "import sys,json; s=json.load(sys.stdin); print(s['displayName'], s['goal'])"
+
+curl -s -H "Authorization: Bearer $(gcloud auth print-access-token)" \
+  "https://monitoring.googleapis.com/v3/projects/boutique-gke/services/boutique-checkout/serviceLevelObjectives/checkout-availability" \
+  | python3 -c "import sys,json; s=json.load(sys.stdin); print(s['displayName'], s['goal'])"
 ```
 
-> **Note:** Stable `gcloud` has no `monitoring slos list` subcommand. Use Console or the Monitoring REST API.
+> **Note:** Stable `gcloud` has no `monitoring services list` or `monitoring slos list` subcommand. Use Console or the Monitoring REST API.
 
 ### 6. Create burn-rate alert policies
 
@@ -210,7 +219,9 @@ kubectl -n observability logs deploy/otel-collector --tail=20
 kubectl -n boutique logs deploy/frontend --tail=20 | grep -i "Tracing enabled"
 
 # SLOs — verify in Console (Monitoring → Services → boutique-frontend / boutique-checkout)
-gcloud monitoring services list --project=boutique-gke
+curl -s -H "Authorization: Bearer $(gcloud auth print-access-token)" \
+  "https://monitoring.googleapis.com/v3/projects/boutique-gke/services/boutique-frontend/serviceLevelObjectives/browse-availability" \
+  | python3 -c "import sys,json; s=json.load(sys.stdin); print(s['displayName'], s['goal'])"
 
 # Storefront still healthy
 dig +short boutique.biroltilki.art

@@ -8,15 +8,16 @@ Enforces **Binary Authorization** on the private GKE cluster so only **cosign-si
 
 ## Inputs
 
-| Name                         | Description           | Type     | Default                    |
-| ---------------------------- | --------------------- | -------- | -------------------------- |
-| `project_id`                 | GCP project ID        | `string` | —                          |
-| `cluster_name`               | GKE cluster name      | `string` | —                          |
-| `location`                   | Cluster region        | `string` | `europe-west1`             |
-| `attestor_id`                | Attestor resource ID  | `string` | `boutique-cosign-attestor` |
-| `cosign_public_key_pem`      | Cosign public key PEM | `string` | —                          |
-| `cosign_signature_algorithm` | PKIX algorithm        | `string` | `ECDSA_P256_SHA256`        |
-| `enforcement_mode`           | Cluster enforcement   | `string` | `DRYRUN_AUDIT_LOG_ONLY`    |
+| Name                                | Description               | Type           | Default                     |
+| ----------------------------------- | ------------------------- | -------------- | --------------------------- |
+| `project_id`                        | GCP project ID            | `string`       | —                           |
+| `cluster_name`                      | GKE cluster name          | `string`       | —                           |
+| `location`                          | Cluster region            | `string`       | `europe-west1`              |
+| `attestor_id`                       | Attestor resource ID      | `string`       | `boutique-cosign-attestor`  |
+| `cosign_public_key_pem`             | Cosign public key PEM     | `string`       | —                           |
+| `cosign_signature_algorithm`        | PKIX algorithm            | `string`       | `ECDSA_P256_SHA256`         |
+| `enforcement_mode`                  | Cluster enforcement       | `string`       | `DRYRUN_AUDIT_LOG_ONLY`     |
+| `platform_image_whitelist_patterns` | Platform image exemptions | `list(string)` | Argo CD, Kyverno, ESO, etc. |
 
 ## Outputs
 
@@ -55,4 +56,6 @@ module "binary_authorization" {
 
 ## Implementation phase
 
-**Phase 3** — WIF, Artifact Registry, CI pipeline skeleton ([docs/setup/08-artifact-registry-binary-auth.md](../../../docs/setup/08-artifact-registry-binary-auth.md)).
+**Phase 3** — WIF, Artifact Registry, CI pipeline ([docs/setup/08-artifact-registry-binary-auth.md](../../../docs/setup/08-artifact-registry-binary-auth.md)).
+
+**Post topic 16** — set `binary_authorization_enforcement_mode = "ENFORCED_BLOCK_AND_AUDIT_LOG"` ([docs/security/edge-hardening.md](../../../docs/security/edge-hardening.md)).

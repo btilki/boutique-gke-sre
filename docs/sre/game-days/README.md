@@ -28,6 +28,12 @@ Validate alerting, runbooks, on-call response, and error-budget process under co
 - Runbook steps restore service
 - Blameless notes captured for postmortem if gaps found
 
+## Execution reports
+
+| Date       | Scenario               | Report                                                                 |
+| ---------- | ---------------------- | ---------------------------------------------------------------------- |
+| 2026-07-04 | 03 — Redis / cart down | [2026-07-04-redis-cart-down.md](reports/2026-07-04-redis-cart-down.md) |
+
 ## Further reading
 
 - [sre/runbooks/README.md](../runbooks/README.md)

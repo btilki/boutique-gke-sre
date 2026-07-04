@@ -1,8 +1,10 @@
 # boutique-gke-sre
 
+> **Infrastructure:** Decommissioned 2026-07-04. Documentation and screenshots remain; live URLs are offline.
+
 Production-grade **platform + SRE reference** for [Google Online Boutique](https://github.com/GoogleCloudPlatform/microservices-demo) on a single private GKE cluster in GCP (`boutique-gke`).
 
-**Live:** https://boutique.biroltilki.art · https://argocd.boutique.biroltilki.art
+**URLs (offline):** https://boutique.biroltilki.art · https://argocd.boutique.biroltilki.art
 
 ---
 
@@ -49,10 +51,10 @@ flowchart LR
 
 ## Status
 
-| Phase | Focus                              | Status         |
-| ----- | ---------------------------------- | -------------- |
-| 1–7   | Bootstrap through smoke validation | ✅ Complete    |
-| 8     | Teardown + backup/restore          | 🔄 In progress |
+| Phase | Focus                              | Status      |
+| ----- | ---------------------------------- | ----------- |
+| 1–7   | Bootstrap through smoke validation | ✅ Complete |
+| 8     | Teardown + backup/restore          | ✅ Complete |
 
 → [ROADMAP.md](ROADMAP.md) · [PROJECT.md](PROJECT.md)
 

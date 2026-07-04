@@ -23,7 +23,7 @@ Production SRE reference for Google Online Boutique on one private regional GKE 
 - HTTPS on `boutique.biroltilki.art` and `argocd.boutique.biroltilki.art`
 - Kyverno enforced; digest-only images; ESO-only secrets
 - SLOs + burn alerts with runbook links; PagerDuty test incident validated
-- Game-day scenarios documented; teardown validation pending (Phase 8)
+- Game-day scenario executed (2026-07-04); infrastructure decommissioned 2026-07-04
 
 ## URLs
 

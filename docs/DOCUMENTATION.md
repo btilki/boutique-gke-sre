@@ -41,8 +41,9 @@ docs/
 ├── security/         # Threat model, IAM, supply chain
 ├── operations/       # Day-2 ops, rollback
 ├── troubleshooting/  # Cross-cutting fixes
-└── implementation/   # Phased roadmap
 ```
+
+Phase status: [ROADMAP.md](../ROADMAP.md) at repository root.
 
 ## Standard validation (live system)
 

@@ -400,4 +400,4 @@ Cloud Monitoring SLOs → PagerDuty ← runbooks (docs/sre/)
 
 - [ARCHITECTURE.md](../../ARCHITECTURE.md) — executive summary
 - [bootstrap.md](../bootstrap.md) — bootstrap path
-- [implementation/roadmap.md](../implementation/roadmap.md) — phased delivery
+- [ROADMAP.md](../../ROADMAP.md) — phased delivery

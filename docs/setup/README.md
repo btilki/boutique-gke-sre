@@ -56,7 +56,7 @@ Topics 7–8 can start after topic 4 completes (parallel with 5–6).
 - [Bootstrap summary](../bootstrap.md)
 - [DNS reference](../dns.md)
 - [Teardown](../teardown.md)
-- [Implementation roadmap](../implementation/roadmap.md)
+- [Roadmap](../../ROADMAP.md)
 
 ## Collaboration
 

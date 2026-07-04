@@ -127,5 +127,5 @@ Post-smoke hardening (Binary Auth enforce, Argo CD WAF): [security/edge-hardenin
 
 - [dns.md](dns.md) · [teardown.md](teardown.md)
 - [architecture/overview.md](architecture/overview.md)
-- [implementation/roadmap.md](implementation/roadmap.md)
+- [ROADMAP.md](../ROADMAP.md)
 - After bootstrap: [16-smoke-validation.md](setup/16-smoke-validation.md), [edge-hardening.md](security/edge-hardening.md), [game-days/01-bad-deploy-rollback.md](sre/game-days/01-bad-deploy-rollback.md), [oncall/README.md](sre/oncall/README.md)

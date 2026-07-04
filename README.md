@@ -212,7 +212,7 @@ Master index: [docs/DOCUMENTATION.md](docs/DOCUMENTATION.md) · Template: [docs/
 | 7     | SRE ops + smoke validation    | ✅ Complete    |
 | 8     | Teardown + backup             | 🔄 In progress |
 
-→ [ROADMAP.md](ROADMAP.md) · [PROJECT.md](PROJECT.md) · [docs/implementation/roadmap.md](docs/implementation/roadmap.md)
+→ [ROADMAP.md](ROADMAP.md) · [PROJECT.md](PROJECT.md) · [docs/setup/README.md](docs/setup/README.md)
 
 ## Contributing
 

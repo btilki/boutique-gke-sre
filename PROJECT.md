@@ -34,7 +34,7 @@ Production SRE reference for Google Online Boutique on one private regional GKE 
 
 Phased delivery — one phase per session, validate, commit, proceed.
 
-→ [ROADMAP.md](ROADMAP.md) · [docs/implementation/roadmap.md](docs/implementation/roadmap.md)
+→ [ROADMAP.md](ROADMAP.md) · [docs/setup/README.md](docs/setup/README.md)
 
 ## Session rule
 

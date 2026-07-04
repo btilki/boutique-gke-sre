@@ -95,5 +95,5 @@ dig +short boutique.biroltilki.art
 ## Further reading
 
 - [setup/16-smoke-validation.md](setup/16-smoke-validation.md) (pre-teardown checklist inverse)
-- [implementation/roadmap.md](implementation/roadmap.md) Phase 8
+- [ROADMAP.md](../ROADMAP.md) Phase 8
 - [bootstrap.md](bootstrap.md) — rebuild path

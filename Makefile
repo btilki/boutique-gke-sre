@@ -1,7 +1,7 @@
 # boutique-gke-sre — common operational targets
 # Phase 1: validate, lint, terraform fmt/plan
 
-.PHONY: help validate lint fmt tf-init tf-plan tf-fmt kyverno-test kubeconform-test boutique-kyverno-test digest-only-test install-hooks
+.PHONY: help validate lint fmt tf-init tf-plan tf-fmt kyverno-test kubeconform-test boutique-kyverno-test digest-only-test install-hooks runbook-lint
 
 TF_ENV ?= terraform/environments/boutique
 
@@ -15,7 +15,7 @@ help:
 	@echo "  make kyverno-test         - Run Kyverno policy tests (requires kyverno CLI)"
 	@echo "  make boutique-kyverno-test - Apply policies to rendered Boutique chart"
 	@echo "  make digest-only-test     - Fail if values-images.yaml uses floating tags"
-	@echo "  make kubeconform-test     - Validate gitops/ YAML schemas (requires kubeconform + helm)"
+	@echo "  make runbook-lint         - Validate alert policy ↔ runbook links"
 	@echo "  make install-hooks - Install pre-commit hooks (needs pre-commit + terraform-docs)"
 
 install-hooks:
@@ -23,7 +23,7 @@ install-hooks:
 	@command -v terraform-docs >/dev/null || { echo "Install terraform-docs: brew install terraform-docs"; exit 1; }
 	pre-commit install
 
-validate: lint
+validate: lint runbook-lint
 	@echo "==> terraform fmt -check"
 	terraform fmt -check -recursive terraform/
 	@echo "==> terraform init -backend=false (modules)"
@@ -60,3 +60,6 @@ digest-only-test:
 
 kubeconform-test:
 	./tests/manifest/kubeconform.sh
+
+runbook-lint:
+	./scripts/validate-runbook-links.sh

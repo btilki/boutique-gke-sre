@@ -1,17 +1,21 @@
 #!/usr/bin/env bash
-# Attach PagerDuty notification channel to topic 13 alert policies (topic 14 step 4).
+# Attach PagerDuty notification channel to alert policies (topic 14 step 4).
 # Prerequisites:
 #   - GSM secret pagerduty-integration-key (Events API v2 integration key)
 #   - Alert policies from topic 13 exist in Cloud Monitoring
 set -euo pipefail
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=lib/runbooks.sh
+source "${SCRIPT_DIR}/lib/runbooks.sh"
+
 PROJECT="${PROJECT_ID:-boutique-gke}"
 CHANNEL_NAME="pagerduty-boutique-production"
-POLICIES=(
-  browse-availability-burn
-  checkout-availability-burn
-  uptime-check-failed
-)
+
+POLICIES=()
+while IFS= read -r line; do
+  POLICIES+=("$line")
+done < <(pagerduty_policies)
 
 if ! gcloud secrets describe pagerduty-integration-key --project="${PROJECT}" >/dev/null 2>&1; then
   echo "ERROR: Secret pagerduty-integration-key not found in Secret Manager." >&2
@@ -73,5 +77,5 @@ done
 
 echo "=== Done ==="
 gcloud monitoring policies list --project="${PROJECT}" \
-  --filter='displayName:("-availability-burn" OR displayName="uptime-check-failed")' \
-  --format='table(displayName,notificationChannels)'
+  --format='table(displayName,notificationChannels)' \
+  --filter='userLabels.runbook:*'

@@ -35,6 +35,8 @@ credentials/
 .pre-commit/
 dist/
 build/
+__pycache__/
+*.pyc
 
 # Kubernetes local config (never commit cluster credentials)
 kubeconfig
@@ -42,7 +44,6 @@ kubeconfig.*
 
 # Cursor
 .cursor/
+# Accidental screenshot drops (use meaningful names under docs/diagrams/)
 image.png
-
-# Accidental diagram duplicates (do not commit)
-docs/diagrams/image copy*.png
+**/image copy*.png

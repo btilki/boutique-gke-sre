@@ -2,6 +2,10 @@
 # Create HTTPS uptime check + uptime-check-failed alert policy (topic 13 step 6).
 set -euo pipefail
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=lib/runbooks.sh
+source "${SCRIPT_DIR}/lib/runbooks.sh"
+
 PROJECT="${PROJECT_ID:-boutique-gke}"
 HOST="boutique.biroltilki.art"
 DISPLAY_NAME="boutique-storefront"
@@ -36,11 +40,12 @@ if [[ -z "${CHECK_ID}" ]]; then
 fi
 echo "Check ID: ${CHECK_ID}"
 
-RUNBOOK="https://github.com/btilki/boutique-gke-sre/blob/main/docs/sre/runbooks/uptime-check-failed.md"
+RUNBOOK="$(runbook_github_url uptime-check-failed)"
+DOC="$(runbook_description uptime-check-failed)"
 FILTER="metric.type=\"monitoring.googleapis.com/uptime_check/check_passed\" resource.type=\"uptime_url\" metric.labels.check_id=\"${CHECK_ID}\""
 
 echo "=== Creating uptime-check-failed alert policy ==="
-export RUNBOOK FILTER HOST
+export RUNBOOK FILTER HOST DOC
 python3 <<'PY' | curl -s -X POST \
   "https://monitoring.googleapis.com/v3/projects/${PROJECT}/alertPolicies" \
   -H "Authorization: Bearer ${TOKEN}" \
@@ -50,6 +55,8 @@ import json, os
 runbook = os.environ["RUNBOOK"]
 filt = os.environ["FILTER"]
 host = os.environ["HOST"]
+doc = os.environ["DOC"]
+ops = "https://github.com/btilki/boutique-gke-sre/blob/main/docs/operations/quick-reference.md"
 print(json.dumps({
     "displayName": "uptime-check-failed",
     "combiner": "OR",
@@ -59,7 +66,10 @@ print(json.dumps({
         "target": "boutique-storefront",
     },
     "documentation": {
-        "content": f"External HTTPS uptime check failed for https://{host}/. PagerDuty channel added in topic 14.\n\nRunbook: {runbook}",
+        "content": (
+            f"{doc} Target: https://{host}/. PagerDuty channel added in topic 14.\n\n"
+            f"Runbook: {runbook}\nQuick reference: {ops}"
+        ),
         "mimeType": "text/markdown",
     },
     "conditions": [{

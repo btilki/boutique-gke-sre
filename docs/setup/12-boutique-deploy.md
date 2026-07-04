@@ -48,6 +48,8 @@ On the **first** Boutique deploy, mirror upstream images into Artifact Registry 
    - `redis_tag`: `7.2-alpine`
 4. Wait for all 11 matrix jobs to succeed (mirror → Trivy → push → cosign sign/attest)
 
+![Successful build-scan-sign workflow run](../diagrams/github-actions-build-scan-sign-success.png)
+
 The workflow mirrors from the upstream table above into:
 
 ```text
@@ -59,6 +61,10 @@ europe-west1-docker.pkg.dev/boutique-gke/boutique/<service>:<tag>
 Third-party images may report known CVEs that upstream has not patched. The mirror workflow uses [`.github/trivy/upstream-mirror.trivyignore`](../../.github/trivy/upstream-mirror.trivyignore) as a documented accepted-risk baseline — see [`.github/trivy/README.md`](../../.github/trivy/README.md) for review policy.
 
 Regenerate the ignore file when `upstream_version` or `redis_tag` changes.
+
+Without an accepted-risk baseline, Trivy fails the matrix on known upstream CVEs:
+
+![Trivy scan failure before upstream-mirror.trivyignore is applied](../diagrams/github-actions-trivy-scan-failure.png)
 
 #### Digest promotion PR
 
@@ -161,6 +167,8 @@ The boutique Ingress must reference the **`boutique-ingress-ip`** static IP (dis
 - `kubectl -n boutique get svc,ingress` — frontend Service and Ingress present
 - `curl -I https://boutique.biroltilki.art` returns `HTTP/2 200`
 - Browsing the URL in a browser shows the Online Boutique storefront
+
+![Online Boutique storefront over HTTPS](../diagrams/boutique-storefront-https.png)
 
 ## Validation
 

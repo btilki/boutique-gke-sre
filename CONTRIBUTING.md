@@ -15,6 +15,14 @@
 4. Review and merge
 5. For deploys: manual Argo CD sync after merge
 
+## Releases
+
+Platform releases use [Semantic Versioning](docs/release/release-strategy.md) tags (`vX.Y.Z`). Tagging triggers `.github/workflows/release.yml`; cluster promotion remains operator-driven.
+
+- [Release strategy](docs/release/release-strategy.md)
+- [Upgrade guide](docs/release/UPGRADE.md)
+- [Release notes template](docs/release/RELEASE_NOTES_TEMPLATE.md)
+
 ## Digest promotion
 
 Image digests are updated by CI in `gitops/apps/boutique/values-images.yaml` via PR. Do not hand-edit tags to `:latest`.

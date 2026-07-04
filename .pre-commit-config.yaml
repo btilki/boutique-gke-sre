@@ -13,6 +13,8 @@ repos:
         exclude: ^gitops/.+/templates/.*\.yaml$
       - id: check-added-large-files
         args: [--maxkb=500]
+        # Browser captures in docs/diagrams/ are intentional portfolio evidence.
+        exclude: ^docs/diagrams/.*\.png$
       - id: check-merge-conflict
       - id: detect-private-key
 

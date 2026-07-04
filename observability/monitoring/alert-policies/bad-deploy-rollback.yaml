@@ -1,0 +1,29 @@
+# Reference: bad-deploy-rollback alert policy
+# Created via scripts/create-supplemental-alert-policies.sh
+# Console: https://console.cloud.google.com/monitoring/alerting/policies?project=boutique-gke
+#
+# Triggers on elevated container restart rate in boutique namespace (post-deploy failures).
+# Notification channels: pagerduty-boutique-production (topic 14)
+
+displayName: bad-deploy-rollback
+combiner: OR
+enabled: true
+
+userLabels:
+  runbook: bad-deploy-rollback
+  namespace: boutique
+  severity: sev2-sev3
+
+documentation:
+  runbook: https://github.com/btilki/boutique-gke-sre/blob/main/docs/sre/runbooks/bad-deploy-rollback.md
+  operations: https://github.com/btilki/boutique-gke-sre/blob/main/docs/operations/quick-reference.md
+
+conditions:
+  - displayName: boutique namespace container restart spike
+    metric: kubernetes.io/container/restart_count
+    namespace: boutique
+    comparison: COMPARISON_GT
+    threshold: 5
+    duration: 300s
+    aligner: ALIGN_DELTA
+    response: page

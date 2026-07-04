@@ -1,0 +1,29 @@
+# Reference: redis-cart-down alert policy
+# Created via scripts/create-supplemental-alert-policies.sh
+#
+# Triggers when redis-cart container restarts exceed threshold (cart/checkout impact).
+# Notification channels: pagerduty-boutique-production (topic 14)
+
+displayName: redis-cart-down
+combiner: OR
+enabled: true
+
+userLabels:
+  runbook: redis-cart-down
+  namespace: boutique
+  workload: redis-cart
+
+documentation:
+  runbook: https://github.com/btilki/boutique-gke-sre/blob/main/docs/sre/runbooks/redis-cart-down.md
+  operations: https://github.com/btilki/boutique-gke-sre/blob/main/docs/operations/quick-reference.md
+
+conditions:
+  - displayName: redis-cart container restart or instability
+    metric: kubernetes.io/container/restart_count
+    namespace: boutique
+    container: redis
+    comparison: COMPARISON_GT
+    threshold: 2
+    duration: 180s
+    aligner: ALIGN_DELTA
+    response: page

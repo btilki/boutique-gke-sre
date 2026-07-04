@@ -1,0 +1,42 @@
+# Canonical runbook URL registry for Cloud Monitoring alert policies.
+# Used by scripts/create-*-alert*.sh and scripts/validate-runbook-links.sh.
+#
+# GitHub blob URLs are the notification payload source of truth (public, no auth).
+
+github:
+  org: btilki
+  repo: boutique-gke-sre
+  branch: main
+  runbooks_path: docs/sre/runbooks
+
+# Operations runbook (not alert-linked; included for PagerDuty custom details)
+operations_runbook:
+  path: docs/operations/operations-runbook.md
+  quick_reference: docs/operations/quick-reference.md
+
+# Alert policy name → runbook filename (must exist under docs/sre/runbooks/)
+policies:
+  browse-availability-burn:
+    runbook: browse-availability-burn.md
+    description: Multi-window burn-rate alert for browse-availability SLO (99.9% / 30d).
+    pagerduty: true
+
+  checkout-availability-burn:
+    runbook: checkout-availability-burn.md
+    description: Multi-window burn-rate alert for checkout-availability SLO (99.95% / 30d).
+    pagerduty: true
+
+  uptime-check-failed:
+    runbook: uptime-check-failed.md
+    description: External HTTPS uptime check failed for boutique.biroltilki.art.
+    pagerduty: true
+
+  bad-deploy-rollback:
+    runbook: bad-deploy-rollback.md
+    description: Elevated container restart rate in boutique namespace after deploy.
+    pagerduty: true
+
+  redis-cart-down:
+    runbook: redis-cart-down.md
+    description: Redis cart workload unhealthy or restarting in boutique namespace.
+    pagerduty: true

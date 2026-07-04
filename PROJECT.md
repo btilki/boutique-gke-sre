@@ -10,6 +10,8 @@ Production SRE reference for Google Online Boutique on one private regional GKE 
 2. Provide operable SLOs, alerting, runbooks, and game-day practice — not slide-ware
 3. Serve as a portfolio artifact and reusable learning reference
 
+→ Hiring review: [PORTFOLIO.md](PORTFOLIO.md)
+
 ## Scope
 
 **In scope:** Single GCP project, one cluster, full SRE + DevSecOps baseline, bootstrap and teardown.
@@ -20,8 +22,8 @@ Production SRE reference for Google Online Boutique on one private regional GKE 
 
 - HTTPS on `boutique.biroltilki.art` and `argocd.boutique.biroltilki.art`
 - Kyverno enforced; digest-only images; ESO-only secrets
-- SLOs + burn alerts with runbook links; PagerDuty test incident
-- One game day executed; teardown validated (zero orphans)
+- SLOs + burn alerts with runbook links; PagerDuty test incident validated
+- Game-day scenarios documented; teardown validation pending (Phase 8)
 
 ## URLs
 

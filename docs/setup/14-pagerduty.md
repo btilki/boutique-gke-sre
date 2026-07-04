@@ -53,6 +53,8 @@ Save the service.
 
 If you added the integration during the service wizard, verify the type is **Events API V2** before copying the key.
 
+![PagerDuty service with Events API V2 integration](../diagrams/pagerduty-service-events-api-v2.png)
+
 Copy the **Integration Key** (32-character hex string). Store it in Secret Manager — do not commit to Git. Use a prompt so the key is not stored in shell history:
 
 ```bash

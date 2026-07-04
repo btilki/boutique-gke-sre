@@ -43,6 +43,8 @@ curl -I https://argocd.boutique.biroltilki.art
 
 **Pass:** `boutique.biroltilki.art` matches `boutique-ingress-ip`; `argocd.boutique.biroltilki.art` matches `argocd-ingress-ip`; both `curl` return `HTTP/2 200` or `302`.
 
+![Online Boutique storefront over HTTPS](../diagrams/boutique-storefront-https.png)
+
 ### 2. GKE cluster health
 
 ```bash
@@ -78,6 +80,8 @@ kubectl apply --dry-run=server -f examples/kyverno-policy-test/bad-latest-pod.ya
 ```
 
 **Pass:** Argo CD, ESO, Kyverno healthy; five policies; `:latest` denied.
+
+![Argo CD Applications — all Synced and Healthy](../diagrams/argocd-applications-healthy-synced.png)
 
 ### 4. Application — Online Boutique
 
@@ -149,6 +153,8 @@ Confirm from topic 14:
 - [ ] Burn-rate policies attached to PagerDuty
 - [ ] Test incident fired and resolved per [test-alerts.md](../sre/oncall/test-alerts.md)
 - [ ] Runbook URLs visible in alert policy documentation
+
+![PagerDuty service with Events API V2 integration](../diagrams/pagerduty-service-events-api-v2.png)
 
 ```bash
 # Notification channel exists and is enabled
@@ -261,6 +267,15 @@ When bootstrap is complete:
 | NetworkPolicy | `default-deny-all` + `boutique-allow` in boutique                |
 | Secret scan   | gitleaks passes on tracked files                                 |
 | SRE docs      | Runbooks, on-call, game days, teardown exist                     |
+
+### Reference screenshots
+
+| Area        | Screenshot                                                                                           | Setup topic |
+| ----------- | ---------------------------------------------------------------------------------------------------- | ----------- |
+| Storefront  | [boutique-storefront-https.png](../diagrams/boutique-storefront-https.png)                           | 12, 16      |
+| GitOps      | [argocd-applications-healthy-synced.png](../diagrams/argocd-applications-healthy-synced.png)         | 16          |
+| CI pipeline | [github-actions-build-scan-sign-success.png](../diagrams/github-actions-build-scan-sign-success.png) | 12          |
+| PagerDuty   | [pagerduty-service-events-api-v2.png](../diagrams/pagerduty-service-events-api-v2.png)               | 14          |
 
 ## Validation
 

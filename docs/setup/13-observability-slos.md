@@ -174,6 +174,19 @@ For each SLO, add **SLO burn rate** conditions per [burn-rate-alerting.md](../sr
 
 Reference YAML: `observability/monitoring/alert-policies/`
 
+### 6b. Create supplemental alert policies (deploy + Redis)
+
+```bash
+./scripts/create-supplemental-alert-policies.sh
+```
+
+| Policy                | Trigger                                         | Runbook                                    |
+| --------------------- | ----------------------------------------------- | ------------------------------------------ |
+| `bad-deploy-rollback` | Container restart spike in `boutique` namespace | `docs/sre/runbooks/bad-deploy-rollback.md` |
+| `redis-cart-down`     | `redis` container restarts in cart workload     | `docs/sre/runbooks/redis-cart-down.md`     |
+
+Runbook URLs are resolved from `observability/monitoring/runbooks.yaml`. Validate: `make runbook-lint`.
+
 ### 7. Create uptime check (external probe)
 
 Navigate: **Monitoring → Uptime checks → Create**, or run:
@@ -236,7 +249,12 @@ gcloud monitoring policies list --project=boutique-gke --format='table(displayNa
 # Runbooks exist on disk
 ls docs/sre/runbooks/browse-availability-burn.md \
    docs/sre/runbooks/checkout-availability-burn.md \
-   docs/sre/runbooks/uptime-check-failed.md
+   docs/sre/runbooks/uptime-check-failed.md \
+   docs/sre/runbooks/bad-deploy-rollback.md \
+   docs/sre/runbooks/redis-cart-down.md
+
+# Registry + YAML refs consistent
+make runbook-lint
 ```
 
 **Pass criteria:** OTel and Grafana running; boutique pods log `Tracing enabled.`; traces in Cloud Trace; browse 99.9% and checkout 99.95% SLOs created; burn alert policies reference runbook URLs.

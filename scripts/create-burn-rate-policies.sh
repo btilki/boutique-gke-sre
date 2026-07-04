@@ -3,18 +3,33 @@
 # Idempotent: fails if policies already exist; delete in Console first to recreate.
 set -euo pipefail
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=lib/runbooks.sh
+source "${SCRIPT_DIR}/lib/runbooks.sh"
+
 PROJECT="${PROJECT_ID:-boutique-gke}"
 TOKEN=$(gcloud auth print-access-token)
 API="https://monitoring.googleapis.com/v3/projects/${PROJECT}/alertPolicies"
 
 build_policy() {
-  DISPLAY_NAME="$1" SLO="$2" RUNBOOK="$3" RUNBOOK_SHORT="$4" DOC="$5" python3 <<'PY'
+  local display_name="$1"
+  local slo="$2"
+  local policy_key="$3"
+  local runbook
+  runbook="$(runbook_github_url "${policy_key}")"
+  local doc
+  doc="$(runbook_description "${policy_key}")"
+  local runbook_short
+  runbook_short="$(runbook_short_name "${policy_key}")"
+  export runbook doc runbook_short display_name slo
+  python3 <<'PY'
 import json, os
-display_name = os.environ["DISPLAY_NAME"]
-slo = os.environ["SLO"]
-runbook = os.environ["RUNBOOK"]
-runbook_short = os.environ["RUNBOOK_SHORT"]
-doc = os.environ["DOC"]
+display_name = os.environ["display_name"]
+slo = os.environ["slo"]
+runbook = os.environ["runbook"]
+runbook_short = os.environ["runbook_short"]
+doc = os.environ["doc"]
+ops = "https://github.com/btilki/boutique-gke-sre/blob/main/docs/operations/quick-reference.md"
 windows = [
     ("Fast burn 1h (page)", "3600s", 14.4),
     ("Fast burn 6h (page)", "21600s", 6.0),
@@ -42,7 +57,7 @@ print(json.dumps({
         "slo": slo.split("/")[-1],
     },
     "documentation": {
-        "content": doc + "\n\nRunbook: " + runbook,
+        "content": doc + "\n\nRunbook: " + runbook + "\nQuick reference: " + ops,
         "mimeType": "text/markdown",
     },
     "conditions": conditions,
@@ -62,17 +77,7 @@ BROWSE_SLO="projects/334181791139/services/boutique-frontend/serviceLevelObjecti
 CHECKOUT_SLO="projects/334181791139/services/boutique-checkout/serviceLevelObjectives/checkout-availability"
 
 echo "Creating browse-availability-burn..."
-create_policy "$(build_policy \
-  "browse-availability-burn" \
-  "${BROWSE_SLO}" \
-  "https://github.com/btilki/boutique-gke-sre/blob/main/docs/sre/runbooks/browse-availability-burn.md" \
-  "browse-availability-burn" \
-  "Multi-window burn-rate alert for browse-availability SLO (99.9% / 30d).")" | python3 -m json.tool
+create_policy "$(build_policy "browse-availability-burn" "${BROWSE_SLO}" "browse-availability-burn")" | python3 -m json.tool
 
 echo "Creating checkout-availability-burn..."
-create_policy "$(build_policy \
-  "checkout-availability-burn" \
-  "${CHECKOUT_SLO}" \
-  "https://github.com/btilki/boutique-gke-sre/blob/main/docs/sre/runbooks/checkout-availability-burn.md" \
-  "checkout-availability-burn" \
-  "Multi-window burn-rate alert for checkout-availability SLO (99.95% / 30d).")" | python3 -m json.tool
+create_policy "$(build_policy "checkout-availability-burn" "${CHECKOUT_SLO}" "checkout-availability-burn")" | python3 -m json.tool

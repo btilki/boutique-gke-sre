@@ -1,0 +1,120 @@
+# Create GitHub Release on version tag push.
+# Does NOT deploy to cluster — operator manual Argo CD sync per ADR-003.
+#
+# Trigger: push tag v*.*.* (e.g. v1.0.0)
+# Requires: contents: write for release creation
+
+name: release
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+      - "v*.*.*-*"
+
+permissions:
+  contents: write
+
+jobs:
+  validate:
+    name: Pre-release validation
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.5.7
+
+      - name: Terraform fmt check
+        run: terraform fmt -check -recursive terraform/
+
+      - name: Terraform validate
+        run: |
+          cd terraform/environments/boutique
+          terraform init -backend=false
+          terraform validate
+
+      - name: Digest-only image values
+        run: ./tests/manifest/digest-only.sh
+
+      - name: Runbook link lint
+        run: ./scripts/validate-runbook-links.sh
+
+  release:
+    name: Publish GitHub Release
+    needs: validate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Resolve chart and upstream versions
+        id: meta
+        run: |
+          CHART_VERSION="$(grep '^version:' gitops/apps/boutique/Chart.yaml | awk '{print $2}')"
+          APP_VERSION="$(grep '^appVersion:' gitops/apps/boutique/Chart.yaml | awk '{print $2}' | tr -d '"')"
+          echo "chart_version=${CHART_VERSION}" >> "${GITHUB_OUTPUT}"
+          echo "app_version=${APP_VERSION}" >> "${GITHUB_OUTPUT}"
+
+      - name: Build release notes
+        id: notes
+        env:
+          TAG: ${{ github.ref_name }}
+          CHART_VERSION: ${{ steps.meta.outputs.chart_version }}
+          APP_VERSION: ${{ steps.meta.outputs.app_version }}
+          REPO: ${{ github.repository }}
+        run: |
+          PREV_TAG="$(git tag -l 'v*' --sort=-v:refname | sed -n '2p')"
+          if [[ -n "${PREV_TAG}" ]]; then
+            COMPARE_URL="https://github.com/${REPO}/compare/${PREV_TAG}...${TAG}"
+            COMPARE_LINE="**Full changelog:** ${COMPARE_URL}"
+          else
+            COMPARE_LINE="**Initial release.**"
+          fi
+          cat > /tmp/release-notes.md <<EOF
+          ## boutique-gke-sre ${TAG}
+
+          | Field | Value |
+          |-------|-------|
+          | **Helm chart** | ${CHART_VERSION} |
+          | **App upstream (appVersion)** | ${APP_VERSION} |
+          | **Deploy** | Manual Argo CD sync ([ADR-003](https://github.com/${REPO}/blob/main/docs/adr/003-manual-argocd-sync.md)) |
+
+          ### Highlights
+
+          - See commit history for this tag.
+
+          ### Upgrade
+
+          1. Review [Upgrade guide](https://github.com/${REPO}/blob/main/docs/release/UPGRADE.md)
+          2. Merge any digest PR from CI if images were rebuilt
+          3. Manual Argo CD sync: \`boutique\`, \`observability\`, \`policies\` as needed
+          4. Run [smoke validation](https://github.com/${REPO}/blob/main/docs/setup/16-smoke-validation.md)
+
+          ### Rollback
+
+          Revert to previous tag and sync — [Rollback strategy](https://github.com/${REPO}/blob/main/docs/release/release-strategy.md#rollback-strategy).
+
+          ### Image digests
+
+          Recorded in \`gitops/apps/boutique/values-images.yaml\` at this tag.
+
+          ${COMPARE_LINE}
+
+          ---
+
+          _Curate full notes using [RELEASE_NOTES_TEMPLATE.md](https://github.com/${REPO}/blob/main/docs/release/RELEASE_NOTES_TEMPLATE.md) for portfolio releases._
+          EOF
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: boutique-gke-sre ${{ github.ref_name }}
+          body_path: /tmp/release-notes.md
+          draft: false
+          prerelease: ${{ contains(github.ref_name, '-rc') || contains(github.ref_name, '-alpha') || contains(github.ref_name, '-beta') }}
+          generate_release_notes: false

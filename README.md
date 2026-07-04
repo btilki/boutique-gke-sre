@@ -1,12 +1,15 @@
 # boutique-gke-sre
 
+> **For hiring managers & interview panels:** [PORTFOLIO.md](PORTFOLIO.md) — 10-minute review guide, architecture highlights, and interview talking points.
+> **Live:** https://boutique.biroltilki.art · https://argocd.boutique.biroltilki.art
+
 ## Project overview
 
 Production-grade **site reliability engineering reference** for [Google Online Boutique](https://github.com/GoogleCloudPlatform/microservices-demo) on a **single private GKE cluster** in GCP project `boutique-gke`. This is a portfolio-quality platform engineering artifact — **not** a throwaway demo.
 
 **Who it's for:** Platform engineers, SREs, and reviewers evaluating production readiness on Google Cloud.
 
-**Production bar:** Valid HTTPS on both public hostnames; Kyverno policies enforced; digest-only signed images; live SLOs with burn-rate alerts; PagerDuty routing; one executed game day; validated teardown with zero billing orphans.
+**Production bar:** Valid HTTPS on both public hostnames; Kyverno policies enforced; digest-only signed images; live SLOs with burn-rate alerts; PagerDuty routing (test-validated); game-day scenarios and scripts; teardown runbooks (Phase 8 validation pending).
 
 ## Operational focus
 
@@ -137,6 +140,9 @@ Build → Trivy (fail critical/high) → push AR (digest) → cosign sign + atte
 | [.github/workflows/terraform-plan.yml](.github/workflows/terraform-plan.yml)         | `terraform plan` on PR                                                    |
 | [.github/workflows/build-scan-sign.yml](.github/workflows/build-scan-sign.yml)       | WIF build pipeline (Phase 3)                                              |
 | [.github/workflows/manifest-digest-pr.yml](.github/workflows/manifest-digest-pr.yml) | Digest promotion PR (Phase 3)                                             |
+| [.github/workflows/release.yml](.github/workflows/release.yml)                       | GitHub Release on SemVer tag (no auto-deploy)                             |
+
+→ Release process: [docs/release/release-strategy.md](docs/release/release-strategy.md)
 
 ## GitOps
 
@@ -182,27 +188,29 @@ Runbooks: [docs/sre/runbooks/](docs/sre/runbooks/) · SLO catalog: [docs/sre/slo
 
 Master index: [docs/DOCUMENTATION.md](docs/DOCUMENTATION.md) · Template: [docs/GUIDE_TEMPLATE.md](docs/GUIDE_TEMPLATE.md)
 
-| Path                                       | Content                          |
-| ------------------------------------------ | -------------------------------- |
-| [docs/architecture/](docs/architecture/)   | System design, ADRs              |
-| [docs/setup/](docs/setup/)                 | Topic-based setup guides (01–16) |
-| [docs/sre/runbooks/](docs/sre/runbooks/)   | Alert runbooks                   |
-| [docs/sre/game-days/](docs/sre/game-days/) | Game-day scenarios               |
-| [docs/sre/oncall/](docs/sre/oncall/)       | On-call playbooks                |
-| [docs/teardown.md](docs/teardown.md)       | Safe decommission                |
+| Path                                       | Content                                             |
+| ------------------------------------------ | --------------------------------------------------- |
+| [PORTFOLIO.md](PORTFOLIO.md)               | **Hiring review guide** — start here for recruiters |
+| [docs/portfolio/](docs/portfolio/)         | Resume bullets, interview Q&A, media guide          |
+| [docs/architecture/](docs/architecture/)   | System design, ADRs                                 |
+| [docs/setup/](docs/setup/)                 | Topic-based setup guides (01–16)                    |
+| [docs/sre/runbooks/](docs/sre/runbooks/)   | Alert runbooks                                      |
+| [docs/sre/game-days/](docs/sre/game-days/) | Game-day scenarios                                  |
+| [docs/sre/oncall/](docs/sre/oncall/)       | On-call playbooks                                   |
+| [docs/teardown.md](docs/teardown.md)       | Safe decommission                                   |
 
 ## Roadmap
 
 | Phase | Focus                         | Status         |
 | ----- | ----------------------------- | -------------- |
-| 1     | Repo + Terraform foundation   | 🔄 In progress |
-| 2     | GKE + DNS + TLS               | ⬜             |
-| 3     | WIF + AR + CI                 | ⬜             |
-| 4     | Argo CD + policies (**gate**) | ⬜             |
-| 5     | Boutique deploy               | ⬜             |
-| 6     | Observability + SLOs          | ⬜             |
-| 7     | SRE ops + game day            | ⬜             |
-| 8     | Teardown + backup             | ⬜             |
+| 1     | Repo + Terraform foundation   | ✅ Complete    |
+| 2     | GKE + DNS + TLS               | ✅ Complete    |
+| 3     | WIF + AR + CI                 | ✅ Complete    |
+| 4     | Argo CD + policies (**gate**) | ✅ Complete    |
+| 5     | Boutique deploy               | ✅ Complete    |
+| 6     | Observability + SLOs          | ✅ Complete    |
+| 7     | SRE ops + smoke validation    | ✅ Complete    |
+| 8     | Teardown + backup             | 🔄 In progress |
 
 → [ROADMAP.md](ROADMAP.md) · [PROJECT.md](PROJECT.md) · [docs/implementation/roadmap.md](docs/implementation/roadmap.md)
 

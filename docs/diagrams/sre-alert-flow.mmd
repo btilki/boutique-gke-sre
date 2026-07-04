@@ -1,0 +1,48 @@
+%% SRE alert and incident path — boutique-gke-sre
+%% Render: GitHub, mermaid.live, or mmdc export to assets/
+
+flowchart TB
+  subgraph SLI["SLI sources"]
+    LB[HTTPS Load Balancer metrics]
+    LOG[Log-based checkout metrics]
+    UP[Uptime check boutique.biroltilki.art]
+    K8S[K8s container metrics]
+  end
+
+  subgraph CM["Cloud Monitoring"]
+    SLO[SLOs browse 99.9% / checkout 99.95%]
+    BURN[Multi-window burn-rate policies]
+    SUPP[bad-deploy / redis-cart policies]
+    UPT[uptime-check-failed]
+  end
+
+  subgraph Notify["Notification"]
+    CH[pagerduty-boutique-production]
+  end
+
+  subgraph Response["On-call response"]
+    PD[PagerDuty incident]
+    RB[Runbook docs/sre/runbooks/]
+    QR[Quick reference]
+    OPS[Operations runbook]
+  end
+
+  LB --> SLO
+  LOG --> SLO
+  UP --> UPT
+  K8S --> SUPP
+  SLO --> BURN
+  BURN --> CH
+  SUPP --> CH
+  UPT --> CH
+  CH --> PD
+  PD --> RB
+  RB --> QR
+  RB --> OPS
+
+  REG[(runbooks.yaml registry)]
+  LINT[make runbook-lint]
+  REG --> LINT
+  LINT -.->|validates URLs| BURN
+  LINT -.->|validates URLs| SUPP
+  LINT -.->|validates URLs| UPT

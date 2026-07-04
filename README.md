@@ -62,4 +62,4 @@ flowchart LR
 
 → [CONTRIBUTING.md](CONTRIBUTING.md) · [SECURITY.md](SECURITY.md) · [LICENSE](LICENSE) (Apache 2.0)
 
-**CI/CD & workflows:** [.github/README.md](.github/README.md)
+**CI/CD & workflows:** [.github/workflows/README.md](.github/workflows/README.md)

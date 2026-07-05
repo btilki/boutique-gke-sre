@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate portfolio PNG screenshots from live GCP data and runbook-lint output."""
+"""Generate operational PNG screenshots from live GCP data and runbook-lint output."""
 from __future__ import annotations
 
 import json
@@ -10,7 +10,7 @@ from pathlib import Path
 from PIL import Image, ImageDraw, ImageFont
 
 ROOT = Path(__file__).resolve().parents[2]
-OUT = ROOT / "docs" / "diagrams"
+OUT = ROOT / "assets" / "diagrams"
 PROJECT = "boutique-gke"
 
 
@@ -723,7 +723,7 @@ def main() -> None:
     render_cloud_armor_ingress(OUT / "cloud-armor-ingress.png")
     render_grafana_dashboard(OUT / "grafana-boutique-dashboard.png")
     render_cloud_trace_checkout(OUT / "cloud-trace-checkout.png")
-    print("Done — 9 portfolio screenshots in docs/diagrams/")
+    print("Done — 9 screenshots written to assets/diagrams/")
 
 
 if __name__ == "__main__":

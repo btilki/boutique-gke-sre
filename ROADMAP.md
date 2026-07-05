@@ -27,6 +27,4 @@ Phase 1 → 2 → 3 → 4 (gate) → 5 → 6 → 7 → 8
 
 ## Current phase
 
-**Complete** — Infrastructure decommissioned 2026-07-04. Git repository retained as portfolio reference. See [docs/teardown.md](docs/teardown.md).
-
-Portfolio review: [PORTFOLIO.md](PORTFOLIO.md)
+**Complete** — Infrastructure decommissioned 2026-07-04. Git repository retained as the platform reference. See [docs/teardown.md](docs/teardown.md).

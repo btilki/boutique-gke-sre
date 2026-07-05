@@ -80,7 +80,7 @@ Full incident template: [incident-response/comms.md](incident-response/comms.md)
 
 ## Common mistakes
 
-- Ignoring budget because “portfolio project” — practice prod discipline
+- Ignoring budget because the environment is non-production — practice prod discipline
 - Continuing game days during freeze without lead approval
 
 ## Best practices

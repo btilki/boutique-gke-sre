@@ -6,7 +6,7 @@ Safely decommission all boutique-gke-sre resources and stop billing with **zero 
 
 ## When to use
 
-- End of portfolio demo / learning period
+- End of platform lifecycle or cost-control window
 - Rebuild from scratch after failed state
 - Validating Phase 8 lifecycle documentation
 
@@ -79,7 +79,7 @@ dig +short boutique.biroltilki.art
 ## Best practices
 
 - Run orphan scan twice (immediate + 24h later)
-- Document destroy date in a postmortem-style note for portfolio records
+- Document destroy date in a postmortem-style note for operational records
 - Export Argo CD app manifests from Git — Git remains source of truth
 
 ## Production considerations

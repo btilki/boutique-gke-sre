@@ -6,7 +6,7 @@ Document DevSecOps controls for boutique-gke-sre: authentication, secrets, image
 
 ## When to use
 
-- Security review or portfolio walkthrough
+- Security review or architecture walkthrough
 - Implementing Phases 3–4 (WIF, ESO, Kyverno, NetworkPolicy)
 - Debugging deploy denials
 

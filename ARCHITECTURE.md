@@ -20,9 +20,9 @@ Git → GitHub Actions (WIF) → Artifact Registry → Argo CD → Private GKE
 
 ## Diagrams
 
-- [docs/diagrams/architecture.mmd](docs/diagrams/architecture.mmd)
-- [docs/diagrams/network-flow.mmd](docs/diagrams/network-flow.mmd)
-- [docs/diagrams/deployment-pipeline.mmd](docs/diagrams/deployment-pipeline.mmd)
+- [assets/diagrams/architecture.mmd](assets/diagrams/architecture.mmd)
+- [assets/diagrams/network-flow.mmd](assets/diagrams/network-flow.mmd)
+- [assets/diagrams/deployment-pipeline.mmd](assets/diagrams/deployment-pipeline.mmd)
 
 ## ADRs
 

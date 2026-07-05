@@ -15,7 +15,7 @@ Next update: [time UTC]
 
 - On-call engineer (primary)
 - Platform lead (SEV1/SEV2)
-- Portfolio/maintainer (optional for extended SEV1)
+- Platform maintainer (optional for extended SEV1)
 
 ## Further reading
 

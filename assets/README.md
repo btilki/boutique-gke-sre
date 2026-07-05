@@ -1,5 +1,5 @@
 # Assets
 
-Static assets: diagram sources, exported images, logos.
+Static assets: diagram sources, operational screenshots, exported images.
 
-- [diagrams/](diagrams/) — Mermaid source files
+- [diagrams/](diagrams/) — Mermaid sources (`.mmd`) and operational PNG screenshots

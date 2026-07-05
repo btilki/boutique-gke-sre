@@ -69,7 +69,7 @@ Remaining error budget at **0%** → treat as **SEV2** minimum per [error-budget
 
 ## Production considerations
 
-- Portfolio reference still benefits from realistic SEV discipline for job interviews and ops muscle memory
+- Realistic SEV discipline builds on-call muscle memory even on smaller platforms
 
 ## Security considerations
 

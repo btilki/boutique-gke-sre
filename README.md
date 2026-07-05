@@ -2,7 +2,7 @@
 
 > **Infrastructure:** Decommissioned 2026-07-04. Documentation and screenshots remain; live URLs are offline.
 
-Production-grade **platform + SRE reference** for [Google Online Boutique](https://github.com/GoogleCloudPlatform/microservices-demo) on a single private GKE cluster in GCP (`boutique-gke`).
+Production-grade **platform + SRE** stack for [Google Online Boutique](https://github.com/GoogleCloudPlatform/microservices-demo) on a single private regional GKE cluster in GCP (`boutique-gke`).
 
 **URLs (offline):** https://boutique.biroltilki.art · https://argocd.boutique.biroltilki.art
 
@@ -10,19 +10,18 @@ Production-grade **platform + SRE reference** for [Google Online Boutique](https
 
 ## Start here
 
-| Audience                               | Document                                                                                                                    |
-| -------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
-| **Hiring managers & interview panels** | **[PORTFOLIO.md](PORTFOLIO.md)** — 10-minute review guide, live evidence, architecture highlights, interview talking points |
-| Engineers rebuilding the stack         | [docs/setup/README.md](docs/setup/README.md) — topic guides 01–16                                                           |
-| Day-2 operations                       | [docs/operations/operations-runbook.md](docs/operations/operations-runbook.md)                                              |
-
-More portfolio material: [docs/portfolio/interview-guide.md](docs/portfolio/interview-guide.md) · [docs/portfolio/media-guide.md](docs/portfolio/media-guide.md)
+| Audience                             | Document                                                                                            |
+| ------------------------------------ | --------------------------------------------------------------------------------------------------- |
+| **Operators and platform engineers** | [docs/setup/README.md](docs/setup/README.md) — topic guides 01–16                                   |
+| **Architecture and design**          | [ARCHITECTURE.md](ARCHITECTURE.md) · [docs/architecture/overview.md](docs/architecture/overview.md) |
+| **Day-2 operations**                 | [docs/operations/operations-runbook.md](docs/operations/operations-runbook.md)                      |
+| **Teardown and lifecycle**           | [docs/teardown.md](docs/teardown.md)                                                                |
 
 ---
 
 ## What this is
 
-A portfolio-quality artifact for platform engineering and SRE roles—not a throwaway demo. One regional private GKE cluster with GitOps, supply-chain controls, observability, SLOs, burn-rate alerting, PagerDuty routing, and runbooks.
+A production-style GCP platform for Online Boutique—not a throwaway demo cluster. One regional private GKE cluster with GitOps, supply-chain controls, observability, SLOs, burn-rate alerting, PagerDuty routing, and runbooks.
 
 ```mermaid
 flowchart LR

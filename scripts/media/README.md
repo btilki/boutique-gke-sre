@@ -15,6 +15,8 @@ Operational helpers — **not** replacements for `docs/setup/` guides.
 | ------------------------------------- | --------------------------------------------------------- |
 | `media/generate-media-screenshots.py` | SLO dashboard, runbook lint, PagerDuty test incident PNGs |
 
+Outputs are written to `assets/diagrams/`.
+
 ## Observability / alerting (Phase 6–7)
 
 | Script                                  | Purpose                                                            | Setup guide                                                        |

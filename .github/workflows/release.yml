@@ -106,7 +106,7 @@ jobs:
 
           ---
 
-          _Curate full notes using [RELEASE_NOTES_TEMPLATE.md](https://github.com/${REPO}/blob/main/docs/release/RELEASE_NOTES_TEMPLATE.md) for portfolio releases._
+          _Curate full notes using [RELEASE_NOTES_TEMPLATE.md](https://github.com/${REPO}/blob/main/docs/release/RELEASE_NOTES_TEMPLATE.md) for release documentation._
           EOF
 
       - name: Create GitHub Release

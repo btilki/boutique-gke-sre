@@ -44,6 +44,6 @@ kubeconfig.*
 
 # Cursor
 .cursor/
-# Accidental screenshot drops (use meaningful names under docs/diagrams/)
+# Accidental screenshot drops (use meaningful names under assets/diagrams/)
 image.png
 **/image copy*.png

@@ -4,7 +4,7 @@ Canonical system design for the production SRE reference: Google Online Boutique
 
 **Public URLs:** https://boutique.biroltilki.art · https://argocd.boutique.biroltilki.art
 
-**Diagram sources:** [docs/diagrams/](../diagrams/)
+**Diagram sources:** [assets/diagrams/](../../assets/diagrams/)
 
 ---
 
@@ -63,7 +63,7 @@ Canonical system design for the production SRE reference: Google Online Boutique
 | GitHub           | Org/repo with Actions; OIDC trust to WIF pool                        |
 | PagerDuty        | Account with service + integration key for alert routing             |
 | Region           | Single GCP region (`europe-west1`) with 3 zones for regional cluster |
-| Traffic          | Portfolio/demo levels; not hyperscale                                |
+| Traffic          | Low-to-moderate production traffic; not hyperscale                   |
 | Images           | Mirrored to Artifact Registry with digest pinning                    |
 | Team model       | Platform engineer + SRE patterns; on-call documented                 |
 
@@ -233,7 +233,7 @@ boutique-vpc (custom, regional)
 
 Namespaces must include label `network-policy.biroltilki.art/tier` (enforced by Kyverno policy `require-netpol-labels`).
 
-→ [network-flow.mmd](../diagrams/network-flow.mmd)
+→ [network-flow.mmd](../../assets/diagrams/network-flow.mmd)
 
 ---
 

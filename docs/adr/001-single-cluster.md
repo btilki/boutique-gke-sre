@@ -6,7 +6,7 @@ Accepted
 
 ## Context
 
-We need environment isolation vs operational simplicity for a portfolio SRE reference.
+We need environment isolation vs operational simplicity for a production SRE platform.
 
 ## Decision
 

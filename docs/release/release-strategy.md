@@ -223,7 +223,7 @@ main ─────●─────●─────●─────●─
 
 - Patch series expected (`v1.2.1`, `v1.2.2`)
 - Long stabilization before `vX.(Y+1).0`
-- Portfolio demo frozen at `v1.0` while `main` advances
+- Release branch frozen at `v1.0` while `main` advances
 
 ### Commands
 
@@ -305,7 +305,7 @@ Tag points to CI-green commit; GitHub Release attached to same tag.
 
 - Use annotated tags only (not lightweight)
 - Never move or force-push tags on `main`
-- Sign tags with GPG if org policy requires (optional for portfolio)
+- Sign tags with GPG if org policy requires (optional)
 
 ---
 
@@ -753,7 +753,7 @@ GitHub Release artifact exists; cluster promotion remains operator-controlled.
 
 ### Purpose
 
-Standardize release artifacts on GitHub for portfolio and operator consumption.
+Standardize release artifacts on GitHub for operator consumption.
 
 ### Release metadata
 

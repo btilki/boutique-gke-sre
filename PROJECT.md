@@ -8,9 +8,9 @@ Production SRE reference for Google Online Boutique on one private regional GKE 
 
 1. Demonstrate production-grade platform engineering on GCP (GitOps, DevSecOps, SRE)
 2. Provide operable SLOs, alerting, runbooks, and game-day practice — not slide-ware
-3. Serve as a portfolio artifact and reusable learning reference
+3. Serve as a reusable platform baseline and internal engineering reference
 
-→ Hiring review: [PORTFOLIO.md](PORTFOLIO.md)
+→ Architecture: [ARCHITECTURE.md](ARCHITECTURE.md) · [docs/architecture/overview.md](docs/architecture/overview.md)
 
 ## Scope
 
@@ -30,7 +30,7 @@ Production SRE reference for Google Online Boutique on one private regional GKE 
 - Storefront: https://boutique.biroltilki.art
 - Argo CD: https://argocd.boutique.biroltilki.art
 
-## Implementation
+## Related
 
 Phased delivery — one phase per session, validate, commit, proceed.
 
@@ -39,3 +39,6 @@ Phased delivery — one phase per session, validate, commit, proceed.
 ## Session rule
 
 **Do not skip Phase 4** (Argo CD + Kyverno + ESO + NetworkPolicy) before treating the cluster as production-ready.
+
+- [README.md](README.md)
+- [docs/operations/operations-runbook.md](docs/operations/operations-runbook.md)

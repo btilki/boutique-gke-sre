@@ -28,3 +28,10 @@ github_repo = "boutique-gke-sre"
 # Phase 7+ — Argo CD edge hardening (post topic 16)
 # enable_argocd_armor = true
 # argocd_armor_allowed_cidrs = ["203.0.113.10/32"]  # optional office/VPN IP; empty = public + WAF
+
+# Phase 9-C — Monitoring + Backup IaC (topic 19). Default false while project is torn down.
+# enable_monitoring_iac = true
+# pagerduty_service_key = ""  # set via TF_VAR_pagerduty_service_key or GSM — never commit
+# enable_backup_iac = true
+# backup_retain_days = 7
+# backup_deactivated = false  # set true before teardown if backups must stop

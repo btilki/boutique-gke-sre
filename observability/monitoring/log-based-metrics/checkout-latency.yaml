@@ -1,0 +1,40 @@
+# Reference: boutique/checkout_latency log-based DISTRIBUTION metric
+# Created via Logging Metrics API / Console — topic 17.
+#
+# Use: checkout-latency SLO denominator distribution (good = ≤ 1000ms).
+# Type: DISTRIBUTION (latency in milliseconds extracted from checkoutservice logs).
+#
+# Privacy: do not promote user_id / email into metric labels (aggregate distribution only).
+#
+# Apply note: Boutique log format varies by version. On rebuild, confirm PlaceOrder
+# duration is present in logs (or switch to an OTel custom histogram / Trace-based SLI
+# per docs/setup/17-latency-slos-dashboards.md). Update filter/extraction accordingly.
+
+name: boutique/checkout_latency
+description: PlaceOrder latency distribution for checkout-latency SLO (ms)
+metricDescriptor:
+  metricKind: DELTA
+  valueType: DISTRIBUTION
+  unit: ms
+filter: |
+  resource.type="k8s_container"
+  resource.labels.namespace_name="boutique"
+  (
+    resource.labels.container_name="server"
+    OR resource.labels.container_name="checkoutservice"
+  )
+  (
+    jsonPayload.message=~"PlaceOrder"
+    OR textPayload=~"PlaceOrder"
+  )
+
+# Extraction (Console / API): configure a distribution extractor on a numeric
+# latency field if present (e.g. jsonPayload.latency_ms). If logs lack duration,
+# use fallback SLI documented in topic 17 (Trace or OTel histogram) and keep this
+# file as the preferred path once instrumentation is available.
+
+bucketOptions:
+  exponentialBuckets:
+    numFiniteBuckets: 64
+    growthFactor: 2.0
+    scale: 1.0

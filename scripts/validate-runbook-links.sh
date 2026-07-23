@@ -74,7 +74,7 @@ while IFS= read -r policy; do
 done < <(python3 "${PARSE_PY}" "${REGISTRY}" list)
 
 # 3. Create scripts source registry (DRY runbook URLs)
-for script in create-burn-rate-policies.sh create-uptime-check.sh create-supplemental-alert-policies.sh; do
+for script in create-burn-rate-policies.sh create-latency-burn-rate-policies.sh create-uptime-check.sh create-argocd-uptime-check.sh create-supplemental-alert-policies.sh; do
   script_path="${SCRIPTS_DIR}/${script}"
   if [[ ! -f "${script_path}" ]]; then
     fail "Missing script: ${script_path}"

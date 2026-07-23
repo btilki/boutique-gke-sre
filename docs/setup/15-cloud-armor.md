@@ -2,7 +2,7 @@
 
 ## Goal
 
-Create a **Cloud Armor** security policy with an **OWASP ModSecurity Core Rule Set (CRS)** baseline, attach it to the backend service fronting the boutique Ingress, and verify legitimate traffic still reaches **https://boutique.biroltilki.art** while typical attack patterns are blocked at the edge.
+Create a **Cloud Armor** security policy with an **OWASP ModSecurity Core Rule Set (CRS)** baseline, attach it to the backend service fronting the boutique Ingress, and verify legitimate traffic still reaches **`boutique.biroltilki.art`** while typical attack patterns are blocked at the edge.
 
 ## Why this step is required
 
@@ -186,7 +186,7 @@ Re-run a probe from step 7, then confirm deny entries: **Console → Cloud Armor
 
 - Security policy `boutique-owasp-crs` exists with CRS preconfigured rules
 - Backend service for boutique Ingress shows attached policy
-- Normal `curl -I https://boutique.biroltilki.art` returns `HTTP/2 200` or `302`
+- Normal `curl -I `boutique.biroltilki.art`` returns `HTTP/2 200` or `302`
 - Malicious test URL returns `403`
 - WAF logging enabled at `NORMAL` level
 - Cloud Armor request logs show `deny` entries for blocked requests

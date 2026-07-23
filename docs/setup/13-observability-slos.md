@@ -19,7 +19,7 @@ Without SLOs and burn alerts, incidents are discovered by users before the team 
 ## Prerequisites
 
 - Prior guide: [12-boutique-deploy.md](12-boutique-deploy.md)
-- Boutique serving traffic at https://boutique.biroltilki.art
+- Boutique serving traffic at `boutique.biroltilki.art`
 - APIs enabled: `monitoring.googleapis.com`, `cloudtrace.googleapis.com`
 - Tools: `kubectl`, `argocd`, `gcloud`, `curl`
 - Access: `roles/monitoring.admin` (or Editor) on `boutique-gke`
@@ -297,3 +297,5 @@ make runbook-lint
 ## Next step
 
 → [PagerDuty integration](14-pagerduty.md)
+
+Latency SLOs and Grafana dashboard apply : after topics 13–14 on a live cluster, continue with [17-latency-slos-dashboards.md](17-latency-slos-dashboards.md).

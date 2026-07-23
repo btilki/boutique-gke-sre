@@ -19,10 +19,12 @@ Fast path from observable failure to documented fix without duplicating full run
 | [argocd-sync-failures.md](argocd-sync-failures.md) | Argo CD OutOfSync, sync errors, degraded apps |
 | [kyverno-denials.md](kyverno-denials.md)           | Resource blocked by Kyverno admission         |
 
-## Public URLs
+## Public DNS names
 
-- Storefront: https://boutique.biroltilki.art
-- Argo CD: https://argocd.boutique.biroltilki.art
+**Status:** inactive (infra decommissioned 2026-07-04). See [dns.md](../dns.md).
+
+- Storefront: `boutique.biroltilki.art`
+- Argo CD: `argocd.boutique.biroltilki.art`
 
 ## Escalation
 

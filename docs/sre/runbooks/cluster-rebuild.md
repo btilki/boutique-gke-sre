@@ -32,3 +32,5 @@ curl -I https://argocd.boutique.biroltilki.art
 ## Further reading
 
 - [bootstrap.md](../../bootstrap.md)
+- [setup/19-monitoring-backup-terraform.md](../../setup/19-monitoring-backup-terraform.md) — enable `module.backup` on rebuild
+- [teardown.md](../../teardown.md)

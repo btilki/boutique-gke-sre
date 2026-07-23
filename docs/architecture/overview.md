@@ -1,8 +1,10 @@
 # Architecture overview — boutique-gke-sre
 
-Canonical system design for the production SRE reference: Google Online Boutique on one private regional GKE cluster in GCP project `boutique-gke`, domain `biroltilki.art`.
+Canonical system design for the production SRE reference: Google Online Boutique on one private regional **GKE** (**Google Kubernetes Engine**) cluster in **GCP** (**Google Cloud Platform**) project `boutique-gke`, domain `biroltilki.art`.
 
-**Public URLs:** https://boutique.biroltilki.art · https://argocd.boutique.biroltilki.art
+**Public DNS (inactive until rebuild):** `boutique.biroltilki.art` · `argocd.boutique.biroltilki.art` — see [dns.md](../dns.md).
+
+**Intended hostnames (when live):** `boutique.biroltilki.art` · `argocd.boutique.biroltilki.art`
 
 **Diagram sources:** [assets/diagrams/](../../assets/diagrams/)
 
@@ -15,8 +17,8 @@ Canonical system design for the production SRE reference: Google Online Boutique
 | ID  | Requirement                                                                |
 | --- | -------------------------------------------------------------------------- |
 | F1  | Run full Online Boutique microservice stack from upstream container images |
-| F2  | Public HTTPS storefront at `https://boutique.biroltilki.art`               |
-| F3  | Argo CD UI at `https://argocd.boutique.biroltilki.art` with manual sync    |
+| F2  | Public HTTPS storefront at `boutique.biroltilki.art`                       |
+| F3  | Argo CD UI at `argocd.boutique.biroltilki.art` with manual sync            |
 | F4  | GitOps deploy: all cluster state from Git; changes via PR only             |
 | F5  | CI builds/scans/signs images; promotes digests to manifests via PR         |
 | F6  | Secrets from Secret Manager via ESO — never plain Secrets in Git           |

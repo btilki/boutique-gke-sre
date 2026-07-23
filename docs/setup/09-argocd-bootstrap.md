@@ -2,7 +2,7 @@
 
 ## Goal
 
-Install Argo CD on the private GKE cluster, expose the UI at **https://argocd.boutique.biroltilki.art**, register the app-of-apps root Application (`gitops/bootstrap/root-app.yaml`), and confirm **manual sync** is the only promotion path. When this topic is complete, you can log in to Argo CD and see child Applications (policies, boutique, observability) in `OutOfSync` state awaiting deliberate sync.
+Install Argo CD on the private GKE cluster, expose the UI at **`argocd.boutique.biroltilki.art`**, register the app-of-apps root Application (`gitops/bootstrap/root-app.yaml`), and confirm **manual sync** is the only promotion path. When this topic is complete, you can log in to Argo CD and see child Applications (policies, boutique, observability) in `OutOfSync` state awaiting deliberate sync.
 
 > **Phase 4 gate:** Topics **09–11** (Argo CD, ESO, Kyverno) must complete before treating the cluster as production-ready. Do not deploy Online Boutique (topic 12) until the gate passes.
 
@@ -140,7 +140,7 @@ Do **not** sync child applications yet — topics 10–11 install prerequisites 
 - `kubectl -n argocd get pods` shows `argocd-server`, `argocd-repo-server`, `argocd-application-controller` pods `Running`
 - `kubectl -n argocd get ingress argocd-server` shows an address (may take 5–15 minutes)
 - `argocd app list` (or UI) shows `boutique-root` with status `OutOfSync` / `Healthy` or `Missing` until you manually sync in a later topic
-- `curl -I https://argocd.boutique.biroltilki.art` returns `HTTP/2 200` or `302` after the managed certificate becomes `Active`
+- `curl -I `argocd.boutique.biroltilki.art`` returns `HTTP/2 200` or `302` after the managed certificate becomes `Active`
 
 Check certificate status:
 

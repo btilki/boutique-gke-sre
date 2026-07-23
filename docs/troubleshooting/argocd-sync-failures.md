@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Diagnose and resolve GitOps sync errors for Applications managed at https://argocd.boutique.biroltilki.art.
+Diagnose and resolve GitOps sync errors for Applications managed at `argocd.boutique.biroltilki.art` (HTTPS when DNS is active; currently **inactive** — [dns.md](../dns.md)).
 
 ## When to use
 
@@ -27,7 +27,7 @@ Argo CD pulls from GitHub → compares to cluster → sync applies manifests. Ky
 3. `kubectl get events -n <target-namespace> --sort-by='.lastTimestamp'`
 4. If `OutOfSync` only: review diff; intentional drift → revert cluster or update Git
 5. **Manual Sync** with prune disabled first; enable prune only after review
-6. Re-check https://boutique.biroltilki.art
+6. Re-check `boutique.biroltilki.art`
 
 ## Validation
 

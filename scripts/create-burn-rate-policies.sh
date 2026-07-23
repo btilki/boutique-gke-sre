@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-# Create multi-window SLO burn-rate alert policies (topic 13 step 5).
+# Create multi-window availability SLO burn-rate alert policies (topic 13 step 5).
+# Latency burn policies: scripts/create-latency-burn-rate-policies.sh (topic 17).
 # Idempotent: fails if policies already exist; delete in Console first to recreate.
 set -euo pipefail
 

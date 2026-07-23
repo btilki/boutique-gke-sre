@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Exercise detection and rollback when a faulty GitOps deploy degrades https://boutique.biroltilki.art.
+Exercise detection and rollback when a faulty GitOps deploy degrades `boutique.biroltilki.art`.
 
 ## When to use
 
@@ -10,7 +10,7 @@ Scheduled game day; pairs with runbook [bad-deploy-rollback.md](../runbooks/bad-
 
 ## Prerequisites
 
-- Argo CD: https://argocd.boutique.biroltilki.art
+- Argo CD: `argocd.boutique.biroltilki.art`
 - Ability to merge/revert PR on `main`
 - PagerDuty routing configured
 
@@ -20,7 +20,7 @@ Fault injection: introduce benign misconfiguration (e.g. bad env var) via PR →
 
 ## Step-by-step implementation
 
-1. Record baseline: `curl -I https://boutique.biroltilki.art`
+1. Record baseline: `curl -I `boutique.biroltilki.art``
 2. Open PR with intentional non-fatal misconfig (documented in game-day log)
 3. Merge; **manual Argo CD sync** `boutique` Application
 4. Confirm alert `bad-deploy-rollback` or error-rate spike
@@ -64,3 +64,5 @@ argocd app get boutique
 
 - [operations/rollback.md](../../operations/rollback.md)
 - [ADR-003](../../adr/003-manual-argocd-sync.md)
+- After run: copy [reports/TEMPLATE.md](reports/TEMPLATE.md) → dated report; update [reports/STATUS.md](reports/STATUS.md)
+- Status: **Deferred** until cluster rebuild — [STATUS.md](reports/STATUS.md)

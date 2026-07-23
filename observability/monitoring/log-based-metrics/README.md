@@ -13,6 +13,12 @@ Supplement LB and GKE metrics with application-level signals (e.g. checkout erro
 | `boutique/checkout_attempts` | `checkout-attempts.yaml` | Checkout availability SLO denominator |
 | `boutique/checkout_success`  | `checkout-success.yaml`  | Checkout availability SLO numerator   |
 
+## Ready in repo (topic 17)
+
+| Metric                      | File                    | Use                                                      |
+| --------------------------- | ----------------------- | -------------------------------------------------------- |
+| `boutique/checkout_latency` | `checkout-latency.yaml` | Checkout latency SLO distribution (ms); apply on rebuild |
+
 ## Privacy and SLI boundaries
 
 Checkout log filters match `[PlaceOrder]` and `payment went through` messages from `checkoutservice`. Those log lines may contain **user identifiers in message text** (e.g. `user_id`).

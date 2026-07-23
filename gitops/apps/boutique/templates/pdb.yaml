@@ -1,0 +1,38 @@
+{{- range $name, $svc := .Values.services }}
+{{- if and ($svc.pdb).enabled }}
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: {{ $name }}
+  namespace: {{ $.Values.namespace }}
+  labels:
+    {{- include "boutique.labels" (dict "appLabel" $svc.appLabel "Values" $.Values "Release" $.Release) | nindent 4 }}
+spec:
+  minAvailable: {{ $svc.pdb.minAvailable }}
+  selector:
+    matchLabels:
+      {{- include "boutique.selectorLabels" (dict "appLabel" $svc.appLabel "Release" $.Release) | nindent 6 }}
+{{- end }}
+{{- end }}
+{{- if and (.Values.redis.pdb).enabled }}
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: {{ .Values.redis.name }}
+  namespace: {{ .Values.namespace }}
+  labels:
+    app.kubernetes.io/name: {{ .Values.redis.name }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/part-of: {{ .Values.global.partOf }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    app: {{ .Values.redis.name }}
+spec:
+  minAvailable: {{ .Values.redis.pdb.minAvailable }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ .Values.redis.name }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+      app: {{ .Values.redis.name }}
+{{- end }}

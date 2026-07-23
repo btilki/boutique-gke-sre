@@ -13,6 +13,14 @@ Support safe project teardown documented in [docs/teardown.md](../../docs/teardo
 | `pre-destroy-checklist.sh` | Verify backups and flag resources still present |
 | `orphan-resource-scan.sh`  | Read-only `gcloud` inventory of common orphans  |
 
+## Cadence
+
+| When                                           | Guide                                                                                  |
+| ---------------------------------------------- | -------------------------------------------------------------------------------------- |
+| Weekly (live project) / pre- and post-teardown | [docs/operations/orphan-scan-cadence.md](../../docs/operations/orphan-scan-cadence.md) |
+
+Report only — **no auto-delete**.
+
 ## Usage
 
 ```bash

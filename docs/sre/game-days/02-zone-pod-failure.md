@@ -20,7 +20,7 @@ Kubernetes recreates pods; PDBs limit simultaneous disruption. HPA and cluster a
 
 ## Step-by-step implementation
 
-1. Notify on-call; note baseline latency at https://boutique.biroltilki.art
+1. Notify on-call; note baseline latency at `boutique.biroltilki.art`
 2. Run injection:
    ```bash
    CONFIRM=yes NAMESPACE=boutique DEPLOYMENT=frontend \
@@ -67,3 +67,5 @@ Expected: new pod Running; storefront HTTP 200.
 ## Further reading
 
 - [scripts/game-days/README.md](../../../scripts/game-days/README.md)
+- After run: copy [reports/TEMPLATE.md](reports/TEMPLATE.md) → dated report; update [reports/STATUS.md](reports/STATUS.md)
+- Status: **Deferred** until cluster rebuild (multi-replica frontend/checkout/cart + PDBs from topic 18) — [STATUS.md](reports/STATUS.md)

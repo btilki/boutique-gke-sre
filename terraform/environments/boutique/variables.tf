@@ -80,3 +80,60 @@ variable "enable_argocd_armor" {
   type        = bool
   default     = true
 }
+
+# --- Phase 9-C (default false — safe with decommissioned project) ---
+
+variable "enable_monitoring_iac" {
+  description = "Provision Cloud Monitoring uptime checks (+ optional PagerDuty channel) via terraform/modules/monitoring."
+  type        = bool
+  default     = false
+}
+
+variable "pagerduty_service_key" {
+  description = "PagerDuty Events API v2 integration key for the Monitoring notification channel. Empty skips channel creation. Never commit the real value."
+  type        = string
+  default     = ""
+  sensitive   = true
+}
+
+variable "pagerduty_channel_display_name" {
+  description = "Display name for the PagerDuty notification channel."
+  type        = string
+  default     = "pagerduty-boutique-production"
+}
+
+variable "enable_backup_iac" {
+  description = "Provision GKE Backup plan via terraform/modules/backup."
+  type        = bool
+  default     = false
+}
+
+variable "backup_plan_name" {
+  description = "GKE Backup plan name when enable_backup_iac is true."
+  type        = string
+  default     = "boutique-daily"
+}
+
+variable "backup_include_namespaces" {
+  description = "Namespaces included in the GKE Backup plan."
+  type        = list(string)
+  default     = ["boutique", "argocd", "observability"]
+}
+
+variable "backup_retain_days" {
+  description = "Backup retention in days."
+  type        = number
+  default     = 7
+}
+
+variable "backup_cron_schedule" {
+  description = "Cron schedule for automated backups (UTC)."
+  type        = string
+  default     = "0 3 * * *"
+}
+
+variable "backup_deactivated" {
+  description = "Pause new backups (set true before teardown if needed)."
+  type        = bool
+  default     = false
+}

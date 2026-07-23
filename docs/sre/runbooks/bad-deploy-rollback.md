@@ -17,11 +17,11 @@ Restore service health after a faulty GitOps deploy (bad digest, config, or Helm
 ## Prerequisites
 
 - `kubectl` access to cluster
-- Argo CD UI: https://argocd.boutique.biroltilki.art
+- Argo CD UI: `argocd.boutique.biroltilki.art`
 
 ## Steps
 
-1. Confirm impact: `curl -I https://boutique.biroltilki.art`; check Argo CD app health
+1. Confirm impact: `curl -I `boutique.biroltilki.art``; check Argo CD app health
 2. Identify last good commit (digest in `gitops/apps/boutique/values-images.yaml`)
 3. Revert PR or `git revert` the bad merge on `main`
 4. **Manual Argo CD sync** the `boutique` Application

@@ -7,6 +7,7 @@ Day-2 operations guides for the boutique-gke-sre production reference environmen
 | [quick-reference.md](quick-reference.md)           | **One-page on-call card** (printable)                                                                                                                   |
 | **[operations-runbook.md](operations-runbook.md)** | **Canonical production runbook** — deploy, rollback, scaling, DR, backup/restore, incident response, monitoring, maintenance, rotation, troubleshooting |
 | [day-2-ops.md](day-2-ops.md)                       | Recurring operational cadence (weekly/monthly/quarterly)                                                                                                |
+| [orphan-scan-cadence.md](orphan-scan-cadence.md)   | Weekly / teardown orphan resource scan (report-only)                                                                                                    |
 | [rollback.md](rollback.md)                         | GitOps rollback patterns (summary; detail in runbook)                                                                                                   |
 
 ## Runbook sections

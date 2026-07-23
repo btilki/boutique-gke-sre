@@ -1,0 +1,31 @@
+# Reference: argocd-ui HTTPS uptime check
+# Created via scripts/create-argocd-uptime-check.sh — topic 18.
+#
+# Console: https://console.cloud.google.com/monitoring/uptime?project=boutique-gke
+#
+# Probes Argo CD control-plane HTTPS independently of the storefront.
+# Alert: same policy uptime-check-failed (OR combiner) — see alert-policies/uptime-check-failed.yaml
+
+displayName: argocd-ui
+# uptimeCheckId: set after create (gcloud monitoring uptime list-configs)
+monitoredResource:
+  type: uptime_url
+  labels:
+    host: argocd.boutique.biroltilki.art
+    project_id: boutique-gke
+httpCheck:
+  protocol: HTTPS
+  path: /healthz
+  port: 443
+  validateSsl: true
+  acceptedResponseStatusCodes:
+    - statusClass: STATUS_CLASS_2XX
+period: 300s # 5 minutes — control plane; less aggressive than storefront
+timeout: 10s
+selectedRegions:
+  - USA_IOWA
+  - EUROPE
+  - ASIA_PACIFIC
+
+alertPolicy: uptime-check-failed
+runbook: docs/sre/runbooks/uptime-check-failed.md

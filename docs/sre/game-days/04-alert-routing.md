@@ -65,3 +65,5 @@ Each policy documentation includes runbook URL under `docs/sre/runbooks/`.
 
 - [oncall/escalation.md](../oncall/escalation.md)
 - [slos/catalog.md](../slos/catalog.md)
+- After run: copy [reports/TEMPLATE.md](reports/TEMPLATE.md) → dated report; update [reports/STATUS.md](reports/STATUS.md)
+- Status: **Deferred** until cluster rebuild + PagerDuty — [STATUS.md](reports/STATUS.md)

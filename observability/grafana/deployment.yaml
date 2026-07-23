@@ -89,11 +89,26 @@ spec:
             - name: datasources
               mountPath: /etc/grafana/provisioning/datasources
               readOnly: true
+            - name: dashboard-provider
+              mountPath: /etc/grafana/provisioning/dashboards
+              readOnly: true
+            - name: dashboards
+              mountPath: /var/lib/grafana/dashboards
+              readOnly: true
             - name: storage
               mountPath: /var/lib/grafana
       volumes:
         - name: datasources
           configMap:
             name: grafana-datasources
+        - name: dashboard-provider
+          configMap:
+            name: grafana-dashboard-provider
+            items:
+              - key: dashboards-provider.yaml
+                path: dashboards.yaml
+        - name: dashboards
+          configMap:
+            name: grafana-dashboards
         - name: storage
           emptyDir: {}

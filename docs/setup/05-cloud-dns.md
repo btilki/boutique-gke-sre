@@ -4,6 +4,8 @@
 
 A Cloud DNS managed zone for `biroltilki.art` exists in project `boutique-gke` with **A records** for `boutique.biroltilki.art` and `argocd.boutique.biroltilki.art` pointing at the global ingress static IP. Your domain registrar delegates DNS to Google’s name servers (`ns-cloud-*.googledomains.com`), and public `dig` queries return the static IP.
 
+**Current (post-teardown):** both hostnames are **inactive** (no public A records). See [dns.md](../dns.md). Re-run this topic on rebuild.
+
 ## Why this step is required
 
 Google-managed TLS certificates (topic 06) and public HTTPS hostnames require resolvable DNS. The `dns` Terraform module creates the managed zone and A records; **registrar NS delegation** is the step only you can perform at your domain provider. Without delegation, `dig` returns nothing or stale records and certificate provisioning fails.

@@ -1,0 +1,37 @@
+# Reference: checkout-latency SLO (Cloud Monitoring)
+# Created via Monitoring API — topic 17.
+# Service: boutique-checkout | Goal: 95% of checkouts ≤ 1000ms (p95 < 1s) | Window: 30 days
+#
+# Console: https://console.cloud.google.com/monitoring/services/service/boutique-checkout/slos/checkout-latency?project=boutique-gke
+#
+# SLI: checkout PlaceOrder latency distribution — “good” = duration ≤ 1000ms.
+# Primary metric: logging.googleapis.com/user/boutique/checkout_latency (DISTRIBUTION)
+# Fallback (if log metric not ready): Cloud Trace span duration for checkoutservice
+#   PlaceOrder — document in topic 17; do not invent LB-only checkout latency.
+#
+# Prerequisite: create the log-based DISTRIBUTION metric from
+# observability/monitoring/log-based-metrics/checkout-latency.yaml before the SLO.
+
+displayName: checkout-latency
+goal: 0.95
+rollingPeriod: 2592000s # 30 days
+
+service:
+  serviceId: boutique-checkout
+  displayName: Online Boutique (checkout)
+
+serviceLevelIndicator:
+  requestBased:
+    distributionCut:
+      range:
+        max: 1000 # milliseconds — p95 target from docs/sre/slos/catalog.md
+      distributionFilter: |
+        metric.type="logging.googleapis.com/user/boutique/checkout_latency"
+        resource.type="k8s_container"
+        resource.labels.namespace_name="boutique"
+
+logBasedMetrics:
+  - observability/monitoring/log-based-metrics/checkout-latency.yaml
+
+# Catalog: Checkout latency p95 < 1000ms / 30-day rolling.
+# Alert policy (topic 17): checkout-latency-burn → docs/sre/runbooks/checkout-latency-burn.md

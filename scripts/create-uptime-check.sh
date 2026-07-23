@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 # Create HTTPS uptime check + uptime-check-failed alert policy (topic 13 step 6).
+# Argo CD second check: scripts/create-argocd-uptime-check.sh (topic 18).
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -69,7 +70,7 @@ print(json.dumps({
         "content": (
             f"{doc} Target: https://{host}/. PagerDuty channel added in topic 14.\n\n"
             f"Runbook: {runbook}\nQuick reference: {ops}"
-        ),
+       ),
         "mimeType": "text/markdown",
     },
     "conditions": [{

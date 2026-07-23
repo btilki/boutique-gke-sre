@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Define Service Level Indicators (SLIs), targets, and alert linkages for Online Boutique on `boutique.biroltilki.art`.
+Define **SLOs** (**Service Level Objectives**) from **SLIs** (**Service Level Indicators**), targets, and alert linkages for Online Boutique on `boutique.biroltilki.art`.
 
 ## When to use
 
@@ -75,6 +75,8 @@ Multi-window burn rates per [burn-rate-alerting.md](burn-rate-alerting.md):
 | ---------------------------- | -------------------------------------------------------------------------- |
 | `browse-availability-burn`   | [browse-availability-burn.md](../runbooks/browse-availability-burn.md)     |
 | `checkout-availability-burn` | [checkout-availability-burn.md](../runbooks/checkout-availability-burn.md) |
+| `browse-latency-burn`        | [browse-latency-burn.md](../runbooks/browse-latency-burn.md)               |
+| `checkout-latency-burn`      | [checkout-latency-burn.md](../runbooks/checkout-latency-burn.md)           |
 | `uptime-check-failed`        | [uptime-check-failed.md](../runbooks/uptime-check-failed.md)               |
 | `bad-deploy-rollback`        | [bad-deploy-rollback.md](../runbooks/bad-deploy-rollback.md)               |
 | `redis-cart-down`            | [redis-cart-down.md](../runbooks/redis-cart-down.md)                       |
@@ -93,7 +95,8 @@ Multi-window burn rates per [burn-rate-alerting.md](burn-rate-alerting.md):
 
 ## Step-by-step implementation
 
-See [setup/13-observability-slos.md](../../setup/13-observability-slos.md) when Phase 6 is implemented.
+- Availability SLOs + burn alerts: [setup/13-observability-slos.md](../../setup/13-observability-slos.md)
+- Latency SLOs + burn alerts + Grafana dashboards: [setup/17-latency-slos-dashboards.md](../../setup/17-latency-slos-dashboards.md) (apply on rebuild)
 
 ## Validation
 

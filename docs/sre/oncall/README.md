@@ -14,7 +14,7 @@ Orient engineers holding the boutique-gke-sre production on-call rotation.
 
 - PagerDuty mobile app configured
 - `kubectl` and `gcloud` access to project `boutique-gke`
-- Bookmarks: https://boutique.biroltilki.art, https://argocd.boutique.biroltilki.art
+- Bookmarks (when live): `boutique.biroltilki.art`, `argocd.boutique.biroltilki.art` — DNS currently **inactive** ([dns.md](../../dns.md))
 
 ## Architecture
 

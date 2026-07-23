@@ -2,12 +2,12 @@
 
 Canonical release engineering guide for the production SRE reference platform.
 
-| Item               | Value                                                                      |
-| ------------------ | -------------------------------------------------------------------------- |
-| **Repository**     | `boutique-gke-sre`                                                         |
-| **Default branch** | `main`                                                                     |
-| **Deploy model**   | GitOps + manual Argo CD sync ([ADR-003](../adr/003-manual-argocd-sync.md)) |
-| **Public URLs**    | https://boutique.biroltilki.art · https://argocd.boutique.biroltilki.art   |
+| Item               | Value                                                                                     |
+| ------------------ | ----------------------------------------------------------------------------------------- |
+| **Repository**     | `boutique-gke-sre`                                                                        |
+| **Default branch** | `main`                                                                                    |
+| **Deploy model**   | GitOps + manual Argo CD sync ([ADR-003](../adr/003-manual-argocd-sync.md))                |
+| **Public DNS**     | `boutique.biroltilki.art` · `argocd.boutique.biroltilki.art` (**inactive** until rebuild) |
 
 **Related:** [UPGRADE.md](UPGRADE.md) · [MIGRATION.md](MIGRATION.md) · [operations/rollback.md](../operations/rollback.md) · [CONTRIBUTING.md](../../CONTRIBUTING.md)
 
@@ -134,7 +134,7 @@ Separate version concerns so supply chain, platform config, and application imag
 
 ### Rules
 
-1. **Production deploys use digests**, not mutable tags ([Kyverno require-digest](../gitops/policies/kyverno/require-digest.yaml))
+1. **Production deploys use digests**, not mutable tags ([Kyverno require-digest](../../gitops/policies/kyverno/require-digest.yaml))
 2. **Platform SemVer tag** marks a supported, documented, smoke-validated snapshot
 3. **Chart `version`** bumps on Helm template or values schema changes
 4. **Chart `appVersion`** reflects Online Boutique upstream tag (informational)
@@ -579,8 +579,8 @@ Pre-tag technical validation (automated + manual).
 
 ### Manual (operator)
 
-- [ ] `curl -I https://boutique.biroltilki.art` — 200/302
-- [ ] `curl -I https://argocd.boutique.biroltilki.art` — 200/302
+- [ ] `curl -I `boutique.biroltilki.art`` — 200/302
+- [ ] `curl -I `argocd.boutique.biroltilki.art`` — 200/302
 - [ ] Argo CD apps Healthy/Synced
 - [ ] Five Kyverno policies active
 - [ ] SLOs reporting in Cloud Monitoring

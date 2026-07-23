@@ -114,3 +114,34 @@ module "armor_argocd" {
 
   depends_on = [time_sleep.wait_for_apis]
 }
+
+# Phase 9-C — optional IaC for uptime + PagerDuty channel (default off while torn down)
+module "monitoring" {
+  count  = var.enable_monitoring_iac ? 1 : 0
+  source = "../../modules/monitoring"
+
+  project_id             = var.project_id
+  boutique_hostname      = var.boutique_hostname
+  argocd_hostname        = var.argocd_hostname
+  pagerduty_display_name = var.pagerduty_channel_display_name
+  pagerduty_service_key  = var.pagerduty_service_key
+
+  depends_on = [module.project_apis, module.dns, module.gke]
+}
+
+# Phase 9-C — optional GKE Backup plan (default off while torn down)
+module "backup" {
+  count  = var.enable_backup_iac ? 1 : 0
+  source = "../../modules/backup"
+
+  project_id         = var.project_id
+  location           = var.region
+  cluster_id         = "projects/${var.project_id}/locations/${module.gke.cluster_location}/clusters/${module.gke.cluster_name}"
+  backup_plan_name   = var.backup_plan_name
+  include_namespaces = var.backup_include_namespaces
+  backup_retain_days = var.backup_retain_days
+  cron_schedule      = var.backup_cron_schedule
+  deactivated        = var.backup_deactivated
+
+  depends_on = [module.project_apis, module.gke]
+}

@@ -1,10 +1,10 @@
 # Observability
 
-OTel, Prometheus, Grafana, and Cloud Monitoring SLO/alert definitions for boutique-gke-sre.
+**OTel** (**OpenTelemetry**), Prometheus, Grafana, and Cloud Monitoring SLO/alert definitions for boutique-gke-sre.
 
 ## Purpose
 
-Metrics, traces, dashboards, and SRE alerting configuration for Online Boutique on GKE.
+Metrics, traces, dashboards, and SRE alerting configuration for Online Boutique on GKE. In-cluster metrics use **GMP** (**Google Managed Prometheus**) where configured.
 
 ## Layout
 
@@ -33,10 +33,10 @@ observability/
 
 ## Public endpoints
 
-| Service    | URL                                    |
-| ---------- | -------------------------------------- |
-| Storefront | https://boutique.biroltilki.art        |
-| Argo CD    | https://argocd.boutique.biroltilki.art |
+| Service    | DNS / URL (inactive until rebuild) |
+| ---------- | ---------------------------------- |
+| Storefront | `boutique.biroltilki.art`          |
+| Argo CD    | `argocd.boutique.biroltilki.art`   |
 
 ## Data flow
 

@@ -28,7 +28,7 @@ policies:
 
   uptime-check-failed:
     runbook: uptime-check-failed.md
-    description: External HTTPS uptime check failed for boutique.biroltilki.art.
+    description: External HTTPS uptime check failed for boutique.biroltilki.art and/or argocd.boutique.biroltilki.art/healthz.
     pagerduty: true
 
   bad-deploy-rollback:
@@ -39,4 +39,14 @@ policies:
   redis-cart-down:
     runbook: redis-cart-down.md
     description: Redis cart workload unhealthy or restarting in boutique namespace.
+    pagerduty: true
+
+  browse-latency-burn:
+    runbook: browse-latency-burn.md
+    description: Multi-window burn-rate alert for browse-latency SLO (p95 < 500ms / 30d).
+    pagerduty: true
+
+  checkout-latency-burn:
+    runbook: checkout-latency-burn.md
+    description: Multi-window burn-rate alert for checkout-latency SLO (p95 < 1000ms / 30d).
     pagerduty: true

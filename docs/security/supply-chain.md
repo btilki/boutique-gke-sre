@@ -7,7 +7,7 @@ Document DevSecOps controls for boutique-gke-sre: authentication, secrets, image
 ## When to use
 
 - Security review or architecture walkthrough
-- Implementing Phases 3–4 (WIF, ESO, Kyverno, NetworkPolicy)
+- Implementing Phases 3–4 (**WIF** (**Workload Identity Federation**), **ESO** (**External Secrets Operator**), Kyverno, NetworkPolicy)
 - Debugging deploy denials
 
 ## Prerequisites
@@ -22,6 +22,8 @@ CI (WIF) → Trivy → AR → cosign → PR digest → Argo sync
   → Binary Authorization → Kyverno → NetworkPolicy → workload
 Secrets: Secret Manager → ESO → Pod (never plain Secret in Git)
 ```
+
+Pipeline uses **AR** (**Artifact Registry**) for images and **BA** (**Binary Authorization**) at deploy time.
 
 ## WIF authentication (no JSON keys)
 

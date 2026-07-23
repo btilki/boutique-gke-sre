@@ -107,3 +107,4 @@ terraform apply -target=module.binary_authorization   # re-enforce from tfvars
 - [Game day 03 guide](../03-redis-cart-down.md)
 - [redis-cart-down runbook](../../runbooks/redis-cart-down.md)
 - [edge-hardening.md](../../../security/edge-hardening.md) — Binary Authorization enforce mode
+- **Postmortem:** [../../postmortems/2026-07-04-redis-cart-down.md](../../postmortems/2026-07-04-redis-cart-down.md)

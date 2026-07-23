@@ -4,7 +4,7 @@ Kubernetes desired state for Argo CD: bootstrap, applications, and platform poli
 
 ## Purpose
 
-Deploy and manage cluster workloads from Git. No manual `kubectl apply` for production paths after Phase 4 bootstrap.
+Deploy and manage cluster workloads from Git using **GitOps** (**Git-based continuous delivery**). No manual `kubectl apply` for production paths after Phase 4 bootstrap.
 
 ## Layout
 
@@ -68,11 +68,11 @@ gitops/
 
 ## Outputs
 
-| Output            | URL / resource                         |
-| ----------------- | -------------------------------------- |
-| Argo CD UI        | https://argocd.boutique.biroltilki.art |
-| Storefront        | https://boutique.biroltilki.art        |
-| Enforced policies | Kyverno + NetworkPolicy baseline       |
+| Output            | URL / resource                                                |
+| ----------------- | ------------------------------------------------------------- |
+| Argo CD UI        | `argocd.boutique.biroltilki.art` (**inactive** until rebuild) |
+| Storefront        | `boutique.biroltilki.art` (**inactive** until rebuild)        |
+| Enforced policies | Kyverno + NetworkPolicy baseline                              |
 
 ## Dependencies
 
@@ -84,6 +84,6 @@ gitops/
 
 1. Bootstrap platform: `bootstrap/` per [docs/setup/09-argocd-bootstrap.md](../docs/setup/09-argocd-bootstrap.md)
 2. Register root app: `kubectl apply -f bootstrap/root-app.yaml`
-3. Manual sync in Argo CD UI at https://argocd.boutique.biroltilki.art
+3. Manual sync in Argo CD UI at `argocd.boutique.biroltilki.art` (when DNS is active)
 
 Sync order: `policies` → `boutique` → `observability`.

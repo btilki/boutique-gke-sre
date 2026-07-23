@@ -23,7 +23,7 @@ Alert → acknowledge → triage → mitigate → communicate → resolve → fo
 1. **Acknowledge** PagerDuty incident within 5 minutes
 2. **Assess severity** using [severity.md](../incident-response/severity.md)
 3. **Open runbook** linked from alert (e.g. `browse-availability-burn`)
-4. **Triage user impact:** `curl -I https://boutique.biroltilki.art`; test checkout
+4. **Triage user impact:** `curl -I `boutique.biroltilki.art``; test checkout
 5. **Check recent changes:** Argo CD sync history, last merged PR
 6. **Mitigate** per runbook (rollback, scale, restore Redis, etc.)
 7. **Communicate** per [comms.md](../incident-response/comms.md) if SEV2+

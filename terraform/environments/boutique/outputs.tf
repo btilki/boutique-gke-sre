@@ -98,3 +98,31 @@ output "argocd_armor_policy_name" {
   description = "Cloud Armor policy for Argo CD edge — attach with scripts/attach-argocd-armor.sh."
   value       = try(module.armor_argocd[0].policy_name, null)
 }
+
+# --- Phase 9-C (null when enable_*_iac is false) ---
+
+output "boutique_uptime_check_id" {
+  description = "Cloud Monitoring uptime check ID for the storefront (when enable_monitoring_iac)."
+  value       = try(module.monitoring[0].boutique_uptime_check_id, null)
+}
+
+output "argocd_uptime_check_id" {
+  description = "Cloud Monitoring uptime check ID for Argo CD (when enable_monitoring_iac)."
+  value       = try(module.monitoring[0].argocd_uptime_check_id, null)
+}
+
+output "pagerduty_notification_channel_name" {
+  description = "PagerDuty notification channel name (when enable_monitoring_iac and key set)."
+  value       = try(module.monitoring[0].pagerduty_notification_channel_name, null)
+  sensitive   = true
+}
+
+output "backup_plan_id" {
+  description = "GKE Backup plan ID (when enable_backup_iac)."
+  value       = try(module.backup[0].backup_plan_id, null)
+}
+
+output "backup_plan_name" {
+  description = "GKE Backup plan name (when enable_backup_iac)."
+  value       = try(module.backup[0].backup_plan_name, null)
+}

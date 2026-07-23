@@ -46,6 +46,8 @@ SLI time series (Cloud Monitoring)
 | ---------------------------- | -------------------------------------------------------------------------- |
 | `browse-availability-burn`   | [browse-availability-burn.md](../runbooks/browse-availability-burn.md)     |
 | `checkout-availability-burn` | [checkout-availability-burn.md](../runbooks/checkout-availability-burn.md) |
+| `browse-latency-burn`        | [browse-latency-burn.md](../runbooks/browse-latency-burn.md)               |
+| `checkout-latency-burn`      | [checkout-latency-burn.md](../runbooks/checkout-latency-burn.md)           |
 | `uptime-check-failed`        | [uptime-check-failed.md](../runbooks/uptime-check-failed.md)               |
 
 Every policy **must** include runbook URL in documentation or notification metadata, e.g.:
@@ -56,12 +58,12 @@ https://github.com/<org>/boutique-gke-sre/blob/main/docs/sre/runbooks/browse-ava
 
 ## Step-by-step implementation
 
-1. Create SLO in Cloud Monitoring for browse availability (99.9% / 30d)
-2. Create alert policy using **SLO burn rate** condition
-3. Add burn-rate thresholds for 1h and 6h (page), 1d and 3d (ticket)
+1. Create availability SLOs (topic 13) then latency SLOs (topic 17)
+2. Create alert policies using **SLO burn rate** conditions
+3. Add burn-rate thresholds for 1h and 6h (page), 1d and 3d (ticket) — API max lookback 24h
 4. Attach PagerDuty notification channel
-5. Add runbook URL to policy user labels or documentation field
-6. Repeat for checkout latency SLO
+5. Add runbook URL to policy documentation (registry: `observability/monitoring/runbooks.yaml`)
+6. Create latency burn policies via `./scripts/create-latency-burn-rate-policies.sh`
 7. Test via [test-alerts.md](../oncall/test-alerts.md) or game day 04
 
 ## Validation

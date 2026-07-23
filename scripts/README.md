@@ -7,6 +7,7 @@ Operational helpers — **not** replacements for `docs/setup/` guides.
 - `bootstrap/` — prerequisite validation
 - `game-days/` — failure injection (Phase 7)
 - `teardown/` — pre-destroy and orphan scans (Phase 8)
+- `load/` — light browse smoke for capacity / SLO signal
 - `media/` — regenerate operational PNG screenshots
 
 ## Media generation
@@ -17,12 +18,14 @@ Operational helpers — **not** replacements for `docs/setup/` guides.
 
 ## Observability / alerting (Phase 6–7)
 
-| Script                                  | Purpose                                                            | Setup guide                                                        |
-| --------------------------------------- | ------------------------------------------------------------------ | ------------------------------------------------------------------ |
-| `attach-pagerduty-channel.sh`           | Attach PagerDuty notification channel to all alert policies        | [14-pagerduty.md](../docs/setup/14-pagerduty.md) step 4            |
-| `create-uptime-check.sh`                | Create storefront uptime check and alert policy                    | [13-observability-slos.md](../docs/setup/13-observability-slos.md) |
-| `create-burn-rate-policies.sh`          | Create SLO burn-rate alert policies                                | [13-observability-slos.md](../docs/setup/13-observability-slos.md) |
-| `create-supplemental-alert-policies.sh` | Create bad-deploy and redis-cart alert policies                    | [13-observability-slos.md](../docs/setup/13-observability-slos.md) |
-| `validate-runbook-links.sh`             | Lint alert policy ↔ runbook registry consistency                   | `make runbook-lint`                                                |
-| `lib/runbooks.sh`                       | Resolve runbook URLs from `observability/monitoring/runbooks.yaml` | —                                                                  |
-| `attach-argocd-armor.sh`                | Attach Cloud Armor `argocd-edge` to Argo CD ingress backend        | [edge-hardening.md](../docs/security/edge-hardening.md)            |
+| Script                                  | Purpose                                                            | Setup guide                                                                      |
+| --------------------------------------- | ------------------------------------------------------------------ | -------------------------------------------------------------------------------- |
+| `attach-pagerduty-channel.sh`           | Attach PagerDuty notification channel to all alert policies        | [14-pagerduty.md](../docs/setup/14-pagerduty.md) step 4                          |
+| `create-uptime-check.sh`                | Create storefront uptime check and alert policy                    | [13-observability-slos.md](../docs/setup/13-observability-slos.md)               |
+| `create-argocd-uptime-check.sh`         | Create Argo CD uptime check (add condition to uptime-check-failed) | [18-sre-operability-game-days.md](../docs/setup/18-sre-operability-game-days.md) |
+| `create-burn-rate-policies.sh`          | Create availability SLO burn-rate alert policies                   | [13-observability-slos.md](../docs/setup/13-observability-slos.md)               |
+| `create-latency-burn-rate-policies.sh`  | Create latency SLO burn-rate alert policies                        | [17-latency-slos-dashboards.md](../docs/setup/17-latency-slos-dashboards.md)     |
+| `create-supplemental-alert-policies.sh` | Create bad-deploy and redis-cart alert policies                    | [13-observability-slos.md](../docs/setup/13-observability-slos.md)               |
+| `validate-runbook-links.sh`             | Lint alert policy ↔ runbook registry consistency                   | `make runbook-lint`                                                              |
+| `lib/runbooks.sh`                       | Resolve runbook URLs from `observability/monitoring/runbooks.yaml` | —                                                                                |
+| `attach-argocd-armor.sh`                | Attach Cloud Armor `argocd-edge` to Argo CD ingress backend        | [edge-hardening.md](../docs/security/edge-hardening.md)                          |

@@ -2,13 +2,13 @@
 
 **Print this page** · Full runbook: [operations-runbook.md](operations-runbook.md)
 
-|                 |                                            |
-| --------------- | ------------------------------------------ |
-| **Storefront**  | https://boutique.biroltilki.art            |
-| **Argo CD**     | https://argocd.boutique.biroltilki.art     |
-| **GCP project** | `boutique-gke`                             |
-| **Cluster**     | `boutique-gke` · `europe-west1`            |
-| **PagerDuty**   | Mobile app · service `boutique-production` |
+|                 |                                                  |
+| --------------- | ------------------------------------------------ |
+| **Storefront**  | `boutique.biroltilki.art` (**inactive**)         |
+| **Argo CD**     | `argocd.boutique.biroltilki.art` (**inactive**)  |
+| **GCP project** | `boutique-gke`                                   |
+| **Cluster**     | `boutique-gke` · `europe-west1` (decommissioned) |
+| **PagerDuty**   | Mobile app · service `boutique-production`       |
 
 ---
 
@@ -45,6 +45,8 @@ kubectl -n argocd get applications
 | ---------------------------- | ------------------------------------------------------------------------------ |
 | `browse-availability-burn`   | [browse-availability-burn.md](../sre/runbooks/browse-availability-burn.md)     |
 | `checkout-availability-burn` | [checkout-availability-burn.md](../sre/runbooks/checkout-availability-burn.md) |
+| `browse-latency-burn`        | [browse-latency-burn.md](../sre/runbooks/browse-latency-burn.md)               |
+| `checkout-latency-burn`      | [checkout-latency-burn.md](../sre/runbooks/checkout-latency-burn.md)           |
 | `uptime-check-failed`        | [uptime-check-failed.md](../sre/runbooks/uptime-check-failed.md)               |
 | `bad-deploy-rollback`        | [bad-deploy-rollback.md](../sre/runbooks/bad-deploy-rollback.md)               |
 | `redis-cart-down`            | [redis-cart-down.md](../sre/runbooks/redis-cart-down.md)                       |

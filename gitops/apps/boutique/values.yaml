@@ -51,7 +51,10 @@ services:
     appLabel: cartservice
     port: 7070
     protocol: grpc
-    replicas: 1
+    replicas: 2
+    pdb:
+      enabled: true
+      minAvailable: 1
     env:
       REDIS_ADDR: redis-cart:6379
     resources:
@@ -66,7 +69,15 @@ services:
     appLabel: checkoutservice
     port: 5050
     protocol: grpc
-    replicas: 1
+    replicas: 2
+    autoscaling:
+      enabled: true
+      minReplicas: 2
+      maxReplicas: 6
+      targetCPUUtilizationPercentage: 70
+    pdb:
+      enabled: true
+      minAvailable: 1
     env:
       PRODUCT_CATALOG_SERVICE_ADDR: productcatalogservice:3550
       CART_SERVICE_ADDR: cartservice:7070
@@ -117,8 +128,16 @@ services:
     appLabel: frontend
     port: 8080
     protocol: http
-    replicas: 1
+    replicas: 2
     exposeIngress: true
+    autoscaling:
+      enabled: true
+      minReplicas: 2
+      maxReplicas: 6
+      targetCPUUtilizationPercentage: 70
+    pdb:
+      enabled: true
+      minAvailable: 1
     env:
       AD_SERVICE_ADDR: adservice:9555
       CART_SERVICE_ADDR: cartservice:7070
@@ -208,10 +227,15 @@ services:
         cpu: 200m
         memory: 256Mi
 
+# Single-instance Redis (emptyDir). Do NOT set replicas > 1 without Redis HA —
+# multiple replicas behind ClusterIP would split cart state.
 redis:
   name: redis-cart
   port: 6379
   replicas: 1
+  pdb:
+    enabled: true
+    minAvailable: 1
   resources:
     requests:
       cpu: 50m

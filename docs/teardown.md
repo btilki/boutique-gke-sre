@@ -57,9 +57,10 @@ gcloud container clusters list --project=boutique-gke
 gcloud compute forwarding-rules list --project=boutique-gke
 gcloud compute addresses list --global --project=boutique-gke
 dig +short boutique.biroltilki.art
+dig +short argocd.boutique.biroltilki.art
 ```
 
-**Expected:** Empty lists; DNS no longer points to your IP (or NXDOMAIN after zone delete).
+**Expected:** Empty lists; both public DNS names **inactive** (empty `dig` or NXDOMAIN after zone delete). See [dns.md](dns.md).
 
 ## Troubleshooting
 
@@ -86,6 +87,7 @@ dig +short boutique.biroltilki.art
 
 - RTO for full rebuild: hours — see [cluster-rebuild runbook](sre/runbooks/cluster-rebuild.md)
 - GKE Backup snapshots may incur storage until deleted
+- If `enable_backup_iac=true`: set `backup_deactivated=true`, delete retained backups, then destroy — see [19-monitoring-backup-terraform.md](setup/19-monitoring-backup-terraform.md)
 
 ## Security considerations
 
@@ -95,5 +97,6 @@ dig +short boutique.biroltilki.art
 ## Further reading
 
 - [setup/16-smoke-validation.md](setup/16-smoke-validation.md) (pre-teardown checklist inverse)
-- [ROADMAP.md](../ROADMAP.md) Phase 8
+- [setup/19-monitoring-backup-terraform.md](setup/19-monitoring-backup-terraform.md) — topic 19 monitoring/backup IaC
+- [ROADMAP.md](../ROADMAP.md) Phase 8 / 9-C
 - [bootstrap.md](bootstrap.md) — rebuild path

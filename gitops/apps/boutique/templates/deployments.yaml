@@ -8,7 +8,9 @@ metadata:
   labels:
     {{- include "boutique.labels" (dict "appLabel" $svc.appLabel "Values" $.Values "Release" $.Release) | nindent 4 }}
 spec:
+  {{- if not ($svc.autoscaling).enabled }}
   replicas: {{ $svc.replicas }}
+  {{- end }}
   selector:
     matchLabels:
       {{- include "boutique.selectorLabels" (dict "appLabel" $svc.appLabel "Release" $.Release) | nindent 6 }}

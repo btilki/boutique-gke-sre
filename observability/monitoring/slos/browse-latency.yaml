@@ -1,0 +1,32 @@
+# Reference: browse-latency SLO (Cloud Monitoring)
+# Created via Monitoring API — topic 17.
+# Service: boutique-frontend | Goal: 95% of requests ≤ 500ms (p95 < 500ms) | Window: 30 days
+#
+# Console: https://console.cloud.google.com/monitoring/services/service/boutique-frontend/slos/browse-latency?project=boutique-gke
+#
+# SLI: HTTPS LB request latency distribution — “good” = latency ≤ 500ms.
+# Metric: loadbalancing.googleapis.com/https/total_latencies (ms)
+#
+# Rebuild note: replace url_map_name with the live frontend url_map after ingress exists
+# (same value as browse-availability.yaml).
+
+displayName: browse-latency
+goal: 0.95
+rollingPeriod: 2592000s # 30 days
+
+service:
+  serviceId: boutique-frontend
+  displayName: Online Boutique (browse)
+
+serviceLevelIndicator:
+  requestBased:
+    distributionCut:
+      range:
+        max: 500 # milliseconds — p95 target from docs/sre/slos/catalog.md
+      distributionFilter: |
+        metric.type="loadbalancing.googleapis.com/https/total_latencies"
+        resource.type="https_lb_rule"
+        resource.label.url_map_name="k8s2-um-jbuc2mne-boutique-boutique-frontend-lvll6m53"
+
+# Catalog: Browse latency p95 < 500ms / 30-day rolling.
+# Alert policy (topic 17): browse-latency-burn → docs/sre/runbooks/browse-latency-burn.md

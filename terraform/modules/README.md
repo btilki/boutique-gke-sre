@@ -14,6 +14,6 @@ Reusable GCP infrastructure modules. Each module documents purpose, inputs, outp
 | [binary-authorization](binary-authorization/) | 3     | Scaffold    |
 | [iam](iam/)                                   | 3–4   | Scaffold    |
 | [secret-manager](secret-manager/)             | 4     | Scaffold    |
-| [monitoring](monitoring/)                     | 6–7   | Scaffold    |
+| [monitoring](monitoring/)                     | 9-C   | Implemented |
 | [armor](armor/)                               | 7     | Implemented |
-| [backup](backup/)                             | 8     | Scaffold    |
+| [backup](backup/)                             | 9-C   | Implemented |

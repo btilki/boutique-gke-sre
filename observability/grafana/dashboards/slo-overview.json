@@ -1,0 +1,284 @@
+{
+  "id": null,
+  "uid": "boutique-slo-overview",
+  "title": "Boutique \u2014 SLO Overview",
+  "description": "On-call overview of browse/checkout SLOs, burn alerts, and runbooks. Authoritative SLI data is Cloud Monitoring.",
+  "tags": [
+    "boutique",
+    "sre",
+    "slo"
+  ],
+  "timezone": "browser",
+  "schemaVersion": 39,
+  "version": 1,
+  "refresh": "1m",
+  "time": {
+    "from": "now-6h",
+    "to": "now"
+  },
+  "templating": {
+    "list": []
+  },
+  "annotations": {
+    "list": []
+  },
+  "links": [
+    {
+      "title": "SLO catalog",
+      "url": "https://github.com/btilki/boutique-gke-sre/blob/main/docs/sre/slos/catalog.md",
+      "type": "link",
+      "icon": "doc"
+    },
+    {
+      "title": "Error budget policy",
+      "url": "https://github.com/btilki/boutique-gke-sre/blob/main/docs/sre/error-budget-policy.md",
+      "type": "link",
+      "icon": "doc"
+    }
+  ],
+  "panels": [
+    {
+      "id": 1,
+      "type": "text",
+      "title": "SLO targets (catalog)",
+      "gridPos": {
+        "h": 5,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "options": {
+        "mode": "markdown",
+        "content": "| Journey | Availability | Latency |\n| --- | --- | --- |\n| **Browse** | 99.9% / 30d | p95 &lt; 500ms (goal 0.95 \u2264 500ms) |\n| **Checkout** | 99.95% / 30d | p95 &lt; 1s (goal 0.95 \u2264 1000ms) |\n\n**Cloud Console:** Monitoring \u2192 Services \u2192 `boutique-frontend` / `boutique-checkout`.\nBurn policies: `browse-*-burn`, `checkout-*-burn` \u2192 PagerDuty (topic 14).\nApply latency SLOs: [topic 17](https://github.com/btilki/boutique-gke-sre/blob/main/docs/setup/17-latency-slos-dashboards.md)."
+      }
+    },
+    {
+      "id": 2,
+      "type": "text",
+      "title": "Alert \u2192 runbook",
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 5
+      },
+      "options": {
+        "mode": "markdown",
+        "content": "| Policy | Runbook |\n| --- | --- |\n| browse-availability-burn | [runbook](https://github.com/btilki/boutique-gke-sre/blob/main/docs/sre/runbooks/browse-availability-burn.md) |\n| browse-latency-burn | [runbook](https://github.com/btilki/boutique-gke-sre/blob/main/docs/sre/runbooks/browse-latency-burn.md) |\n| checkout-availability-burn | [runbook](https://github.com/btilki/boutique-gke-sre/blob/main/docs/sre/runbooks/checkout-availability-burn.md) |\n| checkout-latency-burn | [runbook](https://github.com/btilki/boutique-gke-sre/blob/main/docs/sre/runbooks/checkout-latency-burn.md) |\n| uptime-check-failed | [runbook](https://github.com/btilki/boutique-gke-sre/blob/main/docs/sre/runbooks/uptime-check-failed.md) |\n| redis-cart-down | [runbook](https://github.com/btilki/boutique-gke-sre/blob/main/docs/sre/runbooks/redis-cart-down.md) |\n\nRegistry: `observability/monitoring/runbooks.yaml`"
+      }
+    },
+    {
+      "id": 3,
+      "type": "text",
+      "title": "On-call quick path",
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 5
+      },
+      "options": {
+        "mode": "markdown",
+        "content": "1. Ack PagerDuty \u2014 open runbook from alert body  \n2. Cloud Monitoring \u2192 SLO burn chart (which window fired?)  \n3. Golden signals dashboard for pod CPU/memory/restarts  \n4. Cloud Trace for checkout PlaceOrder  \n5. Error budget: [policy](https://github.com/btilki/boutique-gke-sre/blob/main/docs/sre/error-budget-policy.md)  \n6. Card: [quick-reference](https://github.com/btilki/boutique-gke-sre/blob/main/docs/operations/quick-reference.md)\n\n**Note:** Grafana does not replace Cloud Monitoring SLO burn charts; use both."
+      }
+    },
+    {
+      "id": 4,
+      "type": "stat",
+      "title": "Boutique pods Ready (gauge)",
+      "gridPos": {
+        "h": 5,
+        "w": 8,
+        "x": 0,
+        "y": 13
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "gmp"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 0.4
+              },
+              {
+                "color": "red",
+                "value": 0.8
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "colorMode": "value",
+        "graphMode": "area",
+        "textMode": "auto"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum(kube_pod_status_ready{namespace=\"boutique\", condition=\"true\"})",
+          "legendFormat": "Boutique pods Ready (gauge)",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gmp"
+          }
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "type": "stat",
+      "title": "Boutique pods not Ready",
+      "gridPos": {
+        "h": 5,
+        "w": 8,
+        "x": 8,
+        "y": 13
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "gmp"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 0.4
+              },
+              {
+                "color": "red",
+                "value": 0.8
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "colorMode": "value",
+        "graphMode": "area",
+        "textMode": "auto"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum(kube_pod_status_ready{namespace=\"boutique\", condition=\"false\"}) or vector(0)",
+          "legendFormat": "Boutique pods not Ready",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gmp"
+          }
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "type": "stat",
+      "title": "Restarts (1h)",
+      "gridPos": {
+        "h": 5,
+        "w": 8,
+        "x": 16,
+        "y": 13
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "gmp"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 0.4
+              },
+              {
+                "color": "red",
+                "value": 0.8
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "colorMode": "value",
+        "graphMode": "area",
+        "textMode": "auto"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum(increase(kube_pod_container_status_restarts_total{namespace=\"boutique\"}[1h])) or vector(0)",
+          "legendFormat": "Restarts (1h)",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gmp"
+          }
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "type": "text",
+      "title": "Datasource notes",
+      "gridPos": {
+        "h": 3,
+        "w": 24,
+        "x": 0,
+        "y": 18
+      },
+      "options": {
+        "mode": "markdown",
+        "content": "Datasource UIDs must match `datasources.yaml`: **`gmp`** (Managed Prometheus), **`gcm`** (Cloud Monitoring).\nAfter rebuild, confirm kube-state-metrics / GMP scraping before trusting pod Ready panels.\n`ingress-edge` dashboard is deferred (optional follow-up)."
+      }
+    }
+  ]
+}

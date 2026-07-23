@@ -13,8 +13,8 @@ Ongoing operational tasks after initial bootstrap: certificate renewal, digest p
 ## Prerequisites
 
 - Bootstrap complete per [bootstrap.md](../bootstrap.md)
-- Access: `kubectl`, `gcloud`, Argo CD (https://argocd.boutique.biroltilki.art)
-- Storefront: https://boutique.biroltilki.art
+- Access: `kubectl`, `gcloud`, Argo CD (`argocd.boutique.biroltilki.art`)
+- Storefront: `boutique.biroltilki.art`
 
 ## Architecture
 
@@ -22,11 +22,11 @@ Day-2 work spans Terraform (infra), GitOps (apps/policies), and Cloud Monitoring
 
 ## Step-by-step implementation
 
-1. **Weekly:** Review SLO dashboards and error budget in Cloud Monitoring
+1. **Weekly:** Fill [error-budget/weekly-review.md](../sre/error-budget/weekly-review.md); review SLOs; run [orphan-scan-cadence.md](orphan-scan-cadence.md) if the GCP project is live
 2. **On digest PR merge:** Manual sync `boutique` Application in Argo CD
 3. **Monthly:** Review Kyverno policy reports and failed admissions
 4. **Quarterly:** Rotate non-WIF credentials; verify backup restore drill
-5. **As needed:** Scale node pools via Terraform or HPA tuning in Helm values
+5. **As needed:** Scale per [sre/capacity/baseline.md](../sre/capacity/baseline.md); open [error_budget_freeze](../../.github/ISSUE_TEMPLATE/error_budget_freeze.md) if budget &lt; 25%
 
 ## Validation
 
@@ -61,7 +61,8 @@ Expected: HTTP 200 on storefront; Argo CD apps Healthy/Synced.
 ## Production considerations
 
 - Change windows for checkout-path deploys
-- PDBs and HPA already configured in Helm chart
+- PDBs and HPA configured in Helm chart: `frontend` / `checkoutservice` HPA; PDBs on frontend, checkout, cart, redis-cart — see [boutique README](../../gitops/apps/boutique/README.md)
+- `redis-cart` remains single-replica (no Redis HA); PDB protects voluntary eviction only
 - Cloud Armor rule changes need smoke validation
 
 ## Security considerations

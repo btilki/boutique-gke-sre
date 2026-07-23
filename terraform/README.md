@@ -1,6 +1,6 @@
 # Terraform — boutique-gke-sre
 
-GCP infrastructure as code for project `boutique-gke`.
+GCP **IaC** (**Infrastructure as Code**) for project `boutique-gke`.
 
 ## Purpose
 

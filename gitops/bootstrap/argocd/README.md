@@ -4,7 +4,7 @@ Namespace, Ingress, and install references for the Argo CD GitOps control plane.
 
 ## Purpose
 
-Bootstrap manifests for Argo CD on `argocd.boutique.biroltilki.art`. Argo CD reconciles all cluster desired state from this repository.
+Bootstrap manifests for Argo CD on `argocd.boutique.biroltilki.art` (**inactive** until rebuild — [dns.md](../../../docs/dns.md)). Argo CD reconciles all cluster desired state from this repository.
 
 ## Inputs
 
@@ -16,11 +16,11 @@ Bootstrap manifests for Argo CD on `argocd.boutique.biroltilki.art`. Argo CD rec
 
 ## Outputs
 
-| Output             | Description                                        |
-| ------------------ | -------------------------------------------------- |
-| `argocd` namespace | Control-plane namespace                            |
-| Argo CD server     | HTTPS UI at https://argocd.boutique.biroltilki.art |
-| Sync target        | Root app-of-apps in `../root-app.yaml`             |
+| Output             | Description                                  |
+| ------------------ | -------------------------------------------- |
+| `argocd` namespace | Control-plane namespace                      |
+| Argo CD server     | HTTPS UI at `argocd.boutique.biroltilki.art` |
+| Sync target        | Root app-of-apps in `../root-app.yaml`       |
 
 ## Dependencies
 

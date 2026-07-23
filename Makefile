@@ -1,7 +1,7 @@
 # boutique-gke-sre — common operational targets
 # Phase 1: validate, lint, terraform fmt/plan
 
-.PHONY: help validate lint fmt tf-init tf-plan tf-fmt kyverno-test kubeconform-test boutique-kyverno-test digest-only-test install-hooks runbook-lint
+.PHONY: help validate lint fmt tf-init tf-plan tf-fmt kyverno-test kubeconform-test boutique-kyverno-test digest-only-test install-hooks runbook-lint orphan-scan-help
 
 TF_ENV ?= terraform/environments/boutique
 
@@ -16,6 +16,7 @@ help:
 	@echo "  make boutique-kyverno-test - Apply policies to rendered Boutique chart"
 	@echo "  make digest-only-test     - Fail if values-images.yaml uses floating tags"
 	@echo "  make runbook-lint         - Validate alert policy ↔ runbook links"
+	@echo "  make orphan-scan-help     - Print orphan scan cadence (live gcloud required to scan)"
 	@echo "  make install-hooks - Install pre-commit hooks (needs pre-commit + terraform-docs)"
 
 install-hooks:
@@ -63,3 +64,8 @@ kubeconform-test:
 
 runbook-lint:
 	./scripts/validate-runbook-links.sh
+
+orphan-scan-help:
+	@echo "Cadence: docs/operations/orphan-scan-cadence.md"
+	@echo "Live scan (requires gcloud + PROJECT_ID):"
+	@echo "  export PROJECT_ID=boutique-gke && ./scripts/teardown/orphan-resource-scan.sh"

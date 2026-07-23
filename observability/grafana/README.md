@@ -8,13 +8,14 @@ Visualize SLIs, golden signals, and infrastructure health. Complements Cloud Mon
 
 ## Layout
 
-| Path                 | Purpose                                               |
-| -------------------- | ----------------------------------------------------- |
-| `datasources.yaml`   | Provisioning config for GMP + Cloud Monitoring        |
-| `deployment.yaml`    | Deployment, ServiceAccount (Workload Identity)        |
-| `service.yaml`       | ClusterIP Service (port 80 → Grafana 3000)            |
-| `kustomization.yaml` | ConfigMap generator + resource bundle                 |
-| `dashboards/`        | JSON dashboard exports (golden signals, SLO overview) |
+| Path                       | Purpose                                        |
+| -------------------------- | ---------------------------------------------- |
+| `datasources.yaml`         | Provisioning config for GMP + Cloud Monitoring |
+| `dashboards-provider.yaml` | File provider → `/var/lib/grafana/dashboards`  |
+| `deployment.yaml`          | Deployment, ServiceAccount (Workload Identity) |
+| `service.yaml`             | ClusterIP Service (port 80 → Grafana 3000)     |
+| `kustomization.yaml`       | ConfigMap generators + resource bundle         |
+| `dashboards/`              | JSON dashboards (golden signals, SLO overview) |
 
 ## GCP service account
 
@@ -46,7 +47,7 @@ echo -n "{\"admin-user\":\"admin\",\"admin-password\":\"${GRAFANA_PASSWORD}\"}" 
 
 ## Public URLs
 
-Grafana is cluster-internal or behind IAP; storefront SLOs are also visible in Cloud Console. Storefront: https://boutique.biroltilki.art
+Grafana is cluster-internal or behind IAP; storefront SLOs are also visible in Cloud Console. Storefront: `boutique.biroltilki.art`
 
 ## Dependencies
 
@@ -58,3 +59,5 @@ Grafana is cluster-internal or behind IAP; storefront SLOs are also visible in C
 
 - [observability/README.md](../README.md)
 - [docs/sre/slos/catalog.md](../../docs/sre/slos/catalog.md)
+- [dashboards/README.md](dashboards/README.md)
+- [docs/setup/17-latency-slos-dashboards.md](../../docs/setup/17-latency-slos-dashboards.md)

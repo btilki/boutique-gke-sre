@@ -1,4 +1,4 @@
-# Grafana bundle — datasource provisioning + Deployment (Phase 6, topic 13 step 3).
+# Grafana bundle — datasource + dashboard provisioning + Deployment (Phase 6 / topic 17).
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
@@ -13,6 +13,13 @@ configMapGenerator:
   - name: grafana-datasources
     files:
       - datasources.yaml
+  - name: grafana-dashboard-provider
+    files:
+      - dashboards-provider.yaml
+  - name: grafana-dashboards
+    files:
+      - dashboards/boutique-golden-signals.json
+      - dashboards/slo-overview.json
 
 resources:
   - external-secret.yaml

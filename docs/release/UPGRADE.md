@@ -17,7 +17,7 @@ Safely promote a tagged platform release (Git + images + optional Terraform) wit
 
 - Bootstrap complete ([bootstrap.md](../bootstrap.md))
 - `kubectl`, `gcloud`, `argocd` CLI access
-- Argo CD UI: https://argocd.boutique.biroltilki.art
+- Argo CD UI: `argocd.boutique.biroltilki.art`
 - Error budget reviewed ([error-budget-policy.md](../sre/error-budget-policy.md))
 - Maintenance window for checkout-path or infra changes
 

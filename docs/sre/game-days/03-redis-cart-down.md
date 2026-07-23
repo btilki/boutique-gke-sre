@@ -20,7 +20,7 @@ Cart service depends on `redis-cart` Deployment. Scaling to zero simulates datas
 
 ## Step-by-step implementation
 
-1. Baseline browse and checkout at https://boutique.biroltilki.art
+1. Baseline browse and checkout at `boutique.biroltilki.art`
 2. Inject failure:
    ```bash
    CONFIRM=yes ./scripts/game-days/inject-redis-down.sh
@@ -69,3 +69,6 @@ kubectl get deploy redis-cart -n boutique
 
 - [runbooks/redis-cart-down.md](../runbooks/redis-cart-down.md)
 - [runbooks/redis-restore.md](../runbooks/redis-restore.md)
+- Executed report: [reports/2026-07-04-redis-cart-down.md](reports/2026-07-04-redis-cart-down.md)
+- Postmortem: [../postmortems/2026-07-04-redis-cart-down.md](../postmortems/2026-07-04-redis-cart-down.md)
+- Matrix: [reports/STATUS.md](reports/STATUS.md) · template: [reports/TEMPLATE.md](reports/TEMPLATE.md)

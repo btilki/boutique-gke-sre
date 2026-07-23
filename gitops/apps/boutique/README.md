@@ -4,7 +4,7 @@ GitOps packaging for Google Online Boutique on the boutique GKE cluster.
 
 ## Purpose
 
-Deploy all Online Boutique microservices with digest-pinned images, probes, resource limits, and HTTPS ingress at https://boutique.biroltilki.art.
+Deploy all Online Boutique microservices with digest-pinned images, probes, resource limits, and HTTPS ingress at `boutique.biroltilki.art`.
 
 ## Services
 
@@ -26,11 +26,25 @@ Eleven workloads (upstream **v0.10.5** mirrored from `us-central1-docker.pkg.dev
 
 ## Outputs
 
-| Output                         | Description                                    |
-| ------------------------------ | ---------------------------------------------- |
-| `boutique` namespace workloads | 11 Deployments + Services                      |
-| Ingress                        | Public storefront on `boutique.biroltilki.art` |
-| ManagedCertificate             | Google-managed TLS for storefront hostname     |
+| Output                         | Description                                                |
+| ------------------------------ | ---------------------------------------------------------- |
+| `boutique` namespace workloads | 11 Deployments + Services                                  |
+| HPA                            | `frontend`, `checkoutservice` (CPU, min 2 / max 6)         |
+| PDB                            | `frontend`, `checkoutservice`, `cartservice`, `redis-cart` |
+| Ingress                        | Public storefront on `boutique.biroltilki.art`             |
+| ManagedCertificate             | Google-managed TLS for storefront hostname                 |
+
+## Reliability defaults
+
+| Workload          | Replicas                      | HPA                   | PDB               |
+| ----------------- | ----------------------------- | --------------------- | ----------------- |
+| `frontend`        | 2 (HPA-managed)               | CPU 70%, min 2, max 6 | `minAvailable: 1` |
+| `checkoutservice` | 2 (HPA-managed)               | CPU 70%, min 2, max 6 | `minAvailable: 1` |
+| `cartservice`     | 2                             | —                     | `minAvailable: 1` |
+| `redis-cart`      | **1** (single-instance Redis) | —                     | `minAvailable: 1` |
+| Other services    | 1                             | —                     | —                 |
+
+`redis-cart` stays at one replica: ClusterIP + multiple Redis pods would split cart state without Redis HA.
 
 ## Dependencies
 

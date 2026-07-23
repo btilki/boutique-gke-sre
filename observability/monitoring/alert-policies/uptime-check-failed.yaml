@@ -1,7 +1,8 @@
 # Reference: uptime-check-failed alert policy
-# Created via scripts/create-uptime-check.sh — topic 13 step 6.
+# Storefront check: scripts/create-uptime-check.sh — topic 13.
+# Argo CD check: scripts/create-argocd-uptime-check.sh — topic 18.
 #
-# Triggers when boutique-storefront uptime check fails from 2+ regions for 5 min.
+# Combiner OR: either boutique-storefront or argocd-ui failing pages (after both conditions exist).
 # Notification channels: pagerduty-boutique-production (topic 14).
 
 displayName: uptime-check-failed
@@ -10,7 +11,7 @@ enabled: true
 
 userLabels:
   runbook: uptime-check-failed
-  target: boutique-storefront
+  targets: boutique-storefront,argocd-ui
 
 documentation:
   runbook: https://github.com/btilki/boutique-gke-sre/blob/main/docs/sre/runbooks/uptime-check-failed.md
@@ -23,3 +24,13 @@ conditions:
     duration: 300s
     alignment: ALIGN_NEXT_OLDER
     reducer: REDUCE_COUNT_FALSE
+    check: boutique-storefront
+
+  - displayName: argocd-ui uptime check failed
+    metric: monitoring.googleapis.com/uptime_check/check_passed
+    comparison: COMPARISON_LT
+    threshold: 1
+    duration: 300s
+    alignment: ALIGN_NEXT_OLDER
+    reducer: REDUCE_COUNT_FALSE
+    check: argocd-ui

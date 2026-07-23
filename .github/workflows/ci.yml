@@ -36,6 +36,9 @@ jobs:
           terraform init -backend=false
           terraform validate
 
+      - name: Runbook link lint
+        run: ./scripts/validate-runbook-links.sh
+
   kyverno:
     runs-on: ubuntu-latest
     steps:

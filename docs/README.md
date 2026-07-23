@@ -5,7 +5,8 @@ Master index: **[DOCUMENTATION.md](DOCUMENTATION.md)** · Guide template: **[GUI
 | Path                                 | Description                                                                 |
 | ------------------------------------ | --------------------------------------------------------------------------- |
 | [bootstrap.md](bootstrap.md)         | End-to-end bootstrap summary                                                |
-| [setup/](setup/)                     | Topic-based setup guides (01–16)                                            |
+| [setup/](setup/)                     | Topic-based setup guides (01–20)                                            |
+| [implementation/](implementation/)   | [Implementation plan](implementation/plan.md)                               |
 | [architecture/](architecture/)       | System design ([overview.md](architecture/overview.md))                     |
 | [security/](security/)               | Threat model, IAM, [supply chain](security/supply-chain.md)                 |
 | [operations/](operations/)           | [Production runbook](operations/operations-runbook.md), day-2 ops, rollback |

@@ -4,9 +4,9 @@ Canonical day-2 operations guide for Online Boutique on the private GKE cluster 
 
 | Item           | Value                                                             |
 | -------------- | ----------------------------------------------------------------- |
-| **Storefront** | https://boutique.biroltilki.art                                   |
-| **Argo CD**    | https://argocd.boutique.biroltilki.art                            |
-| **Cluster**    | `boutique-gke` (`europe-west1`)                                   |
+| **Storefront** | `boutique.biroltilki.art` (**inactive** until rebuild)            |
+| **Argo CD**    | `argocd.boutique.biroltilki.art` (**inactive** until rebuild)     |
+| **Cluster**    | `boutique-gke` (`europe-west1`) — decommissioned 2026-07-04       |
 | **GitOps**     | Manual Argo CD sync ([ADR-003](../adr/003-manual-argocd-sync.md)) |
 | **On-call**    | [docs/sre/oncall/README.md](../sre/oncall/README.md)              |
 
@@ -82,7 +82,7 @@ grep '@sha256:' gitops/apps/boutique/values-images.yaml
 
 # 3. Review Argo CD diff before sync
 argocd app diff boutique
-# Or UI: https://argocd.boutique.biroltilki.art → boutique → Diff
+# Or UI: argocd.boutique.biroltilki.art → boutique → Diff
 
 # 4. Manual sync (CLI or UI)
 argocd app sync boutique --prune
@@ -294,7 +294,7 @@ kubectl get nodes
 - Test scale behavior in game day 02 (pod/zone failure)
 - Do not scale below PDB `minAvailable` during incidents
 
-**Further reading:** [architecture/overview.md §11](../architecture/overview.md#11-scalability)
+**Further reading:** [architecture/overview.md §11](../architecture/overview.md#11-scalability) · [sre/capacity/baseline.md](../sre/capacity/baseline.md) · [scripts/load/](../../scripts/load/)
 
 ---
 
@@ -747,17 +747,22 @@ gcloud alpha monitoring policies list --project=boutique-gke \
 # Follow docs/sre/oncall/test-alerts.md
 ./scripts/create-uptime-check.sh   # if re-creating checks
 ./scripts/create-burn-rate-policies.sh
+./scripts/create-latency-burn-rate-policies.sh   # topic 17 — after latency SLOs exist
 ```
 
 **Alert → runbook mapping:**
 
-| Alert policy               | Runbook                                                                    |
-| -------------------------- | -------------------------------------------------------------------------- |
-| `browse-availability-burn` | [browse-availability-burn.md](../sre/runbooks/browse-availability-burn.md) |
-| `checkout-latency-burn`    | [checkout-latency-burn.md](../sre/runbooks/checkout-latency-burn.md)       |
-| `uptime-check-failed`      | [uptime-check-failed.md](../sre/runbooks/uptime-check-failed.md)           |
-| Deploy failure spike       | [bad-deploy-rollback.md](../sre/runbooks/bad-deploy-rollback.md)           |
-| Redis/cart down            | [redis-cart-down.md](../sre/runbooks/redis-cart-down.md)                   |
+| Alert policy                 | Runbook                                                                        |
+| ---------------------------- | ------------------------------------------------------------------------------ |
+| `browse-availability-burn`   | [browse-availability-burn.md](../sre/runbooks/browse-availability-burn.md)     |
+| `checkout-availability-burn` | [checkout-availability-burn.md](../sre/runbooks/checkout-availability-burn.md) |
+| `browse-latency-burn`        | [browse-latency-burn.md](../sre/runbooks/browse-latency-burn.md)               |
+| `checkout-latency-burn`      | [checkout-latency-burn.md](../sre/runbooks/checkout-latency-burn.md)           |
+| `uptime-check-failed`        | [uptime-check-failed.md](../sre/runbooks/uptime-check-failed.md)               |
+| `bad-deploy-rollback`        | [bad-deploy-rollback.md](../sre/runbooks/bad-deploy-rollback.md)               |
+| `redis-cart-down`            | [redis-cart-down.md](../sre/runbooks/redis-cart-down.md)                       |
+
+Canonical registry: `observability/monitoring/runbooks.yaml`
 
 ### Validation
 
@@ -1345,27 +1350,29 @@ Identify safe automation candidates to reduce toil while preserving manual sync 
 
 ### Current automation (implemented)
 
-| Area                | Automation           | Location                                   |
-| ------------------- | -------------------- | ------------------------------------------ |
-| CI build/scan/sign  | GitHub Actions + WIF | `.github/workflows/build-scan-sign.yml`    |
-| Digest promotion    | PR from CI           | `.github/workflows/manifest-digest-pr.yml` |
-| Policy validation   | pre-commit, CI       | `Makefile`, `.github/workflows/ci.yml`     |
-| Terraform plan      | PR comment           | `.github/workflows/terraform-plan.yml`     |
-| Alert policies      | Scripts              | `scripts/create-burn-rate-policies.sh`     |
-| Game day injection  | Scripts              | `scripts/game-days/`                       |
-| Teardown validation | Scripts              | `scripts/teardown/`                        |
+| Area                | Automation                  | Location                                         |
+| ------------------- | --------------------------- | ------------------------------------------------ |
+| CI build/scan/sign  | GitHub Actions + WIF        | `.github/workflows/build-scan-sign.yml`          |
+| Digest promotion    | PR from CI                  | `.github/workflows/manifest-digest-pr.yml`       |
+| Policy validation   | pre-commit, CI              | `Makefile`, `.github/workflows/ci.yml`           |
+| Terraform plan      | PR comment                  | `.github/workflows/terraform-plan.yml`           |
+| Alert policies      | Scripts                     | `scripts/create-burn-rate-policies.sh`           |
+| Runbook link linter | `make runbook-lint` + CI    | `scripts/validate-runbook-links.sh`, `ci.yml`    |
+| Game day injection  | Scripts                     | `scripts/game-days/`                             |
+| Teardown validation | Scripts                     | `scripts/teardown/`                              |
+| Orphan scan cadence | Documented weekly/teardown  | [orphan-scan-cadence.md](orphan-scan-cadence.md) |
+| Error-budget ritual | Checklists + issue template | `docs/sre/error-budget/`                         |
 
 ### Recommended future automation
 
-| Opportunity                   | Benefit                      | Guardrails                                          |
-| ----------------------------- | ---------------------------- | --------------------------------------------------- |
-| Post-sync smoke in CI         | Catch regressions early      | Manual Argo sync remains; smoke after operator sync |
-| Scheduled backup verification | Prove RPO continuously       | Alert on failure; no auto-restore                   |
-| Error budget dashboard bot    | Weekly Slack/email summary   | Read-only                                           |
-| Certificate expiry synthetic  | Early warning                | Complement managed cert auto-renewal                |
-| Orphan resource scan cron     | Cost control                 | Weekly report only; no auto-delete                  |
-| Runbook link linter           | Alert policy drift detection | CI check on `observability/monitoring/`             |
-| Automated game day scheduler  | Quarterly reminder           | Human executes inject steps                         |
+| Opportunity                   | Benefit                    | Guardrails                                          |
+| ----------------------------- | -------------------------- | --------------------------------------------------- |
+| Post-sync smoke in CI         | Catch regressions early    | Manual Argo sync remains; smoke after operator sync |
+| Scheduled backup verification | Prove RPO continuously     | Alert on failure; no auto-restore                   |
+| Error budget dashboard bot    | Weekly Slack/email summary | Read-only; checklist exists today                   |
+| Certificate expiry synthetic  | Early warning              | Complement managed cert auto-renewal                |
+| Orphan scan as scheduled GHA  | Reminder without local run | Report-only; needs GCP WIF in Actions               |
+| Automated game day scheduler  | Quarterly reminder         | Human executes inject steps                         |
 
 ### Commands
 
@@ -1403,8 +1410,8 @@ Disable automation that causes false-positive rollbacks; fix and re-enable via P
 ┌─────────────────────────────────────────────────────────────────┐
 │ boutique-gke-sre — on-call quick reference                      │
 ├─────────────────────────────────────────────────────────────────┤
-│ Storefront:  https://boutique.biroltilki.art                    │
-│ Argo CD:     https://argocd.boutique.biroltilki.art             │
+│ Storefront:  boutique.biroltilki.art (inactive until rebuild)   │
+│ Argo CD:     argocd.boutique.biroltilki.art (inactive)          │
 │ Rollback:    git revert → argocd app sync boutique              │
 │ Severity:    docs/sre/incident-response/severity.md           │
 │ Runbooks:    docs/sre/runbooks/                                 │

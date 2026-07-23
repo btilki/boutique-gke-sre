@@ -1,0 +1,37 @@
+# Reference: browse-latency-burn alert policy
+# Created via scripts/create-latency-burn-rate-policies.sh — topic 17.
+#
+# SLO: projects/<PROJECT_NUMBER>/services/boutique-frontend/serviceLevelObjectives/browse-latency
+# Combiner: OR (any condition fires)
+# Notification channels: pagerduty-boutique-production (topic 14)
+#
+# API note: burn-rate lookback max 24h; 3d/1x from catalog uses 24h/1x approximation.
+
+displayName: browse-latency-burn
+combiner: OR
+enabled: true
+
+userLabels:
+  runbook: browse-latency-burn
+  slo: browse-latency
+
+documentation:
+  runbook: https://github.com/btilki/boutique-gke-sre/blob/main/docs/sre/runbooks/browse-latency-burn.md
+
+conditions:
+  - displayName: Fast burn 1h (page)
+    lookback: 3600s
+    threshold: 14.4
+    response: page
+  - displayName: Fast burn 6h (page)
+    lookback: 21600s
+    threshold: 6.0
+    response: page
+  - displayName: Slow burn 24h (ticket)
+    lookback: 86400s
+    threshold: 3.0
+    response: ticket
+  - displayName: Slow burn 24h slow (ticket)
+    lookback: 86400s
+    threshold: 1.0
+    response: ticket

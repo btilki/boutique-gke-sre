@@ -2,7 +2,7 @@
 
 ## Goal
 
-The global static IP `boutique-ingress-ip` is reserved and attached to GCE Ingress resources via annotation. A GKE **ManagedCertificate** covers `boutique.biroltilki.art` and `argocd.boutique.biroltilki.art`. Ingress manifests reference the static IP name and certificate name. After Argo CD ingress sync (topic 09), both URLs serve valid HTTPS.
+The global static IP `boutique-ingress-ip` is reserved and attached to GCE Ingress resources via annotation. A GKE **ManagedCertificate** covers `boutique.biroltilki.art` and `argocd.boutique.biroltilki.art` with **TLS** (**Transport Layer Security**). Ingress manifests reference the static IP name and certificate name. After Argo CD ingress sync (topic 09), both hostnames serve valid HTTPS.
 
 ## Why this step is required
 
@@ -184,7 +184,7 @@ Status:
     Status:     Active
 ```
 
-**`curl -I https://argocd.boutique.biroltilki.art` (after topic 09 + cert Active):**
+**`curl -I `argocd.boutique.biroltilki.art`` (after topic 09 + cert Active):**
 
 ```
 HTTP/2 200

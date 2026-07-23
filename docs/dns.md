@@ -2,13 +2,22 @@
 
 ## Purpose
 
-Document DNS delegation and A records for public hostnames `boutique.biroltilki.art` and `argocd.boutique.biroltilki.art` pointing to the GCE ingress static IP.
+Document **DNS** (**Domain Name System**) delegation and A records for public hostnames `boutique.biroltilki.art` and `argocd.boutique.biroltilki.art` pointing to the GCE ingress static IP.
+
+## Current status (post-teardown)
+
+| Hostname                         | Role       | Status                                                              |
+| -------------------------------- | ---------- | ------------------------------------------------------------------- |
+| `boutique.biroltilki.art`        | Storefront | **Inactive** — no public A record (infra decommissioned 2026-07-04) |
+| `argocd.boutique.biroltilki.art` | Argo CD UI | **Inactive** — no public A record (infra decommissioned 2026-07-04) |
+
+Expected while offline: `dig +short` returns empty for both names. Re-create A records only during Phase 2 rebuild ([setup/05-cloud-dns.md](setup/05-cloud-dns.md)).
 
 ## When to use
 
 - Phase 2 after Terraform creates Cloud DNS zone and static IP
 - Debugging HTTPS or certificate provisioning failures
-- Teardown verification (records removed)
+- Teardown verification (records removed; names inactive)
 
 ## Prerequisites
 

@@ -1,0 +1,275 @@
+{
+  "id": null,
+  "uid": "boutique-golden-signals",
+  "title": "Boutique \u2014 Golden Signals",
+  "description": "Latency, traffic, errors, saturation for Online Boutique (Managed Prometheus). Aligns with Phase 9-A SRE dashboards.",
+  "tags": [
+    "boutique",
+    "sre",
+    "golden-signals"
+  ],
+  "timezone": "browser",
+  "schemaVersion": 39,
+  "version": 1,
+  "refresh": "30s",
+  "time": {
+    "from": "now-1h",
+    "to": "now"
+  },
+  "templating": {
+    "list": [
+      {
+        "name": "namespace",
+        "type": "constant",
+        "label": "Namespace",
+        "query": "boutique",
+        "current": {
+          "text": "boutique",
+          "value": "boutique"
+        },
+        "hide": 0
+      }
+    ]
+  },
+  "annotations": {
+    "list": []
+  },
+  "links": [
+    {
+      "title": "Browse latency runbook",
+      "url": "https://github.com/btilki/boutique-gke-sre/blob/main/docs/sre/runbooks/browse-latency-burn.md",
+      "type": "link",
+      "icon": "doc"
+    },
+    {
+      "title": "Checkout latency runbook",
+      "url": "https://github.com/btilki/boutique-gke-sre/blob/main/docs/sre/runbooks/checkout-latency-burn.md",
+      "type": "link",
+      "icon": "doc"
+    }
+  ],
+  "panels": [
+    {
+      "id": 1,
+      "type": "text",
+      "title": "How to use",
+      "gridPos": {
+        "h": 3,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "options": {
+        "mode": "markdown",
+        "content": "**Golden signals** for `boutique` namespace (GMP datasource `gmp`).\nTune PromQL after rebuild if metric names differ (kube-state-metrics / cAdvisor).\nOfficial SLOs live in **Cloud Monitoring** \u2014 see [SLO overview](/d/boutique-slo-overview) and [catalog](https://github.com/btilki/boutique-gke-sre/blob/main/docs/sre/slos/catalog.md)."
+      }
+    },
+    {
+      "id": 2,
+      "type": "timeseries",
+      "title": "Traffic \u2014 container CPU cores (proxy for load)",
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 3
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "gmp"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "spanNulls": false
+          },
+          "unit": "cores"
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum by (pod) (rate(container_cpu_usage_seconds_total{namespace=\"$namespace\", container!=\"\", container!=\"POD\"}[5m]))",
+          "legendFormat": "{{pod}}",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gmp"
+          }
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "type": "timeseries",
+      "title": "Errors \u2014 container restarts",
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 3
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "gmp"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "spanNulls": false
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum by (pod) (increase(kube_pod_container_status_restarts_total{namespace=\"$namespace\"}[1h]))",
+          "legendFormat": "{{pod}}",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gmp"
+          }
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "type": "timeseries",
+      "title": "Saturation \u2014 memory working set",
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 11
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "gmp"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "spanNulls": false
+          },
+          "unit": "bytes"
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum by (pod) (container_memory_working_set_bytes{namespace=\"$namespace\", container!=\"\", container!=\"POD\"})",
+          "legendFormat": "{{pod}}",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gmp"
+          }
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "type": "timeseries",
+      "title": "Saturation \u2014 CPU throttling rate",
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 11
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "gmp"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "spanNulls": false
+          },
+          "unit": "s"
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum by (pod) (rate(container_cpu_cfs_throttled_seconds_total{namespace=\"$namespace\", container!=\"\", container!=\"POD\"}[5m]))",
+          "legendFormat": "{{pod}}",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gmp"
+          }
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "type": "text",
+      "title": "Latency note",
+      "gridPos": {
+        "h": 3,
+        "w": 24,
+        "x": 0,
+        "y": 19
+      },
+      "options": {
+        "mode": "markdown",
+        "content": "**Request latency** for browse/checkout SLOs is owned by **Cloud Monitoring** (LB `total_latencies` + checkout distribution), not GMP.\nUse Cloud Console SLO charts or the **Boutique \u2014 SLO Overview** dashboard links. Trace slow checkout in **Cloud Trace** (`checkoutservice` / PlaceOrder)."
+      }
+    }
+  ]
+}

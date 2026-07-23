@@ -2,7 +2,7 @@
 
 ## Goal
 
-Deploy Google Online Boutique to the `boutique` namespace via Argo CD **manual sync**, using digest-pinned images from `gitops/apps/boutique/values-images.yaml`, and confirm the storefront responds at **https://boutique.biroltilki.art**. All Kyverno policies and Binary Authorization checks must pass during sync.
+Deploy Google Online Boutique to the `boutique` namespace via Argo CD **manual sync**, using digest-pinned images from `gitops/apps/boutique/values-images.yaml`, and confirm the storefront responds at **`boutique.biroltilki.art`**. All Kyverno policies and Binary Authorization checks must pass during sync.
 
 ## Why this step is required
 
@@ -21,7 +21,7 @@ Manual sync ensures a human explicitly promotes each revision after PR review.
 - Prior guides through [11-kyverno-policies.md](11-kyverno-policies.md) — **Phase 4 gate complete**
 - **Scaffold gate:** `gitops/apps/boutique/templates/` must contain Helm templates and `values-images.yaml` must have uncommented digest pins before sync succeeds
 - Artifact Registry images built and signed (topic 08); digests recorded in `values-images.yaml`
-- Argo CD CLI logged in or UI access at https://argocd.boutique.biroltilki.art
+- Argo CD CLI logged in or UI access at `argocd.boutique.biroltilki.art`
 - `boutique` namespace labeled: `network-policy.biroltilki.art/tier=application` (topic 11; Argo CD also applies via `managedNamespaceMetadata` on sync)
 - NetworkPolicies applied from topic 11, including [`gitops/policies/network-policies/boutique-frontend-ingress.yaml`](../../gitops/policies/network-policies/boutique-frontend-ingress.yaml) (frontend pods must have label `app: frontend`)
 - Tools: `kubectl`, `argocd` CLI, `curl`, `dig`, `helm`; optional: `kyverno` CLI, `kubeconform` (for `./tests/manifest/` scripts in step 2)
@@ -165,7 +165,7 @@ The boutique Ingress must reference the **`boutique-ingress-ip`** static IP (dis
 - `kubectl -n boutique get pods` — **11/11** pods `Running`, `READY 1/1` (10 microservices + `redis-cart`)
 - `kubectl -n boutique get managedcertificate` — certificate status **Active**
 - `kubectl -n boutique get svc,ingress` — frontend Service and Ingress present
-- `curl -I https://boutique.biroltilki.art` returns `HTTP/2 200`
+- `curl -I `boutique.biroltilki.art`` returns `HTTP/2 200`
 - Browsing the URL in a browser shows the Online Boutique storefront
 
 ![Online Boutique storefront over HTTPS](../../assets/diagrams/boutique-storefront-https.png)

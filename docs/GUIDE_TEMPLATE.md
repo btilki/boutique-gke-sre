@@ -17,4 +17,12 @@ Every guide under `docs/` must include these sections:
 
 Setup guides in `setup/` may also use **Next step** linking to the following topic.
 
+## Terminology
+
+First mention in the home document for a term: **abbreviation** (**full form**), both bold.
+
+Example: **SLO** (**Service Level Objective**)
+
+Do not put the full form first. Do not use “Wave” labels.
+
 Source: [.cursor/rules/documentation.mdc](../.cursor/rules/documentation.mdc)

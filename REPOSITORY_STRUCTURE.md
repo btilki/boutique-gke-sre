@@ -22,7 +22,7 @@ boutique-gke-sre/
 ├── terraform/            # GCP IaC (modules + environments/boutique)
 ├── gitops/               # Argo CD bootstrap, apps, policies
 ├── observability/        # OTel, Prometheus, Grafana, Cloud Monitoring defs
-├── docs/                 # Architecture, setup, SRE, security, operations
+├── docs/                 # Architecture, setup, implementation plan, SRE, security
 ├── scripts/              # Bootstrap validation, game-days, teardown
 ├── examples/             # Reference snippets
 ├── tests/                # Kyverno, Terraform, manifest validation

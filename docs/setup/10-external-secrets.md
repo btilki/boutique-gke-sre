@@ -2,7 +2,7 @@
 
 ## Goal
 
-Install External Secrets Operator (ESO) on the cluster, bind its Kubernetes service account to a GCP service account via **Workload Identity**, and apply a `ClusterSecretStore` that reads from **GCP Secret Manager**. Application teams will use `ExternalSecret` CRs — never plain `Secret` manifests in Git (enforced by Kyverno in topic 11).
+Install **ESO** (**External Secrets Operator**) on the cluster, bind its Kubernetes service account to a GCP service account via **Workload Identity**, and apply a `ClusterSecretStore` that reads from **GCP Secret Manager**. Application teams will use `ExternalSecret` CRs — never plain `Secret` manifests in Git (enforced by Kyverno in topic 11).
 
 > **Phase 4 gate:** Topics **09–11** must complete before treating the cluster as production-ready.
 

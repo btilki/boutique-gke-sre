@@ -2,7 +2,7 @@
 
 ## Goal
 
-Create a **Cloud Armor** security policy with an **OWASP ModSecurity Core Rule Set (CRS)** baseline, attach it to the backend service fronting the boutique Ingress, and verify legitimate traffic still reaches **`boutique.biroltilki.art`** while typical attack patterns are blocked at the edge.
+Create a **Cloud Armor** security policy with an **CRS** (**OWASP ModSecurity Core Rule Set**) baseline, attach it to the backend service fronting the boutique Ingress, and verify legitimate traffic still reaches **`boutique.biroltilki.art`** while typical attack patterns are blocked at the edge.
 
 ## Why this step is required
 

@@ -1,8 +1,8 @@
-# GitHub Workload Identity Federation (WIF)
+# GitHub **WIF** (**Workload Identity Federation**)
 
 ## Goal
 
-GitHub Actions in repository `boutique-gke-sre` authenticates to GCP project `boutique-gke` using **Workload Identity Federation (OIDC)** — no downloaded service account JSON keys. A WIF pool and provider trust `token.actions.githubusercontent.com`, a dedicated CI service account receives least-privilege IAM, and workflows use `google-github-actions/auth@v2`.
+GitHub Actions in repository `boutique-gke-sre` authenticates to GCP project `boutique-gke` using **WIF** (**Workload Identity Federation**) with **OIDC** (**OpenID Connect**) — no downloaded service account JSON keys. A WIF pool and provider trust `token.actions.githubusercontent.com`, a dedicated CI service account receives least-privilege IAM, and workflows use `google-github-actions/auth@v2`.
 
 ## Why this step is required
 

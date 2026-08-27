@@ -106,14 +106,16 @@ Also useful later: `argocd` CLI, `cosign`, `trivy`, `pre-commit`, `gitleaks`.
 
 ## Related portfolio
 
-| Resource                                                    | Link                                                                                                  |
-| ----------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
-| **DevOps Engineering Playbook** (hub)                       | https://github.com/btilki/devops-engineering-playbook                                                 |
-| Playbook project brief                                      | https://github.com/btilki/devops-engineering-playbook/blob/main/featured-projects/boutique-gke-sre.md |
-| Article G1 — SLOs and burn-rate alerts                      | https://github.com/btilki/devops-engineering-playbook/blob/main/articles/G1.md                        |
-| Article G2 — Workload Identity Federation (no SA JSON keys) | https://github.com/btilki/devops-engineering-playbook/blob/main/articles/G2.md                        |
-| Article G3 — Binary Authorization + Cloud Armor baseline    | https://github.com/btilki/devops-engineering-playbook/blob/main/articles/G3.md                        |
-| Sister platform — EKS GitOps                                | https://github.com/btilki/boutique-eks-gitops                                                         |
-| Sister platform — AKS DevSecOps                             | https://github.com/btilki/boutique-aks-devsecops                                                      |
-| Workshop books                                              | https://github.com/btilki/learn-devops-by-building                                                    |
-| LinkedIn                                                    | https://www.linkedin.com/in/birol-tilki-48731326/                                                     |
+| Resource                                                          | Link                                                                                                  |
+| ----------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
+| **DevOps Engineering Playbook** (hub)                             | https://github.com/btilki/devops-engineering-playbook                                                 |
+| Playbook project brief                                            | https://github.com/btilki/devops-engineering-playbook/blob/main/featured-projects/boutique-gke-sre.md |
+| Article G1 — SLOs and burn-rate alerts                            | https://github.com/btilki/devops-engineering-playbook/blob/main/articles/G1.md                        |
+| Article G2 — Workload Identity Federation (no SA JSON keys)       | https://github.com/btilki/devops-engineering-playbook/blob/main/articles/G2.md                        |
+| Article G3 — Binary Authorization + Cloud Armor baseline          | https://github.com/btilki/devops-engineering-playbook/blob/main/articles/G3.md                        |
+| Article X1 — Online Boutique on EKS, GKE, and AKS                 | https://github.com/btilki/devops-engineering-playbook/blob/main/articles/X1.md                        |
+| Article X2 — Single cluster vs multi-cluster                      | https://github.com/btilki/devops-engineering-playbook/blob/main/articles/X2.md                        |
+| Sister platform — EKS GitOps                                      | https://github.com/btilki/boutique-eks-gitops                                                         |
+| Sister platform — AKS DevSecOps                                   | https://github.com/btilki/boutique-aks-devsecops                                                      |
+| _Practical SRE on Google Kubernetes Engine_ (Boutique Production) | https://github.com/btilki/learn-devops-by-building/tree/main/boutique-production/gke-sre              |
+| LinkedIn                                                          | https://www.linkedin.com/in/birol-tilki-48731326/                                                     |

@@ -10,7 +10,7 @@
 - [ ] No secrets or credentials in diff
 - [ ] Setup guide updated if operator steps changed
 - [ ] Runbook linked if new alert policy (SRE changes)
-- [ ] Release notes / migration updated if breaking change ([release/](docs/release/))
+- [ ] Release notes / migration updated if breaking change ([release/](../docs/release/))
 
 ## Deployment
 

@@ -24,7 +24,7 @@ Work through this checklist in order. Record pass/fail for each item.
 
 ### 1. Infrastructure and HTTPS
 
-This project uses **two static IPs** (topic 09/12): `boutique-ingress-ip` for the storefront, `argocd-ingress-ip` for Argo CD.
+This project uses **two static IPs** (Terraform `ingress-edge` in topics 05–06; Ingress in 09/12): `boutique-ingress-ip` for the storefront, `argocd-ingress-ip` for Argo CD.
 
 ```bash
 # DNS

@@ -69,6 +69,21 @@ GitOps and security controls are implemented on a single private GKE cluster.
 
 → Full layout: [REPOSITORY_STRUCTURE.md](REPOSITORY_STRUCTURE.md)
 
+## Tools
+
+Local CLI used by setup guides (topic 01 onward). Validate with `./scripts/bootstrap/validate-prereqs.sh`.
+
+| Tool        | Notes                                    |
+| ----------- | ---------------------------------------- |
+| `gcloud`    | Google Cloud SDK; project `boutique-gke` |
+| `terraform` | ≥ 1.5                                    |
+| `kubectl`   | Cluster access after topic 04            |
+| `helm`      | v3+ (Argo CD install, topic 09)          |
+| `dig`       | DNS checks (topics 05–06, 16)            |
+| `curl`      | HTTPS smoke checks                       |
+
+Also useful later: `argocd` CLI, `cosign`, `trivy`, `pre-commit`, `gitleaks`.
+
 ---
 
 ## Status

@@ -8,8 +8,13 @@ variable "domain" {
   type        = string
 }
 
-variable "static_ip_address" {
-  description = "Global static IP address for boutique and argocd hostnames."
+variable "boutique_ip_address" {
+  description = "Global static IP for the storefront A record (boutique-ingress-ip)."
+  type        = string
+}
+
+variable "argocd_ip_address" {
+  description = "Global static IP for the Argo CD A record (argocd-ingress-ip)."
   type        = string
 }
 

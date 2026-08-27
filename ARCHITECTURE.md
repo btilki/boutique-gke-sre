@@ -11,12 +11,12 @@ Git → GitHub Actions (WIF) → Artifact Registry → Argo CD → Private GKE
 
 ## Key decisions
 
-| Topic     | Choice                                                                                    |
-| --------- | ----------------------------------------------------------------------------------------- |
-| Isolation | One cluster; namespaces `boutique`, `argocd`, `monitoring`, `kyverno`, `external-secrets` |
-| Deploy    | GitOps; manual Argo CD sync; digest-only images                                           |
-| Security  | WIF, ESO, Kyverno, NetworkPolicy, Binary Authorization, Cloud Armor                       |
-| SRE       | Browse 99.9%, checkout 99.95%; burn alerts; runbooks per alert                            |
+| Topic     | Choice                                                                                       |
+| --------- | -------------------------------------------------------------------------------------------- |
+| Isolation | One cluster; namespaces `boutique`, `argocd`, `observability`, `kyverno`, `external-secrets` |
+| Deploy    | GitOps; manual Argo CD sync; digest-only images                                              |
+| Security  | WIF, ESO, Kyverno, NetworkPolicy, Binary Authorization, Cloud Armor                          |
+| SRE       | Browse 99.9%, checkout 99.95%; burn alerts; runbooks per alert                               |
 
 ## Diagrams
 

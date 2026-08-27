@@ -2,7 +2,7 @@
 
 ## Goal
 
-A Cloud DNS managed zone for `biroltilki.art` exists in project `boutique-gke` with **A records** for `boutique.biroltilki.art` and `argocd.boutique.biroltilki.art` pointing at the global ingress static IP. Your domain registrar delegates DNS to Google’s name servers (`ns-cloud-*.googledomains.com`), and public `dig` queries return the static IP.
+A Cloud DNS managed zone for `biroltilki.art` exists in project `boutique-gke` with **A records** for `boutique.biroltilki.art` and `argocd.boutique.biroltilki.art`, each pointing at its **dedicated** global static IP (`boutique-ingress-ip` and `argocd-ingress-ip`). Your domain registrar delegates DNS to Google’s name servers (`ns-cloud-*.googledomains.com`), and public `dig` queries return those IPs.
 
 **Current (post-teardown):** both hostnames are **inactive** (no public A records). See [dns.md](../dns.md). Re-run this topic on rebuild.
 
@@ -10,7 +10,7 @@ A Cloud DNS managed zone for `biroltilki.art` exists in project `boutique-gke` w
 
 Google-managed TLS certificates (topic 06) and public HTTPS hostnames require resolvable DNS. The `dns` Terraform module creates the managed zone and A records; **registrar NS delegation** is the step only you can perform at your domain provider. Without delegation, `dig` returns nothing or stale records and certificate provisioning fails.
 
-The `dns` module depends on `module.ingress_edge` for the static IP address. If you applied only `module.gke` in topic 04, apply `ingress_edge` and `dns` in this topic before registrar changes.
+The `dns` module depends on `module.ingress_edge` for **both** static IP addresses. If you applied only `module.gke` in topic 04, apply `ingress_edge` and `dns` in this topic before registrar changes. GCE Ingress uses one load balancer per Ingress object, so Boutique and Argo CD cannot share a single IP.
 
 ## Prerequisites
 
@@ -46,6 +46,7 @@ terraform apply -target=module.ingress_edge -target=module.dns
 
 ```bash
 terraform output ingress_static_ip
+terraform output argocd_ingress_static_ip
 terraform output dns_name_servers
 terraform output boutique_url
 terraform output argocd_url
@@ -91,7 +92,7 @@ Perform these steps at the registrar where you purchased `biroltilki.art` (Googl
 2. Navigate **Network services** → **Cloud DNS**.
 3. Click managed zone **`biroltilki-art`** (DNS name `biroltilki.art.`).
 4. Copy **DNS name servers** from the zone details page — they must match what you entered at the registrar.
-5. Under **Zone details** → **Records**, confirm **A** records for `boutique.biroltilki.art` and `argocd.boutique.biroltilki.art` point to the same IP as `terraform output ingress_static_ip`.
+5. Under **Zone details** → **Records**, confirm **A** records: `boutique.biroltilki.art` matches `terraform output ingress_static_ip`; `argocd.boutique.biroltilki.art` matches `terraform output argocd_ingress_static_ip`. The two addresses must differ.
 
 ### 5. Wait for propagation
 
@@ -116,10 +117,11 @@ tolist([
 ])
 ```
 
-**`terraform output ingress_static_ip`:**
+**`terraform output ingress_static_ip` / `argocd_ingress_static_ip`:**
 
 ```
-"35.xxx.xxx.xxx"
+"35.xxx.xxx.xxx"    # boutique-ingress-ip
+"34.xxx.xxx.xxx"    # argocd-ingress-ip (different address)
 ```
 
 **`gcloud dns record-sets list` (A records):**
@@ -127,7 +129,7 @@ tolist([
 ```
 NAME                              TYPE  TTL  DATA
 boutique.biroltilki.art.          A     300  35.xxx.xxx.xxx
-argocd.boutique.biroltilki.art.   A     300  35.xxx.xxx.xxx
+argocd.boutique.biroltilki.art.   A     300  34.xxx.xxx.xxx
 ```
 
 **`dig +short NS biroltilki.art` (after delegation):**
@@ -142,8 +144,11 @@ ns-cloud-d1.googledomains.com.
 ## Validation
 
 ```bash
-STATIC_IP="$(cd terraform/environments/boutique && terraform output -raw ingress_static_ip)"
-echo "Expected IP: ${STATIC_IP}"
+cd terraform/environments/boutique
+BOUTIQUE_IP="$(terraform output -raw ingress_static_ip)"
+ARGOCD_IP="$(terraform output -raw argocd_ingress_static_ip)"
+echo "Boutique expected: ${BOUTIQUE_IP}"
+echo "Argo CD expected:  ${ARGOCD_IP}"
 
 dig +short boutique.biroltilki.art
 dig +short argocd.boutique.biroltilki.art
@@ -153,8 +158,8 @@ dig +trace boutique.biroltilki.art | tail -20
 
 Expected:
 
-- `dig +short boutique.biroltilki.art` returns the static IP (same as `ingress_static_ip`)
-- `dig +short argocd.boutique.biroltilki.art` returns the **same** static IP
+- `dig +short boutique.biroltilki.art` returns `ingress_static_ip` (`boutique-ingress-ip`)
+- `dig +short argocd.boutique.biroltilki.art` returns `argocd_ingress_static_ip` (`argocd-ingress-ip`) — **not** the storefront IP
 - NS query returns only Google Cloud DNS name servers
 - HTTPS `curl` may still fail until topic 06 (certificates) and topic 09 (Argo CD ingress sync) — DNS-only success is sufficient here
 
@@ -206,7 +211,7 @@ Restore registrar default NS before or immediately after destroy to avoid orphan
 - Delegate the **root** zone `biroltilki.art` once; manage all subdomains in Cloud DNS
 - Use Terraform for A records — avoid manual Console edits that cause drift
 - Keep TTL at 300s during bootstrap; increase after stability if desired
-- Record the static IP and name servers in your runbook / password manager vault (not in public Git)
+- Record **both** static IPs and the name servers in your runbook / password manager vault (not in public Git)
 - Validate with both `dig +short` and `dig @8.8.8.8` to rule out local resolver cache
 
 ## Security notes
@@ -221,4 +226,4 @@ Restore registrar default NS before or immediately after destroy to avoid orphan
 
 → [06 — Static ingress IP and TLS (managed certificates)](06-ingress-tls.md)
 
-Confirm both hostnames resolve to the static IP before configuring GKE Ingress and ManagedCertificate resources.
+Confirm each hostname resolves to its matching static IP before configuring GKE Ingress and ManagedCertificate resources.

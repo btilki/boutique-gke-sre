@@ -75,7 +75,7 @@ Canonical system design for the production SRE reference: Google Online Boutique
 
 Git is the single source of truth. Engineers merge PRs that update Helm values (image digests) and platform manifests. GitHub Actions authenticates to GCP via Workload Identity Federation, builds or mirrors images, scans with Trivy, signs with cosign, and pushes to Artifact Registry. Argo CD watches the repo and syncs desired state to a **single private regional GKE cluster**. Platform components (Kyverno, ESO, NetworkPolicy) enforce security at admission and runtime.
 
-Online Boutique runs in the `boutique` namespace; Argo CD in `argocd`; observability stack in `observability`. North-south traffic enters through a Google Cloud external HTTP(S) load balancer with a static IP, Google-managed TLS certificates, and Cloud Armor. OpenTelemetry exports to Cloud Trace and Managed Prometheus; Grafana visualizes health. Cloud Monitoring hosts SLOs, uptime checks, and burn-rate alerts that route to PagerDuty with runbook links in `docs/sre/runbooks/`.
+Online Boutique runs in the `boutique` namespace; Argo CD in `argocd`; observability stack in `observability`. North-south traffic enters through Google Cloud external HTTP(S) load balancers with **dedicated** static IPs (`boutique-ingress-ip`, `argocd-ingress-ip`), Google-managed TLS certificates, and Cloud Armor. OpenTelemetry exports to Cloud Trace and Managed Prometheus; Grafana visualizes health. Cloud Monitoring hosts SLOs, uptime checks, and burn-rate alerts that route to PagerDuty with runbook links in `docs/sre/runbooks/`.
 
 ```mermaid
 flowchart TB
@@ -123,19 +123,19 @@ flowchart TB
 
 ## 5. Component diagram
 
-| Layer             | Components                                                             | Responsibility                                                  |
-| ----------------- | ---------------------------------------------------------------------- | --------------------------------------------------------------- |
-| **IaC**           | Terraform (`terraform/`)                                               | VPC, GKE, DNS, static IP, IAM, WIF, AR, Binary Auth, monitoring |
-| **Edge**          | Cloud DNS, static IP, GCE Ingress, managed certs, Cloud Armor          | HTTPS, WAF, routing                                             |
-| **GitOps**        | Argo CD (`gitops/bootstrap/`, `gitops/apps/`)                          | Sync cluster state; manual sync gate                            |
-| **Policy**        | Kyverno (`gitops/policies/kyverno/`)                                   | Admission: digest, probes, resources, labels, no plain Secrets  |
-| **Secrets**       | ESO (`gitops/bootstrap/external-secrets/`)                             | Secret Manager → Kubernetes Secrets                             |
-| **Network**       | NetworkPolicy (`gitops/policies/network-policies/`)                    | Default-deny; explicit service graph                            |
-| **Application**   | Online Boutique Helm (`gitops/apps/boutique/`)                         | Microservices + frontend                                        |
-| **Observability** | OTel, Prometheus, Grafana (`observability/`)                           | Collect, store, visualize                                       |
-| **SRE**           | Cloud Monitoring, PagerDuty (`observability/monitoring/`, `docs/sre/`) | SLOs, alerts, runbooks, game days                               |
-| **CI**            | GitHub Actions (`.github/workflows/`)                                  | WIF auth, scan, sign, digest PR                                 |
-| **Backup**        | GKE Backup / Velero (`scripts/`, runbooks)                             | Redis/cart state protection                                     |
+| Layer             | Components                                                             | Responsibility                                                        |
+| ----------------- | ---------------------------------------------------------------------- | --------------------------------------------------------------------- |
+| **IaC**           | Terraform (`terraform/`)                                               | VPC, GKE, DNS, dual static IPs, IAM, WIF, AR, Binary Auth, monitoring |
+| **Edge**          | Cloud DNS, two static IPs, GCE Ingress, managed certs, Cloud Armor     | HTTPS, WAF, routing (one LB per hostname)                             |
+| **GitOps**        | Argo CD (`gitops/bootstrap/`, `gitops/apps/`)                          | Sync cluster state; manual sync gate                                  |
+| **Policy**        | Kyverno (`gitops/policies/kyverno/`)                                   | Admission: digest, probes, resources, labels, no plain Secrets        |
+| **Secrets**       | ESO (`gitops/bootstrap/external-secrets/`)                             | Secret Manager → Kubernetes Secrets                                   |
+| **Network**       | NetworkPolicy (`gitops/policies/network-policies/`)                    | Default-deny; explicit service graph                                  |
+| **Application**   | Online Boutique Helm (`gitops/apps/boutique/`)                         | Microservices + frontend                                              |
+| **Observability** | OTel, Prometheus, Grafana (`observability/`)                           | Collect, store, visualize                                             |
+| **SRE**           | Cloud Monitoring, PagerDuty (`observability/monitoring/`, `docs/sre/`) | SLOs, alerts, runbooks, game days                                     |
+| **CI**            | GitHub Actions (`.github/workflows/`)                                  | WIF auth, scan, sign, digest PR                                       |
+| **Backup**        | GKE Backup / Velero (`scripts/`, runbooks)                             | Redis/cart state protection                                           |
 
 ---
 
@@ -145,7 +145,7 @@ flowchart TB
 
 ```
 User browser
-  → DNS (boutique.biroltilki.art → static IP)
+  → DNS (boutique.biroltilki.art → boutique-ingress-ip)
   → Cloud Armor (WAF / rate limits)
   → GCE Ingress (TLS termination, Google-managed cert)
   → frontend Service (boutique namespace)
@@ -220,8 +220,8 @@ boutique-vpc (custom, regional)
 
 - Private cluster: node IPs not publicly routable
 - Authorized networks or IAP for control plane admin access
-- GCE Ingress provisions external HTTP(S) load balancer
-- Static global IP from Terraform; bound via Ingress annotations
+- GCE Ingress provisions an external HTTP(S) load balancer **per Ingress object**
+- Two static global IPs from Terraform (`boutique-ingress-ip`, `argocd-ingress-ip`); bound via Ingress annotations
 
 ### NetworkPolicy model (default-deny)
 
@@ -285,14 +285,14 @@ Internet (untrusted)
 
 ## 11. Scalability
 
-| Mechanism                | Use                                          |
-| ------------------------ | -------------------------------------------- |
-| HPA                      | frontend, checkout, cart — CPU/request-based |
-| Cluster Autoscaler       | Scale nodes when pods pending                |
-| Regional cluster         | Control plane HA; nodes across 3 zones       |
-| PDBs                     | minAvailable on critical services            |
-| Resource requests/limits | Kyverno-required; prevents noisy neighbor    |
-| GCE load balancer        | L7 scaling at ingress                        |
+| Mechanism                | Use                                                                 |
+| ------------------------ | ------------------------------------------------------------------- |
+| HPA                      | frontend, checkout — CPU/request-based (cart: fixed replicas + PDB) |
+| Cluster Autoscaler       | Scale nodes when pods pending                                       |
+| Regional cluster         | Control plane HA; nodes across 3 zones                              |
+| PDBs                     | minAvailable on critical services                                   |
+| Resource requests/limits | Kyverno-required; prevents noisy neighbor                           |
+| GCE load balancer        | L7 scaling at ingress                                               |
 
 Single-cluster limits: no hard blast-radius between logical envs; namespace quotas cap consumption. Sufficient for reference traffic.
 
@@ -339,7 +339,7 @@ Teardown destroy order: [teardown.md](../teardown.md)
 - **Single cluster** — lower baseline vs multi-cluster; one control plane bill
 - **Private nodes + NAT** — NAT egress charges at reference scale
 - **Managed Prometheus + Cloud Monitoring** — tune retention; avoid high-cardinality labels
-- **Static IP + LB** — fixed monthly cost while cluster exists
+- **Static IPs + LBs** — two reserved global addresses plus two HTTP(S) load balancers while the cluster exists
 - **Node pool** — autoscaling min sized for demo; tear down when idle
 - **GKE Backup** — GCS storage for Redis backups per RPO
 
@@ -390,8 +390,8 @@ Argo CD → ONE private GKE cluster
   Helm · Kyverno · ESO · NetworkPolicy
 │
 ▼
-HTTPS (Cloud Armor · managed TLS · static IP)
-  boutique.biroltilki.art · argocd.boutique.biroltilki.art
+HTTPS (Cloud Armor · managed TLS · dedicated static IPs)
+ boutique.biroltilki.art · argocd.boutique.biroltilki.art
 │
 ▼
 OTel → Cloud Trace / Managed Prometheus / Grafana

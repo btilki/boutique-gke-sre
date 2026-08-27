@@ -4,7 +4,7 @@ Service Level Objective resources for browse and checkout paths.
 
 ## Purpose
 
-Define SLIs and targets in Cloud Monitoring aligned with [docs/sre/slos/catalog.md](../../docs/sre/slos/catalog.md).
+Define SLIs and targets in Cloud Monitoring aligned with [docs/sre/slos/catalog.md](../../../docs/sre/slos/catalog.md).
 
 ## Reference artifacts
 
@@ -40,10 +40,10 @@ curl -s -H "Authorization: Bearer $(gcloud auth print-access-token)" \
 ```
 
 > Stable `gcloud` has no `monitoring services list` subcommand. Use Console or the Monitoring REST API.
-> Repo-only check today: files exist and match [catalog.md](../../docs/sre/slos/catalog.md) targets.
+> Repo-only check today: files exist and match [catalog.md](../../../docs/sre/slos/catalog.md) targets.
 
 ## Further reading
 
 - [../README.md](../README.md)
-- [docs/sre/error-budget-policy.md](../../docs/sre/error-budget-policy.md)
-- [docs/setup/17-latency-slos-dashboards.md](../../docs/setup/17-latency-slos-dashboards.md) — topic 17
+- [docs/sre/error-budget-policy.md](../../../docs/sre/error-budget-policy.md)
+- [docs/setup/17-latency-slos-dashboards.md](../../../docs/setup/17-latency-slos-dashboards.md) — topic 17

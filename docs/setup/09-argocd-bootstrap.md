@@ -24,7 +24,7 @@ Without Argo CD you would apply manifests by hand, bypassing audit trails, diges
 
 ```bash
 cd terraform/environments/boutique
-terraform output ingress_static_ip cluster_name cluster_location
+terraform output ingress_static_ip argocd_ingress_static_ip cluster_name cluster_location
 ```
 
 Defaults used in this guide: cluster `boutique-gke`, region `europe-west1`, Argo CD static IP resource name `argocd-ingress-ip` (storefront uses `boutique-ingress-ip` in topic 12).
@@ -151,7 +151,7 @@ kubectl -n argocd describe managedcertificate argocd-managed-cert
 ## Validation
 
 ```bash
-# DNS resolves to the Terraform static IP
+# DNS resolves to the Argo CD static IP (not boutique-ingress-ip)
 dig +short argocd.boutique.biroltilki.art
 
 # HTTPS responds without certificate errors
@@ -172,7 +172,7 @@ kubectl -n argocd get secret argocd-initial-admin-secret
 | Symptom                             | Cause                                                                | Fix                                                                                                                                   |
 | ----------------------------------- | -------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
 | `connection refused` on Argo CD URL | Ingress or managed cert not ready                                    | Wait 15–60 min; check `ManagedCertificate` status is `Active`                                                                         |
-| TLS error / wrong certificate       | DNS not pointing at static IP                                        | Compare `dig +short` output to `terraform output ingress_static_ip`                                                                   |
+| TLS error / wrong certificate       | DNS not pointing at Argo CD static IP                                | Compare `dig +short argocd.boutique.biroltilki.art` to `terraform output argocd_ingress_static_ip`                                    |
 | `502 Bad Gateway` on Argo CD URL    | `server.insecure` not set while using HTTP backend on Ingress        | Ensure `configs.params.server.insecure: true` in Helm values                                                                          |
 | `boutique-root` `InvalidSpecError`  | Wrong `repoURL` or private repo without credentials                  | Set correct Git URL; add repo credentials via Argo CD UI or `argocd repo add`                                                         |
 | `authentication required` on sync   | `repoURL` points at wrong GitHub org (e.g. `biroltilki` vs `btilki`) | Set `https://github.com/btilki/boutique-gke-sre` in `root-app.yaml` and child apps; `kubectl apply -f gitops/bootstrap/root-app.yaml` |

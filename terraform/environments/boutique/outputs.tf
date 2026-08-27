@@ -48,8 +48,23 @@ output "cluster_location" {
 }
 
 output "ingress_static_ip" {
-  description = "Global static IP for Ingress — use in Kubernetes Ingress annotation (Phase 2)."
+  description = "Storefront global static IP (boutique-ingress-ip) — Phase 2."
   value       = try(module.ingress_edge.address, null)
+}
+
+output "ingress_static_ip_name" {
+  description = "Storefront global address resource name (Ingress annotation)."
+  value       = try(module.ingress_edge.address_name, null)
+}
+
+output "argocd_ingress_static_ip" {
+  description = "Argo CD global static IP (argocd-ingress-ip) — Phase 2."
+  value       = try(module.ingress_edge.argocd_address, null)
+}
+
+output "argocd_ingress_static_ip_name" {
+  description = "Argo CD global address resource name (Ingress annotation)."
+  value       = try(module.ingress_edge.argocd_address_name, null)
 }
 
 output "dns_name_servers" {

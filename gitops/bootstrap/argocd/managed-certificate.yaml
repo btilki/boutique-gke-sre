@@ -1,4 +1,5 @@
-# Google-managed TLS certificate for boutique + Argo CD hostnames.
+# Google-managed TLS certificate for the Argo CD hostname only.
+# Boutique uses a separate ManagedCertificate in namespace boutique (Helm, topic 12).
 # Apply after namespace argocd exists (topic 06 / 09).
 # Status Active required before HTTPS works (15–60 min after DNS + Ingress).
 apiVersion: networking.gke.io/v1

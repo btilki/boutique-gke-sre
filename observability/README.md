@@ -1,6 +1,6 @@
 # Observability
 
-**OTel** (**OpenTelemetry**), Prometheus, Grafana, and Cloud Monitoring SLO/alert definitions for boutique-gke-sre.
+**OTel** (**OpenTelemetry**), Grafana, and Cloud Monitoring SLO/alert definitions for boutique-gke-sre. In-cluster Prometheus (`prometheus/`) is **optional reference only** — not synced by Argo CD.
 
 ## Purpose
 
@@ -16,7 +16,7 @@ observability/
 │   │   └── deployment.yaml      # Collector Deployment manifest
 │   └── README.md
 ├── prometheus/
-│   ├── values.yaml              # kube-prometheus-stack Helm values
+│   ├── values.yaml              # Optional kube-prometheus-stack values (not GitOps-synced)
 │   └── README.md
 ├── grafana/
 │   ├── datasources.yaml         # Datasource provisioning

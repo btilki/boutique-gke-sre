@@ -14,12 +14,12 @@ See `variables.tf` and `terraform.tfvars.example`.
 
 See `outputs.tf`:
 
-| Phase                | Outputs                                                                                                   |
-| -------------------- | --------------------------------------------------------------------------------------------------------- |
-| **1** (topic 03)     | `network_name`, `subnet_name`, `pods_range_name`, `services_range_name`, `enabled_apis`                   |
-| **2** (topics 04–06) | `cluster_name`, `cluster_location`, `ingress_static_ip`, `dns_name_servers`, `boutique_url`, `argocd_url` |
-| **3** (topic 07)     | `wif_provider_name`, `ci_service_account_email`                                                           |
-| **9-C** (topic 19)   | `boutique_uptime_check_id`, `argocd_uptime_check_id`, `backup_plan_id` — only when `enable_*_iac=true`    |
+| Phase                | Outputs                                                                                                                               |
+| -------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
+| **1** (topic 03)     | `network_name`, `subnet_name`, `pods_range_name`, `services_range_name`, `enabled_apis`                                               |
+| **2** (topics 04–06) | `cluster_name`, `cluster_location`, `ingress_static_ip`, `argocd_ingress_static_ip`, `dns_name_servers`, `boutique_url`, `argocd_url` |
+| **3** (topic 07)     | `wif_provider_name`, `ci_service_account_email`                                                                                       |
+| **9-C** (topic 19)   | `boutique_uptime_check_id`, `argocd_uptime_check_id`, `backup_plan_id` — only when `enable_*_iac=true`                                |
 
 Phase 2 outputs return `null` until the corresponding modules are applied. Monitoring/backup modules default **off** (`enable_monitoring_iac` / `enable_backup_iac` = `false`).
 

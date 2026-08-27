@@ -4,13 +4,25 @@ variable "project_id" {
 }
 
 variable "address_name" {
-  description = "Name of the global static IP address."
+  description = "Name of the storefront global static IP address."
   type        = string
   default     = "boutique-ingress-ip"
 }
 
 variable "description" {
-  description = "Description for the static IP resource."
+  description = "Description for the storefront static IP resource."
   type        = string
-  default     = "Global static IP for boutique + argocd ingress"
+  default     = "Global static IP for boutique.biroltilki.art GCE Ingress"
+}
+
+variable "argocd_address_name" {
+  description = "Name of the Argo CD global static IP address."
+  type        = string
+  default     = "argocd-ingress-ip"
+}
+
+variable "argocd_description" {
+  description = "Description for the Argo CD static IP resource."
+  type        = string
+  default     = "Global static IP for argocd.boutique.biroltilki.art GCE Ingress"
 }

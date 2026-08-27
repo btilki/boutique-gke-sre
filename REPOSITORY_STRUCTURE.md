@@ -6,13 +6,13 @@ Full rule: [.cursor/rules/repository-structure.mdc](.cursor/rules/repository-str
 
 ## Layer map
 
-| Layer              | Paths                                                          |
-| ------------------ | -------------------------------------------------------------- |
-| **Infrastructure** | `terraform/`                                                   |
-| **Platform**       | `gitops/bootstrap/`, `gitops/policies/`, `observability/`      |
-| **Applications**   | `gitops/apps/`                                                 |
-| **SRE operations** | `docs/sre/`, `scripts/game-days/`, `observability/monitoring/` |
-| **Cross-cutting**  | `.github/`, `tests/`, `scripts/bootstrap                       | teardown/`, root docs |
+| Layer              | Paths                                                                      |
+| ------------------ | -------------------------------------------------------------------------- |
+| **Infrastructure** | `terraform/`                                                               |
+| **Platform**       | `gitops/bootstrap/`, `gitops/policies/`, `observability/`                  |
+| **Applications**   | `gitops/apps/`                                                             |
+| **SRE operations** | `docs/sre/`, `scripts/game-days/`, `observability/monitoring/`             |
+| **Cross-cutting**  | `.github/`, `tests/`, `scripts/bootstrap/`, `scripts/teardown/`, root docs |
 
 ## Top-level tree
 
@@ -39,21 +39,21 @@ boutique-gke-sre/
 
 ## Terraform modules
 
-| Module                 | Phase | Status      |
-| ---------------------- | ----- | ----------- |
-| `project-apis`         | 1     | Implemented |
-| `networking`           | 1     | Implemented |
-| `gke`                  | 2     | Implemented |
-| `dns`                  | 2     | Implemented |
-| `ingress-edge`         | 2     | Implemented |
-| `wif`                  | 3     | Scaffold    |
-| `artifact-registry`    | 3     | Scaffold    |
-| `binary-authorization` | 3     | Scaffold    |
-| `iam`                  | 3–4   | Scaffold    |
-| `armor`                | 7     | Implemented |
-| `secret-manager`       | 4     | Scaffold    |
-| `monitoring`           | 6–7   | Scaffold    |
-| `backup`               | 8     | Scaffold    |
+| Module                 | Phase | Status                 |
+| ---------------------- | ----- | ---------------------- |
+| `project-apis`         | 1     | Implemented            |
+| `networking`           | 1     | Implemented            |
+| `gke`                  | 2     | Implemented            |
+| `dns`                  | 2     | Implemented            |
+| `ingress-edge`         | 2     | Implemented            |
+| `wif`                  | 3     | Implemented            |
+| `artifact-registry`    | 3     | Implemented            |
+| `binary-authorization` | 3     | Implemented            |
+| `iam`                  | 3–4   | Scaffold (README only) |
+| `armor`                | 7     | Implemented            |
+| `secret-manager`       | 4     | Scaffold (README only) |
+| `monitoring`           | 9-C   | Implemented            |
+| `backup`               | 9-C   | Implemented            |
 
 Each module includes `README.md` with purpose, inputs, outputs, dependencies, usage.
 

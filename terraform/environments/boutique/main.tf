@@ -55,11 +55,12 @@ module "gke" {
 module "dns" {
   source = "../../modules/dns"
 
-  project_id        = var.project_id
-  domain            = var.domain
-  static_ip_address = module.ingress_edge.address
-  boutique_hostname = var.boutique_hostname
-  argocd_hostname   = var.argocd_hostname
+  project_id          = var.project_id
+  domain              = var.domain
+  boutique_ip_address = module.ingress_edge.address
+  argocd_ip_address   = module.ingress_edge.argocd_address
+  boutique_hostname   = var.boutique_hostname
+  argocd_hostname     = var.argocd_hostname
 
   depends_on = [module.ingress_edge]
 }

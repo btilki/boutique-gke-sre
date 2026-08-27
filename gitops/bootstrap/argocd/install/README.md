@@ -24,7 +24,7 @@ Document how Argo CD is installed on the cluster. The actual Helm release is app
 ## Dependencies
 
 - Phase 2: GKE cluster reachable via `kubectl`
-- Phase 4 setup: [docs/setup/09-argocd-bootstrap.md](../../../docs/setup/09-argocd-bootstrap.md)
+- Phase 4 setup: [docs/setup/09-argocd-bootstrap.md](../../../../docs/setup/09-argocd-bootstrap.md)
 
 ## Usage
 

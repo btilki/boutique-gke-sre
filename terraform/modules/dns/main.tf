@@ -13,7 +13,7 @@ resource "google_dns_record_set" "boutique" {
   name         = "${var.boutique_hostname}."
   type         = "A"
   ttl          = var.ttl
-  rrdatas      = [var.static_ip_address]
+  rrdatas      = [var.boutique_ip_address]
 }
 
 resource "google_dns_record_set" "argocd" {
@@ -22,5 +22,5 @@ resource "google_dns_record_set" "argocd" {
   name         = "${var.argocd_hostname}."
   type         = "A"
   ttl          = var.ttl
-  rrdatas      = [var.static_ip_address]
+  rrdatas      = [var.argocd_ip_address]
 }

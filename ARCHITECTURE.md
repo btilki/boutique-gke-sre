@@ -5,18 +5,18 @@ Executive summary for **boutique-gke-sre**. Full design: **[docs/architecture/ov
 ## Stack flow
 
 ```
-Git → GitHub Actions (WIF) → Artifact Registry → Argo CD → Private GKE
+Git → GitHub Actions (WIF) → Artifact Registry → Argo CD → GKE (private nodes, public API)
   → HTTPS (Cloud Armor, TLS) → OTel → Cloud Monitoring → PagerDuty
 ```
 
 ## Key decisions
 
-| Topic     | Choice                                                                                       |
-| --------- | -------------------------------------------------------------------------------------------- |
-| Isolation | One cluster; namespaces `boutique`, `argocd`, `observability`, `kyverno`, `external-secrets` |
-| Deploy    | GitOps; manual Argo CD sync; digest-only images                                              |
-| Security  | WIF, ESO, Kyverno, NetworkPolicy, Binary Authorization, Cloud Armor                          |
-| SRE       | Browse 99.9%, checkout 99.95%; burn alerts; runbooks per alert                               |
+| Topic     | Choice                                                                                                                  |
+| --------- | ----------------------------------------------------------------------------------------------------------------------- |
+| Isolation | One cluster; private nodes; public API; namespaces `boutique`, `argocd`, `observability`, `kyverno`, `external-secrets` |
+| Deploy    | GitOps; manual Argo CD sync; digest-only images                                                                         |
+| Security  | WIF, ESO, Kyverno, NetworkPolicy, Binary Authorization, Cloud Armor                                                     |
+| SRE       | Browse 99.9%, checkout 99.95%; burn alerts; runbooks per alert                                                          |
 
 ## Diagrams
 

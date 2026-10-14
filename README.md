@@ -2,7 +2,7 @@
 
 > **Infrastructure:** Decommissioned 2026-07-04. Documentation and screenshots remain; public DNS names are **inactive** (no A records until rebuild).
 
-Production-style **platform + SRE** stack for [Google Online Boutique](https://github.com/GoogleCloudPlatform/microservices-demo) on a single private regional GKE cluster in GCP (`boutique-gke`).
+Production-style **platform + SRE** stack for [Google Online Boutique](https://github.com/GoogleCloudPlatform/microservices-demo) on a single regional GKE cluster in GCP (`boutique-gke`), with private nodes and a public API endpoint.
 
 Part of the [DevOps Engineering Playbook](https://github.com/btilki/devops-engineering-playbook) · Author: [Birol Tilki](https://www.linkedin.com/in/birol-tilki-48731326/)
 
@@ -14,7 +14,7 @@ Part of the [DevOps Engineering Playbook](https://github.com/btilki/devops-engin
 | ------------------ | ------------------------------------------------------------------------------------------------------------------------- |
 | **What**           | SRE-focused private GKE platform for Online Boutique — SLOs, burn-rate alerts, runbooks                                   |
 | **Lens**           | Reliability after deploy: observability → PagerDuty → incident paths                                                      |
-| **Also included**  | GitOps, supply-chain controls, private cluster security baseline                                                          |
+| **Also included**  | GitOps, supply-chain controls, private-node baseline (public API endpoint)                                                |
 | **State**          | Phases 1–8 lived; infra **torn down**; Phase 9 SRE expansion ready to apply on rebuild                                    |
 | **Start reading**  | [ARCHITECTURE.md](ARCHITECTURE.md) → [docs/setup/README.md](docs/setup/README.md) → observability / SLO docs              |
 | **Playbook brief** | [featured project](https://github.com/btilki/devops-engineering-playbook/blob/main/featured-projects/boutique-gke-sre.md) |

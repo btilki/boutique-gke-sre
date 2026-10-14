@@ -1,6 +1,6 @@
 # Architecture overview — boutique-gke-sre
 
-Canonical system design for the production SRE reference: Google Online Boutique on one private regional **GKE** (**Google Kubernetes Engine**) cluster in **GCP** (**Google Cloud Platform**) project `boutique-gke`, domain `biroltilki.art`.
+Canonical system design for the production SRE reference: Google Online Boutique on one regional **GKE** (**Google Kubernetes Engine**) cluster in **GCP** (**Google Cloud Platform**) project `boutique-gke`, domain `biroltilki.art`. Nodes are private. The Kubernetes API endpoint is public.
 
 **Public DNS (inactive until rebuild):** `boutique.biroltilki.art` · `argocd.boutique.biroltilki.art` — see [dns.md](../dns.md).
 
@@ -73,7 +73,7 @@ Canonical system design for the production SRE reference: Google Online Boutique
 
 ## 4. High-level architecture
 
-Git is the single source of truth. Engineers merge PRs that update Helm values (image digests) and platform manifests. GitHub Actions authenticates to GCP via Workload Identity Federation, builds or mirrors images, scans with Trivy, signs with cosign, and pushes to Artifact Registry. Argo CD watches the repo and syncs desired state to a **single private regional GKE cluster**. Platform components (Kyverno, ESO, NetworkPolicy) enforce security at admission and runtime.
+Git is the single source of truth. Engineers merge PRs that update Helm values (image digests) and platform manifests. GitHub Actions authenticates to GCP via Workload Identity Federation, builds or mirrors images, scans with Trivy, signs with cosign, and pushes to Artifact Registry. Argo CD watches the repo and syncs desired state to a **single regional GKE cluster** (private nodes, public API endpoint). Platform components (Kyverno, ESO, NetworkPolicy) enforce security at admission and runtime.
 
 Online Boutique runs in the `boutique` namespace; Argo CD in `argocd`; observability stack in `observability`. North-south traffic enters through Google Cloud external HTTP(S) load balancers with **dedicated** static IPs (`boutique-ingress-ip`, `argocd-ingress-ip`), Google-managed TLS certificates, and Cloud Armor. OpenTelemetry exports to Cloud Trace and Managed Prometheus; Grafana visualizes health. Cloud Monitoring hosts SLOs, uptime checks, and burn-rate alerts that route to PagerDuty with runbook links in `docs/sre/runbooks/`.
 
@@ -218,8 +218,8 @@ boutique-vpc (custom, regional)
 
 ### GKE networking (Phase 2+)
 
-- Private cluster: node IPs not publicly routable
-- Authorized networks or IAP for control plane admin access
+- Nodes use private IPs and egress through Cloud NAT. Node IPs are not publicly routable.
+- The Kubernetes API endpoint is public (`enable_private_endpoint = false` in `terraform/modules/gke`). Master authorized networks are not configured. Topic 04 documents `get-credentials` against that public endpoint.
 - GCE Ingress provisions an external HTTP(S) load balancer **per Ingress object**
 - Two static global IPs from Terraform (`boutique-ingress-ip`, `argocd-ingress-ip`); bound via Ingress annotations
 
@@ -235,23 +235,25 @@ boutique-vpc (custom, regional)
 
 Namespaces must include label `network-policy.biroltilki.art/tier` (enforced by Kyverno policy `require-netpol-labels`).
 
+The GKE module does not set Dataplane V2 (`datapath_provider = "ADVANCED_DATAPATH"`) or the Calico network-policy addon. These NetworkPolicy manifests are in Git. They are not pinned to an enforcing dataplane. See [SECURITY.md](../../SECURITY.md).
+
 → [network-flow.mmd](../../assets/diagrams/network-flow.mmd)
 
 ---
 
 ## 9. Security boundaries
 
-| Boundary        | Mechanism                        | Notes                                           |
-| --------------- | -------------------------------- | ----------------------------------------------- |
-| CI → GCP        | WIF (OIDC trust GitHub repo/ref) | Short-lived tokens; scoped SA per workflow      |
-| Pod → GCP       | Workload Identity                | ESO SA in `external-secrets`                    |
-| Image trust     | cosign + Binary Authorization    | Unsigned images rejected at deploy              |
-| Admission       | Kyverno                          | Blocks `:latest`, missing probes, plain Secrets |
-| Runtime network | NetworkPolicy                    | Default-deny; explicit allows                   |
-| Edge            | Cloud Armor                      | OWASP CRS baseline                              |
-| Secrets         | Secret Manager + ESO             | gitleaks in pre-commit                          |
-| Audit           | Cloud Audit Logs                 | Admin and data access                           |
-| TLS             | Google-managed certs             | Auto-renewal on Ingress                         |
+| Boundary        | Mechanism                        | Notes                                                                                                                                                                |
+| --------------- | -------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| CI → GCP        | WIF (OIDC trust GitHub repo/ref) | Short-lived tokens; scoped SA per workflow                                                                                                                           |
+| Pod → GCP       | Workload Identity                | ESO SA in `external-secrets`                                                                                                                                         |
+| Image trust     | cosign + Binary Authorization    | This cluster's rule requires attestation. The project default is allow with dry-run. The `redis-cart` attestation gap is still open.                                 |
+| Admission       | Kyverno                          | Blocks `:latest`, missing probes, plain Secrets                                                                                                                      |
+| Runtime network | NetworkPolicy                    | Manifests are default-deny with explicit allows. The enforcing dataplane is not set in the GKE module.                                                               |
+| Edge            | Cloud Armor                      | Storefront policy is a console procedure (topic 15): SQLi, XSS, and a rate limit. The Argo CD policy is Terraform and stays off unless `enable_argocd_armor` is set. |
+| Secrets         | Secret Manager + ESO             | gitleaks in pre-commit                                                                                                                                               |
+| Audit           | Cloud Audit Logs                 | Admin and data access                                                                                                                                                |
+| TLS             | Google-managed certs             | Auto-renewal on Ingress                                                                                                                                              |
 
 **Trust zones:**
 

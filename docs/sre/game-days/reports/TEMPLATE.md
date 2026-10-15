@@ -2,7 +2,7 @@
 
 **Date:** YYYY-MM-DD
 **Scenario:** e.g. [01 — Bad deploy rollback](../01-bad-deploy-rollback.md) (link the scenario you ran)
-**Environment:** `boutique-gke` (production reference) | tabletop / deferred
+**Environment:** `boutique-gke` (production pilot) | tabletop / deferred
 **Facilitator:**
 **Participants:**
 **Severity (exercise):** Simulated SEV[1-4]

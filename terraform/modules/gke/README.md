@@ -4,7 +4,7 @@ Private regional GKE cluster and autoscaling node pool for Online Boutique on `b
 
 ## Purpose
 
-Provisions a production-style **private regional GKE cluster** in `europe-west1` with Workload Identity, secondary IP ranges for pods and services (from the networking module), and an autoscaling node pool sized for the Boutique microservices workload. Nodes have no public IPs; egress uses Cloud NAT from the VPC module.
+Provisions a production-pilot **private regional GKE cluster** in `europe-west1` with Workload Identity, secondary IP ranges for pods and services (from the networking module), and an autoscaling node pool sized for the Boutique microservices workload. Nodes have no public IPs; egress uses Cloud NAT from the VPC module.
 
 ## Inputs
 

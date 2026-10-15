@@ -21,7 +21,7 @@ The principles above are the target. This repository still has these gaps. Do no
 
 - The Kubernetes API endpoint is public (`enable_private_endpoint = false` in `terraform/modules/gke`). Master authorized networks are not set. Node OAuth scope is `https://www.googleapis.com/auth/cloud-platform`.
 - Binary Authorization's project default is allow plus dry-run. Only this cluster's admission rule requires an attestation.
-- `redis-cart` was not attested during the 2026-07-04 game day. The action items in [docs/sre/postmortems/2026-07-04-redis-cart-down.md](docs/sre/postmortems/2026-07-04-redis-cart-down.md) are still open. Signing uses a long-lived cosign private key in GitHub secrets.
+- `redis-cart` was not attested during the Redis cart game day. The action items in [docs/sre/postmortems/2026-07-04-redis-cart-down.md](docs/sre/postmortems/2026-07-04-redis-cart-down.md) are still open. Signing uses a long-lived cosign private key in GitHub secrets.
 - Storefront Cloud Armor is a console procedure in [docs/setup/15-cloud-armor.md](docs/setup/15-cloud-armor.md). The Terraform module covers the Argo CD policy and stays off unless `enable_argocd_armor` is set. The rules are SQLi, XSS, and a rate limit, then default allow.
 - The GKE module does not set Dataplane V2 or the Calico network-policy addon. NetworkPolicy objects in Git are not pinned to an enforcing dataplane. Kyverno checks the namespace label. It does not prove the CNI is dropping packets.
 

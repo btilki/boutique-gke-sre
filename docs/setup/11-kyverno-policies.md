@@ -4,7 +4,7 @@
 
 Install the Kyverno admission controller, deploy the five minimum ClusterPolicies from `gitops/policies/kyverno/`, sync NetworkPolicies from `gitops/policies/network-policies/`, and prove enforcement by denying a `:latest` image fixture. When complete, non-compliant workloads cannot reach the cluster.
 
-> **Phase 4 gate:** Topics **09–11** must complete before treating the cluster as production-ready. **Do not proceed to Boutique deploy (topic 12) until this guide passes validation.**
+> **Phase 4 gate:** Topics **09–11** must complete before deploying Boutique (topic 12). **Do not proceed to topic 12 until this guide passes validation.**
 
 ## Why this step is required
 

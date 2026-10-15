@@ -6,7 +6,7 @@ Deploy Google Online Boutique to the `boutique` namespace via Argo CD **manual s
 
 ## Why this step is required
 
-This is the first full application workload on the production-ready platform (Phase 4 gate complete). It validates the entire supply chain built in topics 07–11:
+This is the first full application workload on the pilot platform (Phase 4 gate complete). It validates the entire supply chain built in topics 07–11:
 
 - CI promotes image **digests** (not tags) into `values-images.yaml`
 - Argo CD renders the Helm chart in `gitops/apps/boutique/`

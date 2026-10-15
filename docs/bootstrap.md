@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Provide the executive path from an empty GCP project to production-ready URLs for Online Boutique and Argo CD on a single private GKE cluster.
+Provide the executive path from an empty GCP project to the storefront and Argo CD hostnames for Online Boutique on a single private GKE cluster.
 
 **Target DNS names** (inactive until rebuild): `boutique.biroltilki.art` · `argocd.boutique.biroltilki.art` — [dns.md](dns.md)
 
@@ -51,7 +51,7 @@ flowchart TB
 | SRE practices         | 20                | 9-D (cadence anytime)              |
 | Lifecycle             | teardown + backup | 8                                  |
 
-**Critical:** Do not skip topics 09–11 (Argo CD, ESO, Kyverno) before treating the cluster as production-ready.
+**Critical:** Do not skip topics 09–11 (Argo CD, ESO, Kyverno) before deploying Boutique.
 
 ## Step-by-step implementation
 

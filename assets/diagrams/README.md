@@ -70,7 +70,7 @@ flowchart TB
 ```
 ````
 
-Export PNG (optional, requires [mermaid-cli](https://github.com/mermaid-js/mermaid-cli)):
+Export PNG (optional, requires mermaid-cli):
 
 ```bash
 npx -p @mermaid-js/mermaid-cli mmdc -i assets/diagrams/architecture.mmd -o assets/architecture.png

@@ -5,22 +5,21 @@
 **Architecture (authoritative):** [docs/architecture/overview.md](../architecture/overview.md) · [ARCHITECTURE.md](../../ARCHITECTURE.md)
 **Setup guides:** [docs/setup/README.md](../setup/README.md)
 
-**Plan version:** 2026-07-25
-**Status:** Phases **1–8** lived and torn down (2026-07-04). Phases **9-A–9-D** repo-ready (apply topics 17–20 on rebuild).
+**Status:** Phases **1–8** lived and torn down. Phases **9-A–9-D** repo-ready (apply topics 17–20 on rebuild).
 
 ---
 
 ## 1. Executive summary
 
-| Field              | Value                                                                                                                                                                                    |
-| ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Project            | **boutique-gke-sre**                                                                                                                                                                     |
-| Goal               | Production **SRE** (**Site Reliability Engineering**) reference for Online Boutique on one private **GKE** (**Google Kubernetes Engine**) cluster in **GCP** (**Google Cloud Platform**) |
-| Domain             | `biroltilki.art` — hostnames currently **inactive** ([dns.md](../dns.md))                                                                                                                |
-| Phases             | **1–8** (bootstrap → teardown) + **9-A–9-D** (SRE expansion)                                                                                                                             |
-| Overall complexity | **L** (platform breadth); Phase 4 is the production gate                                                                                                                                 |
-| Current mode       | Repo retained as reference; live apply deferred until rebuild                                                                                                                            |
-| Definition of done | Production bar in [PROJECT.md](../../PROJECT.md); topics 01–16 validated historically; 17–20 artifacts in Git                                                                            |
+| Field              | Value                                                                                                                                                                                          |
+| ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Project            | **boutique-gke-sre**                                                                                                                                                                           |
+| Goal               | Production-pilot **SRE** (**Site Reliability Engineering**) reference for Online Boutique on one private **GKE** (**Google Kubernetes Engine**) cluster in **GCP** (**Google Cloud Platform**) |
+| Domain             | `biroltilki.art` — hostnames currently **inactive** ([dns.md](../dns.md))                                                                                                                      |
+| Phases             | **1–8** (bootstrap → teardown) + **9-A–9-D** (SRE expansion)                                                                                                                                   |
+| Overall complexity | **L** (platform breadth); Phase 4 is the deploy gate                                                                                                                                           |
+| Current mode       | Repo retained as reference; live apply deferred until rebuild                                                                                                                                  |
+| Definition of done | Pilot checklist in [PROJECT.md](../../PROJECT.md); topics 01–16 validated historically; 17–20 artifacts in Git                                                                                 |
 
 ---
 
@@ -41,7 +40,7 @@
 
 ## 3. Business value
 
-- Production-quality GCP platform reference (not a throwaway demo)
+- Production-pilot GCP platform for Online Boutique
 - Educational setup topics with rationale (why private GKE, WIF, burn rates)
 - Operable reliability: SLOs, error budgets, runbooks, one executed game day
 - Cost-conscious teardown path with orphan-scan hygiene
@@ -268,7 +267,7 @@ Then apply topics **17–20** per their guides. DNS must be **active** again bef
 ## 18. Further reading
 
 - [ROADMAP.md](../../ROADMAP.md) — short status table
-- [PROJECT.md](../../PROJECT.md) — charter and production bar
+- [PROJECT.md](../../PROJECT.md) — charter and pilot checklist
 - [bootstrap.md](../bootstrap.md) — executive bootstrap path
 - [setup/README.md](../setup/README.md) — topic index
 - [DOCUMENTATION.md](../DOCUMENTATION.md) — doc standards and terminology

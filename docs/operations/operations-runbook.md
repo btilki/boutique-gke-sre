@@ -6,7 +6,7 @@ Canonical day-2 operations guide for Online Boutique on the private GKE cluster 
 | -------------- | ----------------------------------------------------------------- |
 | **Storefront** | `boutique.biroltilki.art` (**inactive** until rebuild)            |
 | **Argo CD**    | `argocd.boutique.biroltilki.art` (**inactive** until rebuild)     |
-| **Cluster**    | `boutique-gke` (`europe-west1`) — decommissioned 2026-07-04       |
+| **Cluster**    | `boutique-gke` (`europe-west1`) — decommissioned                  |
 | **GitOps**     | Manual Argo CD sync ([ADR-003](../adr/003-manual-argocd-sync.md)) |
 | **On-call**    | [docs/sre/oncall/README.md](../sre/oncall/README.md)              |
 
@@ -1425,6 +1425,6 @@ Disable automation that causes false-positive rollbacks; fix and re-enable via P
 
 ## Document history
 
-| Version | Date       | Author       | Notes                                    |
-| ------- | ---------- | ------------ | ---------------------------------------- |
-| 1.0     | 2026-07-04 | Platform/SRE | Initial comprehensive operations runbook |
+| Version | Author       | Notes                                    |
+| ------- | ------------ | ---------------------------------------- |
+| 1.0     | Platform/SRE | Initial comprehensive operations runbook |

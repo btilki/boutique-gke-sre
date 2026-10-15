@@ -21,7 +21,7 @@ Fast path from observable failure to documented fix without duplicating full run
 
 ## Public DNS names
 
-**Status:** inactive (infra decommissioned 2026-07-04). See [dns.md](../dns.md).
+**Status:** inactive (infra decommissioned). See [dns.md](../dns.md).
 
 - Storefront: `boutique.biroltilki.art`
 - Argo CD: `argocd.boutique.biroltilki.art`

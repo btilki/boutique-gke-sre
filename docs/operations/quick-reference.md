@@ -144,4 +144,4 @@ DNS → TLS/cert → Ingress → Argo CD sync → Kyverno → Pods → Logs
 
 ---
 
-_v1.0 · 2026-07-04 · boutique-gke-sre_
+_v1.0 · boutique-gke-sre_

@@ -2,11 +2,11 @@
 
 ## Summary
 
-Production SRE reference for Google Online Boutique on one private regional GKE cluster in GCP project `boutique-gke`, domain `biroltilki.art`.
+Production-pilot SRE reference for [Google Online Boutique](https://github.com/GoogleCloudPlatform/microservices-demo) on one private regional GKE cluster in GCP project `boutique-gke`, domain `biroltilki.art`.
 
 ## Goals
 
-1. Demonstrate production-grade platform engineering on GCP (GitOps, DevSecOps, SRE)
+1. Run a production-pilot platform on GCP (GitOps, DevSecOps, SRE)
 2. Provide operable SLOs, alerting, runbooks, and game-day practice — not slide-ware
 3. Serve as a reusable platform baseline and internal engineering reference
 
@@ -18,7 +18,7 @@ Production SRE reference for Google Online Boutique on one private regional GKE 
 
 **Out of scope:** Multi-project/cluster, multi-region active-active, service mesh default, custom app code, status page product.
 
-## Production bar
+## Pilot checklist
 
 - HTTPS on `boutique.biroltilki.art` and `argocd.boutique.biroltilki.art` (when live)
 - Kyverno enforced; digest-only images; ESO-only secrets
@@ -27,7 +27,7 @@ Production SRE reference for Google Online Boutique on one private regional GKE 
 - HA GitOps, Argo uptime, game-day STATUS/TEMPLATE, GD03 postmortem (topic 18 — apply on rebuild)
 - Terraform monitoring + GKE Backup modules (topic 19 — enable_*_iac on rebuild)
 - Error-budget ritual, capacity baseline, toil cadence (topic 20)
-- Game-day scenario executed (2026-07-04); infrastructure decommissioned 2026-07-04
+- Game-day scenario executed; infrastructure decommissioned
 
 ## DNS names (inactive)
 
@@ -46,7 +46,7 @@ Phased delivery — one phase per session, validate, commit, proceed.
 
 ## Session rule
 
-**Do not skip Phase 4** (Argo CD + Kyverno + ESO + NetworkPolicy) before treating the cluster as production-ready.
+**Do not skip Phase 4** (Argo CD + Kyverno + ESO + NetworkPolicy) before deploying Boutique.
 
 - [README.md](README.md)
 - [docs/operations/operations-runbook.md](docs/operations/operations-runbook.md)

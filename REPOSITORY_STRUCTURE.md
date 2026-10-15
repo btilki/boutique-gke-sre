@@ -28,7 +28,7 @@ boutique-gke-sre/
 ├── tests/                # Kyverno, Terraform, manifest validation
 ├── assets/diagrams/      # Mermaid sources and operational screenshots
 ├── README.md             # Project overview and navigation
-├── PROJECT.md            # Charter and production bar
+├── PROJECT.md            # Charter and pilot checklist
 ├── ARCHITECTURE.md       # Executive architecture index
 ├── ROADMAP.md            # Phase status
 ├── CONTRIBUTING.md

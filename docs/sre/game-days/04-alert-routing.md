@@ -6,7 +6,7 @@ End-to-end verification that Cloud Monitoring alerts reach PagerDuty with correc
 
 ## When to use
 
-After [setup/14-pagerduty.md](../../setup/14-pagerduty.md); before declaring production-ready.
+After [setup/14-pagerduty.md](../../setup/14-pagerduty.md); before pilot sign-off.
 
 ## Prerequisites
 

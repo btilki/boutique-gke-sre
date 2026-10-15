@@ -32,11 +32,11 @@ Phase 1 → 2 → 3 → 4 (gate) → 5 → 6 → 7 → 8
 
 ## Critical gate
 
-**Do not skip Phase 4** before treating the cluster as production-ready.
+**Do not skip Phase 4** before deploying Boutique.
 
 ## Current phase
 
-**Phases 1–8 complete** — Infrastructure decommissioned 2026-07-04. Git repository retained as the platform reference. See [docs/teardown.md](docs/teardown.md).
+**Phases 1–8 complete** — Infrastructure decommissioned. Git repository retained as the platform reference. See [docs/teardown.md](docs/teardown.md).
 
 **Phases 9-A–9-D — repo ready:** Apply/execute topics **17–20** on rebuild (topic 20 cadence can be practiced offline). Optional follow-ups below.
 

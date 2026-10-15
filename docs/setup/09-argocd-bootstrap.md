@@ -4,7 +4,7 @@
 
 Install Argo CD on the private GKE cluster, expose the UI at **`argocd.boutique.biroltilki.art`**, register the app-of-apps root Application (`gitops/bootstrap/root-app.yaml`), and confirm **manual sync** is the only promotion path. When this topic is complete, you can log in to Argo CD and see child Applications (policies, boutique, observability) in `OutOfSync` state awaiting deliberate sync.
 
-> **Phase 4 gate:** Topics **09–11** (Argo CD, ESO, Kyverno) must complete before treating the cluster as production-ready. Do not deploy Online Boutique (topic 12) until the gate passes.
+> **Phase 4 gate:** Topics **09–11** (Argo CD, ESO, Kyverno) must complete before deploying Online Boutique (topic 12).
 
 ## Why this step is required
 
@@ -74,7 +74,7 @@ helm upgrade --install argocd argo/argo-cd \
   --timeout 10m
 ```
 
-Pin the chart version to a known release; check [argo-helm releases](https://github.com/argoproj/argo-helm/releases) before upgrading in production.
+Pin the chart version to a known release before upgrading.
 
 ### 4. Apply the Argo CD Ingress manifest
 

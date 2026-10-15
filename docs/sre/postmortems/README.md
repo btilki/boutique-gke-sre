@@ -8,9 +8,9 @@ Blameless postmortem reports for incidents and game-day follow-ups.
 
 ## Completed reports
 
-| Date       | Title                                                                 | Severity        | Source                                                                   |
-| ---------- | --------------------------------------------------------------------- | --------------- | ------------------------------------------------------------------------ |
-| 2026-07-04 | [Redis cart down — BA blocked restore](2026-07-04-redis-cart-down.md) | SEV2 (exercise) | [Game day 03 report](../game-days/reports/2026-07-04-redis-cart-down.md) |
+| Title                                                                 | Severity        | Source                                                                   |
+| --------------------------------------------------------------------- | --------------- | ------------------------------------------------------------------------ |
+| [Redis cart down — BA blocked restore](2026-07-04-redis-cart-down.md) | SEV2 (exercise) | [Game day 03 report](../game-days/reports/2026-07-04-redis-cart-down.md) |
 
 ## When to write one
 

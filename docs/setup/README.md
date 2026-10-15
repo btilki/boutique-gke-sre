@@ -1,6 +1,6 @@
 # Setup guides — boutique-gke-sre
 
-Topic-based guides to bootstrap from an empty GCP project to production-ready URLs.
+Topic-based guides to bootstrap from an empty GCP project to the storefront and Argo CD hostnames.
 
 **Target DNS names** (inactive until rebuild — see [dns.md](../dns.md)):
 
@@ -36,7 +36,7 @@ Topics **01–16** are the original bootstrap path. Topics **17–20** are SRE e
 
 All guides use the SETUP-GUIDE format: Goal, Why, Prerequisites, Commands, Expected output, Validation, Common problems, Recovery, Best practices, Security notes, Next step.
 
-**Phase 4 gate:** Topics 09–11 (Argo CD, ESO, Kyverno) must complete before treating the cluster as production-ready or deploying Boutique (topic 12).
+**Phase 4 gate:** Topics 09–11 (Argo CD, ESO, Kyverno) must complete before deploying Boutique (topic 12).
 
 ## Dependency graph
 

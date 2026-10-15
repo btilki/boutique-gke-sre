@@ -9,4 +9,4 @@ Phased delivery plan and status for **boutique-gke-sre**.
 | [setup/](../setup/)            | Topic guides 01–20 (execute these)                                 |
 
 **Session rule:** One phase per session → validate → commit → next.
-**Gate:** Do **not** skip Phase 4 before treating the cluster as production-ready.
+**Gate:** Do **not** skip Phase 4 before deploying Boutique.

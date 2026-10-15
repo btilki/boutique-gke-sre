@@ -6,10 +6,10 @@ Document **DNS** (**Domain Name System**) delegation and A records for public ho
 
 ## Current status (post-teardown)
 
-| Hostname                         | Role       | Status                                                              |
-| -------------------------------- | ---------- | ------------------------------------------------------------------- |
-| `boutique.biroltilki.art`        | Storefront | **Inactive** — no public A record (infra decommissioned 2026-07-04) |
-| `argocd.boutique.biroltilki.art` | Argo CD UI | **Inactive** — no public A record (infra decommissioned 2026-07-04) |
+| Hostname                         | Role       | Status                                                   |
+| -------------------------------- | ---------- | -------------------------------------------------------- |
+| `boutique.biroltilki.art`        | Storefront | **Inactive** — no public A record (infra decommissioned) |
+| `argocd.boutique.biroltilki.art` | Argo CD UI | **Inactive** — no public A record (infra decommissioned) |
 
 Expected while offline: `dig +short` returns empty for both names. Re-create A records only during Phase 2 rebuild ([setup/05-cloud-dns.md](setup/05-cloud-dns.md)).
 

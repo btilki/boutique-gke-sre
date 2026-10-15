@@ -60,7 +60,7 @@ Expected: bad example fails; production manifests pass.
 
 ## Production considerations
 
-- Policies enforce production bar; exceptions need ADR
+- Policies enforce the pilot checklist; exceptions need an ADR
 - Policy changes sync via `policies` Argo CD Application
 
 ## Security considerations

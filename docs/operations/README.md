@@ -1,6 +1,6 @@
 # Operations documentation
 
-Day-2 operations guides for the boutique-gke-sre production reference environment.
+Day-2 operations guides for the boutique-gke-sre production-pilot environment.
 
 | Document                                           | Description                                                                                                                                             |
 | -------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |

@@ -8,7 +8,7 @@ Create a **Cloud Armor** security policy with an **CRS** (**OWASP ModSecurity Co
 
 The storefront Ingress is public internet-facing. Cloud Armor adds WAF and DDoS protection at the Google Cloud load balancer — before malicious requests reach GKE nodes or application pods. OWASP CRS provides a maintained rule set for common web attacks (SQLi, XSS, path traversal).
 
-This is edge hardening in the production bar: HTTPS (topic 06), policy enforcement (topics 11–12), and now WAF (topic 15).
+This is edge hardening on the pilot checklist: HTTPS (topic 06), policy enforcement (topics 11–12), and now WAF (topic 15).
 
 ## Prerequisites
 
@@ -153,7 +153,7 @@ curl -s -o /dev/null -w "%{http_code}\n" https://boutique.biroltilki.art
 
 Expected: `200` or `302` — normal storefront responses.
 
-### 7. Verify WAF blocks attack patterns (required for production bar)
+### 7. Verify WAF blocks attack patterns (required for the pilot checklist)
 
 Send controlled attack probes (expect **403** from Cloud Armor):
 

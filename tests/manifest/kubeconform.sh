@@ -2,7 +2,7 @@
 # kubeconform manifest schema validation stub — boutique-gke-sre
 #
 # Validates Kubernetes YAML under gitops/ against upstream schemas.
-# Install: https://github.com/yannh/kubeconform
+# Install kubeconform before running this script.
 #
 set -euo pipefail
 
@@ -11,7 +11,7 @@ SCHEMA_DIR="${SCHEMA_DIR:-}"
 
 echo "==> kubeconform manifest validation"
 command -v kubeconform >/dev/null || {
-  echo "kubeconform not installed; see https://github.com/yannh/kubeconform"
+  echo "kubeconform not installed"
   exit 1
 }
 

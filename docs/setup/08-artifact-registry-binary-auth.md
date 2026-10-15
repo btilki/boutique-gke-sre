@@ -333,4 +333,4 @@ terraform destroy -target=module.artifact_registry
 
 → [09 — Argo CD bootstrap](09-argocd-bootstrap.md)
 
-**Phase 4 gate:** Topics 09–11 (Argo CD, ESO, Kyverno) must complete before treating the cluster as production-ready.
+**Phase 4 gate:** Topics 09–11 (Argo CD, ESO, Kyverno) must complete before deploying Boutique (topic 12).

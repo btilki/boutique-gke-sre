@@ -69,6 +69,6 @@ kubectl get deploy redis-cart -n boutique
 
 - [runbooks/redis-cart-down.md](../runbooks/redis-cart-down.md)
 - [runbooks/redis-restore.md](../runbooks/redis-restore.md)
-- Executed report: [reports/2026-07-04-redis-cart-down.md](reports/2026-07-04-redis-cart-down.md)
-- Postmortem: [../postmortems/2026-07-04-redis-cart-down.md](../postmortems/2026-07-04-redis-cart-down.md)
+- Executed report: [Redis cart down](reports/2026-07-04-redis-cart-down.md)
+- Postmortem: [Redis cart down — BA blocked restore](../postmortems/2026-07-04-redis-cart-down.md)
 - Matrix: [reports/STATUS.md](reports/STATUS.md) · template: [reports/TEMPLATE.md](reports/TEMPLATE.md)

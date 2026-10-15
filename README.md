@@ -1,23 +1,22 @@
 # boutique-gke-sre
 
-> **Infrastructure:** Decommissioned 2026-07-04. Documentation and screenshots remain; public DNS names are **inactive** (no A records until rebuild).
+> **Infrastructure:** Decommissioned. Documentation and screenshots remain; public DNS names are **inactive** (no A records until rebuild).
 
-Production-style **platform + SRE** stack for [Google Online Boutique](https://github.com/GoogleCloudPlatform/microservices-demo) on a single regional GKE cluster in GCP (`boutique-gke`), with private nodes and a public API endpoint.
+Production-pilot **platform + SRE** stack for [Google Online Boutique](https://github.com/GoogleCloudPlatform/microservices-demo) on a single regional GKE cluster in GCP (`boutique-gke`), with private nodes and a public API endpoint.
 
-Part of the [DevOps Engineering Playbook](https://github.com/btilki/devops-engineering-playbook) · Author: [Birol Tilki](https://www.linkedin.com/in/birol-tilki-48731326/)
+Author: [Birol Tilki](https://www.linkedin.com/in/birol-tilki-48731326/)
 
 **DNS names (inactive):** `boutique.biroltilki.art` · `argocd.boutique.biroltilki.art`
 
 ### At a glance (30 seconds)
 
-|                    |                                                                                                                           |
-| ------------------ | ------------------------------------------------------------------------------------------------------------------------- |
-| **What**           | SRE-focused private GKE platform for Online Boutique — SLOs, burn-rate alerts, runbooks                                   |
-| **Lens**           | Reliability after deploy: observability → PagerDuty → incident paths                                                      |
-| **Also included**  | GitOps, supply-chain controls, private-node baseline (public API endpoint)                                                |
-| **State**          | Phases 1–8 lived; infra **torn down**; Phase 9 SRE expansion ready to apply on rebuild                                    |
-| **Start reading**  | [ARCHITECTURE.md](ARCHITECTURE.md) → [docs/setup/README.md](docs/setup/README.md) → observability / SLO docs              |
-| **Playbook brief** | [featured project](https://github.com/btilki/devops-engineering-playbook/blob/main/featured-projects/boutique-gke-sre.md) |
+|                   |                                                                                                              |
+| ----------------- | ------------------------------------------------------------------------------------------------------------ |
+| **What**          | SRE-focused private GKE platform for Online Boutique — SLOs, burn-rate alerts, runbooks                      |
+| **Lens**          | Reliability after deploy: observability → PagerDuty → incident paths                                         |
+| **Also included** | GitOps, supply-chain controls, private-node baseline (public API endpoint)                                   |
+| **State**         | Phases 1–8 lived; infra **torn down**; Phase 9 SRE expansion ready to apply on rebuild                       |
+| **Start reading** | [ARCHITECTURE.md](ARCHITECTURE.md) → [docs/setup/README.md](docs/setup/README.md) → observability / SLO docs |
 
 ---
 
@@ -34,7 +33,7 @@ Part of the [DevOps Engineering Playbook](https://github.com/btilki/devops-engin
 
 ## What this is
 
-A production-style GCP platform for Online Boutique—not a throwaway demo cluster. One regional private GKE cluster with GitOps, supply-chain controls, observability, SLOs, burn-rate alerting, PagerDuty routing, and runbooks.
+A production-pilot GCP platform for [Google Online Boutique](https://github.com/GoogleCloudPlatform/microservices-demo). One regional private GKE cluster with GitOps, supply-chain controls, observability, SLOs, burn-rate alerting, PagerDuty routing, and runbooks.
 
 ```mermaid
 flowchart LR
@@ -49,7 +48,7 @@ flowchart LR
 
 ## Operational focus
 
-This repository is the production reference for site reliability of Online Boutique
+This repository is the production-pilot reference for site reliability of Online Boutique
 on Google Cloud: SLOs, alerting, incident response, error budgets, and runbooks.
 GitOps and security controls are implemented on a single private GKE cluster.
 
@@ -104,18 +103,10 @@ Also useful later: `argocd` CLI, `cosign`, `trivy`, `pre-commit`, `gitleaks`.
 
 **CI/CD & workflows:** [.github/workflows/README.md](.github/workflows/README.md)
 
-## Related portfolio
+## Related
 
-| Resource                                                          | Link                                                                                                  |
-| ----------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
-| **DevOps Engineering Playbook** (hub)                             | https://github.com/btilki/devops-engineering-playbook                                                 |
-| Playbook project brief                                            | https://github.com/btilki/devops-engineering-playbook/blob/main/featured-projects/boutique-gke-sre.md |
-| Article G1 — SLOs and burn-rate alerts                            | https://github.com/btilki/devops-engineering-playbook/blob/main/articles/G1.md                        |
-| Article G2 — Workload Identity Federation (no SA JSON keys)       | https://github.com/btilki/devops-engineering-playbook/blob/main/articles/G2.md                        |
-| Article G3 — Binary Authorization + Cloud Armor baseline          | https://github.com/btilki/devops-engineering-playbook/blob/main/articles/G3.md                        |
-| Article X1 — Online Boutique on EKS, GKE, and AKS                 | https://github.com/btilki/devops-engineering-playbook/blob/main/articles/X1.md                        |
-| Article X2 — Single cluster vs multi-cluster                      | https://github.com/btilki/devops-engineering-playbook/blob/main/articles/X2.md                        |
-| Sister platform — EKS GitOps                                      | https://github.com/btilki/boutique-eks-gitops                                                         |
-| Sister platform — AKS DevSecOps                                   | https://github.com/btilki/boutique-aks-devsecops                                                      |
-| _Practical SRE on Google Kubernetes Engine_ (Boutique Production) | https://github.com/btilki/learn-devops-by-building/tree/main/boutique-production/gke-sre              |
-| LinkedIn                                                          | https://www.linkedin.com/in/birol-tilki-48731326/                                                     |
+| Repository             | Link                                                      |
+| ---------------------- | --------------------------------------------------------- |
+| Google Online Boutique | https://github.com/GoogleCloudPlatform/microservices-demo |
+| boutique-eks-gitops    | https://github.com/btilki/boutique-eks-gitops             |
+| boutique-aks-devsecops | https://github.com/btilki/boutique-aks-devsecops          |

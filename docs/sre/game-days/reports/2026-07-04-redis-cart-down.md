@@ -1,8 +1,7 @@
 # Game day report — Redis / cart down
 
-**Date:** 2026-07-04
 **Scenario:** [03 — Redis / cart down](../03-redis-cart-down.md)
-**Environment:** `boutique-gke` (production reference)
+**Environment:** `boutique-gke` (production pilot)
 **Facilitator:** Platform owner (solo exercise)
 **Severity (exercise):** Simulated SEV2 (checkout path)
 
@@ -94,7 +93,7 @@ CONFIRM=yes ./scripts/game-days/inject-redis-down.sh
 kubectl scale deployment redis-cart -n boutique --replicas=1
 kubectl rollout restart deployment/redis-cart -n boutique
 
-# BA temporary DRYRUN (emergency only — used 2026-07-04)
+# BA temporary DRYRUN (emergency only)
 cd terraform/environments/boutique
 terraform apply -var='binary_authorization_enforcement_mode=DRYRUN_AUDIT_LOG_ONLY' \
   -target=module.binary_authorization
@@ -107,4 +106,4 @@ terraform apply -target=module.binary_authorization   # re-enforce from tfvars
 - [Game day 03 guide](../03-redis-cart-down.md)
 - [redis-cart-down runbook](../../runbooks/redis-cart-down.md)
 - [edge-hardening.md](../../../security/edge-hardening.md) — Binary Authorization enforce mode
-- **Postmortem:** [../../postmortems/2026-07-04-redis-cart-down.md](../../postmortems/2026-07-04-redis-cart-down.md)
+- **Postmortem:** [Redis cart down — BA blocked restore](../../postmortems/2026-07-04-redis-cart-down.md)

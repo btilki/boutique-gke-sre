@@ -1,10 +1,9 @@
 # Postmortem: Redis cart down game day — restore blocked by Binary Authorization
 
-**Date:** 2026-07-04
 **Severity:** SEV2 (exercise) — checkout / storefront unavailable during inject; extended by BA deny on restore
 **Authors:** Platform owner (solo game day)
 **Type:** Game day follow-up (not an unplanned production incident)
-**Related report:** [game-days/reports/2026-07-04-redis-cart-down.md](../game-days/reports/2026-07-04-redis-cart-down.md)
+**Related report:** [Redis cart down](../game-days/reports/2026-07-04-redis-cart-down.md)
 
 ## Summary
 

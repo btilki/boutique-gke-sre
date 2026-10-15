@@ -2,13 +2,13 @@
 
 ## Goal
 
-Run the full **production bar** checklist: confirm HTTPS on both public URLs, GitOps and policy enforcement, observability and SLOs, PagerDuty routing, Cloud Armor, and SRE artifacts (runbooks, on-call docs). When this topic passes, bootstrap is complete and the cluster meets the definition of done in the project description.
+Run the full **pilot checklist**: confirm HTTPS on both public URLs, GitOps and policy enforcement, observability and SLOs, PagerDuty routing, Cloud Armor, and SRE artifacts (runbooks, on-call docs). When this topic passes, bootstrap is complete and the cluster meets the definition of done in the project description.
 
 ## Why this step is required
 
-Individual topics validate their own layer. This topic proves the **system** works as a production SRE reference — not a collection of partially configured components. It is the formal gate before game days, on-call rotation, and treating `boutique-gke` as the canonical demo environment.
+Individual topics validate their own layer. This topic proves the **system** works together: GitOps, policy, observability, SLOs, and paging. It is the formal gate before game days and on-call rotation.
 
-Failing smoke validation here means deferring production-ready status until gaps are closed — even if topics 01–15 were marked complete individually.
+Failing smoke validation here means the pilot is not complete until the gaps are closed — even if topics 01–15 were marked complete individually.
 
 ## Prerequisites
 
@@ -288,7 +288,7 @@ curl -I https://boutique.biroltilki.art
 curl -I https://argocd.boutique.biroltilki.art
 ```
 
-**Production bar summary** — all must pass:
+**Pilot checklist** — all must pass:
 
 - [ ] One private GKE cluster (`boutique-gke`, regional, Workload Identity)
 - [ ] Terraform + GCS remote state

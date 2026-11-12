@@ -1,6 +1,6 @@
 # Architecture
 
-Executive summary for **boutique-gke-sre**. Full design: **[docs/architecture/overview.md](docs/architecture/overview.md)** (16 sections).
+Executive summary for boutique-gke-sre. Full design: [docs/architecture/overview.md](docs/architecture/overview.md) (16 sections). Folder nav: [docs/architecture/README.md](docs/architecture/README.md).
 
 ## Stack flow
 
@@ -29,3 +29,9 @@ Git → GitHub Actions (WIF) → Artifact Registry → Argo CD → GKE (private 
 - [001 — Single cluster](docs/adr/001-single-cluster.md)
 - [002 — WIF over SA keys](docs/adr/002-wif-over-sa-keys.md)
 - [003 — Manual Argo CD sync](docs/adr/003-manual-argocd-sync.md)
+
+## Related
+
+- [docs/ci.md](docs/ci.md) · [docs/operations/rollback.md](docs/operations/rollback.md)
+- [docs/pilot-claims.md](docs/pilot-claims.md)
+- [docs/setup/README.md](docs/setup/README.md) (topics 01–16)

@@ -1,12 +1,24 @@
 # Architecture overview — boutique-gke-sre
 
-Canonical system design for the production SRE reference: Google Online Boutique on one regional **GKE** (**Google Kubernetes Engine**) cluster in **GCP** (**Google Cloud Platform**) project `boutique-gke`, domain `biroltilki.art`. Nodes are private. The Kubernetes API endpoint is public.
+Canonical design for this production pilot: Google Online Boutique on one regional GKE cluster in GCP project `boutique-gke`, domain `biroltilki.art`. Nodes are private. The Kubernetes API endpoint is public.
 
-**Public DNS (inactive until rebuild):** `boutique.biroltilki.art` · `argocd.boutique.biroltilki.art` — see [dns.md](../dns.md).
+Public DNS stays offline until rebuild: `boutique.biroltilki.art` · `argocd.boutique.biroltilki.art` — see [dns.md](../dns.md).
 
-**Intended hostnames (when live):** `boutique.biroltilki.art` · `argocd.boutique.biroltilki.art`
+Diagrams: [assets/diagrams/](../../assets/diagrams/). Folder nav: [README.md](README.md).
 
-**Diagram sources:** [assets/diagrams/](../../assets/diagrams/)
+---
+
+## How to use this document
+
+| I want to…                      | Jump to                                                                                                               |
+| ------------------------------- | --------------------------------------------------------------------------------------------------------------------- |
+| Requirements and constraints    | [§1](#1-requirements) · [§2](#2-constraints)                                                                          |
+| High-level stack and components | [§4](#4-high-level-architecture) · [§5](#5-component-diagram)                                                         |
+| Deployment and GitOps           | [§7](#7-deployment-flow) · [`../ci.md`](../ci.md)                                                                     |
+| Network and ingress             | [§8](#8-network-flow)                                                                                                 |
+| Security boundaries             | [§9](#9-security-boundaries)                                                                                          |
+| Failure, scale, DR, cost        | [§10](#10-failure-scenarios) · [§11](#11-scalability) · [§12](#12-disaster-recovery) · [§14](#14-cost-considerations) |
+| Observability and SLOs          | [§13](#13-observability-signal-ownership) · [`../sre/`](../sre/README.md)                                             |
 
 ---
 
@@ -402,6 +414,10 @@ Cloud Monitoring SLOs → PagerDuty ← runbooks (docs/sre/)
 
 ## Related documentation
 
+- [README.md](README.md) — architecture folder nav
 - [ARCHITECTURE.md](../../ARCHITECTURE.md) — executive summary
+- [ci.md](../ci.md) · [operations/rollback.md](../operations/rollback.md) — delivery contracts
+- [pilot-claims.md](../pilot-claims.md) — what the pilot proved
 - [bootstrap.md](../bootstrap.md) — bootstrap path
+- [setup/README.md](../setup/README.md) — rebuild (topics 01–16)
 - [ROADMAP.md](../../ROADMAP.md) — phased delivery

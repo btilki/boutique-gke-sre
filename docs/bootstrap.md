@@ -2,11 +2,9 @@
 
 ## Purpose
 
-Provide the executive path from an empty GCP project to the storefront and Argo CD hostnames for Online Boutique on a single private GKE cluster.
+Executive path from an empty GCP project to the storefront and Argo CD hostnames for Online Boutique on one private GKE cluster.
 
-**Target DNS names** (inactive until rebuild): `boutique.biroltilki.art` · `argocd.boutique.biroltilki.art` — [dns.md](dns.md)
-
-**Intended hostnames (when live):** `boutique.biroltilki.art` · `argocd.boutique.biroltilki.art`
+**DNS names** (offline until rebuild): `boutique.biroltilki.art` · `argocd.boutique.biroltilki.art` — [dns.md](dns.md)
 
 ## When to use
 
@@ -37,36 +35,31 @@ flowchart TB
   P6 --> P8[Phase 8: Backup + teardown validated]
 ```
 
-| Stage                 | Setup topics      | Implementation phase               |
-| --------------------- | ----------------- | ---------------------------------- |
-| Foundation            | 01–03             | 1                                  |
-| Cluster + edge        | 04–06             | 2                                  |
-| Supply chain          | 07–08             | 3                                  |
-| Platform **gate**     | 09–11             | 4                                  |
-| Application           | 12                | 5                                  |
-| SRE                   | 13–16             | 6–7                                |
-| Latency SRE           | 17                | 9-A (apply on rebuild)             |
-| Operability           | 18                | 9-B (apply / game days on rebuild) |
-| Monitoring/Backup IaC | 19                | 9-C (enable_*_iac on rebuild)      |
-| SRE practices         | 20                | 9-D (cadence anytime)              |
-| Lifecycle             | teardown + backup | 8                                  |
+| Stage             | Setup topics      | Implementation phase |
+| ----------------- | ----------------- | -------------------- |
+| Foundation        | 01–03             | 1                    |
+| Cluster + edge    | 04–06             | 2                    |
+| Supply chain      | 07–08             | 3                    |
+| Platform **gate** | 09–11             | 4                    |
+| Application       | 12                | 5                    |
+| SRE               | 13–16             | 6–7                  |
+| Lifecycle         | teardown + backup | 8                    |
 
 **Critical:** Do not skip topics 09–11 (Argo CD, ESO, Kyverno) before deploying Boutique.
 
+Optional guides after a deliberate rebuild (not part of the closed pilot): [setup/README.md — Optional after rebuild](setup/README.md#optional-after-rebuild--not-part-of-the-closed-pilot).
+
 ## Step-by-step implementation
 
-Execute topic guides in order. Confirm each before proceeding.
+Run topic guides in order. Confirm each before you continue.
 
 1. [01 — GCP project and APIs](setup/01-gcp-project-apis.md)
 2. [02 — Terraform remote state](setup/02-terraform-remote-state.md)
 3. [03 — VPC and Cloud NAT](setup/03-vpc-nat.md)
 4. Continue through [setup/README.md](setup/README.md) through topic 16
-5. After rebuild (post topics 13–14): [17 — Latency SLOs + Grafana](setup/17-latency-slos-dashboards.md)
-6. After rebuild (post topics 12–14): [18 — SRE operability / game days](setup/18-sre-operability-game-days.md)
-7. After rebuild (GKE + HTTPS): [19 — Monitoring + Backup Terraform](setup/19-monitoring-backup-terraform.md)
-8. Practices (anytime / richer when live): [20 — SRE practices](setup/20-sre-practices-capacity-toil.md)
+5. When the pilot is done: [teardown.md](teardown.md)
 
-After Phase 1 (topics 01–03): `make validate`, commit, proceed to Phase 2.
+After Phase 1 (topics 01–03): `make validate`, commit, then start Phase 2.
 
 ## Validation
 
@@ -139,7 +132,4 @@ Post-smoke hardening (Binary Auth enforce, Argo CD WAF): [security/edge-hardenin
 - [architecture/overview.md](architecture/overview.md)
 - [ROADMAP.md](../ROADMAP.md)
 - After bootstrap: [16-smoke-validation.md](setup/16-smoke-validation.md), [edge-hardening.md](security/edge-hardening.md), [game-days/01-bad-deploy-rollback.md](sre/game-days/01-bad-deploy-rollback.md), [oncall/README.md](sre/oncall/README.md)
-- After rebuild (latency catalog): [17-latency-slos-dashboards.md](setup/17-latency-slos-dashboards.md)
-- After rebuild (operability): [18-sre-operability-game-days.md](setup/18-sre-operability-game-days.md)
-- After rebuild (monitoring/backup IaC): [19-monitoring-backup-terraform.md](setup/19-monitoring-backup-terraform.md)
-- Practices: [20-sre-practices-capacity-toil.md](setup/20-sre-practices-capacity-toil.md)
+- Optional after rebuild: [setup/README.md](setup/README.md#optional-after-rebuild--not-part-of-the-closed-pilot)

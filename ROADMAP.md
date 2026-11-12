@@ -3,32 +3,32 @@
 Phased delivery for **boutique-gke-sre** — one phase per session: validate → commit → next.
 
 **Full plan:** [docs/implementation/plan.md](docs/implementation/plan.md)
-**Step-by-step guides:** [docs/setup/README.md](docs/setup/README.md) (topics 01–20)
+**Step-by-step guides:** [docs/setup/README.md](docs/setup/README.md) (pilot topics 01–16; optional after-rebuild scaffolds listed there)
 
-| Phase   | Focus                                                 | Size | Status                                               | Setup topics                                       |
-| ------- | ----------------------------------------------------- | ---- | ---------------------------------------------------- | -------------------------------------------------- |
-| **1**   | Repo scaffold + Terraform foundation                  | S    | ✅ Complete                                          | 01–03                                              |
-| **2**   | GKE + DNS + ingress + TLS                             | L    | ✅ Complete                                          | 04–06                                              |
-| **3**   | WIF + Artifact Registry + CI                          | M    | ✅ Complete                                          | 07–08                                              |
-| **4**   | Argo CD + policies + ESO + NetworkPolicy (**gate**)   | L    | ✅ Complete                                          | 09–11                                              |
-| **5**   | Online Boutique deploy                                | M    | ✅ Complete                                          | 12                                                 |
-| **6**   | Observability + SLOs                                  | L    | ✅ Complete                                          | 13                                                 |
-| **7**   | SRE ops + smoke validation                            | M    | ✅ Complete                                          | 14–16                                              |
-| **8**   | Teardown + backup/restore                             | M    | ✅ Complete                                          | [teardown](docs/teardown.md)                       |
-| **9-A** | Latency SLOs + burn alerts + Grafana dashboards       | M    | ✅ Repo ready (apply on rebuild)                     | [17](docs/setup/17-latency-slos-dashboards.md)     |
-| **9-B** | HA GitOps, Argo uptime, game-day ops, GD03 postmortem | M    | ✅ Repo ready (apply / execute on rebuild)           | [18](docs/setup/18-sre-operability-game-days.md)   |
-| **9-C** | Terraform monitoring + GKE Backup modules             | M    | ✅ Repo ready (enable flags on rebuild)              | [19](docs/setup/19-monitoring-backup-terraform.md) |
-| **9-D** | Error-budget ritual, capacity baseline, toil          | M    | ✅ Repo ready (cadence anytime / live after rebuild) | [20](docs/setup/20-sre-practices-capacity-toil.md) |
+| Phase   | Focus                                                 | Size | Status                            | Setup topics                                       |
+| ------- | ----------------------------------------------------- | ---- | --------------------------------- | -------------------------------------------------- |
+| **1**   | Repo scaffold + Terraform foundation                  | S    | ✅ Complete                       | 01–03                                              |
+| **2**   | GKE + DNS + ingress + TLS                             | L    | ✅ Complete                       | 04–06                                              |
+| **3**   | WIF + Artifact Registry + CI                          | M    | ✅ Complete                       | 07–08                                              |
+| **4**   | Argo CD + policies + ESO + NetworkPolicy (**gate**)   | L    | ✅ Complete                       | 09–11                                              |
+| **5**   | Online Boutique deploy                                | M    | ✅ Complete                       | 12                                                 |
+| **6**   | Observability + SLOs                                  | L    | ✅ Complete                       | 13                                                 |
+| **7**   | SRE ops + smoke validation                            | M    | ✅ Complete                       | 14–16                                              |
+| **8**   | Teardown + backup/restore                             | M    | ✅ Complete                       | [teardown](docs/teardown.md)                       |
+| **9-A** | Latency SLOs + burn alerts + Grafana dashboards       | M    | Optional scaffold (after rebuild) | [17](docs/setup/17-latency-slos-dashboards.md)     |
+| **9-B** | HA GitOps, Argo uptime, game-day ops, GD03 postmortem | M    | Optional scaffold (after rebuild) | [18](docs/setup/18-sre-operability-game-days.md)   |
+| **9-C** | Terraform monitoring + GKE Backup modules             | M    | Optional scaffold (after rebuild) | [19](docs/setup/19-monitoring-backup-terraform.md) |
+| **9-D** | Error-budget ritual, capacity baseline, toil          | M    | Optional scaffold (after rebuild) | [20](docs/setup/20-sre-practices-capacity-toil.md) |
+
+Phases 9-A–9-D are not part of the closed pilot. They appear only under [setup — Optional after rebuild](docs/setup/README.md#optional-after-rebuild--not-part-of-the-closed-pilot).
 
 ## Dependency graph
 
 ```
 Phase 1 → 2 → 3 → 4 (gate) → 5 → 6 → 7 → 8
-                              └──────────→ 9-A (topic 17)
-                              └──────────→ 9-B (topic 18)
-                              └──────────→ 9-C (topic 19)
-                              └──────────→ 9-D (topic 20; practice layer)
 ```
+
+Optional after rebuild (scaffolds only): phases 9-A–9-D map to setup topics 17–20.
 
 ## Critical gate
 
@@ -38,7 +38,7 @@ Phase 1 → 2 → 3 → 4 (gate) → 5 → 6 → 7 → 8
 
 **Phases 1–8 complete** — Infrastructure decommissioned. Git repository retained as the platform reference. See [docs/teardown.md](docs/teardown.md).
 
-**Phases 9-A–9-D — repo ready:** Apply/execute topics **17–20** on rebuild (topic 20 cadence can be practiced offline). Optional follow-ups below.
+Optional follow-ups below are maintainer backlog, not lived pilot claims.
 
 ### Optional follow-ups
 
@@ -48,7 +48,11 @@ Phase 1 → 2 → 3 → 4 (gate) → 5 → 6 → 7 → 8
 | Chaos Mesh / custom-metrics HPA         | Architecture “future”                      | Beyond Phase 9-D                   |
 | Slack budget bot / scheduled orphan GHA | Needs live integrations                    | Checklist + local scan exist today |
 
-## Phase 9-A deliverables (9-A)
+## Optional after rebuild — scaffold inventory (9-A–9-D)
+
+Not part of the closed pilot. File map for maintainers; apply only via [setup optional section](docs/setup/README.md#optional-after-rebuild--not-part-of-the-closed-pilot).
+
+### 9-A
 
 | Area          | Path                                                                                 |
 | ------------- | ------------------------------------------------------------------------------------ |
@@ -60,7 +64,7 @@ Phase 1 → 2 → 3 → 4 (gate) → 5 → 6 → 7 → 8
 | Grafana       | `observability/grafana/dashboards/` + provisioning                                   |
 | Setup guide   | [docs/setup/17-latency-slos-dashboards.md](docs/setup/17-latency-slos-dashboards.md) |
 
-## Phase 9-B deliverables (9-B)
+### 9-B
 
 | Area                 | Path                                                                                     |
 | -------------------- | ---------------------------------------------------------------------------------------- |
@@ -71,7 +75,7 @@ Phase 1 → 2 → 3 → 4 (gate) → 5 → 6 → 7 → 8
 | Postmortem           | `docs/sre/postmortems/2026-07-04-redis-cart-down.md`                                     |
 | Setup guide          | [docs/setup/18-sre-operability-game-days.md](docs/setup/18-sre-operability-game-days.md) |
 
-## Phase 9-C deliverables (9-C)
+### 9-C
 
 | Area              | Path                                                                                         |
 | ----------------- | -------------------------------------------------------------------------------------------- |
@@ -80,7 +84,7 @@ Phase 1 → 2 → 3 → 4 (gate) → 5 → 6 → 7 → 8
 | Env flags         | `enable_monitoring_iac`, `enable_backup_iac` in `environments/boutique`                      |
 | Setup guide       | [docs/setup/19-monitoring-backup-terraform.md](docs/setup/19-monitoring-backup-terraform.md) |
 
-## Phase 9-D deliverables (9-D)
+### 9-D
 
 | Area                       | Path                                                                                         |
 | -------------------------- | -------------------------------------------------------------------------------------------- |

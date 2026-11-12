@@ -4,10 +4,10 @@ Onboarding map for engineers joining the project.
 
 **Guide formats:**
 
-| Type                 | Location          | Sections                                                                                                                                                            |
-| -------------------- | ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Setup topics (01–20) | [setup/](setup/)  | **11-section SETUP format** (Goal, Why, Prerequisites, Commands, Expected output, Validation, Common problems, Recovery, Best practices, Security notes, Next step) |
-| General docs         | `docs/` elsewhere | **12-section standard** ([Guide template](GUIDE_TEMPLATE.md))                                                                                                       |
+| Type                       | Location          | Sections                                                                                                                                                            |
+| -------------------------- | ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Setup topics (01–16 pilot) | [setup/](setup/)  | **11-section SETUP format** (Goal, Why, Prerequisites, Commands, Expected output, Validation, Common problems, Recovery, Best practices, Security notes, Next step) |
+| General docs               | `docs/` elsewhere | **12-section standard** ([Guide template](GUIDE_TEMPLATE.md))                                                                                                       |
 
 **Terminology:** On first mention in the home doc for a term, write **abbreviation** (**full form**), both bold — e.g. **SLO** (**Service Level Objective**). See [GUIDE_TEMPLATE.md](GUIDE_TEMPLATE.md).
 
@@ -35,24 +35,25 @@ Onboarding map for engineers joining the project.
 
 ## Required artifacts
 
-| Artifact              | Path                                                                   | Status                                            |
-| --------------------- | ---------------------------------------------------------------------- | ------------------------------------------------- |
-| Bootstrap             | [bootstrap.md](bootstrap.md)                                           | Documented                                        |
-| Implementation plan   | [implementation/plan.md](implementation/plan.md)                       | Documented                                        |
-| DNS                   | [dns.md](dns.md)                                                       | Documented                                        |
-| Teardown              | [teardown.md](teardown.md)                                             | Documented                                        |
-| Setup index           | [setup/README.md](setup/README.md)                                     | 20 topics (01–16 bootstrap; 17–20 Phases 9-A–9-D) |
-| Architecture          | [architecture/overview.md](architecture/overview.md)                   | 16 sections                                       |
-| SLO catalog           | [sre/slos/catalog.md](sre/slos/catalog.md)                             | Documented                                        |
-| Burn-rate alerting    | [sre/slos/burn-rate-alerting.md](sre/slos/burn-rate-alerting.md)       | Documented                                        |
-| Error budget policy   | [sre/error-budget-policy.md](sre/error-budget-policy.md)               | Documented                                        |
-| Severity              | [sre/incident-response/severity.md](sre/incident-response/severity.md) | Documented                                        |
-| On-call               | [sre/oncall/README.md](sre/oncall/README.md)                           | Documented                                        |
-| Alert testing         | [sre/oncall/test-alerts.md](sre/oncall/test-alerts.md)                 | Documented                                        |
-| Postmortem template   | [sre/postmortems/TEMPLATE.md](sre/postmortems/TEMPLATE.md)             | Documented                                        |
-| Runbooks              | [sre/runbooks/](sre/runbooks/)                                         | Per alert policy                                  |
-| Game days             | [sre/game-days/](sre/game-days/)                                       | 4 scenarios                                       |
-| Supply chain security | [security/supply-chain.md](security/supply-chain.md)                   | Documented                                        |
+| Artifact              | Path                                                                   | Status                                                       |
+| --------------------- | ---------------------------------------------------------------------- | ------------------------------------------------------------ |
+| Bootstrap             | [bootstrap.md](bootstrap.md)                                           | Documented                                                   |
+| Implementation plan   | [implementation/plan.md](implementation/plan.md)                       | Documented                                                   |
+| DNS                   | [dns.md](dns.md)                                                       | Documented                                                   |
+| Teardown              | [teardown.md](teardown.md)                                             | Documented                                                   |
+| Setup index           | [setup/README.md](setup/README.md)                                     | Pilot topics 01–16; optional after-rebuild guides only there |
+| Architecture          | [architecture/overview.md](architecture/overview.md)                   | 16 sections                                                  |
+| SLO catalog           | [sre/slos/catalog.md](sre/slos/catalog.md)                             | Documented                                                   |
+| Burn-rate alerting    | [sre/slos/burn-rate-alerting.md](sre/slos/burn-rate-alerting.md)       | Documented                                                   |
+| Error budget policy   | [sre/error-budget-policy.md](sre/error-budget-policy.md)               | Documented                                                   |
+| Severity              | [sre/incident-response/severity.md](sre/incident-response/severity.md) | Documented                                                   |
+| On-call               | [sre/oncall/README.md](sre/oncall/README.md)                           | Documented                                                   |
+| Alert testing         | [sre/oncall/test-alerts.md](sre/oncall/test-alerts.md)                 | Documented                                                   |
+| Postmortem template   | [sre/postmortems/TEMPLATE.md](sre/postmortems/TEMPLATE.md)             | Documented                                                   |
+| Runbooks              | [sre/runbooks/](sre/runbooks/)                                         | Per alert policy                                             |
+| Game days             | [sre/game-days/](sre/game-days/)                                       | 4 scenarios                                                  |
+| Supply chain security | [security/supply-chain.md](security/supply-chain.md)                   | Documented                                                   |
+| CI contract           | [ci.md](ci.md)                                                         | Documented                                                   |
 
 **Status key:** _Documented_ = artifact exists in Git. _Implemented in GCP_ = applied in live environment (varies by phase).
 
@@ -62,7 +63,7 @@ Onboarding map for engineers joining the project.
 docs/
 ├── architecture/     # System design, ADRs
 ├── implementation/   # Implementation plan (plan.md)
-├── setup/            # Topic guides 01–20 (user-executed; 17–20 = SRE expansion)
+├── setup/            # Topic guides 01–16 (pilot); optional after-rebuild scaffolds
 ├── sre/              # Runbooks, SLOs, on-call, game days
 ├── security/         # Threat model, IAM, supply chain
 ├── operations/       # Day-2 ops, rollback
@@ -92,9 +93,8 @@ You execute setup steps in [setup/](setup/). Guides are the source of truth — 
 - [x] Runbook naming matches alert policies
 - [x] Error budget + severity linked
 - [x] All setup guides 01–16 written (SETUP format)
-- [x] Setup topics 17–20 (Phases 9-A–9-D) written
 - [x] Terraform Phase 3 modules (WIF, AR, Binary Auth) in repo
 - [x] Helm chart templates + digest pins for Boutique deploy (Phase 5 / topic 12)
 - [x] OTel collector manifests + observability Kustomize bundle (Phase 6 / topic 13)
-- [ ] Alert policies in GCP link to runbook URLs (verify in Console after rebuild — topics 13–14, 17–18)
+- [ ] Alert policies in GCP link to runbook URLs (verify in Console after rebuild — topics 13–14)
 - [x] Public DNS documented as inactive until rebuild ([dns.md](dns.md))

@@ -7,7 +7,7 @@ Production-pilot SRE reference for [Google Online Boutique](https://github.com/G
 ## Goals
 
 1. Run a production-pilot platform on GCP (GitOps, DevSecOps, SRE)
-2. Provide operable SLOs, alerting, runbooks, and game-day practice — not slide-ware
+2. Provide operable SLOs, alerting, runbooks, and game-day practice — not slides only
 3. Serve as a reusable platform baseline and internal engineering reference
 
 → Architecture: [ARCHITECTURE.md](ARCHITECTURE.md) · [docs/architecture/overview.md](docs/architecture/overview.md)
@@ -23,18 +23,16 @@ Production-pilot SRE reference for [Google Online Boutique](https://github.com/G
 - HTTPS on `boutique.biroltilki.art` and `argocd.boutique.biroltilki.art` (when live)
 - Kyverno enforced; digest-only images; ESO-only secrets
 - SLOs + burn alerts with runbook links; PagerDuty test incident validated
-- Latency SLO artifacts + Grafana dashboards in repo (topic 17 — apply on rebuild)
-- HA GitOps, Argo uptime, game-day STATUS/TEMPLATE, GD03 postmortem (topic 18 — apply on rebuild)
-- Terraform monitoring + GKE Backup modules (topic 19 — enable_*_iac on rebuild)
-- Error-budget ritual, capacity baseline, toil cadence (topic 20)
 - Game-day scenario executed; infrastructure decommissioned
 
-## DNS names (inactive)
+Optional guides after a deliberate rebuild live under [`docs/setup/README.md`](docs/setup/README.md). They are not part of this checklist.
 
-Public A records removed with teardown. Names resolve empty until Phase 2 rebuild.
+## DNS names (offline)
 
-- Storefront: `boutique.biroltilki.art` (**inactive**)
-- Argo CD: `argocd.boutique.biroltilki.art` (**inactive**)
+Public A records were removed with teardown. Names stay empty until a Phase 2 rebuild.
+
+- Storefront: `boutique.biroltilki.art` (offline)
+- Argo CD: `argocd.boutique.biroltilki.art` (offline)
 
 See [docs/dns.md](docs/dns.md).
 

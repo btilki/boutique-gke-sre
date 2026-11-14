@@ -1,6 +1,6 @@
 # SRE documentation
 
-Runbooks, SLOs, game days, on-call, and incident response for the closed production pilot.
+Runbooks, SLOs, game days, on-call, and incident response for the closed production reference.
 
 | Path                                             | Description                                                                        |
 | ------------------------------------------------ | ---------------------------------------------------------------------------------- |

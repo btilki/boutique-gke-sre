@@ -69,7 +69,7 @@ Expected: HTTP 200 on storefront; Argo CD apps Healthy/Synced.
 
 - WIF-only CI; no SA keys in GitHub
 - ESO-only secrets; audit Secret Manager access
-- Binary Authorization enforced at deploy
+- Binary Authorization cluster rule in place; Enforce only after topic 16 ([edge-hardening.md](../security/edge-hardening.md)) — project default stays allow + dry-run
 
 ## Further reading
 

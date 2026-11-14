@@ -2,11 +2,11 @@
 
 ## Summary
 
-Production-pilot SRE reference for [Google Online Boutique](https://github.com/GoogleCloudPlatform/microservices-demo) on one private regional GKE cluster in GCP project `boutique-gke`, domain `biroltilki.art`.
+Production SRE reference for [Google Online Boutique](https://github.com/GoogleCloudPlatform/microservices-demo) on one private regional GKE cluster in GCP project `boutique-gke`, domain `biroltilki.art`.
 
 ## Goals
 
-1. Run a production-pilot platform on GCP (GitOps, DevSecOps, SRE)
+1. Run a production-reference platform on GCP (GitOps, DevSecOps, SRE)
 2. Provide operable SLOs, alerting, runbooks, and game-day practice — not slides only
 3. Serve as a reusable platform baseline and internal engineering reference
 
@@ -18,7 +18,7 @@ Production-pilot SRE reference for [Google Online Boutique](https://github.com/G
 
 **Out of scope:** Multi-project/cluster, multi-region active-active, service mesh default, custom app code, status page product.
 
-## Pilot checklist
+## Reference checklist
 
 - HTTPS on `boutique.biroltilki.art` and `argocd.boutique.biroltilki.art` (when live)
 - Kyverno enforced; digest-only images; ESO-only secrets

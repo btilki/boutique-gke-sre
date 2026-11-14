@@ -1,6 +1,6 @@
 # Documentation — boutique-gke-sre
 
-Production pilot closed. The delivery path was validated, then GCP resources from the pilot were destroyed. These docs describe what was built and how to rebuild it.
+Production reference closed. The delivery path was validated, then GCP resources from the reference were destroyed. These docs describe what was built and how to rebuild it.
 
 If this file disagrees with [`setup/`](setup/README.md) on bootstrap steps, the setup guide wins.
 
@@ -11,7 +11,7 @@ If this file disagrees with [`setup/`](setup/README.md) on bootstrap steps, the 
 | I want to…                     | Read                                                                                                                                                                                                              |
 | ------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Understand the project quickly | [`../ARCHITECTURE.md`](../ARCHITECTURE.md) · [ADR-003](adr/003-manual-argocd-sync.md)                                                                                                                             |
-| See pilot proof                | [`pilot-claims.md`](pilot-claims.md) · [`evidence/`](evidence/README.md) · [`lessons-learned.md`](lessons-learned.md)                                                                                             |
+| See reference proof            | [`reference-claims.md`](reference-claims.md) · [`evidence/`](evidence/README.md) · [`lessons-learned.md`](lessons-learned.md)                                                                                     |
 | Review design and SRE          | [`architecture/overview.md`](architecture/overview.md) · [`sre/`](sre/README.md) · [`ci.md`](ci.md) · [`security/threat-model.md`](security/threat-model.md) · [`operations/rollback.md`](operations/rollback.md) |
 | Rebuild or operate             | [`setup/`](setup/README.md) (topics 01–16) · [`teardown.md`](teardown.md) · [`operations/operations-runbook.md`](operations/operations-runbook.md)                                                                |
 
@@ -24,8 +24,8 @@ If this file disagrees with [`setup/`](setup/README.md) on bootstrap steps, the 
 | Architecture summary                   | [`../ARCHITECTURE.md`](../ARCHITECTURE.md)                                                                               |
 | Architecture deep dive                 | [`architecture/`](architecture/README.md)                                                                                |
 | Design decisions                       | [`adr/`](adr/README.md)                                                                                                  |
-| Pilot claims                           | [`pilot-claims.md`](pilot-claims.md)                                                                                     |
-| Pilot evidence                         | [`evidence/README.md`](evidence/README.md)                                                                               |
+| Reference claims                       | [`reference-claims.md`](reference-claims.md)                                                                             |
+| Reference evidence                     | [`evidence/README.md`](evidence/README.md)                                                                               |
 | Lessons learned                        | [`lessons-learned.md`](lessons-learned.md)                                                                               |
 | Bootstrap summary                      | [`bootstrap.md`](bootstrap.md)                                                                                           |
 | Bootstrap and teardown                 | [`setup/README.md`](setup/README.md) · [`teardown.md`](teardown.md)                                                      |
@@ -60,7 +60,7 @@ Both stay offline until you rebuild — no public A records. See [`dns.md`](dns.
 | [`../README.md`](../README.md)                             | Project landing page                  |
 | [`../CONTRIBUTING.md`](../CONTRIBUTING.md)                 | How to contribute                     |
 | [`../SECURITY.md`](../SECURITY.md)                         | Security reporting and current limits |
-| [`../PROJECT.md`](../PROJECT.md)                           | Charter and pilot checklist           |
+| [`../PROJECT.md`](../PROJECT.md)                           | Charter and reference checklist       |
 | [`../ROADMAP.md`](../ROADMAP.md)                           | Phase status                          |
 | [`../CHANGELOG.md`](../CHANGELOG.md)                       | Notable changes                       |
 | [`../REPOSITORY_STRUCTURE.md`](../REPOSITORY_STRUCTURE.md) | Full tree                             |

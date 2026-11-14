@@ -2,11 +2,13 @@
 
 ## Goal
 
-A regional Docker **Artifact Registry** repository in `europe-west1` stores Online Boutique images (digest-only promotion). **Binary Authorization** enforces that only cosign-attested images from that registry deploy to GKE. An attestor trusts signatures produced by the CI pipeline (topic 07 WIF). Local and CI pushes target `europe-west1-docker.pkg.dev/boutique-gke/boutique`.
+A regional Docker **Artifact Registry** repository in `europe-west1` stores Online Boutique images (digest-only promotion). **Binary Authorization** is wired with a cosign attestor so the cluster can require attested images from that registry. An attestor trusts signatures produced by the CI pipeline (topic 07 WIF). Local and CI pushes target `europe-west1-docker.pkg.dev/boutique-gke/boutique`.
+
+At this topic, keep Binary Authorization in **dry run**. Switch the cluster rule to **Enforce** only after topic 16 smoke validation — see [edge-hardening.md](../security/edge-hardening.md).
 
 ## Why this step is required
 
-Production deploys require immutable, scanned, and signed artifacts. Artifact Registry is the single source of truth for container images. Binary Authorization is the admission-control gate at GKE deploy time — unsigned or un attested images are rejected before pods run. Together with Trivy (CI), cosign (CI), and Kyverno digest policies (topic 11), this closes the supply-chain loop.
+Production deploys require immutable, scanned, and signed artifacts. Artifact Registry is the single source of truth for container images. Binary Authorization is the admission-control gate at GKE deploy time. Together with Trivy (CI), cosign (CI), and Kyverno digest policies (topic 11), this closes the supply-chain loop once Enforce is on after smoke.
 
 ## Prerequisites
 
@@ -100,26 +102,25 @@ gcloud artifacts repositories add-iam-policy-binding boutique \
 1. Console → **Security** → **Binary Authorization** (search “Binary Authorization”).
 2. If prompted, click **Enable Binary Authorization API** / **Get started**.
 3. **Policy** tab → edit **Kubernetes Engine policy** (project default).
-4. Set **Policy mode** to **Enforce** (use **Dry run** initially if you want shadow mode during bootstrap).
-5. Under **Rules** → **Add rule** (or edit default):
-   - **Rule type:** Allow
-   - **Pod specification:** Require attestations
+4. Leave the **project default** on **Allow** / **Dry run** (matches Terraform: project evaluation `ALWAYS_ALLOW` + `DRYRUN_AUDIT_LOG_ONLY`). Do not set project-wide Enforce here.
+5. Under **Rules** → **Add rule** (or edit the cluster rule):
+   - **Rule type:** Require attestations (cluster `boutique-gke` in `europe-west1`)
    - **Attestors:** (create below, then attach)
-   - **Scope:** Cluster `boutique-gke` in `europe-west1` when UI offers cluster scope; otherwise project-wide for single-cluster reference
+   - **Enforcement for this rule:** **Dry run** until after topic 16
 6. Click **Attestors** in left nav → **Create attestor**.
 7. **Name:** `boutique-cosign-attestor`
 8. **Description:** `Trust cosign signatures from CI pipeline`
 9. **Public key (manual):** Paste cosign **public** key PEM from your CI signing setup (generate with `cosign generate-key-pair` in a secure environment — store private key in GitHub Secrets as `COSIGN_PRIVATE_KEY`, never in Git).
 10. **Signature algorithm:** ECDSA P-256 (default from `cosign generate-key-pair`) — or match your cosign key type if you used non-default options
 11. Click **Create**
-12. Return to **Policy** → attach attestor `boutique-cosign-attestor` to the admission rule.
+12. Return to **Policy** → attach attestor `boutique-cosign-attestor` to the cluster admission rule.
 13. **Save** policy.
 
-**Dry-run validation first (recommended):**
+**Dry-run through Boutique deploy (required for topics 08–16):**
 
-1. Set policy to **Dry run** for 24h
-2. Deploy a test pod — check **Binary Authorization** logs in Cloud Logging
-3. Switch to **Enforce** before topic 12 production Boutique deploy
+1. Keep the cluster rule on **Dry run**
+2. Deploy / sync Boutique (topic 12) — check **Binary Authorization** logs in Cloud Logging
+3. Switch the cluster rule to **Enforce** only after topic 16 — [edge-hardening.md](../security/edge-hardening.md)
 
 ### Part E — Binary Authorization (Terraform — recommended)
 
@@ -293,7 +294,7 @@ gcloud container binauthz policy import /tmp/binauth-policy.yaml \
   --project=boutique-gke
 ```
 
-Revert to **Enforce** after fixing signing pipeline.
+If the cluster rule was already on **Enforce**, return to Enforce after fixing the signing pipeline (do not flip Enforce on during topics 08–16 bootstrap).
 
 **Delete test image:**
 
@@ -315,7 +316,7 @@ terraform destroy -target=module.artifact_registry
 
 - Reference images by **digest** in GitOps (`image@sha256:...`) — tags are human hints only
 - Enable AR cleanup for untagged manifests to control cost
-- Start Binary Authorization in **dry run** (`DRYRUN_AUDIT_LOG_ONLY`), then set `binary_authorization_enforcement_mode = "ENFORCED_BLOCK_AND_AUDIT_LOG"` before topic 12
+- Start Binary Authorization in **dry run** (`DRYRUN_AUDIT_LOG_ONLY`); set `binary_authorization_enforcement_mode = "ENFORCED_BLOCK_AND_AUDIT_LOG"` only after topic 16 ([edge-hardening.md](../security/edge-hardening.md))
 - Store cosign private key in GitHub Encrypted Secrets; public key in Terraform or Console attestor
 - Pair with Trivy CI gate (fail critical/high) before push
 - One repository per application family; separate dev/prod only if you add environments later

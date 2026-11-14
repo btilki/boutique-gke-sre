@@ -4,7 +4,7 @@ Attestor, note, and deploy-time image policy for GKE.
 
 ## Purpose
 
-Enforces **Binary Authorization** on the private GKE cluster so only **cosign-signed and attested** images from the project Artifact Registry can run. Defines an attestor (linked to cosign key material or Cloud KMS), a policy note, and a cluster admission policy. Must be validated in Phase 3 before Boutique deploy in Phase 5.
+Configures **Binary Authorization** for the GKE cluster: attestor (cosign public key or Cloud KMS), project default allow + dry-run, and a **cluster** admission rule that defaults to `DRYRUN_AUDIT_LOG_ONLY`. Enforce (`ENFORCED_BLOCK_AND_AUDIT_LOG`) is a post–topic 16 change — see [edge-hardening.md](../../../docs/security/edge-hardening.md). Wire the module in Phase 3 before Boutique deploy in Phase 5; do not claim Enforce until that hardening step.
 
 ## Inputs
 

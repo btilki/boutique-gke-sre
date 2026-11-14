@@ -73,9 +73,10 @@ Tests: `make kyverno-test` · `tests/kyverno/` · CI jobs `kyverno` + `manifests
 
 ## NetworkPolicy default-deny
 
-- Default deny ingress and egress per namespace
+- Default deny ingress and egress manifests per namespace
 - Explicit allows: ingress controller → frontend; service graph inside `boutique`
-- Labels enforced by Kyverno policy #4
+- Labels required by Kyverno policy #4
+- The GKE module does **not** pin Dataplane V2 or Calico — objects in Git do not prove the CNI drops packets until that is set ([SECURITY.md](../../SECURITY.md))
 
 → [gitops/policies/network-policies/](../../gitops/policies/network-policies/)
 

@@ -2,13 +2,13 @@
 
 ## Goal
 
-Run the full **pilot checklist**: confirm HTTPS on both public URLs, GitOps and policy enforcement, observability and SLOs, PagerDuty routing, Cloud Armor, and SRE artifacts (runbooks, on-call docs). When this topic passes, bootstrap is complete and the cluster meets the definition of done in the project description.
+Run the full **reference checklist**: confirm HTTPS on both public URLs, GitOps and policy enforcement, observability and SLOs, PagerDuty routing, Cloud Armor, and SRE artifacts (runbooks, on-call docs). When this topic passes, bootstrap is complete and the cluster meets the definition of done in the project description.
 
 ## Why this step is required
 
-Individual topics validate their own layer. This topic proves the **system** works together: GitOps, policy, observability, SLOs, and paging. It is the formal gate before game days and on-call rotation.
+Individual topics validate their own layer. This topic proves the **system** works together: GitOps, policy, observability, SLOs, and paging. It closes the lived bootstrap path (topics 01–16). Edge hardening, optional topics 17–20, and further game days are after this gate — not part of the closed reference path.
 
-Failing smoke validation here means the pilot is not complete until the gaps are closed — even if topics 01–15 were marked complete individually.
+Failing smoke validation here means the reference is not complete until the gaps are closed — even if topics 01–15 were marked complete individually.
 
 ## Prerequisites
 
@@ -288,7 +288,7 @@ curl -I https://boutique.biroltilki.art
 curl -I https://argocd.boutique.biroltilki.art
 ```
 
-**Pilot checklist** — all must pass:
+**Reference checklist** — all must pass:
 
 - [ ] One private GKE cluster (`boutique-gke`, regional, Workload Identity)
 - [ ] Terraform + GCS remote state
@@ -326,7 +326,7 @@ If smoke validation fails:
 3. Fix and re-validate that layer only
 4. Re-run this checklist from the failed section
 
-Do not proceed to game days until all items pass.
+Do not mark the closed reference path complete until all items pass.
 
 For environment teardown when the reference is no longer needed: [teardown.md](../teardown.md)
 
@@ -335,7 +335,7 @@ For environment teardown when the reference is no longer needed: [teardown.md](.
 - Run this checklist after every major platform change
 - Automate repeatable checks in CI (Kyverno tests, `helm template` dry-run) — keep this manual checklist for integration proof
 - Store smoke test results in a change log or PR comment
-- Schedule game day 01 within one week of passing smoke validation
+- On a live rebuild, schedule an additional game day only after smoke and edge hardening — the closed reference executed game day 03; others stayed deferred
 
 ## Security notes
 
@@ -346,19 +346,23 @@ For environment teardown when the reference is no longer needed: [teardown.md](.
 
 ## Next step
 
-Bootstrap is complete. Proceed to operational readiness:
+Bootstrap (topics 01–16) is complete. Recommended before teardown or a long-lived rebuild:
 
-| Step                  | Action                                  | Guide                                                                             |
-| --------------------- | --------------------------------------- | --------------------------------------------------------------------------------- |
-| Latency SLOs          | Apply browse/checkout latency + Grafana | [17-latency-slos-dashboards.md](17-latency-slos-dashboards.md)                    |
-| Operability           | HA sync, Argo uptime, game days         | [18-sre-operability-game-days.md](18-sre-operability-game-days.md)                |
-| Monitoring/Backup IaC | Enable TF modules                       | [19-monitoring-backup-terraform.md](19-monitoring-backup-terraform.md)            |
-| SRE practices         | Error budget, capacity, toil            | [20-sre-practices-capacity-toil.md](20-sre-practices-capacity-toil.md)            |
-| Edge hardening        | Binary Auth enforce + Argo CD WAF       | [edge-hardening.md](../security/edge-hardening.md)                                |
-| First game day        | Bad deploy rollback scenario            | [game-days/01-bad-deploy-rollback.md](../sre/game-days/01-bad-deploy-rollback.md) |
-| On-call setup         | Rotation and playbook                   | [oncall/README.md](../sre/oncall/README.md)                                       |
-| Alert drill           | Re-test PagerDuty routing               | [oncall/test-alerts.md](../sre/oncall/test-alerts.md)                             |
-| CI deploy path        | Digest PR → review → Argo sync          | [12-boutique-deploy.md](12-boutique-deploy.md)                                    |
-| Teardown              | Safe decommission when finished         | [teardown.md](../teardown.md)                                                     |
+| Step           | Action                                                           | Guide                                                              |
+| -------------- | ---------------------------------------------------------------- | ------------------------------------------------------------------ |
+| Edge hardening | Binary Auth Enforce + optional Argo CD WAF                       | [edge-hardening.md](../security/edge-hardening.md)                 |
+| Digest path    | Digest PR → review → **manual** Argo sync (**CI never deploys**) | [12-boutique-deploy.md](12-boutique-deploy.md) · [ci.md](../ci.md) |
+| On-call setup  | Rotation and playbook                                            | [oncall/README.md](../sre/oncall/README.md)                        |
+| Alert drill    | Re-test PagerDuty routing                                        | [oncall/test-alerts.md](../sre/oncall/test-alerts.md)              |
+| Teardown       | Safe decommission when finished                                  | [teardown.md](../teardown.md)                                      |
+
+Optional after rebuild — not part of the closed reference path ([setup index](README.md#optional-after-rebuild--not-part-of-the-closed-reference)):
+
+| Step                  | Action                                     | Guide                                                                  |
+| --------------------- | ------------------------------------------ | ---------------------------------------------------------------------- |
+| Latency SLOs          | Apply browse/checkout latency + Grafana    | [17-latency-slos-dashboards.md](17-latency-slos-dashboards.md)         |
+| Operability           | HA sync proof, Argo uptime, more game days | [18-sre-operability-game-days.md](18-sre-operability-game-days.md)     |
+| Monitoring/Backup IaC | Enable TF modules                          | [19-monitoring-backup-terraform.md](19-monitoring-backup-terraform.md) |
+| SRE practices         | Error budget, capacity, toil               | [20-sre-practices-capacity-toil.md](20-sre-practices-capacity-toil.md) |
 
 Executive summary: [bootstrap.md](../bootstrap.md)

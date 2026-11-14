@@ -4,7 +4,7 @@ Audience: Implementer or reviewer · Topics 07–08 · 12 · ADR [002](adr/002-w
 
 ## After teardown
 
-The closed pilot left no live Artifact Registry and no live WIF binding. Rebuild topics 07–08 before you expect `build-scan-sign` to succeed.
+The closed reference left no live Artifact Registry and no live WIF binding. Rebuild topics 07–08 before you expect `build-scan-sign` to succeed.
 
 Workflow YAML stays in Git under [`.github/workflows/`](../.github/workflows/). After a rebuild, run supply-chain jobs with `workflow_dispatch` — see [setup/12-boutique-deploy.md](setup/12-boutique-deploy.md).
 
@@ -19,14 +19,14 @@ Workflow YAML stays in Git under [`.github/workflows/`](../.github/workflows/). 
 
 ## Hard rules
 
-| Rule                                                  | Detail                                                                    |
-| ----------------------------------------------------- | ------------------------------------------------------------------------- |
-| No long-lived GCP SA JSON keys for CI                 | WIF (ADR-002)                                                             |
-| Images are mirrored, not rebuilt from Boutique source | `build-scan-sign.yml`                                                     |
-| Trivy fails CRITICAL and HIGH                         | Same workflow                                                             |
-| cosign signs and attests by digest                    | Key in GitHub secrets — pilot limit in [pilot-claims.md](pilot-claims.md) |
-| Successful path opens a digest PR only                | Digests in `gitops/apps/boutique/values-images.yaml`                      |
-| CI never deploys to the cluster                       | No `kubectl apply`, `helm upgrade`, or `argocd sync` (ADR-003)            |
+| Rule                                                  | Detail                                                                                |
+| ----------------------------------------------------- | ------------------------------------------------------------------------------------- |
+| No long-lived GCP SA JSON keys for CI                 | WIF (ADR-002)                                                                         |
+| Images are mirrored, not rebuilt from Boutique source | `build-scan-sign.yml`                                                                 |
+| Trivy fails CRITICAL and HIGH                         | Same workflow                                                                         |
+| cosign signs and attests by digest                    | Key in GitHub secrets — reference limit in [reference-claims.md](reference-claims.md) |
+| Successful path opens a digest PR only                | Digests in `gitops/apps/boutique/values-images.yaml`                                  |
+| CI never deploys to the cluster                       | No `kubectl apply`, `helm upgrade`, or `argocd sync` (ADR-003)                        |
 
 ## Pipeline map
 
@@ -49,4 +49,4 @@ Workflow YAML stays in Git under [`.github/workflows/`](../.github/workflows/). 
 | Mirror, digest, Boutique sync              | [setup/12-boutique-deploy.md](setup/12-boutique-deploy.md)                             |
 | Supply-chain controls                      | [security/supply-chain.md](security/supply-chain.md)                                   |
 | Rollback after a bad digest                | [operations/rollback.md](operations/rollback.md)                                       |
-| What the pilot proved                      | [pilot-claims.md](pilot-claims.md)                                                     |
+| What the reference proved                  | [reference-claims.md](reference-claims.md)                                             |

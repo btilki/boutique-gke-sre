@@ -1,7 +1,7 @@
 # Game day report — Redis / cart down
 
 **Scenario:** [03 — Redis / cart down](../03-redis-cart-down.md)
-**Environment:** `boutique-gke` (production pilot)
+**Environment:** `boutique-gke` (production reference)
 **Facilitator:** Platform owner (solo exercise)
 **Severity (exercise):** Simulated SEV2 (checkout path)
 

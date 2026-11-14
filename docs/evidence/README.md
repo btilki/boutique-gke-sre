@@ -1,6 +1,6 @@
-# Pilot evidence — boutique-gke-sre
+# Reference evidence — boutique-gke-sre
 
-Screenshots from the production pilot while it was live. The GKE cluster and other GCP billables were destroyed afterward (Phase 8). There is no live demo today. These images are the proof that the path ran once.
+Screenshots from the production reference while it was live. The GKE cluster and other GCP billables were destroyed afterward (Phase 8). There is no live demo today. These images are the proof that the path ran once.
 
 Files sit under [`assets/diagrams/`](../../assets/diagrams/). The README [Proof](../../README.md#proof) section shows a short crop of the same set.
 
@@ -12,7 +12,7 @@ Files sit under [`assets/diagrams/`](../../assets/diagrams/). The README [Proof]
 
 ![Online Boutique storefront over HTTPS](../../assets/diagrams/boutique-storefront-https.png)
 
-`https://boutique.biroltilki.art` over Google-managed TLS (when the pilot was live). Shows the public storefront. It does not show a successful checkout or a Cloud Armor block.
+`https://boutique.biroltilki.art` over Google-managed TLS (when the reference was live). Shows the public storefront. It does not show a successful checkout or a Cloud Armor block.
 
 File: [`boutique-storefront-https.png`](../../assets/diagrams/boutique-storefront-https.png)
 
@@ -20,7 +20,7 @@ File: [`boutique-storefront-https.png`](../../assets/diagrams/boutique-storefron
 
 ![Argo CD applications healthy and synced](../../assets/diagrams/argocd-applications-healthy-synced.png)
 
-`argocd.boutique.biroltilki.art` — Boutique and platform apps Synced and Healthy at capture. Manual sync was the pilot rule. This crop does not show an OutOfSync app moving to Synced.
+`argocd.boutique.biroltilki.art` — Boutique and platform apps Synced and Healthy at capture. Manual sync was the reference rule. This crop does not show an OutOfSync app moving to Synced.
 
 File: [`argocd-applications-healthy-synced.png`](../../assets/diagrams/argocd-applications-healthy-synced.png)
 
@@ -62,7 +62,7 @@ File: [`alert-policy-runbook-link.png`](../../assets/diagrams/alert-policy-runbo
 
 ![PagerDuty test incident](../../assets/diagrams/pagerduty-test-incident.png)
 
-Service wired to Events API V2, plus a TEST alert that opened an incident. Shows routing on the pilot. It does not show a real SEV from live traffic.
+Service wired to Events API V2, plus a TEST alert that opened an incident. Shows routing on the reference. It does not show a real SEV from live traffic.
 
 Files: [`pagerduty-service-events-api-v2.png`](../../assets/diagrams/pagerduty-service-events-api-v2.png) · [`pagerduty-test-incident.png`](../../assets/diagrams/pagerduty-test-incident.png)
 
@@ -112,19 +112,19 @@ File: [`runbook-lint-success.png`](../../assets/diagrams/runbook-lint-success.pn
 
 ## Not shown yet
 
-These items are documented, but there is no screenshot here yet. Capture them on a rebuild if you still need the proof on camera:
+These items are documented, but there is no screenshot here yet. Capture them on a rebuild if you still need screenshot proof:
 
 | Gap                                                | Why it matters                             |
 | -------------------------------------------------- | ------------------------------------------ |
 | Digest PR diff (image digest only)                 | Shows CI changed Git pins, not the cluster |
-| Kyverno deny of `:latest` or a non-AR image        | Live admission on camera                   |
-| Argo OutOfSync → manual Sync                       | Manual sync story on camera                |
+| Kyverno deny of `:latest` or a non-AR image        | Live admission denial                      |
+| Argo OutOfSync → manual Sync                       | Manual sync path                           |
 | Binary Authorization deny on unsigned `redis-cart` | Matches the game-day restore gap           |
 | Multi-window burn chart firing                     | SLO → alert path under load                |
-| Teardown: `terraform destroy` / empty orphan scan  | Phase 8 on camera                          |
+| Teardown: `terraform destroy` / empty orphan scan  | Phase 8 completion                         |
 | Private endpoint / authorized networks             | Would close the public API tradeoff        |
 
-Claims you can defend without a cluster: [`../pilot-claims.md`](../pilot-claims.md). Current limits: [`../../SECURITY.md`](../../SECURITY.md).
+File-backed claims (no cluster required): [`../reference-claims.md`](../reference-claims.md). Current limits: [`../../SECURITY.md`](../../SECURITY.md).
 
 Same PNGs plus Mermaid sources: [`../../assets/diagrams/README.md`](../../assets/diagrams/README.md).
 
@@ -132,7 +132,7 @@ Same PNGs plus Mermaid sources: [`../../assets/diagrams/README.md`](../../assets
 
 ## Related
 
-- Lessons from the pilot: [`../lessons-learned.md`](../lessons-learned.md)
+- Lessons from the reference: [`../lessons-learned.md`](../lessons-learned.md)
 - Rebuild: [`../setup/README.md`](../setup/README.md) (topics 01–16)
 - Teardown: [`../teardown.md`](../teardown.md)
 - Game days: [`../sre/game-days/`](../sre/game-days/README.md)

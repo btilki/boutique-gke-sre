@@ -1,8 +1,8 @@
 # boutique-gke-sre
 
-Production-pilot SRE platform for [Google Online Boutique](https://github.com/GoogleCloudPlatform/microservices-demo) on private GKE — SLOs, burn-rate alerts, PagerDuty, GitOps.
+Production-reference SRE platform for [Google Online Boutique](https://github.com/GoogleCloudPlatform/microservices-demo) on private GKE — SLOs, burn-rate alerts, PagerDuty, GitOps.
 
-> **Status:** Production pilot closed. Phases 1–8 ran end to end; then the GCP resources were destroyed. There is no live GKE cluster or public DNS from that run. To run again, follow [`docs/setup/`](docs/setup/) (topics 01–16).
+> **Status:** Production reference closed. Phases 1–8 ran end to end; then the GCP resources were destroyed. There is no live GKE cluster or public DNS from that run. To run again, follow [`docs/setup/`](docs/setup/) (topics 01–16).
 
 Author: [Birol Tilki](https://www.linkedin.com/in/birol-tilki-48731326/)
 
@@ -23,7 +23,7 @@ Shipping Online Boutique to a cluster is not the hard part. The hard part is rel
 
 ## Result
 
-Topics 01–16 completed, then teardown. Documentation and screenshots remain; there are no public A records. File-backed claims: [`docs/pilot-claims.md`](docs/pilot-claims.md).
+Topics 01–16 completed, then teardown. Documentation and screenshots remain; there are no public A records. File-backed claims: [`docs/reference-claims.md`](docs/reference-claims.md).
 
 ---
 
@@ -34,16 +34,16 @@ Topics 01–16 completed, then teardown. Documentation and screenshots remain; t
 | What      | SRE-focused private GKE for Online Boutique in `europe-west1`                                          |
 | Hard rule | Reliability **after deployment** — SLOs → burn alerts → PagerDuty → runbooks                           |
 | CI model  | GitHub Actions + WIF; **CI does not sync Argo** — digest PRs only                                      |
-| Scope     | Production pilot — one project, one cluster; not multi-region HA                                       |
+| Scope     | Production reference — one project, one cluster; not multi-region HA                                   |
 | Stack     | Terraform · GKE · Argo CD · Kyverno · ESO · Binary Authorization · OTel · Cloud Monitoring · PagerDuty |
 
 ---
 
 ## Proof
 
-These screenshots are from the lived pilot. Full catalog: [`docs/evidence/`](docs/evidence/README.md). Hostnames stay offline until you rebuild.
+These screenshots are from the lived reference. Full catalog: [`docs/evidence/`](docs/evidence/README.md). Hostnames stay offline until you rebuild.
 
-**Storefront** — `https://boutique.biroltilki.art` over HTTPS (when the pilot was live):
+**Storefront** — `https://boutique.biroltilki.art` over HTTPS (when the reference was live):
 
 ![Online Boutique storefront over HTTPS](assets/diagrams/boutique-storefront-https.png)
 
@@ -66,7 +66,7 @@ More: Kyverno, Binary Authorization, PagerDuty test incident, Grafana, Cloud Tra
 ## Tradeoffs / what I would change for real production
 
 - **Public Kubernetes API endpoint** — nodes are private; the control plane is not. A rebuild would set a private endpoint and master authorized networks ([`SECURITY.md`](SECURITY.md)).
-- **Single cluster, one Boutique namespace** — fine for a cost-capped pilot; not true env isolation.
+- **Single cluster, one Boutique namespace** — fine for a cost-capped reference; not true env isolation.
 - **`redis-cart` attestation gap** — the game day showed Binary Authorization blocking an unsigned restore; postmortem actions are still open.
 - **Storefront Cloud Armor is a console procedure** — Terraform Armor covers the Argo CD policy only when enabled; the storefront WAF was topic 15 by hand.
 - **NetworkPolicy may not be enforced by the CNI** — Kyverno requires the label; the GKE module does not pin Dataplane V2 or Calico.
@@ -80,7 +80,7 @@ Do **not** call this production-ready. Limits: [`SECURITY.md`](SECURITY.md). Les
 | I want to…                            | Read                                                                                                                                                                                                                                                                |
 | ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Understand the project in ~10 minutes | This page → [`ARCHITECTURE.md`](ARCHITECTURE.md) → [ADR-003](docs/adr/003-manual-argocd-sync.md)                                                                                                                                                                    |
-| See pilot proof                       | [`docs/pilot-claims.md`](docs/pilot-claims.md) · [`docs/evidence/`](docs/evidence/README.md)                                                                                                                                                                        |
+| See reference proof                   | [`docs/reference-claims.md`](docs/reference-claims.md) · [`docs/evidence/`](docs/evidence/README.md)                                                                                                                                                                |
 | Review design and SRE                 | [`docs/architecture/overview.md`](docs/architecture/overview.md) · [`docs/sre/`](docs/sre/README.md) · [`docs/ci.md`](docs/ci.md) · [`docs/security/threat-model.md`](docs/security/threat-model.md) · [`docs/operations/rollback.md`](docs/operations/rollback.md) |
 | Rebuild or operate                    | [`docs/setup/`](docs/setup/README.md) (topics 01–16) · [`docs/teardown.md`](docs/teardown.md) · [`docs/operations/operations-runbook.md`](docs/operations/operations-runbook.md)                                                                                    |
 
@@ -115,7 +115,7 @@ Full tree: [`REPOSITORY_STRUCTURE.md`](REPOSITORY_STRUCTURE.md)
 
 ---
 
-## What the pilot demonstrated
+## What the reference demonstrated
 
 - Private-node GKE with HTTPS on the storefront and Argo CD hostnames (when live)
 - Digest-only GitOps, Kyverno baseline, ESO + Secret Manager, Binary Authorization

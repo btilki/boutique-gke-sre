@@ -4,7 +4,7 @@ Audience: Implementer
 Authority: This directory is the **single source of truth** for bootstrap. If README, chat, or scripts conflict with `docs/setup/`, this guide wins.
 [Doc index](../README.md) · [Architecture summary](../../ARCHITECTURE.md) · [Roadmap](../../ROADMAP.md)
 
-> **Pilot status:** Production pilot closed. Topics 01–16 and Phase 8 teardown completed.
+> **Reference status:** Production reference closed. Topics 01–16 and Phase 8 teardown completed.
 > There is no live GKE cluster or public DNS from that run.
 > This guide is for step-by-step rebuild and validation. Follow topics 01 → 16 in order unless you abort early (still use [teardown.md](../teardown.md)).
 > Do not assume a cluster already exists because the repo is complete in Git.
@@ -16,7 +16,7 @@ Authority: This directory is the **single source of truth** for bootstrap. If RE
 
 ---
 
-## Topic sequence (pilot path: 01–16)
+## Topic sequence (reference path: 01–16)
 
 | #   | Topic                           | Guide                                                                      | Est.   | Phase      | Status |
 | --- | ------------------------------- | -------------------------------------------------------------------------- | ------ | ---------- | ------ |
@@ -43,9 +43,9 @@ Each guide follows the same SETUP format: Goal, Why, Prerequisites, Commands, Ex
 
 **Phase 4 gate:** Topics 09–11 (Argo CD, ESO, Kyverno) must complete before deploying Boutique (topic 12).
 
-This is the pilot story. Live execution through topic 16 is complete; Phase 8 tore the stack down.
+This is the reference story. Live execution through topic 16 is complete; Phase 8 tore the stack down.
 
-### Dependency graph (pilot path)
+### Dependency graph (reference path)
 
 ```
 01 → 02 → 03 → 04 → 05 → 06
@@ -55,7 +55,7 @@ This is the pilot story. Live execution through topic 16 is complete; Phase 8 to
 
 Topics 7–8 can start after topic 4 (in parallel with 5–6).
 
-### Terraform phases (pilot path)
+### Terraform phases (reference path)
 
 | Phase | Topics | Terraform modules applied                                                                |
 | ----- | ------ | ---------------------------------------------------------------------------------------- |
@@ -64,7 +64,7 @@ Topics 7–8 can start after topic 4 (in parallel with 5–6).
 | 3     | 07–08  | `wif`, `artifact_registry`, `binary_authorization`                                       |
 | 4+    | 09–16  | GitOps / Console (Argo CD, ESO, Kyverno, observability, and so on)                       |
 
-### Optional after rebuild — not part of the closed pilot
+### Optional after rebuild — not part of the closed reference
 
 Guides 17–20 exist in Git as scaffolds only. They were not required for topics 01–16 and are not claimed as demonstrated. Enable them only after a deliberate rebuild; see [ROADMAP](../../ROADMAP.md).
 

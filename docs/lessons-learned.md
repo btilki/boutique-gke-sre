@@ -1,14 +1,14 @@
 # Lessons learned — boutique-gke-sre
 
-Concrete takeaways from the closed production pilot (topics 01–16 and Phase 8 teardown). Not a full postmortem — only items backed by the repo, screenshots, or the Redis cart game day.
+Concrete takeaways from the closed production reference (topics 01–16 and Phase 8 teardown). Not a full postmortem — only items backed by the repo, screenshots, or the Redis cart game day.
 
 ---
 
 ## What worked
 
-- **SRE after deployment stayed the center of the story.** Browse and checkout SLOs, burn alerts with runbook URLs, and a PagerDuty test path are in Git and in the evidence gallery. Interviewers can walk that path without a live cluster.
-- **Teardown as a first-class step** kept cost honest. Leaving private GKE, NAT, and load balancers running is the expensive failure mode. Phase 8 and [`teardown.md`](teardown.md) treat destroy as mandatory after the pilot.
-- **Honest scope** (one project, one cluster, namespaces not isolation) made the tradeoffs discussable instead of hidden. See [`pilot-claims.md`](pilot-claims.md) and [`../SECURITY.md`](../SECURITY.md).
+- **SRE after deployment stayed the center of the story.** Browse and checkout SLOs, burn alerts with runbook URLs, and a PagerDuty test path are in Git and in the evidence gallery. That path can be reviewed without a live cluster.
+- **Teardown as a first-class step** kept cost honest. Leaving private GKE, NAT, and load balancers running is the expensive failure mode. Phase 8 and [`teardown.md`](teardown.md) treat destroy as mandatory after the reference.
+- **Honest scope** (one project, one cluster, namespaces not isolation) made the tradeoffs discussable instead of hidden. See [`reference-claims.md`](reference-claims.md) and [`../SECURITY.md`](../SECURITY.md).
 
 ## What broke or surprised us
 
@@ -28,7 +28,7 @@ Concrete takeaways from the closed production pilot (topics 01–16 and Phase 8 
 ## Related
 
 - Proof gallery: [`evidence/README.md`](evidence/README.md)
-- File-backed claims: [`pilot-claims.md`](pilot-claims.md)
+- File-backed claims: [`reference-claims.md`](reference-claims.md)
 - Architecture summary: [`../ARCHITECTURE.md`](../ARCHITECTURE.md)
 - Game days: [`sre/game-days/`](sre/game-days/README.md)
 - Rebuild: [`setup/README.md`](setup/README.md) (topics 01–16)

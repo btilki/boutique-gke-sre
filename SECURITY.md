@@ -11,9 +11,9 @@ If you discover a security issue, please report it responsibly. Do not open publ
 - **No long-lived GCP keys in GitHub** — Workload Identity Federation only
 - **No secrets in Git** — gitleaks in pre-commit; Secret Manager via ESO
 - **Digest-only images** — Kyverno rejects mutable tags
-- **Signed artifacts** — cosign + Binary Authorization at deploy
-- **Network default-deny** — NetworkPolicy with explicit allows
-- **Edge protection** — Cloud Armor on storefront ingress
+- **Signed artifacts** — cosign + Binary Authorization (cluster rule; Enforce after smoke)
+- **Network default-deny** — NetworkPolicy manifests with explicit allows (CNI pin required — see limits)
+- **Edge protection** — Cloud Armor on storefront ingress (console path in the lived reference)
 
 ## Current limits
 

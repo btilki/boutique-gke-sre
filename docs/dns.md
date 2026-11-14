@@ -72,6 +72,10 @@ gcloud dns record-sets list --zone=biroltilki-art --project=boutique-gke
 
 ## Validation
 
+**While offline (current):** `dig +short` for both names must return empty. Do not expect HTTPS success until after a Phase 2 rebuild.
+
+**After rebuild** (records and certs restored):
+
 ```bash
 dig +short boutique.biroltilki.art
 dig +short argocd.boutique.biroltilki.art
@@ -79,8 +83,8 @@ curl -I https://boutique.biroltilki.art
 curl -I https://argocd.boutique.biroltilki.art
 ```
 
-**Expected DNS:** Each name returns its dedicated global static IP (the two addresses differ).
-**Expected HTTPS:** After certs provision (15–60 min): `HTTP/2 200` or `302`, no certificate errors.
+**Expected DNS (live):** Each name returns its dedicated global static IP (the two addresses differ).
+**Expected HTTPS (live):** After certs provision (15–60 min): `HTTP/2 200` or `302`, no certificate errors.
 
 ## Troubleshooting
 

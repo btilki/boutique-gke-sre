@@ -6,7 +6,7 @@ Accepted
 
 ## Context
 
-Even on a single cluster, promotion follows production-pilot discipline: operators sync on purpose.
+Even on a single cluster, promotion follows production-reference discipline: operators sync on purpose.
 
 ## Decision
 

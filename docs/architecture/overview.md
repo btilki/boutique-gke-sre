@@ -1,6 +1,6 @@
 # Architecture overview — boutique-gke-sre
 
-Canonical design for this production pilot: Google Online Boutique on one regional GKE cluster in GCP project `boutique-gke`, domain `biroltilki.art`. Nodes are private. The Kubernetes API endpoint is public.
+Canonical design for this production reference: Google Online Boutique on one regional GKE cluster in GCP project `boutique-gke`, domain `biroltilki.art`. Nodes are private. The Kubernetes API endpoint is public.
 
 Public DNS stays offline until rebuild: `boutique.biroltilki.art` · `argocd.boutique.biroltilki.art` — see [dns.md](../dns.md).
 
@@ -40,18 +40,18 @@ Diagrams: [assets/diagrams/](../../assets/diagrams/). Folder nav: [README.md](RE
 
 ### Non-functional
 
-| ID   | Requirement               | Target                                               |
-| ---- | ------------------------- | ---------------------------------------------------- |
-| NF1  | Browse availability SLO   | 99.9% monthly                                        |
-| NF2  | Checkout availability SLO | 99.95% monthly                                       |
-| NF3  | Browse latency SLO        | p95 < 500ms                                          |
-| NF4  | Checkout latency SLO      | p95 < 1000ms                                         |
-| NF5  | Image immutability        | Digest-only; reject `:latest`                        |
-| NF6  | Supply chain              | cosign sign + attest; Binary Authorization at deploy |
-| NF7  | Policy enforcement        | Kyverno admission + NetworkPolicy default-deny       |
-| NF8  | Node privacy              | Private GKE nodes; egress via Cloud NAT              |
-| NF9  | Incident readiness        | SEV1–SEV4 taxonomy; runbook per alert                |
-| NF10 | Recoverability            | Backup/restore runbook for Redis/cart state          |
+| ID   | Requirement               | Target                                                              |
+| ---- | ------------------------- | ------------------------------------------------------------------- |
+| NF1  | Browse availability SLO   | 99.9% monthly (lived path)                                          |
+| NF2  | Checkout availability SLO | 99.95% monthly (lived path)                                         |
+| NF3  | Browse latency SLO        | p95 < 500ms (optional after rebuild — topic 17)                     |
+| NF4  | Checkout latency SLO      | p95 < 1000ms (optional after rebuild — topic 17)                    |
+| NF5  | Image immutability        | Digest-only; reject `:latest`                                       |
+| NF6  | Supply chain              | cosign sign + attest; Binary Authorization (Enforce after topic 16) |
+| NF7  | Policy enforcement        | Kyverno admission + NetworkPolicy manifests (CNI pin separate)      |
+| NF8  | Node privacy              | Private GKE nodes; public API endpoint; egress via Cloud NAT        |
+| NF9  | Incident readiness        | SEV1–SEV4 taxonomy; runbook per alert                               |
+| NF10 | Recoverability            | Backup/restore runbook for Redis/cart state                         |
 
 ---
 
@@ -341,10 +341,10 @@ Teardown destroy order: [teardown.md](../teardown.md)
 
 **SLO catalog:** [docs/sre/slos/catalog.md](../sre/slos/catalog.md)
 
-| Service           | SLI                        | Target           |
-| ----------------- | -------------------------- | ---------------- |
-| Browse (frontend) | Availability + p95 latency | 99.9% / <500ms   |
-| Checkout          | Availability + p95 latency | 99.95% / <1000ms |
+| Service           | SLI                                                   | Target           |
+| ----------------- | ----------------------------------------------------- | ---------------- |
+| Browse (frontend) | Availability (lived); p95 latency optional (topic 17) | 99.9% / <500ms   |
+| Checkout          | Availability (lived); p95 latency optional (topic 17) | 99.95% / <1000ms |
 
 ---
 
@@ -417,7 +417,7 @@ Cloud Monitoring SLOs → PagerDuty ← runbooks (docs/sre/)
 - [README.md](README.md) — architecture folder nav
 - [ARCHITECTURE.md](../../ARCHITECTURE.md) — executive summary
 - [ci.md](../ci.md) · [operations/rollback.md](../operations/rollback.md) — delivery contracts
-- [pilot-claims.md](../pilot-claims.md) — what the pilot proved
+- [reference-claims.md](../reference-claims.md) — what the reference proved
 - [bootstrap.md](../bootstrap.md) — bootstrap path
 - [setup/README.md](../setup/README.md) — rebuild (topics 01–16)
 - [ROADMAP.md](../../ROADMAP.md) — phased delivery

@@ -193,7 +193,7 @@ Release notes section **Breaking changes** empty for PATCH; populated for MAJOR.
 ### Best practices
 
 - When in doubt between MINOR and MAJOR, choose MAJOR and document migration
-- Align the first release tag with the smoke-validation gate (e.g. `v1.0.0` = pilot checklist met)
+- Align the first release tag with the smoke-validation gate (e.g. `v1.0.0` = reference checklist met)
 
 ---
 
@@ -681,7 +681,7 @@ make runbook-lint
 
 ### Expected outcome
 
-Pilot checklist still passes; release recorded in handoff log.
+Reference checklist still passes; release recorded in handoff log.
 
 ### Recovery steps
 
@@ -788,7 +788,7 @@ Standardize release artifacts on GitHub for operator consumption.
 ### Example release title series
 
 ```
-boutique-gke-sre v1.0.0 — Pilot checklist (smoke validation)
+boutique-gke-sre v1.0.0 — Reference checklist (smoke validation)
 boutique-gke-sre v1.1.0 — Backup/restore + Phase 8
 boutique-gke-sre v1.1.1 — Hotfix: uptime alert tuning
 ```

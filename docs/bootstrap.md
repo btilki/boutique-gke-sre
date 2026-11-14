@@ -47,7 +47,7 @@ flowchart TB
 
 **Critical:** Do not skip topics 09–11 (Argo CD, ESO, Kyverno) before deploying Boutique.
 
-Optional guides after a deliberate rebuild (not part of the closed pilot): [setup/README.md — Optional after rebuild](setup/README.md#optional-after-rebuild--not-part-of-the-closed-pilot).
+Optional guides after a deliberate rebuild (not part of the closed reference): [setup/README.md — Optional after rebuild](setup/README.md#optional-after-rebuild--not-part-of-the-closed-reference).
 
 ## Step-by-step implementation
 
@@ -57,7 +57,7 @@ Run topic guides in order. Confirm each before you continue.
 2. [02 — Terraform remote state](setup/02-terraform-remote-state.md)
 3. [03 — VPC and Cloud NAT](setup/03-vpc-nat.md)
 4. Continue through [setup/README.md](setup/README.md) through topic 16
-5. When the pilot is done: [teardown.md](teardown.md)
+5. When the reference is done: [teardown.md](teardown.md)
 
 After Phase 1 (topics 01–03): `make validate`, commit, then start Phase 2.
 
@@ -132,4 +132,4 @@ Post-smoke hardening (Binary Auth enforce, Argo CD WAF): [security/edge-hardenin
 - [architecture/overview.md](architecture/overview.md)
 - [ROADMAP.md](../ROADMAP.md)
 - After bootstrap: [16-smoke-validation.md](setup/16-smoke-validation.md), [edge-hardening.md](security/edge-hardening.md), [game-days/01-bad-deploy-rollback.md](sre/game-days/01-bad-deploy-rollback.md), [oncall/README.md](sre/oncall/README.md)
-- Optional after rebuild: [setup/README.md](setup/README.md#optional-after-rebuild--not-part-of-the-closed-pilot)
+- Optional after rebuild: [setup/README.md](setup/README.md#optional-after-rebuild--not-part-of-the-closed-reference)

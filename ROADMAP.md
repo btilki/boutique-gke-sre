@@ -3,7 +3,7 @@
 Phased delivery for **boutique-gke-sre** — one phase per session: validate → commit → next.
 
 **Full plan:** [docs/implementation/plan.md](docs/implementation/plan.md)
-**Step-by-step guides:** [docs/setup/README.md](docs/setup/README.md) (pilot topics 01–16; optional after-rebuild scaffolds listed there)
+**Step-by-step guides:** [docs/setup/README.md](docs/setup/README.md) (reference topics 01–16; optional after-rebuild scaffolds listed there)
 
 | Phase   | Focus                                                 | Size | Status                            | Setup topics                                       |
 | ------- | ----------------------------------------------------- | ---- | --------------------------------- | -------------------------------------------------- |
@@ -20,7 +20,7 @@ Phased delivery for **boutique-gke-sre** — one phase per session: validate →
 | **9-C** | Terraform monitoring + GKE Backup modules             | M    | Optional scaffold (after rebuild) | [19](docs/setup/19-monitoring-backup-terraform.md) |
 | **9-D** | Error-budget ritual, capacity baseline, toil          | M    | Optional scaffold (after rebuild) | [20](docs/setup/20-sre-practices-capacity-toil.md) |
 
-Phases 9-A–9-D are not part of the closed pilot. They appear only under [setup — Optional after rebuild](docs/setup/README.md#optional-after-rebuild--not-part-of-the-closed-pilot).
+Phases 9-A–9-D are not part of the closed reference. They appear only under [setup — Optional after rebuild](docs/setup/README.md#optional-after-rebuild--not-part-of-the-closed-reference).
 
 ## Dependency graph
 
@@ -38,7 +38,7 @@ Optional after rebuild (scaffolds only): phases 9-A–9-D map to setup topics 17
 
 **Phases 1–8 complete** — Infrastructure decommissioned. Git repository retained as the platform reference. See [docs/teardown.md](docs/teardown.md).
 
-Optional follow-ups below are maintainer backlog, not lived pilot claims.
+Optional follow-ups below are maintainer backlog, not lived reference claims.
 
 ### Optional follow-ups
 
@@ -50,7 +50,7 @@ Optional follow-ups below are maintainer backlog, not lived pilot claims.
 
 ## Optional after rebuild — scaffold inventory (9-A–9-D)
 
-Not part of the closed pilot. File map for maintainers; apply only via [setup optional section](docs/setup/README.md#optional-after-rebuild--not-part-of-the-closed-pilot).
+Not part of the closed reference. File map for maintainers; apply only via [setup optional section](docs/setup/README.md#optional-after-rebuild--not-part-of-the-closed-reference).
 
 ### 9-A
 

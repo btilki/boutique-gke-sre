@@ -1,6 +1,6 @@
 # Architecture — boutique-gke-sre
 
-Production pilot closed. GCP resources from the pilot were destroyed. These pages describe the design as it exists in Git. They do not provision GCP.
+Production reference closed. GCP resources from the reference were destroyed. These pages describe the design as it exists in Git. They do not provision GCP.
 
 If you skipped the summary, start here: [`../../ARCHITECTURE.md`](../../ARCHITECTURE.md).
 
@@ -17,7 +17,7 @@ If you skipped the summary, start here: [`../../ARCHITECTURE.md`](../../ARCHITEC
 | Walk requirements and constraints | [overview.md §1](overview.md#1-requirements) · [§2](overview.md#2-constraints)                                     |
 | Network and ingress               | [overview.md §8](overview.md#8-network-flow) · [`../dns.md`](../dns.md)                                            |
 
-Pilot claims (no cluster required): [`../pilot-claims.md`](../pilot-claims.md)
+Reference claims (no cluster required): [`../reference-claims.md`](../reference-claims.md)
 Delivery contracts: [`../ci.md`](../ci.md) · [`../operations/rollback.md`](../operations/rollback.md)
 
 ---
@@ -47,7 +47,7 @@ Full ADR index: [`../adr/README.md`](../adr/README.md)
 
 ## Maturity
 
-This is a production pilot: real SRE and supply-chain controls on one GKE cluster. It does not claim multi-region HA or enterprise-scale DR.
+This is a production reference: real SRE and supply-chain controls on one GKE cluster. It does not claim multi-region HA or enterprise-scale DR.
 
 ---
 

@@ -8,15 +8,15 @@ On a rebuilt cluster, sync Boutique **HPA/PDB/replica** defaults, add the **Argo
 
 ## Why this step is required
 
-Topic 17 closed the latency SLO catalog. Topic 18 closes operability gaps:
+Topics 17–20 are optional after rebuild — not part of the closed reference path. Topic 18 applies and proves operability artifacts that already exist in Git:
 
-| Gap                          | Artifact                                             |
-| ---------------------------- | ---------------------------------------------------- |
-| HA claimed but `replicas: 1` | HPA/PDB + multi-replica critical paths               |
-| Only GD03 executed           | STATUS + TEMPLATE for 01/02/04; postmortem from GD03 |
-| Argo CD edge unmonitored     | `argocd-ui` uptime check                             |
+| Gap                                   | Artifact                                                                                                       |
+| ------------------------------------- | -------------------------------------------------------------------------------------------------------------- |
+| HA values in Git not yet proven live  | Sync HPA/PDB + multi-replica critical paths (`frontend` / `checkout` / `cart` already `replicas: 2` in values) |
+| Only GD03 executed on the closed path | STATUS + TEMPLATE for 01/02/04; postmortem from GD03                                                           |
+| Argo CD edge unmonitored              | `argocd-ui` uptime check                                                                                       |
 
-Without this step, game day 02 is theater and Argo CD outages are invisible to synthetic probes.
+Without this step on a rebuild, further game days stay deferred and Argo CD outages stay invisible to synthetic probes.
 
 ## Prerequisites
 

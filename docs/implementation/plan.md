@@ -11,36 +11,36 @@
 
 ## 1. Executive summary
 
-| Field              | Value                                                                                                                                                                                          |
-| ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Project            | **boutique-gke-sre**                                                                                                                                                                           |
-| Goal               | Production-pilot **SRE** (**Site Reliability Engineering**) reference for Online Boutique on one private **GKE** (**Google Kubernetes Engine**) cluster in **GCP** (**Google Cloud Platform**) |
-| Domain             | `biroltilki.art` — hostnames currently **inactive** ([dns.md](../dns.md))                                                                                                                      |
-| Phases             | **1–8** (bootstrap → teardown) + **9-A–9-D** (SRE expansion)                                                                                                                                   |
-| Overall complexity | **L** (platform breadth); Phase 4 is the deploy gate                                                                                                                                           |
-| Current mode       | Repo retained as reference; live apply deferred until rebuild                                                                                                                                  |
-| Definition of done | Pilot checklist in [PROJECT.md](../../PROJECT.md); topics 01–16 validated historically; 17–20 artifacts in Git                                                                                 |
+| Field              | Value                                                                                                                                                                                    |
+| ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Project            | **boutique-gke-sre**                                                                                                                                                                     |
+| Goal               | Production **SRE** (**Site Reliability Engineering**) reference for Online Boutique on one private **GKE** (**Google Kubernetes Engine**) cluster in **GCP** (**Google Cloud Platform**) |
+| Domain             | `biroltilki.art` — hostnames currently **inactive** ([dns.md](../dns.md))                                                                                                                |
+| Phases             | **1–8** (bootstrap → teardown) + **9-A–9-D** (SRE expansion)                                                                                                                             |
+| Overall complexity | **L** (platform breadth); Phase 4 is the deploy gate                                                                                                                                     |
+| Current mode       | Repo retained as reference; live apply deferred until rebuild                                                                                                                            |
+| Definition of done | Reference checklist in [PROJECT.md](../../PROJECT.md); topics 01–16 validated historically; 17–20 artifacts in Git                                                                       |
 
 ---
 
 ## 2. Project goals
 
-| ID   | Goal                          | Success indicator                                             |
-| ---- | ----------------------------- | ------------------------------------------------------------- |
-| G-01 | Reproducible GCP foundation   | Terraform remote state; VPC; private GKE; DNS + TLS           |
-| G-02 | GitOps-only app delivery      | Argo CD manual sync; digest-pinned Boutique                   |
-| G-03 | Supply-chain baseline         | WIF CI, Trivy, cosign, Binary Authorization, Kyverno          |
-| G-04 | Secrets without Git plaintext | ESO + Secret Manager only                                     |
-| G-05 | Operable SLOs                 | Availability + latency SLOs; burn alerts; runbooks; PagerDuty |
-| G-06 | On-call readiness             | SEV taxonomy; game days; postmortems                          |
-| G-07 | Safe lifecycle                | Bootstrap + teardown + backup/restore documented              |
-| G-08 | SRE expansion (9-A–9-D)       | Topics 17–20 repo-ready; apply on rebuild                     |
+| ID   | Goal                          | Success indicator                                                                                 |
+| ---- | ----------------------------- | ------------------------------------------------------------------------------------------------- |
+| G-01 | Reproducible GCP foundation   | Terraform remote state; VPC; private GKE; DNS + TLS                                               |
+| G-02 | GitOps-only app delivery      | Argo CD manual sync; digest-pinned Boutique                                                       |
+| G-03 | Supply-chain baseline         | WIF CI, Trivy, cosign, Binary Authorization, Kyverno                                              |
+| G-04 | Secrets without Git plaintext | ESO + Secret Manager only                                                                         |
+| G-05 | Operable SLOs                 | Availability SLOs lived; latency SLOs optional (9-A / topic 17); burn alerts; runbooks; PagerDuty |
+| G-06 | On-call readiness             | SEV taxonomy; game days; postmortems                                                              |
+| G-07 | Safe lifecycle                | Bootstrap + teardown + backup/restore documented                                                  |
+| G-08 | SRE expansion (9-A–9-D)       | Topics 17–20 repo-ready; apply on rebuild                                                         |
 
 ---
 
 ## 3. Business value
 
-- Production-pilot GCP platform for Online Boutique
+- Production-reference GCP platform for Online Boutique
 - Educational setup topics with rationale (why private GKE, WIF, burn rates)
 - Operable reliability: SLOs, error budgets, runbooks, one executed game day
 - Cost-conscious teardown path with orphan-scan hygiene
@@ -72,8 +72,8 @@
 | ------------------------- | ------------------------------------------ |
 | Browse availability SLO   | 99.9% (30-day)                             |
 | Checkout availability SLO | 99.95% (30-day)                            |
-| Browse latency SLO        | p95 &lt; 500ms                             |
-| Checkout latency SLO      | p95 &lt; 1000ms                            |
+| Browse latency SLO        | p95 &lt; 500ms (optional — topic 17)       |
+| Checkout latency SLO      | p95 &lt; 1000ms (optional — topic 17)      |
 | Images                    | Digest-only; no `:latest`                  |
 | Artifacts                 | cosign sign + attest; Binary Authorization |
 | Policy                    | Kyverno + NetworkPolicy; ESO-only secrets  |
@@ -267,7 +267,7 @@ Then apply topics **17–20** per their guides. DNS must be **active** again bef
 ## 18. Further reading
 
 - [ROADMAP.md](../../ROADMAP.md) — short status table
-- [PROJECT.md](../../PROJECT.md) — charter and pilot checklist
+- [PROJECT.md](../../PROJECT.md) — charter and reference checklist
 - [bootstrap.md](../bootstrap.md) — executive bootstrap path
 - [setup/README.md](../setup/README.md) — topic index
 - [DOCUMENTATION.md](../DOCUMENTATION.md) — doc standards and terminology

@@ -33,5 +33,5 @@ Git → GitHub Actions (WIF) → Artifact Registry → Argo CD → GKE (private 
 ## Related
 
 - [docs/ci.md](docs/ci.md) · [docs/operations/rollback.md](docs/operations/rollback.md)
-- [docs/pilot-claims.md](docs/pilot-claims.md)
+- [docs/reference-claims.md](docs/reference-claims.md)
 - [docs/setup/README.md](docs/setup/README.md) (topics 01–16)

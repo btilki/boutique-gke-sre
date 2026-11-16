@@ -72,7 +72,7 @@ Full incident template: [incident-response/comms.md](incident-response/comms.md)
 
 - Weekly: checklist completed; freeze log matches any open freeze issues
 - Monthly: budget consumption vs deploy log correlates
-- Game day 01 triggers burn → team follows rollback, not feature work
+- On rebuild: Game day 01 (deferred on the closed path) should trigger burn → team follows rollback, not feature work — see [STATUS](game-days/reports/STATUS.md)
 
 ## Troubleshooting
 

@@ -5,20 +5,20 @@ Phases 1–8 for **boutique-gke-sre** ran sequentially with validation at each g
 **Full plan:** [docs/implementation/plan.md](docs/implementation/plan.md)
 **Step-by-step guides:** [docs/setup/README.md](docs/setup/README.md) (reference topics 01–16; optional after-rebuild scaffolds listed there)
 
-| Phase   | Focus                                                 | Size | Status                            | Setup topics                                       |
-| ------- | ----------------------------------------------------- | ---- | --------------------------------- | -------------------------------------------------- |
-| **1**   | Repo scaffold + Terraform foundation                  | S    | Complete                          | 01–03                                              |
-| **2**   | GKE + DNS + ingress + TLS                             | L    | Complete                          | 04–06                                              |
-| **3**   | WIF + Artifact Registry + CI                          | M    | Complete                          | 07–08                                              |
-| **4**   | Argo CD + policies + ESO + NetworkPolicy (**gate**)   | L    | Complete                          | 09–11                                              |
-| **5**   | Online Boutique deploy                                | M    | Complete                          | 12                                                 |
-| **6**   | Observability + SLOs                                  | L    | Complete                          | 13                                                 |
-| **7**   | SRE ops + smoke validation                            | M    | Complete                          | 14–16                                              |
-| **8**   | Teardown                                              | M    | Complete                          | [teardown](docs/teardown.md)                       |
-| **9-A** | Latency SLOs + burn alerts + Grafana dashboards       | M    | Optional scaffold (after rebuild) | [17](docs/setup/17-latency-slos-dashboards.md)     |
-| **9-B** | HA GitOps, Argo uptime, game-day ops, GD03 postmortem | M    | Optional scaffold (after rebuild) | [18](docs/setup/18-sre-operability-game-days.md)   |
-| **9-C** | Terraform monitoring + GKE Backup modules             | M    | Optional scaffold (after rebuild) | [19](docs/setup/19-monitoring-backup-terraform.md) |
-| **9-D** | Error-budget ritual, capacity baseline, toil          | M    | Optional scaffold (after rebuild) | [20](docs/setup/20-sre-practices-capacity-toil.md) |
+| Phase   | Focus                                                        | Size | Status                            | Setup topics                                       |
+| ------- | ------------------------------------------------------------ | ---- | --------------------------------- | -------------------------------------------------- |
+| **1**   | Repo scaffold + Terraform foundation                         | S    | Complete                          | 01–03                                              |
+| **2**   | GKE + DNS + ingress + TLS                                    | L    | Complete                          | 04–06                                              |
+| **3**   | WIF + Artifact Registry + CI                                 | M    | Complete                          | 07–08                                              |
+| **4**   | Argo CD + policies + ESO + NetworkPolicy (**gate**)          | L    | Complete                          | 09–11                                              |
+| **5**   | Online Boutique deploy                                       | M    | Complete                          | 12                                                 |
+| **6**   | Observability + SLOs                                         | L    | Complete                          | 13                                                 |
+| **7**   | SRE ops + smoke validation                                   | M    | Complete                          | 14–16                                              |
+| **8**   | Teardown                                                     | M    | Complete                          | [teardown](docs/teardown.md)                       |
+| **9-A** | Latency SLOs + burn alerts + Grafana dashboards              | M    | Optional scaffold (after rebuild) | [17](docs/setup/17-latency-slos-dashboards.md)     |
+| **9-B** | HA GitOps, Argo uptime, Game day ops, Game day 03 postmortem | M    | Optional scaffold (after rebuild) | [18](docs/setup/18-sre-operability-game-days.md)   |
+| **9-C** | Terraform monitoring + GKE Backup modules                    | M    | Optional scaffold (after rebuild) | [19](docs/setup/19-monitoring-backup-terraform.md) |
+| **9-D** | Error-budget ritual, capacity baseline, toil                 | M    | Optional scaffold (after rebuild) | [20](docs/setup/20-sre-practices-capacity-toil.md) |
 
 Phases 9-A–9-D are not part of the closed reference. They appear only under [setup — Optional after rebuild](docs/setup/README.md#optional-after-rebuild-not-part-of-the-closed-reference).
 
@@ -42,11 +42,11 @@ Optional follow-ups below are maintainer backlog, not closed-path claims.
 
 ### Optional follow-ups
 
-| Item                                    | Focus                                      | Notes                              |
-| --------------------------------------- | ------------------------------------------ | ---------------------------------- |
-| **C2**                                  | Migrate SLO + burn policies into Terraform | Not required for 9-C               |
-| Chaos Mesh / custom-metrics HPA         | Architecture “future”                      | Beyond Phase 9-D                   |
-| Slack budget bot / scheduled orphan GHA | Needs live integrations                    | Checklist + local scan exist today |
+| Item                                                       | Focus                                      | Notes                              |
+| ---------------------------------------------------------- | ------------------------------------------ | ---------------------------------- |
+| **C2**                                                     | Migrate SLO + burn policies into Terraform | Not required for 9-C               |
+| Chaos Mesh / custom-metrics HPA                            | Architecture “future”                      | Beyond Phase 9-D                   |
+| Slack budget bot / scheduled orphan-resource GitHub Action | Needs live integrations                    | Checklist + local scan exist today |
 
 ## Optional after rebuild — scaffold inventory (9-A–9-D)
 
@@ -68,14 +68,14 @@ Not part of the closed reference. File map for maintainers; apply only via [setu
 
 Apply/prove on a rebuild. Some files below already exist from the closed path.
 
-| Area                 | Path                                                                                     | Note                                     |
-| -------------------- | ---------------------------------------------------------------------------------------- | ---------------------------------------- |
-| HPA / PDB / replicas | `gitops/apps/boutique/templates/hpa.yaml`, `pdb.yaml`, `values.yaml`                     | In Git; sync/prove live on rebuild       |
-| Argo CD uptime       | `observability/monitoring/uptime-checks/argocd-ui.yaml`                                  | Scaffold until applied                   |
-| Create script        | `scripts/create-argocd-uptime-check.sh`                                                  | Scaffold until applied                   |
-| Game-day ops         | `docs/sre/game-days/reports/{TEMPLATE,STATUS}.md`                                        | STATUS shows 01/02/04 deferred           |
-| Postmortem           | `docs/sre/postmortems/2026-07-04-redis-cart-down.md`                                     | **Lived** (Game day 03) — not a scaffold |
-| Setup guide          | [docs/setup/18-sre-operability-game-days.md](docs/setup/18-sre-operability-game-days.md) | Optional after rebuild                   |
+| Area                 | Path                                                                                     | Note                                               |
+| -------------------- | ---------------------------------------------------------------------------------------- | -------------------------------------------------- |
+| HPA / PDB / replicas | `gitops/apps/boutique/templates/hpa.yaml`, `pdb.yaml`, `values.yaml`                     | In Git; sync/prove live on rebuild                 |
+| Argo CD uptime       | `observability/monitoring/uptime-checks/argocd-ui.yaml`                                  | Scaffold until applied                             |
+| Create script        | `scripts/create-argocd-uptime-check.sh`                                                  | Scaffold until applied                             |
+| Game day ops         | `docs/sre/game-days/reports/{TEMPLATE,STATUS}.md`                                        | STATUS shows 01/02/04 deferred                     |
+| Postmortem           | `docs/sre/postmortems/2026-07-04-redis-cart-down.md`                                     | From the closed run (Game day 03) — not a scaffold |
+| Setup guide          | [docs/setup/18-sre-operability-game-days.md](docs/setup/18-sre-operability-game-days.md) | Optional after rebuild                             |
 
 ### 9-C
 

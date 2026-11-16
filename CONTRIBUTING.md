@@ -1,6 +1,8 @@
 # Contributing
 
-Closed reference — see [`docs/reference-claims.md`](docs/reference-claims.md). Contributions are docs, policies, CI validation, and rebuild readiness. Hard rules: [`docs/ci.md`](docs/ci.md). Rebuild path: [`docs/setup/README.md`](docs/setup/README.md).
+This repo accepts documentation and policy contributions; production rebuild is operator-driven.
+
+Closed reference — see [`docs/reference-claims.md`](docs/reference-claims.md). Hard rules: [`docs/ci.md`](docs/ci.md). Rebuild path: [`docs/setup/README.md`](docs/setup/README.md).
 
 When a change updates what this repo can claim, refresh [`docs/reference-claims.md`](docs/reference-claims.md) and [`docs/evidence/README.md`](docs/evidence/README.md) in the same PR.
 

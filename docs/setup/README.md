@@ -18,26 +18,26 @@ Authority: This directory is the **single source of truth** for bootstrap. If RE
 
 ## Topic sequence (reference path: 01–16)
 
-| #   | Topic                           | Guide                                                                      | Est.   | Phase      | Status |
-| --- | ------------------------------- | -------------------------------------------------------------------------- | ------ | ---------- | ------ |
-| 1   | GCP project and APIs            | [01-gcp-project-apis.md](01-gcp-project-apis.md)                           | 30 min | 1          | ✅     |
-| 2   | Terraform remote state          | [02-terraform-remote-state.md](02-terraform-remote-state.md)               | 45 min | 1          | ✅     |
-| 3   | VPC, subnets, Cloud NAT         | [03-vpc-nat.md](03-vpc-nat.md)                                             | 1 h    | 1          | ✅     |
-| 4   | GKE cluster                     | [04-gke-cluster.md](04-gke-cluster.md)                                     | 1–2 h  | 2          | ✅     |
-| 5   | Cloud DNS + NS delegation       | [05-cloud-dns.md](05-cloud-dns.md)                                         | 45 min | 2          | ✅     |
-| 6   | Static IP + TLS                 | [06-ingress-tls.md](06-ingress-tls.md)                                     | 1 h    | 2          | ✅     |
-| 7   | GitHub WIF                      | [07-github-wif.md](07-github-wif.md)                                       | 1 h    | 3          | ✅     |
-| 8   | Artifact Registry + Binary Auth | [08-artifact-registry-binary-auth.md](08-artifact-registry-binary-auth.md) | 1 h    | 3          | ✅     |
-| 9   | Argo CD bootstrap               | [09-argocd-bootstrap.md](09-argocd-bootstrap.md)                           | 1 h    | 4 **gate** | ✅     |
-| 10  | ESO + Secret Manager            | [10-external-secrets.md](10-external-secrets.md)                           | 45 min | 4          | ✅     |
-| 11  | Kyverno policies                | [11-kyverno-policies.md](11-kyverno-policies.md)                           | 45 min | 4          | ✅     |
-| 12  | Boutique deploy                 | [12-boutique-deploy.md](12-boutique-deploy.md)                             | 1 h    | 5          | ✅     |
-| 13  | Observability + SLOs            | [13-observability-slos.md](13-observability-slos.md)                       | 2 h    | 6          | ✅     |
-| 14  | PagerDuty                       | [14-pagerduty.md](14-pagerduty.md)                                         | 1 h    | 7          | ✅     |
-| 15  | Cloud Armor                     | [15-cloud-armor.md](15-cloud-armor.md)                                     | 45 min | 7          | ✅     |
-| 16  | Smoke + SRE verification        | [16-smoke-validation.md](16-smoke-validation.md)                           | 1 h    | 7–8        | ✅     |
+| #   | Topic                           | Guide                                                                      | Est.   | Phase      | Status   |
+| --- | ------------------------------- | -------------------------------------------------------------------------- | ------ | ---------- | -------- |
+| 1   | GCP project and APIs            | [01-gcp-project-apis.md](01-gcp-project-apis.md)                           | 30 min | 1          | Complete |
+| 2   | Terraform remote state          | [02-terraform-remote-state.md](02-terraform-remote-state.md)               | 45 min | 1          | Complete |
+| 3   | VPC, subnets, Cloud NAT         | [03-vpc-nat.md](03-vpc-nat.md)                                             | 1 h    | 1          | Complete |
+| 4   | GKE cluster                     | [04-gke-cluster.md](04-gke-cluster.md)                                     | 1–2 h  | 2          | Complete |
+| 5   | Cloud DNS + NS delegation       | [05-cloud-dns.md](05-cloud-dns.md)                                         | 45 min | 2          | Complete |
+| 6   | Static IP + TLS                 | [06-ingress-tls.md](06-ingress-tls.md)                                     | 1 h    | 2          | Complete |
+| 7   | GitHub WIF                      | [07-github-wif.md](07-github-wif.md)                                       | 1 h    | 3          | Complete |
+| 8   | Artifact Registry + Binary Auth | [08-artifact-registry-binary-auth.md](08-artifact-registry-binary-auth.md) | 1 h    | 3          | Complete |
+| 9   | Argo CD bootstrap               | [09-argocd-bootstrap.md](09-argocd-bootstrap.md)                           | 1 h    | 4 **gate** | Complete |
+| 10  | ESO + Secret Manager            | [10-external-secrets.md](10-external-secrets.md)                           | 45 min | 4          | Complete |
+| 11  | Kyverno policies                | [11-kyverno-policies.md](11-kyverno-policies.md)                           | 45 min | 4          | Complete |
+| 12  | Boutique deploy                 | [12-boutique-deploy.md](12-boutique-deploy.md)                             | 1 h    | 5          | Complete |
+| 13  | Observability + SLOs            | [13-observability-slos.md](13-observability-slos.md)                       | 2 h    | 6          | Complete |
+| 14  | PagerDuty                       | [14-pagerduty.md](14-pagerduty.md)                                         | 1 h    | 7          | Complete |
+| 15  | Cloud Armor                     | [15-cloud-armor.md](15-cloud-armor.md)                                     | 45 min | 7          | Complete |
+| 16  | Smoke + SRE verification        | [16-smoke-validation.md](16-smoke-validation.md)                           | 1 h    | 7–8        | Complete |
 
-Status legend: ⬜ Not started · 🔄 In progress · ✅ Complete
+Status values: Not started · In progress · Complete
 
 Each guide follows the same SETUP format: Goal, Why, Prerequisites, Commands, Expected output, Validation, Common problems, Recovery, Best practices, Security notes, Next step.
 

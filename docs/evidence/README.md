@@ -1,6 +1,6 @@
 # Reference evidence — boutique-gke-sre
 
-Screenshots from the production reference while it was live. The GKE cluster and other GCP billables were destroyed afterward (Phase 8). There is no live demo today. These images are the proof that the path ran once.
+Screenshots from the production reference while it was live. The GKE cluster and other billable GCP resources were destroyed afterward (Phase 8). There is no live demo today. These images are the proof that the path ran once.
 
 Files sit under [`assets/diagrams/`](../../assets/diagrams/). The README [Proof](../../README.md#proof) section shows a short crop of the same set.
 

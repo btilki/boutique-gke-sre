@@ -62,7 +62,7 @@ During Game day 03 (Redis / cart down), scaling `redis-cart` to zero correctly b
 
 - Restore path under BA enforce was not rehearsed before the game day
 - Alert → PagerDuty → runbook path was skipped
-- Game day 03 / redis runbook lacked BA scale-to-zero guidance at the time of the exercise
+- Game day 03 / `redis-cart` runbook lacked Binary Authorization scale-to-zero guidance at the time of the exercise
 
 ## Action items
 
@@ -71,7 +71,7 @@ During Game day 03 (Redis / cart down), scaling `redis-cart` to zero correctly b
 | Ensure `redis-cart` (and platform Redis image) is cosign-signed/attested in CI or mirror workflow                      | Platform | On next rebuild          | P1       | Open   |
 | Document BA + scale-to-zero in [redis-cart-down.md](../runbooks/redis-cart-down.md)                                    | SRE      | Follow-up                | P1       | Open   |
 | Add restore fallback (signed image or emergency DRYRUN) to [03-redis-cart-down.md](../game-days/03-redis-cart-down.md) | SRE      | Follow-up                | P2       | Open   |
-| Re-run GD03 with PagerDuty ack + `redis-cart-down` alert validation                                                    | On-call  | After rebuild (topic 18) | P2       | Open   |
+| Re-run Game day 03 with PagerDuty acknowledge + `redis-cart-down` alert validation                                     | On-call  | After rebuild (topic 18) | P2       | Open   |
 
 ## Lessons learned
 

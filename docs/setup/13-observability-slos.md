@@ -298,4 +298,4 @@ make runbook-lint
 
 → [PagerDuty integration](14-pagerduty.md)
 
-Latency SLOs and Grafana dashboard apply : after topics 13–14 on a live cluster, continue with [17-latency-slos-dashboards.md](17-latency-slos-dashboards.md).
+Latency SLOs and Grafana dashboards apply after topics 13–14 on a live cluster — continue with [17-latency-slos-dashboards.md](17-latency-slos-dashboards.md).

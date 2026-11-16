@@ -26,7 +26,7 @@ check() {
   fi
 }
 
-echo "1. Confirm backups exported (GKE Backup / Velero) — manual step"
+echo "1. Confirm backups exported if needed (GKE Backup when topic 19 enabled, or manual Redis export) — manual step"
 echo "2. Confirm Argo CD apps scaled or removed — manual step"
 echo "3. Scanning for common orphan-prone resources..."
 

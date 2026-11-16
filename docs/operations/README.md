@@ -1,6 +1,6 @@
 # Operations documentation
 
-Day-2 operations guides for the boutique-gke-sre production reference environment.
+Day-2 operations guides for the boutique-gke-sre closed production reference (offline until rebuild — see [reference-claims.md](../reference-claims.md)).
 
 | Document                                           | Description                                                                                                                                             |
 | -------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |

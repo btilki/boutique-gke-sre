@@ -10,11 +10,11 @@ On a rebuilt cluster, sync Boutique **HPA/PDB/replica** defaults, add the **Argo
 
 Topics 17–20 are optional after rebuild — not part of the closed reference path. Topic 18 applies and proves operability artifacts that already exist in Git:
 
-| Gap                                   | Artifact                                                                                                       |
-| ------------------------------------- | -------------------------------------------------------------------------------------------------------------- |
-| HA values in Git not yet proven live  | Sync HPA/PDB + multi-replica critical paths (`frontend` / `checkout` / `cart` already `replicas: 2` in values) |
-| Only GD03 executed on the closed path | STATUS + TEMPLATE for 01/02/04; postmortem from GD03                                                           |
-| Argo CD edge unmonitored              | `argocd-ui` uptime check                                                                                       |
+| Gap                                          | Artifact                                                                                                       |
+| -------------------------------------------- | -------------------------------------------------------------------------------------------------------------- |
+| HA values in Git not yet proven live         | Sync HPA/PDB + multi-replica critical paths (`frontend` / `checkout` / `cart` already `replicas: 2` in values) |
+| Only Game day 03 executed on the closed path | STATUS + TEMPLATE for 01/02/04; postmortem from Game day 03                                                    |
+| Argo CD edge unmonitored                     | `argocd-ui` uptime check                                                                                       |
 
 Without this step on a rebuild, further game days stay deferred and Argo CD outages stay invisible to synthetic probes.
 
@@ -24,7 +24,7 @@ Without this step on a rebuild, further game days stay deferred and Argo CD outa
 - Recommended: [17-latency-slos-dashboards.md](17-latency-slos-dashboards.md) (can run before or after this topic)
 - Storefront + Argo CD HTTPS healthy
 - Tools: `kubectl`, `argocd`, `gcloud`, `curl`, `helm` (optional)
-- Access: cluster admin, Monitoring editor, PagerDuty for GD04
+- Access: cluster admin, Monitoring editor, PagerDuty for Game day 04
 - Repo artifacts:
   - `gitops/apps/boutique/templates/hpa.yaml`, `pdb.yaml`, updated `values.yaml`
   - `observability/monitoring/uptime-checks/argocd-ui.yaml`
@@ -75,12 +75,12 @@ gcloud monitoring uptime list-configs --project=boutique-gke \
 
 ### 4. Game-day cadence (execute when scheduled)
 
-| Order | Scenario                | Guide                                                                   | Notes                                                                                |
-| ----- | ----------------------- | ----------------------------------------------------------------------- | ------------------------------------------------------------------------------------ |
-| 1     | Alert routing           | [04-alert-routing.md](../sre/game-days/04-alert-routing.md)             | Proves PD before chaotic injects                                                     |
-| 2     | Bad deploy rollback     | [01-bad-deploy-rollback.md](../sre/game-days/01-bad-deploy-rollback.md) |                                                                                      |
-| 3     | Zone / pod failure      | [02-zone-pod-failure.md](../sre/game-days/02-zone-pod-failure.md)       | Needs step 1 HA sync first                                                           |
-| 4     | Redis re-run (optional) | [03-redis-cart-down.md](../sre/game-days/03-redis-cart-down.md)         | Close PD/BA gaps from [postmortem](../sre/postmortems/2026-07-04-redis-cart-down.md) |
+| Order | Scenario                | Guide                                                                   | Notes                                                                                                           |
+| ----- | ----------------------- | ----------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
+| 1     | Alert routing           | [04-alert-routing.md](../sre/game-days/04-alert-routing.md)             | Proves PagerDuty before chaotic injects                                                                         |
+| 2     | Bad deploy rollback     | [01-bad-deploy-rollback.md](../sre/game-days/01-bad-deploy-rollback.md) |                                                                                                                 |
+| 3     | Zone / pod failure      | [02-zone-pod-failure.md](../sre/game-days/02-zone-pod-failure.md)       | Needs step 1 HA sync first                                                                                      |
+| 4     | Redis re-run (optional) | [03-redis-cart-down.md](../sre/game-days/03-redis-cart-down.md)         | Close PagerDuty / Binary Authorization gaps from [postmortem](../sre/postmortems/2026-07-04-redis-cart-down.md) |
 
 After each run:
 
@@ -107,7 +107,7 @@ curl -I https://argocd.boutique.biroltilki.art/healthz
 - PDB objects for frontend, checkoutservice, cartservice, redis-cart
 - Uptime configs include `boutique-storefront` and `argocd-ui`
 - `uptime-check-failed` documents both targets; runbook covers both branches
-- GD 01/02/04 marked **Executed** in STATUS only after dated reports exist (do not fabricate)
+- Game days 01/02/04 marked **Executed** in STATUS only after dated reports exist (do not fabricate)
 
 ## Validation
 
@@ -137,7 +137,7 @@ curl -I https://argocd.boutique.biroltilki.art/healthz
 | Frontend stuck at 1 replica         | HPA metrics unavailable              | Metrics server / resource requests present      |
 | Redis scaled to 2                   | Misread HA table                     | Keep `replicas: 1` — split cart state otherwise |
 | Argo uptime 401/403                 | Armor / auth on `/healthz`           | Allow health path or probe CIDRs (topic 15)     |
-| GD02 meaningless                    | Still single-replica frontend        | Complete step 1 before inject                   |
+| Game day 02 meaningless             | Still single-replica frontend        | Complete step 1 before inject                   |
 | STATUS says Executed without report | Process drift                        | Require dated file under `reports/`             |
 
 ## Recovery
@@ -150,7 +150,7 @@ curl -I https://argocd.boutique.biroltilki.art/healthz
 
 - On rebuild: run Game day 04 before chaotic injects so paging is proven (deferred on the closed path — see [STATUS](../sre/game-days/reports/STATUS.md))
 - Keep STATUS.md honest — Deferred until a report exists
-- Re-read GD03 postmortem before re-running Redis (BA + signing)
+- Re-read Game day 03 postmortem before re-running Redis (Binary Authorization + signing)
 - Prefer GitOps scale over `kubectl scale` for lasting HA changes
 
 ## Security notes

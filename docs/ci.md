@@ -1,5 +1,7 @@
 # CI contract — boutique-gke-sre
 
+This page defines what CI may and may not do in this reference.
+
 Topics 07–08, 12 · ADR [002](adr/002-wif-over-sa-keys.md), [003](adr/003-manual-argocd-sync.md) · Workflows [`.github/workflows/`](../.github/workflows/README.md)
 
 ## After teardown

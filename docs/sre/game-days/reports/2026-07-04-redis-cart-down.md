@@ -72,7 +72,7 @@ Expected: `redis-cart` unavailable â†’ `cartservice` cannot persist cart state â
 
 - Restore via `kubectl scale` alone is **insufficient** under BA enforce without signed images.
 - Game-day guide restore step does not mention BA / attestation prerequisite.
-- Alert firing and PagerDuty ack were not exercised in this run.
+- Alert firing and the PagerDuty acknowledge step were not exercised in this run.
 
 ## Action items
 
@@ -81,7 +81,7 @@ Expected: `redis-cart` unavailable â†’ `cartservice` cannot persist cart state â
 | Sign `redis-cart` in `build-scan-sign` CI (or mirror workflow)                                          | P1       | Open   |
 | Document BA + scale-to-zero interaction in [redis-cart-down runbook](../../runbooks/redis-cart-down.md) | P1       | Open   |
 | Add restore fallback to game-day 03 guide (DRYRUN or signed image)                                      | P2       | Open   |
-| Re-run scenario 03 with PagerDuty ack and `redis-cart-down` alert validation                            | P2       | Open   |
+| Re-run scenario 03 with PagerDuty acknowledge and `redis-cart-down` alert validation                    | P2       | Open   |
 
 ## Commands reference
 

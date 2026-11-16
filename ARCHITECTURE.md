@@ -20,7 +20,7 @@ Git → GitHub Actions (WIF on supply-chain) → Artifact Registry → Argo CD �
 | Isolation | One cluster; private-node; public API; namespaces `boutique`, `argocd`, `observability`, `kyverno`, `external-secrets` |
 | Deploy    | GitOps; manual Argo CD sync; digest-only images                                                                        |
 | Security  | WIF (supply-chain), ESO, Kyverno, NetworkPolicy, Binary Authorization, Cloud Armor                                     |
-| SRE       | Browse/checkout availability SLOs; burn alerts; runbooks; Game day 03 executed (alert path not verified)               |
+| SRE       | Browse and checkout availability SLOs; burn alerts; runbooks; Game day 03 executed (alert path not verified)           |
 
 ## Diagrams
 

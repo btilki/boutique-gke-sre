@@ -10,7 +10,7 @@ The closed run followed this path: GitHub Actions mirrored, scanned, and signed 
 - Argo CD (manual sync), ESO + Secret Manager, Kyverno Enforce, NetworkPolicy manifests
 - Digest-only Boutique Helm in the `boutique` namespace; storefront and Argo CD over HTTPS when live
 - Browse and checkout availability SLOs; burn-rate alerts with runbook URLs; PagerDuty test path
-- Cloud Armor on the storefront (console path); one executed Game day (03; PD/alert not verified); ordered teardown
+- Cloud Armor on the storefront (console path); one executed Game day (03; PagerDuty and alert path not verified); ordered teardown
 
 ## Limits inside the operated path
 

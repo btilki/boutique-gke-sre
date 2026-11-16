@@ -435,13 +435,17 @@ gcloud beta container backup-restores backups list \
 
 ### Expected outcome
 
+When topic 19 IaC is enabled (`enable_backup_iac`):
+
 - Daily backup plan covers `boutique` namespace (including Redis PVC)
 - Latest backup state: `SUCCEEDED`
 - Retention matches policy (default: 7 days per backup module scaffold)
 
+If topic 19 is off: no GKE Backup plan is expected — use the redis-restore / manual export path before teardown.
+
 ### Recovery steps
 
-If backups are missing or failing:
+If backups are missing or failing (with topic 19 enabled):
 
 1. Check GKE Backup API enabled: `gcloud services list --enabled | grep gkebackup`
 2. Verify backup plan IAM and Workload Identity bindings

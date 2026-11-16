@@ -27,7 +27,7 @@ Day-2 work spans Terraform (infra), GitOps (apps/policies), and Cloud Monitoring
 1. **Weekly:** Fill [error-budget/weekly-review.md](../sre/error-budget/weekly-review.md); review SLOs; run [orphan-scan-cadence.md](orphan-scan-cadence.md) if the GCP project is live
 2. **On digest PR merge:** Manual sync `boutique` Application in Argo CD
 3. **Monthly:** Review Kyverno policy reports and failed admissions
-4. **Quarterly:** Rotate non-WIF credentials; verify backup restore drill
+4. **Quarterly:** Rotate non-WIF credentials; verify backup restore drill when topic 19 GKE Backup is enabled (optional after rebuild)
 5. **As needed:** Scale per [sre/capacity/baseline.md](../sre/capacity/baseline.md); open [error_budget_freeze](../../.github/ISSUE_TEMPLATE/error_budget_freeze.md) if budget &lt; 25%
 
 ## Validation

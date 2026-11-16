@@ -378,4 +378,4 @@ Optional after rebuild (not part of the closed reference path) ([setup index](RE
 | Monitoring/Backup IaC | Enable TF modules                          | [19-monitoring-backup-terraform.md](19-monitoring-backup-terraform.md) |
 | SRE practices         | Error budget, capacity, toil               | [20-sre-practices-capacity-toil.md](20-sre-practices-capacity-toil.md) |
 
-Executive summary: [bootstrap.md](../bootstrap.md)
+Bootstrap summary: [bootstrap.md](../bootstrap.md)

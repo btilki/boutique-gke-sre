@@ -4,7 +4,7 @@ Production SRE reference for [Google Online Boutique](https://github.com/GoogleC
 
 > **Status:** Production reference closed. Phases 1–8 ran end to end; then the GCP resources were destroyed. There is no live GKE cluster or public DNS from that run. To run again, follow [`docs/setup/`](docs/setup/) (topics 01–16).
 
-Author: [Birol Tilki](https://www.linkedin.com/in/birol-tilki-48731326/) — designed, operated, and tore down this reference (topics 01–16; game-day evidence dated 2026-07-04).
+Author: [Birol Tilki](https://www.linkedin.com/in/birol-tilki-48731326/) — designed, operated, and tore down this reference (topics 01–16; Game day 03 evidence dated 2026-07-04).
 
 **Hostnames (offline until rebuild):** `boutique.biroltilki.art` · `argocd.boutique.biroltilki.art`
 
@@ -73,7 +73,7 @@ More: Kyverno, Binary Authorization, PagerDuty test incident, Grafana, Cloud Tra
 
 - **Public Kubernetes API endpoint** — nodes are private; the control plane is not. IaC today keeps `enable_private_endpoint = false`. A hardened rebuild would set a private endpoint and master authorized networks ([`SECURITY.md`](SECURITY.md)).
 - **Single cluster, one Boutique namespace** — fine for a cost-capped reference; not true env isolation.
-- **`redis-cart` attestation gap** — Game day 03 showed Binary Authorization blocking an unsigned restore; PagerDuty ack was not exercised; postmortem actions are still open.
+- **`redis-cart` attestation gap** — Game day 03 showed Binary Authorization blocking an unsigned restore; the PagerDuty acknowledge step was not exercised; postmortem actions are still open.
 - **Storefront Cloud Armor is a console procedure** — Terraform Armor for Argo CD is off by default (`enable_argocd_armor = false`); enable after topic 16. Storefront WAF was topic 15 by hand.
 - **NetworkPolicy may not be enforced by the CNI** — Kyverno requires the label; the GKE module does not pin Dataplane V2 or Calico.
 
@@ -135,7 +135,7 @@ Full tree: [`REPOSITORY_STRUCTURE.md`](REPOSITORY_STRUCTURE.md)
 - Private-node GKE with HTTPS on the storefront and Argo CD hostnames (when live)
 - Digest-only GitOps, Kyverno baseline, ESO + Secret Manager, Binary Authorization
 - Browse and checkout availability SLOs, burn-rate alerts, PagerDuty test path
-- One executed Game day (03 redis-cart; PagerDuty/alert not verified — see [`docs/sre/game-days/reports/STATUS.md`](docs/sre/game-days/reports/STATUS.md))
+- One executed Game day (03 — `redis-cart`; PagerDuty and alert path not verified — see [`docs/sre/game-days/reports/STATUS.md`](docs/sre/game-days/reports/STATUS.md))
 - Ordered teardown with orphan-resource scans ([`docs/teardown.md`](docs/teardown.md))
 
 ---

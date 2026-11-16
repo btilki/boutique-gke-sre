@@ -254,7 +254,7 @@ def render_pagerduty_incident(path: Path) -> None:
         draw.text((160, y), val, fill="#1a1a1a", font=body_f)
         y += 28
 
-    draw.text((44, h - 56), "Test alert → PagerDuty incident (not game day 04; GD04 deferred)", fill="#06ac38", font=small_f)
+    draw.text((44, h - 56), "Test alert → PagerDuty incident (not Game day 04; deferred)", fill="#06ac38", font=small_f)
     captured = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
     draw.text((44, h - 36), f"Incident data from Cloud Monitoring alerts API · {captured}", fill="#999", font=small_f)
     img.save(path)

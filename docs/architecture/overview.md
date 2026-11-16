@@ -314,13 +314,13 @@ Single-cluster limits: no hard blast-radius between logical envs; namespace quot
 
 ## 12. Disaster recovery
 
-| Asset           | RPO  | RTO     | Method                                                                    |
-| --------------- | ---- | ------- | ------------------------------------------------------------------------- |
-| Redis (cart)    | < 1h | < 30m   | GKE Backup / Velero; [redis-restore](../sre/runbooks/redis-restore.md)    |
-| Git state       | 0    | minutes | GitHub; Argo resync                                                       |
-| Terraform state | 0    | hours   | GCS versioned backend                                                     |
-| Secrets         | 0    | minutes | Secret Manager versions; ESO resync                                       |
-| Cluster         | N/A  | hours   | Terraform re-apply; [cluster-rebuild](../sre/runbooks/cluster-rebuild.md) |
+| Asset           | RPO  | RTO     | Method                                                                              |
+| --------------- | ---- | ------- | ----------------------------------------------------------------------------------- |
+| Redis (cart)    | < 1h | < 30m   | GKE Backup when topic 19 enabled; [redis-restore](../sre/runbooks/redis-restore.md) |
+| Git state       | 0    | minutes | GitHub; Argo resync                                                                 |
+| Terraform state | 0    | hours   | GCS versioned backend                                                               |
+| Secrets         | 0    | minutes | Secret Manager versions; ESO resync                                                 |
+| Cluster         | N/A  | hours   | Terraform re-apply; [cluster-rebuild](../sre/runbooks/cluster-rebuild.md)           |
 
 Teardown destroy order: [teardown.md](../teardown.md)
 
@@ -355,7 +355,7 @@ Teardown destroy order: [teardown.md](../teardown.md)
 - **Managed Prometheus + Cloud Monitoring** — tune retention; avoid high-cardinality labels
 - **Static IPs + LBs** — two reserved global addresses plus two HTTP(S) load balancers while the cluster exists
 - **Node pool** — autoscaling min sized for demo; tear down when idle
-- **GKE Backup** — GCS storage for Redis backups per RPO
+- **GKE Backup (optional topic 19)** — GCS storage for Redis backups per RPO when `enable_backup_iac` is on; not part of Phase 8 closed-path proof
 
 ---
 

@@ -45,9 +45,9 @@ Full ADR index: [`../adr/README.md`](../adr/README.md)
 
 ---
 
-## Maturity
+## Scope of this design
 
-This is a production reference: real SRE and supply-chain controls on one GKE cluster. It does not claim multi-region HA or enterprise-scale DR.
+Single-cluster production reference. Topics 01–16 were operated, then torn down. It does not claim multi-region HA or large-scale DR.
 
 ---
 

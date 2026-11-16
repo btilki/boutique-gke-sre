@@ -4,7 +4,7 @@ Kubernetes desired state for Argo CD: bootstrap, applications, and platform poli
 
 ## Purpose
 
-Deploy and manage cluster workloads from Git using **GitOps** (**Git-based continuous delivery**). No manual `kubectl apply` for production paths after Phase 4 bootstrap.
+Deploy and manage cluster workloads from Git using GitOps. No manual `kubectl apply` for GitOps / reference deploy paths after Phase 4 bootstrap.
 
 ## Layout
 

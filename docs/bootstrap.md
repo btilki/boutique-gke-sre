@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Executive path from an empty GCP project to the storefront and Argo CD hostnames for Online Boutique on one private GKE cluster.
+Executive path from an empty GCP project to the storefront and Argo CD hostnames for Online Boutique on one private-node GKE cluster (public API endpoint).
 
 **DNS names** (offline until rebuild): `boutique.biroltilki.art` · `argocd.boutique.biroltilki.art` — [dns.md](dns.md)
 
@@ -19,7 +19,7 @@ Executive path from an empty GCP project to the storefront and Argo CD hostnames
 - GCP account with project `boutique-gke` (or permission to create it)
 - Domain `biroltilki.art` with registrar access
 - Repository on disk (`git clone` or local `git init`; GitHub remote required by topic 07)
-- Tools: `gcloud`, `terraform` ≥ 1.5 (full list in [README](../README.md))
+- Tools: `gcloud`, `terraform` ≥ 1.5 — see [scripts/bootstrap/validate-prereqs.sh](../scripts/bootstrap/validate-prereqs.sh)
 
 ## Architecture
 
@@ -32,18 +32,20 @@ flowchart TB
   P3 --> P4[Phase 4: Argo CD + policies GATE]
   P4 --> P5[Phase 5: Boutique deploy]
   P5 --> P6[Phase 6–7: Observability + SRE]
-  P6 --> P8[Phase 8: Backup + teardown validated]
+  P6 --> P8[Phase 8: Teardown validated]
 ```
 
-| Stage             | Setup topics      | Implementation phase |
-| ----------------- | ----------------- | -------------------- |
-| Foundation        | 01–03             | 1                    |
-| Cluster + edge    | 04–06             | 2                    |
-| Supply chain      | 07–08             | 3                    |
-| Platform **gate** | 09–11             | 4                    |
-| Application       | 12                | 5                    |
-| SRE               | 13–16             | 6–7                  |
-| Lifecycle         | teardown + backup | 8                    |
+| Stage             | Setup topics | Implementation phase |
+| ----------------- | ------------ | -------------------- |
+| Foundation        | 01–03        | 1                    |
+| Cluster + edge    | 04–06        | 2                    |
+| Supply chain      | 07–08        | 3                    |
+| Platform **gate** | 09–11        | 4                    |
+| Application       | 12           | 5                    |
+| SRE               | 13–16        | 6–7                  |
+| Lifecycle         | teardown     | 8                    |
+
+Backup/restore runbooks may exist under ops docs; GKE Backup Terraform is optional after rebuild ([topic 19](setup/19-monitoring-backup-terraform.md)), not part of Phase 8 closed-path proof.
 
 **Critical:** Do not skip topics 09–11 (Argo CD, ESO, Kyverno) before deploying Boutique.
 

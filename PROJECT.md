@@ -2,13 +2,13 @@
 
 ## Summary
 
-Production SRE reference for [Google Online Boutique](https://github.com/GoogleCloudPlatform/microservices-demo) on one private regional GKE cluster in GCP project `boutique-gke`, domain `biroltilki.art`.
+Production SRE reference for [Google Online Boutique](https://github.com/GoogleCloudPlatform/microservices-demo) on one private-node regional GKE cluster (public API endpoint) in GCP project `boutique-gke`, domain `biroltilki.art`.
 
 ## Goals
 
-1. Run a production-reference platform on GCP (GitOps, DevSecOps, SRE)
-2. Provide operable SLOs, alerting, runbooks, and game-day practice — not slides only
-3. Serve as a reusable platform baseline and internal engineering reference
+1. Run Online Boutique on one private-node GKE cluster with GitOps and supply-chain controls
+2. Operate browse/checkout availability SLOs, burn alerts, runbooks, and at least one game day
+3. Keep bootstrap and teardown documented so the stack can be rebuilt or removed without tribal knowledge
 
 → Architecture: [ARCHITECTURE.md](ARCHITECTURE.md) · [docs/architecture/overview.md](docs/architecture/overview.md)
 

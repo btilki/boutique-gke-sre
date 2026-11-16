@@ -34,14 +34,14 @@ The mitigation column is the intended control. Residual gaps are listed in the n
 
 These are in scope and not fully closed. Details and file pointers: [SECURITY.md](../../SECURITY.md).
 
-| Risk                              | What is true in this repo                                                                                                                               |
-| --------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Public Kubernetes API             | `enable_private_endpoint = false`. No master authorized networks.                                                                                       |
-| Broad node identity               | Node OAuth scope is `cloud-platform`.                                                                                                                   |
-| Attestation is cluster-scoped     | Project Binary Authorization default is allow plus dry-run. Only this cluster requires an attestation.                                                  |
-| Unsigned `redis-cart` on recreate | The Redis cart game day hit this. Postmortem actions are still open. Cosign uses a long-lived GitHub secret.                                            |
-| Partial edge WAF                  | Storefront Armor is a console procedure (topic 15): SQLi, XSS, and a rate limit. Terraform Armor is the Argo CD policy, gated by `enable_argocd_armor`. |
-| NetworkPolicy may not be enforced | The GKE module sets neither Dataplane V2 nor the Calico addon.                                                                                          |
+| Risk                              | What is true in this repo                                                                                                                              |
+| --------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Public Kubernetes API             | `enable_private_endpoint = false`. No master authorized networks.                                                                                      |
+| Broad node identity               | Node OAuth scope is `cloud-platform`.                                                                                                                  |
+| Attestation is cluster-scoped     | Project Binary Authorization default is allow plus dry-run. Only this cluster requires an attestation.                                                 |
+| Unsigned `redis-cart` on recreate | The Redis cart game day hit this. Postmortem actions are still open. Cosign uses a long-lived GitHub secret.                                           |
+| Partial edge WAF                  | Storefront Armor is a console procedure (topic 15): SQLi, XSS, and a rate limit. Terraform Argo CD Armor defaults off (`enable_argocd_armor = false`). |
+| NetworkPolicy may not be enforced | The GKE module sets neither Dataplane V2 nor the Calico addon.                                                                                         |
 
 ## Out of scope
 

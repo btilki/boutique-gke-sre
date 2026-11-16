@@ -4,7 +4,7 @@
 
 If you discover a security issue, please report it responsibly. Do not open public issues for exploitable vulnerabilities.
 
-**Contact:** Open a private security advisory on GitHub or contact the repository maintainer directly.
+**Contact:** Open a private [GitHub Security Advisory](https://github.com/btilki/boutique-gke-sre/security/advisories) for this repository. Do not open a public issue for exploitable vulnerabilities.
 
 ## Design principles
 
@@ -13,7 +13,7 @@ If you discover a security issue, please report it responsibly. Do not open publ
 - **Digest-only images** — Kyverno rejects mutable tags
 - **Signed artifacts** — cosign + Binary Authorization (cluster rule; Enforce after smoke)
 - **Network default-deny** — NetworkPolicy manifests with explicit allows (CNI pin required — see limits)
-- **Edge protection** — Cloud Armor on storefront ingress (console path in the lived reference)
+- **Edge protection** — Cloud Armor on storefront ingress (console path in the closed reference)
 
 ## Current limits
 
@@ -22,7 +22,7 @@ The principles above are the target. This repository still has these gaps. Do no
 - The Kubernetes API endpoint is public (`enable_private_endpoint = false` in `terraform/modules/gke`). Master authorized networks are not set. Node OAuth scope is `https://www.googleapis.com/auth/cloud-platform`.
 - Binary Authorization's project default is allow plus dry-run. Only this cluster's admission rule requires an attestation.
 - `redis-cart` was not attested during the Redis cart game day. The action items in [docs/sre/postmortems/2026-07-04-redis-cart-down.md](docs/sre/postmortems/2026-07-04-redis-cart-down.md) are still open. Signing uses a long-lived cosign private key in GitHub secrets.
-- Storefront Cloud Armor is a console procedure in [docs/setup/15-cloud-armor.md](docs/setup/15-cloud-armor.md). The Terraform module covers the Argo CD policy and stays off unless `enable_argocd_armor` is set. The rules are SQLi, XSS, and a rate limit, then default allow.
+- Storefront Cloud Armor is a console procedure in [docs/setup/15-cloud-armor.md](docs/setup/15-cloud-armor.md). The Terraform Argo CD Armor policy defaults to off (`enable_argocd_armor = false`); set `true` after topic 16. The rules are SQLi, XSS, and a rate limit, then default allow.
 - The GKE module does not set Dataplane V2 or the Calico network-policy addon. NetworkPolicy objects in Git are not pinned to an enforcing dataplane. Kyverno checks the namespace label. It does not prove the CNI is dropping packets.
 
 ## Supply chain

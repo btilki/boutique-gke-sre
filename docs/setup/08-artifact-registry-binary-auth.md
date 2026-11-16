@@ -161,8 +161,8 @@ module "binary_authorization" {
 
 ```
 GitHub Actions (WIF → CI SA)
-  → docker build
-  → Trivy scan (fail on critical/high)
+  → docker pull (mirror upstream Boutique / Redis — not a source rebuild)
+  → Trivy scan (fail on CRITICAL/HIGH)
   → push europe-west1-docker.pkg.dev/boutique-gke/boutique/SERVICE:TAG
   → cosign sign --key env://COSIGN_PRIVATE_KEY IMAGE_DIGEST
   → cosign attest --key env://COSIGN_PRIVATE_KEY --predicate-type slsaprovenance IMAGE_DIGEST
@@ -170,7 +170,7 @@ GitHub Actions (WIF → CI SA)
 Binary Authorization attestor (public key in GCP)
   → On pod admit: image digest must have valid signature from trusted attestor
        ↓
-GKE schedules pod (or rejects if unsigned)
+GKE schedules pod (or rejects if unsigned / Enforce is on)
 ```
 
 Key concepts:

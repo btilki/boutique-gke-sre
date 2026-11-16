@@ -4,7 +4,7 @@ Regional GKE cluster (private nodes, public control-plane endpoint) and autoscal
 
 ## Purpose
 
-Provisions a production-reference regional GKE cluster in `europe-west1` with Workload Identity, secondary IP ranges for pods and services (from the networking module), and an autoscaling node pool sized for the Boutique microservices workload. Nodes have no public IPs (`enable_private_nodes`); the Kubernetes API endpoint stays public (`enable_private_endpoint = false`). Egress uses Cloud NAT from the VPC module.
+Provisions a production reference regional GKE cluster in `europe-west1` with Workload Identity, secondary IP ranges for pods and services (from the networking module), and an autoscaling node pool sized for the Boutique microservices workload. Nodes have no public IPs (`enable_private_nodes`); the Kubernetes API endpoint stays public (`enable_private_endpoint = false`). Egress uses Cloud NAT from the VPC module.
 
 ## Inputs
 

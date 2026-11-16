@@ -38,7 +38,7 @@ Optional after rebuild (scaffolds only): phases 9-A–9-D map to setup topics 17
 
 **Phases 1–8 complete** — Infrastructure decommissioned. Git repository retained as the platform reference. See [docs/teardown.md](docs/teardown.md).
 
-Optional follow-ups below are maintainer backlog, not lived reference claims.
+Optional follow-ups below are maintainer backlog, not closed-path claims.
 
 ### Optional follow-ups
 
@@ -66,14 +66,16 @@ Not part of the closed reference. File map for maintainers; apply only via [setu
 
 ### 9-B
 
-| Area                 | Path                                                                                     |
-| -------------------- | ---------------------------------------------------------------------------------------- |
-| HPA / PDB / replicas | `gitops/apps/boutique/templates/hpa.yaml`, `pdb.yaml`, `values.yaml`                     |
-| Argo CD uptime       | `observability/monitoring/uptime-checks/argocd-ui.yaml`                                  |
-| Create script        | `scripts/create-argocd-uptime-check.sh`                                                  |
-| Game-day ops         | `docs/sre/game-days/reports/{TEMPLATE,STATUS}.md`                                        |
-| Postmortem           | `docs/sre/postmortems/2026-07-04-redis-cart-down.md`                                     |
-| Setup guide          | [docs/setup/18-sre-operability-game-days.md](docs/setup/18-sre-operability-game-days.md) |
+Apply/prove on a rebuild. Some files below already exist from the closed path.
+
+| Area                 | Path                                                                                     | Note                                     |
+| -------------------- | ---------------------------------------------------------------------------------------- | ---------------------------------------- |
+| HPA / PDB / replicas | `gitops/apps/boutique/templates/hpa.yaml`, `pdb.yaml`, `values.yaml`                     | In Git; sync/prove live on rebuild       |
+| Argo CD uptime       | `observability/monitoring/uptime-checks/argocd-ui.yaml`                                  | Scaffold until applied                   |
+| Create script        | `scripts/create-argocd-uptime-check.sh`                                                  | Scaffold until applied                   |
+| Game-day ops         | `docs/sre/game-days/reports/{TEMPLATE,STATUS}.md`                                        | STATUS shows 01/02/04 deferred           |
+| Postmortem           | `docs/sre/postmortems/2026-07-04-redis-cart-down.md`                                     | **Lived** (game day 03) — not a scaffold |
+| Setup guide          | [docs/setup/18-sre-operability-game-days.md](docs/setup/18-sre-operability-game-days.md) | Optional after rebuild                   |
 
 ### 9-C
 

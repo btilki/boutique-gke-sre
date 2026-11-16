@@ -76,9 +76,9 @@ variable "argocd_armor_allowed_cidrs" {
 }
 
 variable "enable_argocd_armor" {
-  description = "Create Cloud Armor policy argocd-edge for the Argo CD ingress backend."
+  description = "Create Cloud Armor policy argocd-edge for the Argo CD ingress backend. Default false; set true after topic 16 (edge hardening)."
   type        = bool
-  default     = true
+  default     = false
 }
 
 # --- Phase 9-C (default false — safe with decommissioned project) ---

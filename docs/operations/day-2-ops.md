@@ -1,18 +1,20 @@
 # Day-2 operations
 
+> **Offline until rebuild:** Hostnames and the GKE cluster from the closed reference are gone. `curl` / `dig` checks below apply only after you rebuild ([setup/README.md](../setup/README.md)). While offline, expect empty DNS and failed HTTPS.
+
 ## Purpose
 
 Ongoing operational tasks after initial bootstrap: certificate renewal, digest promotions, capacity, and platform hygiene.
 
 ## When to use
 
-- Regular platform engineer shifts
+- Regular platform engineer shifts on a **live** rebuild
 - After Phase 6 observability is live
-- Before and after production manifest changes
+- Before and after application manifest changes
 
 ## Prerequisites
 
-- Bootstrap complete per [bootstrap.md](../bootstrap.md)
+- Bootstrap complete per [bootstrap.md](../bootstrap.md) (live cluster)
 - Access: `kubectl`, `gcloud`, Argo CD (`argocd.boutique.biroltilki.art`)
 - Storefront: `boutique.biroltilki.art`
 
@@ -30,13 +32,16 @@ Day-2 work spans Terraform (infra), GitOps (apps/policies), and Cloud Monitoring
 
 ## Validation
 
+**After rebuild only:**
+
 ```bash
 curl -I https://boutique.biroltilki.art
 kubectl get applications -n argocd
 gcloud monitoring slos list --project=boutique-gke
 ```
 
-Expected: HTTP 200 on storefront; Argo CD apps Healthy/Synced.
+Expected (live): HTTP 200 on storefront; Argo CD apps Healthy/Synced.
+Expected (offline now): empty `dig +short` and failed HTTPS — see [dns.md](../dns.md).
 
 ## Troubleshooting
 
@@ -56,7 +61,7 @@ Expected: HTTP 200 on storefront; Argo CD apps Healthy/Synced.
 
 - All changes via PR; digest-only images
 - Link incidents to runbooks and postmortems
-- Run game days before major dependency upgrades
+- Schedule game-day exercises before major dependency upgrades (closed path: game day 03 only; see [STATUS](../sre/game-days/reports/STATUS.md))
 
 ## Production considerations
 

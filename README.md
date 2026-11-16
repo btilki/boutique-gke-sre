@@ -1,10 +1,10 @@
 # boutique-gke-sre
 
-Production-reference SRE platform for [Google Online Boutique](https://github.com/GoogleCloudPlatform/microservices-demo) on private GKE — SLOs, burn-rate alerts, PagerDuty, GitOps.
+Production reference SRE platform for [Google Online Boutique](https://github.com/GoogleCloudPlatform/microservices-demo) on private-node GKE (public API endpoint) — SLOs, burn-rate alerts, PagerDuty, GitOps.
 
 > **Status:** Production reference closed. Phases 1–8 ran end to end; then the GCP resources were destroyed. There is no live GKE cluster or public DNS from that run. To run again, follow [`docs/setup/`](docs/setup/) (topics 01–16).
 
-Author: [Birol Tilki](https://www.linkedin.com/in/birol-tilki-48731326/)
+Author: [Birol Tilki](https://www.linkedin.com/in/birol-tilki-48731326/) — solo design, operate, and teardown of this reference (topics 01–16; lived evidence dated 2026-07-04).
 
 **Hostnames (offline until rebuild):** `boutique.biroltilki.art` · `argocd.boutique.biroltilki.art`
 
@@ -16,14 +16,14 @@ Shipping Online Boutique to a cluster is not the hard part. The hard part is rel
 
 ## Decision
 
-- **One private regional GKE cluster** in project `boutique-gke` — namespaces for isolation, not multi-cluster blast radius ([ADR-001](docs/adr/001-single-cluster.md)).
+- **One private-node regional GKE cluster** in project `boutique-gke` (public Kubernetes API) — namespaces for isolation, not multi-cluster blast radius ([ADR-001](docs/adr/001-single-cluster.md)).
 - **Git is what Argo CD reconciles** — GitHub Actions builds, scans (Trivy), signs (cosign), and opens digest PRs. Operators sync Argo by hand ([ADR-003](docs/adr/003-manual-argocd-sync.md)).
 - **Admission blocks the easy mistakes** — Kyverno enforces digest-only images, probes, resources, NetworkPolicy labels, and ESO-only secrets. Binary Authorization checks attestations when the cluster admits images.
-- **SRE after deployment** — browse and checkout SLOs in Cloud Monitoring, multi-window burn alerts, PagerDuty with runbook links, game days, and ordered teardown.
+- **SRE after deployment** — browse and checkout availability SLOs in Cloud Monitoring, multi-window burn alerts, PagerDuty with runbook links, one executed game day, and ordered teardown.
 
 ## Result
 
-Topics 01–16 completed, then teardown. Documentation and screenshots remain; there are no public A records. File-backed claims: [`docs/reference-claims.md`](docs/reference-claims.md).
+Topics 01–16 completed, then teardown. Documentation and screenshots remain; there are no public A records. Claims documented in this repo: [`docs/reference-claims.md`](docs/reference-claims.md).
 
 ---
 
@@ -31,7 +31,7 @@ Topics 01–16 completed, then teardown. Documentation and screenshots remain; t
 
 |           |                                                                                                        |
 | --------- | ------------------------------------------------------------------------------------------------------ |
-| What      | SRE-focused private GKE for Online Boutique in `europe-west1`                                          |
+| What      | SRE-focused private-node GKE (public API) for Online Boutique in `europe-west1`                        |
 | Hard rule | Reliability **after deployment** — SLOs → burn alerts → PagerDuty → runbooks                           |
 | CI model  | GitHub Actions + WIF; **CI does not sync Argo** — digest PRs only                                      |
 | Scope     | Production reference — one project, one cluster; not multi-region HA                                   |
@@ -41,7 +41,13 @@ Topics 01–16 completed, then teardown. Documentation and screenshots remain; t
 
 ## Proof
 
-These screenshots are from the lived reference. Full catalog: [`docs/evidence/`](docs/evidence/README.md). Hostnames stay offline until you rebuild.
+These screenshots are from when the stack was live. Full catalog: [`docs/evidence/`](docs/evidence/README.md). Hostnames stay offline until you rebuild.
+
+| Status                        | Examples                                                                                                                 |
+| ----------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| Proven in screenshots         | Storefront HTTPS, Argo Healthy/Synced, `build-scan-sign`, availability SLOs, Kyverno/BA/PagerDuty/Grafana (see evidence) |
+| Documented, no screenshot yet | Digest PR diff, Kyverno deny of `:latest`, Argo OutOfSync→Sync, BA deny on `redis-cart`, teardown console                |
+| Deferred                      | Game days 01/02/04; latency SLOs (topic 17); topics 18–20 scaffolds                                                      |
 
 **Storefront** — `https://boutique.biroltilki.art` over HTTPS (when the reference was live):
 
@@ -67,8 +73,8 @@ More: Kyverno, Binary Authorization, PagerDuty test incident, Grafana, Cloud Tra
 
 - **Public Kubernetes API endpoint** — nodes are private; the control plane is not. A rebuild would set a private endpoint and master authorized networks ([`SECURITY.md`](SECURITY.md)).
 - **Single cluster, one Boutique namespace** — fine for a cost-capped reference; not true env isolation.
-- **`redis-cart` attestation gap** — the game day showed Binary Authorization blocking an unsigned restore; postmortem actions are still open.
-- **Storefront Cloud Armor is a console procedure** — Terraform Armor covers the Argo CD policy only when enabled; the storefront WAF was topic 15 by hand.
+- **`redis-cart` attestation gap** — game day 03 showed Binary Authorization blocking an unsigned restore; PagerDuty ack was not exercised; postmortem actions are still open.
+- **Storefront Cloud Armor is a console procedure** — Terraform Armor for Argo CD is off by default (`enable_argocd_armor = false`); enable after topic 16. Storefront WAF was topic 15 by hand.
 - **NetworkPolicy may not be enforced by the CNI** — Kyverno requires the label; the GKE module does not pin Dataplane V2 or Calico.
 
 Do **not** call this production-ready. Limits: [`SECURITY.md`](SECURITY.md). Lessons: [`docs/lessons-learned.md`](docs/lessons-learned.md).
@@ -119,7 +125,8 @@ Full tree: [`REPOSITORY_STRUCTURE.md`](REPOSITORY_STRUCTURE.md)
 
 - Private-node GKE with HTTPS on the storefront and Argo CD hostnames (when live)
 - Digest-only GitOps, Kyverno baseline, ESO + Secret Manager, Binary Authorization
-- Browse and checkout SLOs, burn-rate alerts, PagerDuty test path, one executed game day
+- Browse and checkout availability SLOs, burn-rate alerts, PagerDuty test path
+- One executed game day (03 redis-cart; PagerDuty/alert not verified — see [`docs/sre/game-days/reports/STATUS.md`](docs/sre/game-days/reports/STATUS.md))
 - Ordered teardown with orphan-resource scans ([`docs/teardown.md`](docs/teardown.md))
 
 ---

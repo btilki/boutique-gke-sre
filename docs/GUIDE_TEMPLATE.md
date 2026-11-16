@@ -1,5 +1,7 @@
 # Guide template
 
+**Maintainer template** for new `docs/` guides. Reader entry points: [`../README.md`](../README.md) · [`README.md`](README.md).
+
 Every guide under `docs/` must include these sections:
 
 1. **Purpose** — what this guide accomplishes
@@ -19,10 +21,8 @@ Setup guides in `setup/` may also use **Next step** linking to the following top
 
 ## Terminology
 
-First mention in the home document for a term: **abbreviation** (**full form**), both bold.
+Use the **short form only** (e.g. `SLO`, `WIF`, `GKE`). Do not write the long form in parentheses after the abbreviation. Prefer short form on first mention as well.
 
-Example: **SLO** (**Service Level Objective**)
+Do not use “Wave” labels.
 
-Do not put the full form first. Do not use “Wave” labels.
-
-Source: [.cursor/rules/documentation.mdc](../.cursor/rules/documentation.mdc)
+Abbreviation map: [DOCUMENTATION.md](DOCUMENTATION.md).

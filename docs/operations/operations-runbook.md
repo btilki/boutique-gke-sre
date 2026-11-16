@@ -1,6 +1,8 @@
 # Production operations runbook — boutique-gke-sre
 
-Canonical day-2 operations guide for Online Boutique on the private GKE cluster in GCP project `boutique-gke`.
+Canonical day-2 operations guide for Online Boutique on private-node GKE in GCP project `boutique-gke`.
+
+> **Offline until rebuild:** The closed-reference cluster and public A records are gone. Every `curl` / `dig` / `kubectl` block in this runbook assumes a **live rebuild**. While offline, empty DNS and failed HTTPS are expected — see [dns.md](../dns.md).
 
 | Item           | Value                                                             |
 | -------------- | ----------------------------------------------------------------- |
@@ -23,7 +25,7 @@ Provide a single reference for platform engineers and on-call responders to oper
 ### Commands
 
 ```bash
-# Baseline context — run at shift start
+# Baseline context — run at shift start (live rebuild only)
 export PROJECT_ID=boutique-gke
 export REGION=europe-west1
 export CLUSTER_NAME=boutique-gke
@@ -38,6 +40,8 @@ argocd app list 2>/dev/null || kubectl -n argocd get applications
 
 ### Validation
 
+**After rebuild only:**
+
 ```bash
 curl -I https://boutique.biroltilki.art
 curl -I https://argocd.boutique.biroltilki.art
@@ -46,8 +50,8 @@ kubectl get nodes
 
 ### Expected outcome
 
-- Both URLs return `HTTP/2 200` or `302` with valid TLS
-- All nodes `Ready`
+- **Live:** Both URLs return `HTTP/2 200` or `302` with valid TLS; all nodes `Ready`
+- **Offline (current):** `dig +short` empty; HTTPS fails — not an incident on the closed stack
 - Argo CD Applications show `Healthy` / `Synced` (or `OutOfSync` awaiting manual sync)
 
 ### Recovery steps

@@ -42,8 +42,8 @@ Diagrams: [assets/diagrams/](../../assets/diagrams/). Folder nav: [README.md](RE
 
 | ID   | Requirement               | Target                                                              |
 | ---- | ------------------------- | ------------------------------------------------------------------- |
-| NF1  | Browse availability SLO   | 99.9% monthly (lived path)                                          |
-| NF2  | Checkout availability SLO | 99.95% monthly (lived path)                                         |
+| NF1  | Browse availability SLO   | 99.9% monthly (closed path — topic 13)                              |
+| NF2  | Checkout availability SLO | 99.95% monthly (closed path — topic 13)                             |
 | NF3  | Browse latency SLO        | p95 < 500ms (optional after rebuild — topic 17)                     |
 | NF4  | Checkout latency SLO      | p95 < 1000ms (optional after rebuild — topic 17)                    |
 | NF5  | Image immutability        | Digest-only; reject `:latest`                                       |
@@ -77,7 +77,7 @@ Diagrams: [assets/diagrams/](../../assets/diagrams/). Folder nav: [README.md](RE
 | GitHub           | Org/repo with Actions; OIDC trust to WIF pool                        |
 | PagerDuty        | Account with service + integration key for alert routing             |
 | Region           | Single GCP region (`europe-west1`) with 3 zones for regional cluster |
-| Traffic          | Low-to-moderate production traffic; not hyperscale                   |
+| Traffic          | Low demo / reference traffic; not hyperscale                         |
 | Images           | Mirrored to Artifact Registry with digest pinning                    |
 | Team model       | Platform engineer + SRE patterns; on-call documented                 |
 
@@ -107,7 +107,7 @@ flowchart TB
     DNS[Cloud DNS]
     CA[Cloud Armor]
 
-    subgraph GKE["Private GKE Cluster"]
+    subgraph GKE["GKE (private nodes, public API)"]
       AC[Argo CD]
       KY[Kyverno]
       ESO[External Secrets]
@@ -255,17 +255,17 @@ The GKE module does not set Dataplane V2 (`datapath_provider = "ADVANCED_DATAPAT
 
 ## 9. Security boundaries
 
-| Boundary        | Mechanism                        | Notes                                                                                                                                                                |
-| --------------- | -------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| CI → GCP        | WIF (OIDC trust GitHub repo/ref) | Short-lived tokens; scoped SA per workflow                                                                                                                           |
-| Pod → GCP       | Workload Identity                | ESO SA in `external-secrets`                                                                                                                                         |
-| Image trust     | cosign + Binary Authorization    | This cluster's rule requires attestation. The project default is allow with dry-run. The `redis-cart` attestation gap is still open.                                 |
-| Admission       | Kyverno                          | Blocks `:latest`, missing probes, plain Secrets                                                                                                                      |
-| Runtime network | NetworkPolicy                    | Manifests are default-deny with explicit allows. The enforcing dataplane is not set in the GKE module.                                                               |
-| Edge            | Cloud Armor                      | Storefront policy is a console procedure (topic 15): SQLi, XSS, and a rate limit. The Argo CD policy is Terraform and stays off unless `enable_argocd_armor` is set. |
-| Secrets         | Secret Manager + ESO             | gitleaks in pre-commit                                                                                                                                               |
-| Audit           | Cloud Audit Logs                 | Admin and data access                                                                                                                                                |
-| TLS             | Google-managed certs             | Auto-renewal on Ingress                                                                                                                                              |
+| Boundary        | Mechanism                        | Notes                                                                                                                                                                                 |
+| --------------- | -------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| CI → GCP        | WIF (OIDC trust GitHub repo/ref) | Short-lived tokens; scoped SA per workflow                                                                                                                                            |
+| Pod → GCP       | Workload Identity                | ESO SA in `external-secrets`                                                                                                                                                          |
+| Image trust     | cosign + Binary Authorization    | This cluster's rule requires attestation. The project default is allow with dry-run. The `redis-cart` attestation gap is still open.                                                  |
+| Admission       | Kyverno                          | Blocks `:latest`, missing probes, plain Secrets                                                                                                                                       |
+| Runtime network | NetworkPolicy                    | Manifests are default-deny with explicit allows. The enforcing dataplane is not set in the GKE module.                                                                                |
+| Edge            | Cloud Armor                      | Storefront policy is a console procedure (topic 15): SQLi, XSS, and a rate limit. The Argo CD policy is Terraform; `enable_argocd_armor` defaults to `false` (enable after topic 16). |
+| Secrets         | Secret Manager + ESO             | gitleaks in pre-commit                                                                                                                                                                |
+| Audit           | Cloud Audit Logs                 | Admin and data access                                                                                                                                                                 |
+| TLS             | Google-managed certs             | Auto-renewal on Ingress                                                                                                                                                               |
 
 **Trust zones:**
 
@@ -341,10 +341,10 @@ Teardown destroy order: [teardown.md](../teardown.md)
 
 **SLO catalog:** [docs/sre/slos/catalog.md](../sre/slos/catalog.md)
 
-| Service           | SLI                                                   | Target           |
-| ----------------- | ----------------------------------------------------- | ---------------- |
-| Browse (frontend) | Availability (lived); p95 latency optional (topic 17) | 99.9% / <500ms   |
-| Checkout          | Availability (lived); p95 latency optional (topic 17) | 99.95% / <1000ms |
+| Service           | SLI                                                         | Target           |
+| ----------------- | ----------------------------------------------------------- | ---------------- |
+| Browse (frontend) | Availability (closed path); p95 latency optional (topic 17) | 99.9% / <500ms   |
+| Checkout          | Availability (closed path); p95 latency optional (topic 17) | 99.95% / <1000ms |
 
 ---
 
@@ -400,7 +400,7 @@ GitHub Actions (WIF → GCP) + Trivy + cosign
 Artifact Registry + Binary Authorization
 │
 ▼
-Argo CD → ONE private GKE cluster
+Argo CD → ONE GKE cluster (private nodes, public API)
   Helm · Kyverno · ESO · NetworkPolicy
 │
 ▼

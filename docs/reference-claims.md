@@ -10,7 +10,7 @@ GitHub Actions builds, scans, and signs images. Git stores digest pins. Argo CD 
 - Argo CD (manual sync), ESO + Secret Manager, Kyverno Enforce, NetworkPolicy manifests
 - Digest-only Boutique Helm in the `boutique` namespace; storefront and Argo CD over HTTPS when live
 - Browse and checkout availability SLOs; burn-rate alerts with runbook URLs; PagerDuty test path
-- Cloud Armor on the storefront (console path); one executed game day; ordered teardown
+- Cloud Armor on the storefront (console path); one executed game day (03; PD/alert not verified); ordered teardown
 
 ## Limits inside the operated path
 
@@ -23,7 +23,7 @@ These are deliberate reference choices. Each row links to the owning file.
 | Project Binary Authorization default is allow plus dry-run; only this cluster requires attestation | Binary Authorization module / Console · [`security/supply-chain.md`](security/supply-chain.md) |
 | `redis-cart` was not attested; game-day restore hit a Binary Authorization deny                    | [`sre/game-days/`](sre/game-days/README.md) · `sre/postmortems/`                               |
 | Cosign private key lives in GitHub secrets (long-lived)                                            | [`.github/workflows/`](../.github/workflows/README.md) · [`../SECURITY.md`](../SECURITY.md)    |
-| Storefront Cloud Armor is console-only; Terraform Armor is optional for Argo CD                    | [`setup/15-cloud-armor.md`](setup/15-cloud-armor.md)                                           |
+| Storefront Cloud Armor is console-only; Argo CD Armor defaults off (`enable_argocd_armor = false`) | [`setup/15-cloud-armor.md`](setup/15-cloud-armor.md) · [`../SECURITY.md`](../SECURITY.md)      |
 | NetworkPolicy may not be enforced by the CNI (no Dataplane V2 or Calico pin)                       | `terraform/modules/gke` · [`../SECURITY.md`](../SECURITY.md)                                   |
 
 ## Do not claim

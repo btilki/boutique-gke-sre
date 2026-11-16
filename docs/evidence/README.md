@@ -44,7 +44,7 @@ File: [`github-actions-trivy-scan-failure.png`](../../assets/diagrams/github-act
 
 ![Browse and checkout SLO dashboard](../../assets/diagrams/slo-browse-checkout.png)
 
-Availability SLOs for browse and checkout in Cloud Monitoring. Shows SLOs on the lived path. It does not show a multi-window burn chart firing.
+Availability SLOs for browse and checkout in Cloud Monitoring. Shows SLOs from when the stack was live. It does not show a multi-window burn chart firing.
 
 File: [`slo-browse-checkout.png`](../../assets/diagrams/slo-browse-checkout.png)
 
@@ -124,7 +124,7 @@ These items are documented, but there is no screenshot here yet. Capture them on
 | Teardown: `terraform destroy` / empty orphan scan  | Phase 8 completion                         |
 | Private endpoint / authorized networks             | Would close the public API tradeoff        |
 
-File-backed claims (no cluster required): [`../reference-claims.md`](../reference-claims.md). Current limits: [`../../SECURITY.md`](../../SECURITY.md).
+Claims documented in this repo (no cluster required): [`../reference-claims.md`](../reference-claims.md). Current limits: [`../../SECURITY.md`](../../SECURITY.md).
 
 Same PNGs plus Mermaid sources: [`../../assets/diagrams/README.md`](../../assets/diagrams/README.md).
 

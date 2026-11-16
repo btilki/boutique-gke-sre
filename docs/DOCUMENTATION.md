@@ -1,6 +1,6 @@
 # Documentation index — boutique-gke-sre
 
-Onboarding map for engineers joining the project.
+**Maintainer / onboarding map** — not the primary reader path. Start at [`README.md`](../README.md) or [`docs/README.md`](README.md).
 
 **Guide formats:**
 
@@ -9,29 +9,20 @@ Onboarding map for engineers joining the project.
 | Setup topics (01–16 reference) | [setup/](setup/)  | **11-section SETUP format** (Goal, Why, Prerequisites, Commands, Expected output, Validation, Common problems, Recovery, Best practices, Security notes, Next step) |
 | General docs                   | `docs/` elsewhere | **12-section standard** ([Guide template](GUIDE_TEMPLATE.md))                                                                                                       |
 
-**Terminology:** On first mention in the home doc for a term, write **abbreviation** (**full form**), both bold — e.g. **SLO** (**Service Level Objective**). See [GUIDE_TEMPLATE.md](GUIDE_TEMPLATE.md).
+**Terminology:** Use the short form only (e.g. `SLO`, `WIF`, `GKE`). Do not write the long form in parentheses after the abbreviation. Prefer short form on first mention. See [GUIDE_TEMPLATE.md](GUIDE_TEMPLATE.md).
 
-| Abbreviation | Full form                         | Home document                                                          |
-| ------------ | --------------------------------- | ---------------------------------------------------------------------- |
-| **GCP**      | **Google Cloud Platform**         | [architecture/overview.md](architecture/overview.md)                   |
-| **GKE**      | **Google Kubernetes Engine**      | [architecture/overview.md](architecture/overview.md)                   |
-| **SRE**      | **Site Reliability Engineering**  | [sre/README.md](sre/README.md)                                         |
-| **SLO**      | **Service Level Objective**       | [sre/slos/catalog.md](sre/slos/catalog.md)                             |
-| **SLI**      | **Service Level Indicator**       | [sre/slos/catalog.md](sre/slos/catalog.md)                             |
-| **SEV**      | **severity**                      | [sre/incident-response/severity.md](sre/incident-response/severity.md) |
-| **DNS**      | **Domain Name System**            | [dns.md](dns.md)                                                       |
-| **IaC**      | **Infrastructure as Code**        | [../terraform/README.md](../terraform/README.md)                       |
-| **WIF**      | **Workload Identity Federation**  | [security/supply-chain.md](security/supply-chain.md)                   |
-| **ESO**      | **External Secrets Operator**     | [security/supply-chain.md](security/supply-chain.md)                   |
-| **AR**       | **Artifact Registry**             | [security/supply-chain.md](security/supply-chain.md)                   |
-| **BA**       | **Binary Authorization**          | [security/supply-chain.md](security/supply-chain.md)                   |
-| **OTel**     | **OpenTelemetry**                 | [../observability/README.md](../observability/README.md)               |
-| **GMP**      | **Google Managed Prometheus**     | [../observability/README.md](../observability/README.md)               |
-| **HPA**      | **Horizontal Pod Autoscaler**     | [sre/capacity/baseline.md](sre/capacity/baseline.md)                   |
-| **PDB**      | **Pod Disruption Budget**         | [sre/capacity/baseline.md](sre/capacity/baseline.md)                   |
-| **HA**       | **high availability**             | [sre/capacity/baseline.md](sre/capacity/baseline.md)                   |
-| **TLS**      | **Transport Layer Security**      | [setup/06-ingress-tls.md](setup/06-ingress-tls.md)                     |
-| **GitOps**   | **Git-based continuous delivery** | [../gitops/README.md](../gitops/README.md)                             |
+| Abbreviation | Typical meaning (for readers new to the stack)    | Home document                                                          |
+| ------------ | ------------------------------------------------- | ---------------------------------------------------------------------- |
+| GCP          | Google Cloud                                      | [architecture/overview.md](architecture/overview.md)                   |
+| GKE          | Google Kubernetes Engine                          | [architecture/overview.md](architecture/overview.md)                   |
+| SRE          | Site reliability                                  | [sre/README.md](sre/README.md)                                         |
+| SLO / SLI    | Service level objective / indicator               | [sre/slos/catalog.md](sre/slos/catalog.md)                             |
+| SEV          | Incident severity                                 | [sre/incident-response/severity.md](sre/incident-response/severity.md) |
+| WIF          | Workload Identity Federation                      | [security/supply-chain.md](security/supply-chain.md)                   |
+| ESO          | External Secrets Operator                         | [security/supply-chain.md](security/supply-chain.md)                   |
+| AR / BA      | Artifact Registry / Binary Authorization          | [security/supply-chain.md](security/supply-chain.md)                   |
+| OTel / GMP   | OpenTelemetry / Managed Prometheus                | [../observability/README.md](../observability/README.md)               |
+| HPA / PDB    | Horizontal Pod Autoscaler / Pod Disruption Budget | [sre/capacity/baseline.md](sre/capacity/baseline.md)                   |
 
 ## Required artifacts
 

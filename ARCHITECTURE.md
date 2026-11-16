@@ -5,7 +5,7 @@ Executive summary for boutique-gke-sre. Full design: [docs/architecture/overview
 ## Stack flow
 
 ```
-Git → GitHub Actions (WIF) → Artifact Registry → Argo CD → GKE (private nodes, public API)
+Git → GitHub Actions (WIF) → Artifact Registry → Argo CD → GKE (private nodes, public API endpoint)
   → HTTPS (Cloud Armor, TLS) → OTel → Cloud Monitoring → PagerDuty
 ```
 

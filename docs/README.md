@@ -67,4 +67,4 @@ Both stay offline until you rebuild — no public A records. See [`dns.md`](dns.
 
 Sister platforms: [boutique-eks-gitops](https://github.com/btilki/boutique-eks-gitops) · [boutique-aks-devsecops](https://github.com/btilki/boutique-aks-devsecops)
 
-Maintainer planning (not a reader path): [`implementation/plan.md`](implementation/plan.md) · [`DOCUMENTATION.md`](DOCUMENTATION.md) · [`GUIDE_TEMPLATE.md`](GUIDE_TEMPLATE.md)
+Maintainer-only (skip on a first read): [`implementation/plan.md`](implementation/plan.md) · [`DOCUMENTATION.md`](DOCUMENTATION.md) · [`GUIDE_TEMPLATE.md`](GUIDE_TEMPLATE.md)

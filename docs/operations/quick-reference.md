@@ -2,6 +2,8 @@
 
 **Print this page** · Full runbook: [operations-runbook.md](operations-runbook.md)
 
+> **Offline until rebuild:** Cluster and public DNS from the closed reference are gone. Shift-start `curl` / `kubectl` below apply only on a live rebuild.
+
 |                 |                                                  |
 | --------------- | ------------------------------------------------ |
 | **Storefront**  | `boutique.biroltilki.art` (**inactive**)         |
@@ -14,6 +16,8 @@
 
 ## Shift start (2 min)
 
+**After rebuild only:**
+
 ```bash
 export PROJECT_ID=boutique-gke CLUSTER_NAME=boutique-gke REGION=europe-west1
 gcloud config set project "${PROJECT_ID}"
@@ -22,7 +26,8 @@ curl -sS -o /dev/null -w "boutique: %{http_code}\n" https://boutique.biroltilki.
 kubectl -n argocd get applications
 ```
 
-**Pass:** HTTP 200/302 · nodes Ready · Argo apps Healthy (or OutOfSync awaiting sync)
+**Pass (live):** HTTP 200/302 · nodes Ready · Argo apps Healthy (or OutOfSync awaiting sync)
+**Pass (offline now):** empty DNS — do not treat failed curl as an incident on the closed stack
 
 ---
 

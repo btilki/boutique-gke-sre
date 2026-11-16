@@ -1,25 +1,24 @@
 # Implementation plan — boutique-gke-sre
 
-**Audience:** Implementer during build and rebuild
-**Public summary:** [ROADMAP.md](../../ROADMAP.md)
-**Architecture (authoritative):** [docs/architecture/overview.md](../architecture/overview.md) · [ARCHITECTURE.md](../../ARCHITECTURE.md)
-**Setup guides:** [docs/setup/README.md](../setup/README.md)
+**Maintainer plan** — phase detail for rebuilds. Public summary: [ROADMAP.md](../../ROADMAP.md). Reader path: [docs/setup/README.md](../setup/README.md).
 
-**Status:** Phases **1–8** lived and torn down. Phases **9-A–9-D** repo-ready (apply topics 17–20 on rebuild).
+**Architecture (authoritative):** [docs/architecture/overview.md](../architecture/overview.md) · [ARCHITECTURE.md](../../ARCHITECTURE.md)
+
+**Status:** Phases **1–8** operated and torn down. Phases **9-A–9-D** repo-ready (apply topics 17–20 on rebuild).
 
 ---
 
 ## 1. Executive summary
 
-| Field              | Value                                                                                                                                                                                    |
-| ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Project            | **boutique-gke-sre**                                                                                                                                                                     |
-| Goal               | Production **SRE** (**Site Reliability Engineering**) reference for Online Boutique on one private **GKE** (**Google Kubernetes Engine**) cluster in **GCP** (**Google Cloud Platform**) |
-| Domain             | `biroltilki.art` — hostnames currently **inactive** ([dns.md](../dns.md))                                                                                                                |
-| Phases             | **1–8** (bootstrap → teardown) + **9-A–9-D** (SRE expansion)                                                                                                                             |
-| Overall complexity | **L** (platform breadth); Phase 4 is the deploy gate                                                                                                                                     |
-| Current mode       | Repo retained as reference; live apply deferred until rebuild                                                                                                                            |
-| Definition of done | Reference checklist in [PROJECT.md](../../PROJECT.md); topics 01–16 validated historically; 17–20 artifacts in Git                                                                       |
+| Field              | Value                                                                                                              |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------ |
+| Project            | **boutique-gke-sre**                                                                                               |
+| Goal               | Production SRE reference for Online Boutique on one private-node GKE cluster in GCP                                |
+| Domain             | `biroltilki.art` — hostnames currently **inactive** ([dns.md](../dns.md))                                          |
+| Phases             | **1–8** (bootstrap → teardown) + **9-A–9-D** (SRE expansion)                                                       |
+| Overall complexity | **L** (platform breadth); Phase 4 is the deploy gate                                                               |
+| Current mode       | Repo retained as reference; live apply deferred until rebuild                                                      |
+| Definition of done | Reference checklist in [PROJECT.md](../../PROJECT.md); topics 01–16 validated historically; 17–20 artifacts in Git |
 
 ---
 
@@ -38,31 +37,31 @@
 
 ---
 
-## 3. Business value
+## 3. Why this shape
 
-- Production-reference GCP platform for Online Boutique
-- Educational setup topics with rationale (why private GKE, WIF, burn rates)
-- Operable reliability: SLOs, error budgets, runbooks, one executed game day
-- Cost-conscious teardown path with orphan-scan hygiene
+- One GCP project, one private-node GKE cluster, Online Boutique as the workload
+- Setup topics explain controls (WIF, burn rates, manual Argo sync) instead of only listing them
+- Availability SLOs, runbooks, and one executed game day on the closed path
+- Teardown and orphan-scan path so billable resources do not linger
 
 ---
 
 ## 4. Functional requirements
 
-| ID    | Requirement                                             | Phase / topic |
-| ----- | ------------------------------------------------------- | ------------- |
-| FR-01 | Terraform: APIs, VPC/NAT, remote state                  | 1 / 01–03     |
-| FR-02 | Private GKE, static IP, Cloud DNS, managed TLS          | 2 / 04–06     |
-| FR-03 | GitHub WIF, Artifact Registry, Binary Authorization, CI | 3 / 07–08     |
-| FR-04 | Argo CD, ESO, Kyverno, NetworkPolicy (**gate**)         | 4 / 09–11     |
-| FR-05 | Online Boutique Helm GitOps (digest-only)               | 5 / 12        |
-| FR-06 | OTel, Grafana, Cloud Monitoring SLOs + burn alerts      | 6 / 13        |
-| FR-07 | PagerDuty, Armor, smoke validation                      | 7 / 14–16     |
-| FR-08 | Teardown + backup/restore runbooks                      | 8 / teardown  |
-| FR-09 | Latency SLOs + Grafana dashboards                       | 9-A / 17      |
-| FR-10 | HA GitOps, Argo uptime, game-day ops                    | 9-B / 18      |
-| FR-11 | Monitoring + GKE Backup Terraform modules               | 9-C / 19      |
-| FR-12 | Error-budget ritual, capacity, toil cadence             | 9-D / 20      |
+| ID    | Requirement                                              | Phase / topic |
+| ----- | -------------------------------------------------------- | ------------- |
+| FR-01 | Terraform: APIs, VPC/NAT, remote state                   | 1 / 01–03     |
+| FR-02 | Private-node GKE (public API), static IP, Cloud DNS, TLS | 2 / 04–06     |
+| FR-03 | GitHub WIF, Artifact Registry, Binary Authorization, CI  | 3 / 07–08     |
+| FR-04 | Argo CD, ESO, Kyverno, NetworkPolicy (**gate**)          | 4 / 09–11     |
+| FR-05 | Online Boutique Helm GitOps (digest-only)                | 5 / 12        |
+| FR-06 | OTel, Grafana, Cloud Monitoring SLOs + burn alerts       | 6 / 13        |
+| FR-07 | PagerDuty, Armor, smoke validation                       | 7 / 14–16     |
+| FR-08 | Teardown + backup/restore runbooks                       | 8 / teardown  |
+| FR-09 | Latency SLOs + Grafana dashboards                        | 9-A / 17      |
+| FR-10 | HA GitOps, Argo uptime, game-day ops                     | 9-B / 18      |
+| FR-11 | Monitoring + GKE Backup Terraform modules                | 9-C / 19      |
+| FR-12 | Error-budget ritual, capacity, toil cadence              | 9-D / 20      |
 
 ---
 

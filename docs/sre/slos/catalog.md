@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Define **SLOs** (**Service Level Objectives**) from **SLIs** (**Service Level Indicators**), targets, and alert linkages for Online Boutique on `boutique.biroltilki.art`.
+Define SLOs from SLIs, targets, and alert linkages for Online Boutique on `boutique.biroltilki.art`.
 
 ## When to use
 
@@ -21,33 +21,35 @@ SLOs are defined in **Cloud Monitoring** from LB, custom, or log-based metrics. 
 
 ## Service objectives
 
+Availability SLOs below were on the closed reference path (topic 13). Latency SLOs are optional after rebuild (topic 17) — not claimed as operated.
+
 ### Browse (frontend)
 
-| SLI          | Definition                                             | Target      | Window         |
-| ------------ | ------------------------------------------------------ | ----------- | -------------- |
-| Availability | Successful HTTP responses / total requests to frontend | **99.9%**   | 30-day rolling |
-| Latency      | p95 request duration (frontend)                        | **< 500ms** | 30-day rolling |
+| SLI          | Definition                                             | Target      | Window         | Path                   |
+| ------------ | ------------------------------------------------------ | ----------- | -------------- | ---------------------- |
+| Availability | Successful HTTP responses / total requests to frontend | **99.9%**   | 30-day rolling | Closed path (topic 13) |
+| Latency      | p95 request duration (frontend)                        | **< 500ms** | 30-day rolling | Optional (topic 17)    |
 
 **User journey:** Home, product browse, cart view (pre-checkout).
 
 **SLI sources (indicative):**
 
 - Availability: HTTPS LB request count + 5xx ratio, or custom metric from frontend
-- Latency: LB backend latency p95 or log-based metric from structured access logs
+- Latency: LB backend latency p95 or log-based metric from structured access logs (apply via topic 17)
 
 ### Checkout
 
-| SLI          | Definition                                 | Target       | Window         |
-| ------------ | ------------------------------------------ | ------------ | -------------- |
-| Availability | Successful checkout completions / attempts | **99.95%**   | 30-day rolling |
-| Latency      | p95 checkout path duration                 | **< 1000ms** | 30-day rolling |
+| SLI          | Definition                                 | Target       | Window         | Path                   |
+| ------------ | ------------------------------------------ | ------------ | -------------- | ---------------------- |
+| Availability | Successful checkout completions / attempts | **99.95%**   | 30-day rolling | Closed path (topic 13) |
+| Latency      | p95 checkout path duration                 | **< 1000ms** | 30-day rolling | Optional (topic 17)    |
 
 **User journey:** Place order via `checkoutservice`.
 
 **SLI sources (indicative):**
 
 - Availability: gRPC/HTTP success rate on `checkoutservice` (OTel or log-based metric)
-- Latency: Cloud Trace span p95 for checkout path (frontend → checkout → payment)
+- Latency: Cloud Trace span p95 for checkout path (frontend → checkout → payment) (apply via topic 17)
 
 ## Error budget
 
@@ -71,15 +73,15 @@ Multi-window burn rates per [burn-rate-alerting.md](burn-rate-alerting.md):
 
 ## Alert → runbook mapping
 
-| Alert policy                 | Runbook                                                                    |
-| ---------------------------- | -------------------------------------------------------------------------- |
-| `browse-availability-burn`   | [browse-availability-burn.md](../runbooks/browse-availability-burn.md)     |
-| `checkout-availability-burn` | [checkout-availability-burn.md](../runbooks/checkout-availability-burn.md) |
-| `browse-latency-burn`        | [browse-latency-burn.md](../runbooks/browse-latency-burn.md)               |
-| `checkout-latency-burn`      | [checkout-latency-burn.md](../runbooks/checkout-latency-burn.md)           |
-| `uptime-check-failed`        | [uptime-check-failed.md](../runbooks/uptime-check-failed.md)               |
-| `bad-deploy-rollback`        | [bad-deploy-rollback.md](../runbooks/bad-deploy-rollback.md)               |
-| `redis-cart-down`            | [redis-cart-down.md](../runbooks/redis-cart-down.md)                       |
+| Alert policy                 | Runbook                                                                    | Path                |
+| ---------------------------- | -------------------------------------------------------------------------- | ------------------- |
+| `browse-availability-burn`   | [browse-availability-burn.md](../runbooks/browse-availability-burn.md)     | Closed path         |
+| `checkout-availability-burn` | [checkout-availability-burn.md](../runbooks/checkout-availability-burn.md) | Closed path         |
+| `browse-latency-burn`        | [browse-latency-burn.md](../runbooks/browse-latency-burn.md)               | Optional (topic 17) |
+| `checkout-latency-burn`      | [checkout-latency-burn.md](../runbooks/checkout-latency-burn.md)           | Optional (topic 17) |
+| `uptime-check-failed`        | [uptime-check-failed.md](../runbooks/uptime-check-failed.md)               | Closed path         |
+| `bad-deploy-rollback`        | [bad-deploy-rollback.md](../runbooks/bad-deploy-rollback.md)               | Closed path         |
+| `redis-cart-down`            | [redis-cart-down.md](../runbooks/redis-cart-down.md)                       | Closed path         |
 
 ## Observability ownership
 
@@ -99,6 +101,8 @@ Multi-window burn rates per [burn-rate-alerting.md](burn-rate-alerting.md):
 - Latency SLOs + burn alerts + Grafana dashboards: [setup/17-latency-slos-dashboards.md](../../setup/17-latency-slos-dashboards.md) (apply on rebuild)
 
 ## Validation
+
+**After rebuild only** (hostnames are offline until then — [dns.md](../../dns.md)):
 
 ```bash
 gcloud monitoring slos list --project=boutique-gke

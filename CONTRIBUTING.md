@@ -2,7 +2,7 @@
 
 ## Principles
 
-- **Git is source of truth** — no manual `kubectl apply` for GitOps / reference deploy paths
+- **Git is source of truth** — no manual `kubectl apply` for GitOps-managed workloads
 - **PR-only manifest changes** — including image digest updates from CI
 - **Manual Argo CD sync** — deliberate promotion even on a single cluster
 - **No secrets in Git** — Secret Manager + ESO only

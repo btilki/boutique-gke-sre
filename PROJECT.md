@@ -23,13 +23,13 @@ Production SRE reference for [Google Online Boutique](https://github.com/GoogleC
 - HTTPS on `boutique.biroltilki.art` and `argocd.boutique.biroltilki.art` (when live)
 - Kyverno enforced; digest-only images; ESO-only secrets
 - SLOs + burn alerts with runbook links; PagerDuty test incident validated
-- Game-day scenario executed; infrastructure decommissioned
+- Game day 03 executed (alert path not verified); infrastructure decommissioned
 
 Optional guides after a deliberate rebuild live under [`docs/setup/README.md`](docs/setup/README.md). They are not part of this checklist.
 
 ## DNS names (offline)
 
-Public A records were removed with teardown. Names stay empty until a Phase 2 rebuild.
+Public A records were removed with teardown. Names stay empty until a rebuild ([docs/setup/05-cloud-dns.md](docs/setup/05-cloud-dns.md)).
 
 - Storefront: `boutique.biroltilki.art` (offline)
 - Argo CD: `argocd.boutique.biroltilki.art` (offline)

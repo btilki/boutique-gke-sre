@@ -32,7 +32,7 @@
 | G-04 | Secrets without Git plaintext | ESO + Secret Manager only                                                                         |
 | G-05 | Operable SLOs                 | Availability SLOs lived; latency SLOs optional (9-A / topic 17); burn alerts; runbooks; PagerDuty |
 | G-06 | On-call readiness             | SEV taxonomy; game days; postmortems                                                              |
-| G-07 | Safe lifecycle                | Bootstrap + teardown + backup/restore documented                                                  |
+| G-07 | Safe lifecycle                | Bootstrap + teardown documented; backup IaC optional (topic 19)                                   |
 | G-08 | SRE expansion (9-A–9-D)       | Topics 17–20 repo-ready; apply on rebuild                                                         |
 
 ---
@@ -57,7 +57,7 @@
 | FR-05 | Online Boutique Helm GitOps (digest-only)                | 5 / 12        |
 | FR-06 | OTel, Grafana, Cloud Monitoring SLOs + burn alerts       | 6 / 13        |
 | FR-07 | PagerDuty, Armor, smoke validation                       | 7 / 14–16     |
-| FR-08 | Teardown + backup/restore runbooks                       | 8 / teardown  |
+| FR-08 | Teardown documented; backup/restore optional (topic 19)  | 8 / teardown  |
 | FR-09 | Latency SLOs + Grafana dashboards                        | 9-A / 17      |
 | FR-10 | HA GitOps, Argo uptime, game-day ops                     | 9-B / 18      |
 | FR-11 | Monitoring + GKE Backup Terraform modules                | 9-C / 19      |
@@ -115,7 +115,7 @@ See [architecture/overview.md](../architecture/overview.md) §1.
 - GitOps (Argo CD, Boutique Helm, Kyverno, NetworkPolicy, ESO)
 - Observability (OTel, Grafana, Cloud Monitoring SLOs/alerts)
 - SRE docs (runbooks, game days, on-call, error budget)
-- Setup topics 01–20; teardown; backup modules
+- Setup topics 01–16 + teardown; topics 17–20 optional (incl. backup modules)
 
 ### Out of scope
 
@@ -204,7 +204,7 @@ See [REPOSITORY_STRUCTURE.md](../../REPOSITORY_STRUCTURE.md).
 | M3 Platform gate | 4       | Argo CD, ESO, Kyverno, NetworkPolicy |
 | M4 App live      | 5       | Boutique HTTPS                       |
 | M5 Observability | 6–7     | SLOs, PagerDuty, smoke               |
-| M6 Lifecycle     | 8       | Teardown + backup docs               |
+| M6 Lifecycle     | 8       | Teardown docs                        |
 | M7 SRE expansion | 9-A–9-D | Topics 17–20 repo-ready              |
 
 ---
@@ -220,7 +220,7 @@ See [REPOSITORY_STRUCTURE.md](../../REPOSITORY_STRUCTURE.md).
 | **5**   | Online Boutique deploy                   | M    | ✅ Complete   | 12                                               |
 | **6**   | Observability + SLOs                     | L    | ✅ Complete   | 13                                               |
 | **7**   | SRE ops + smoke                          | M    | ✅ Complete   | 14–16                                            |
-| **8**   | Teardown + backup/restore                | M    | ✅ Complete   | [teardown](../teardown.md)                       |
+| **8**   | Teardown                                 | M    | ✅ Complete   | [teardown](../teardown.md)                       |
 | **9-A** | Latency SLOs + Grafana                   | M    | ✅ Repo ready | [17](../setup/17-latency-slos-dashboards.md)     |
 | **9-B** | HA, Argo uptime, game days               | M    | ✅ Repo ready | [18](../setup/18-sre-operability-game-days.md)   |
 | **9-C** | Monitoring + Backup Terraform            | M    | ✅ Repo ready | [19](../setup/19-monitoring-backup-terraform.md) |

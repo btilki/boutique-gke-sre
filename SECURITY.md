@@ -2,7 +2,7 @@
 
 ## Reporting vulnerabilities
 
-If you discover a security issue, please report it responsibly. Do not open public issues for exploitable vulnerabilities.
+If you discover a security issue, please report it responsibly.
 
 **Contact:** Open a private [GitHub Security Advisory](https://github.com/btilki/boutique-gke-sre/security/advisories) for this repository. Do not open a public issue for exploitable vulnerabilities.
 

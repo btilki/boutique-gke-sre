@@ -2,7 +2,7 @@
 
 **DR asset:** Cart Redis state — [Architecture §12](../../architecture/overview.md#12-disaster-recovery)
 
-> Procedures validated in Phase 8 backup/restore.
+> Documented restore path. GKE Backup Terraform is optional after rebuild (topic 19) — not part of Phase 8 closed-path proof.
 
 ## Purpose
 

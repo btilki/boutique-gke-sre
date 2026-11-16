@@ -2,7 +2,7 @@
 
 Closed reference: GCP was torn down after topics 01–16 (including Phase 8 teardown). Nothing here requires a live cluster to read. Screenshots: [`evidence/`](evidence/README.md).
 
-GitHub Actions builds, scans, and signs images. Git stores digest pins. Argo CD reconciles. Cloud Monitoring holds the browse and checkout SLOs; burn alerts go to PagerDuty with runbook links. The reference proved that path once, then the cloud resources were removed.
+GitHub Actions mirrors, scans, and signs images. Git stores digest pins. Argo CD reconciles. Cloud Monitoring holds the browse and checkout SLOs; burn alerts go to PagerDuty with runbook links. The reference proved that path once, then the cloud resources were removed.
 
 ## Operated, then torn down (topics 01–16)
 
@@ -16,7 +16,7 @@ GitHub Actions builds, scans, and signs images. Git stores digest pins. Argo CD 
 
 These are deliberate reference choices. Each row links to the owning file.
 
-| Limit                                                                                              | Where to point                                                                                 |
+| Limit                                                                                              | Source                                                                                         |
 | -------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
 | Public Kubernetes API; no master authorized networks                                               | `terraform/modules/gke` · [`../SECURITY.md`](../SECURITY.md)                                   |
 | Broad node OAuth scope (`cloud-platform`)                                                          | `terraform/modules/gke`                                                                        |

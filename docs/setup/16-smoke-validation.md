@@ -251,22 +251,29 @@ pre-commit run gitleaks --all-files
 
 ## Expected output
 
-When bootstrap is complete:
+When topics 01–16 smoke checks pass (before edge hardening):
 
-| Area          | Expected state                                                   |
-| ------------- | ---------------------------------------------------------------- |
-| DNS / TLS     | Both hostnames resolve to correct static IPs; HTTPS 200/302      |
-| Argo CD       | Synced apps; manual sync only                                    |
-| ESO           | ClusterSecretStore Ready                                         |
-| Kyverno       | 5 ClusterPolicies enforcing                                      |
-| Boutique      | Healthy; digest-only images                                      |
-| Supply chain  | Binary Auth ENFORCED on cluster; AR repo exists                  |
-| Observability | OTel + Grafana Running; SLOs listed                              |
-| Alerting      | PagerDuty channel; test incident succeeded                       |
-| Cloud Armor   | `boutique-owasp-crs` + `argocd-edge` attached; probes return 403 |
-| NetworkPolicy | `default-deny-all` + `boutique-allow` in boutique                |
-| Secret scan   | gitleaks passes on tracked files                                 |
-| SRE docs      | Runbooks, on-call, game days, teardown exist                     |
+| Area          | Expected state                                                                |
+| ------------- | ----------------------------------------------------------------------------- |
+| DNS / TLS     | Both hostnames resolve to correct static IPs; HTTPS 200/302                   |
+| Argo CD       | Synced apps; manual sync only                                                 |
+| ESO           | ClusterSecretStore Ready                                                      |
+| Kyverno       | 5 ClusterPolicies enforcing                                                   |
+| Boutique      | Healthy; digest-only images                                                   |
+| Supply chain  | AR repo exists; Binary Auth cluster rule present (dry-run OK until hardening) |
+| Observability | OTel + Grafana Running; availability SLOs listed                              |
+| Alerting      | PagerDuty channel; test incident succeeded                                    |
+| Cloud Armor   | Storefront `boutique-owasp-crs` attached (topic 15); probes return 403        |
+| NetworkPolicy | `default-deny-all` + `boutique-allow` in boutique                             |
+| Secret scan   | gitleaks passes on tracked files                                              |
+| SRE docs      | Runbooks, on-call, game days, teardown exist                                  |
+
+**After** [edge-hardening.md](../security/edge-hardening.md) (post smoke, not required to mark topics 01–16 complete):
+
+| Area          | Expected state                                                           |
+| ------------- | ------------------------------------------------------------------------ |
+| Binary Auth   | Cluster rule `ENFORCED_BLOCK_AND_AUDIT_LOG`                              |
+| Argo CD Armor | `argocd-edge` attached when `enable_argocd_armor = true` (default false) |
 
 ### Reference screenshots
 
@@ -290,18 +297,22 @@ curl -I https://argocd.boutique.biroltilki.art
 
 **Reference checklist** — all must pass:
 
-- [ ] One private GKE cluster (`boutique-gke`, regional, Workload Identity)
+- [ ] One private-node GKE cluster (`boutique-gke`, regional, Workload Identity; public API)
 - [ ] Terraform + GCS remote state
 - [ ] Valid HTTPS on `boutique.biroltilki.art` and `argocd.boutique.biroltilki.art`
 - [ ] GitOps via Argo CD; digest-only images; manual sync
 - [ ] ESO + Secret Manager; Kyverno + NetworkPolicy
-- [ ] Trivy + cosign + Binary Authorization (CI path from topic 07–08)
-- [ ] SLOs + burn alerts + PagerDuty + OTel traces
-- [ ] Cloud Armor on storefront and Argo CD (`argocd-edge`)
-- [ ] Binary Authorization `ENFORCED_BLOCK_AND_AUDIT_LOG` on cluster (post hardening)
+- [ ] Trivy + cosign + Binary Authorization wired (topics 07–08; Enforce may still be dry-run)
+- [ ] Availability SLOs + burn alerts + PagerDuty + OTel traces
+- [ ] Storefront Cloud Armor (`boutique-owasp-crs`, topic 15)
 - [ ] Runbooks + on-call docs + alert test completed
 - [ ] gitleaks / secret scan passed (step 11)
 - [ ] Teardown runbook validated (read-through)
+
+Post-smoke (edge hardening — separate from topics 01–16 complete):
+
+- [ ] Binary Authorization `ENFORCED_BLOCK_AND_AUDIT_LOG` on cluster
+- [ ] Argo CD Armor (`argocd-edge`) if `enable_argocd_armor = true`
 
 ## Common problems
 

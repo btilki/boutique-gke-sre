@@ -1,12 +1,12 @@
-# GitHub **WIF** (**Workload Identity Federation**)
+# GitHub WIF
 
 ## Goal
 
-GitHub Actions in repository `boutique-gke-sre` authenticates to GCP project `boutique-gke` using **WIF** (**Workload Identity Federation**) with **OIDC** (**OpenID Connect**) — no downloaded service account JSON keys. A WIF pool and provider trust `token.actions.githubusercontent.com`, a dedicated CI service account receives least-privilege IAM, and workflows use `google-github-actions/auth@v2`.
+GitHub Actions in repository `boutique-gke-sre` authenticates to GCP project `boutique-gke` using WIF with OIDC — no downloaded service account JSON keys. A WIF pool and provider trust `token.actions.githubusercontent.com`, a dedicated CI service account receives least-privilege IAM, and workflows use `google-github-actions/auth@v2`.
 
 ## Why this step is required
 
-The CI pipeline builds images, pushes to Artifact Registry, runs Trivy, signs with cosign, and updates digest manifests. Long-lived JSON keys in GitHub Secrets are a critical security risk (leak = full SA compromise). WIF issues **short-lived** credentials bound to a specific GitHub repository and ref pattern. This is mandatory for the production supply-chain bar documented in [ADR 002 — WIF over SA keys](../adr/002-wif-over-sa-keys.md).
+Supply-chain CI mirrors images into Artifact Registry, runs Trivy, signs with cosign, and updates digest manifests. Long-lived JSON keys in GitHub Secrets are a critical security risk (leak = full SA compromise). WIF issues **short-lived** credentials bound to a specific GitHub repository and ref pattern. This is mandatory for the production supply-chain bar documented in [ADR 002 — WIF over SA keys](../adr/002-wif-over-sa-keys.md).
 
 ## Prerequisites
 

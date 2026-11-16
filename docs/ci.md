@@ -13,7 +13,7 @@ Workflow YAML stays in Git under [`.github/workflows/`](../.github/workflows/). 
 |              |                                                                                            |
 | ------------ | ------------------------------------------------------------------------------------------ |
 | Git          | GitHub (source of truth for Argo CD)                                                       |
-| CI           | GitHub Actions + WIF to GCP                                                                |
+| CI           | GitHub Actions; WIF only on supply-chain workflows (`build-scan-sign`, mirror)             |
 | Default path | Mirror Boutique v0.10.5 → Trivy CRITICAL/HIGH → AR push → cosign sign + attest → digest PR |
 | Hard rule    | **CI never syncs Argo** — digest PRs only; operators sync by hand                          |
 
@@ -21,7 +21,7 @@ Workflow YAML stays in Git under [`.github/workflows/`](../.github/workflows/). 
 
 | Rule                                                  | Detail                                                                                |
 | ----------------------------------------------------- | ------------------------------------------------------------------------------------- |
-| No long-lived GCP SA JSON keys for CI                 | WIF (ADR-002)                                                                         |
+| No long-lived GCP SA JSON keys for supply-chain CI    | WIF on `build-scan-sign` / mirror (ADR-002); PR gates need no GCP                     |
 | Images are mirrored, not rebuilt from Boutique source | `build-scan-sign.yml`                                                                 |
 | Trivy fails CRITICAL and HIGH                         | Same workflow                                                                         |
 | cosign signs and attests by digest                    | Key in GitHub secrets — reference limit in [reference-claims.md](reference-claims.md) |

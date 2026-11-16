@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Document the intended capacity model for Online Boutique on one private regional GKE cluster: workload **HA** (**high availability**), **HPA** (**Horizontal Pod Autoscaler**) / **PDB** (**Pod Disruption Budget**) defaults, node pool autoscaling, and **when to scale** vs when to freeze (error budget).
+Document the intended capacity model for Online Boutique on one private-node regional GKE cluster: workload HA, HPA / PDB defaults, node pool autoscaling, and **when to scale** vs when to freeze (error budget).
 
 ## When to use
 

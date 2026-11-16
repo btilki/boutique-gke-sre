@@ -24,6 +24,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - P1 honesty: offline guards on ops/SLO validation; CI mirror (not `docker build`) in topic 08; game-day wording aligned to STATUS; SECURITY advisory URL; dated `0.1.0`.
 - P2 polish: short-form abbreviations; `production reference` wording; ownership/timeline on README; ROADMAP 9-B marks GD03 postmortem as lived.
 - P3 polish: softer charter/maturity wording; maintainer-only labels; proven / not-shown / deferred table on README.
+- P0 (re-audit): Phase 8 = teardown everywhere; WIF scoped to supply-chain workflows; smoke expected table vs edge hardening.
+- P1 (re-audit): CI mirror wording; setup 04 public API; NetworkPolicy CNI honesty; short-form abbreviations on setup/security/observability hubs.
+- P2 (re-audit): README grammar and game-day caveat; SECURITY/PROJECT polish; evidence and claims wording.
+- P3 (re-audit): Soften Decision headlines; refresh `.cursor` project-description (no pilot; private-node + public API).
 
 ## [0.1.0] — 2026-07-04
 

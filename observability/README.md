@@ -1,10 +1,10 @@
 # Observability
 
-**OTel** (**OpenTelemetry**), Grafana, and Cloud Monitoring SLO/alert definitions for boutique-gke-sre. In-cluster Prometheus (`prometheus/`) is **optional reference only** — not synced by Argo CD.
+OTel, Grafana, and Cloud Monitoring SLO/alert definitions for boutique-gke-sre. In-cluster Prometheus (`prometheus/`) is **optional reference only** — not synced by Argo CD.
 
 ## Purpose
 
-Metrics, traces, dashboards, and SRE alerting configuration for Online Boutique on GKE. In-cluster metrics use **GMP** (**Google Managed Prometheus**) where configured.
+Metrics, traces, dashboards, and SRE alerting configuration for Online Boutique on GKE. In-cluster metrics use Managed Prometheus where configured.
 
 ## Layout
 

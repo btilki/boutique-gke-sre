@@ -2,7 +2,7 @@
 
 ## Goal
 
-Terraform has reserved **two** global static IPs (`boutique-ingress-ip` and `argocd-ingress-ip`). Git already contains per-hostname GCE Ingress annotations and **ManagedCertificate** CRs. After Argo CD Ingress apply (topic 09) and Boutique deploy (topic 12), each hostname serves valid **TLS** (**Transport Layer Security**) on its own load balancer.
+Terraform has reserved **two** global static IPs (`boutique-ingress-ip` and `argocd-ingress-ip`). Git already contains per-hostname GCE Ingress annotations and ManagedCertificate CRs. After Argo CD Ingress apply (topic 09) and Boutique deploy (topic 12), each hostname serves valid TLS on its own load balancer.
 
 ## Why this step is required
 

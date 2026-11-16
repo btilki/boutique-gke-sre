@@ -2,7 +2,7 @@
 
 ## Goal
 
-A regional **private** GKE cluster named `boutique-gke` runs in `europe-west1` with Workload Identity, autoscaling node pool `boutique-primary`, and private nodes on `boutique-gke-subnet`. You can authenticate with `kubectl` and see healthy nodes in `Ready` state.
+A regional private-node GKE cluster named `boutique-gke` runs in `europe-west1` with Workload Identity, autoscaling node pool `boutique-primary`, and private nodes on `boutique-gke-subnet`. The Kubernetes API endpoint stays public (`enable_private_endpoint = false`). You can authenticate with `kubectl` and see healthy nodes in `Ready` state.
 
 ## Why this step is required
 

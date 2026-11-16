@@ -26,17 +26,17 @@ Diagrams: [assets/diagrams/](../../assets/diagrams/). Folder nav: [README.md](RE
 
 ### Functional
 
-| ID  | Requirement                                                                |
-| --- | -------------------------------------------------------------------------- |
-| F1  | Run full Online Boutique microservice stack from upstream container images |
-| F2  | Public HTTPS storefront at `boutique.biroltilki.art`                       |
-| F3  | Argo CD UI at `argocd.boutique.biroltilki.art` with manual sync            |
-| F4  | GitOps deploy: all cluster state from Git; changes via PR only             |
-| F5  | CI builds/scans/signs images; promotes digests to manifests via PR         |
-| F6  | Secrets from Secret Manager via ESO — never plain Secrets in Git           |
-| F7  | Observability: metrics, logs, traces exportable to GCP backends            |
-| F8  | SLOs with burn-rate alerts routed to PagerDuty + runbook links             |
-| F9  | Bootstrap, backup/restore, and teardown documented and validated           |
+| ID  | Requirement                                                                     |
+| --- | ------------------------------------------------------------------------------- |
+| F1  | Run full Online Boutique microservice stack from upstream container images      |
+| F2  | Public HTTPS storefront at `boutique.biroltilki.art`                            |
+| F3  | Argo CD UI at `argocd.boutique.biroltilki.art` with manual sync                 |
+| F4  | GitOps deploy: all cluster state from Git; changes via PR only                  |
+| F5  | CI mirrors/scans/signs images; promotes digests to manifests via PR             |
+| F6  | Secrets from Secret Manager via ESO — never plain Secrets in Git                |
+| F7  | Observability: metrics, logs, traces exportable to GCP backends                 |
+| F8  | SLOs with burn-rate alerts routed to PagerDuty + runbook links                  |
+| F9  | Bootstrap and teardown documented and validated; backup IaC optional (topic 19) |
 
 ### Non-functional
 
@@ -63,7 +63,7 @@ Diagrams: [assets/diagrams/](../../assets/diagrams/). Folder nav: [README.md](RE
 - **No service mesh** as default (no Istio/Linkerd in baseline)
 - **No custom app code** — upstream Online Boutique images only
 - **Manual Argo CD sync** — deliberate promotion even on a single cluster
-- **WIF-only CI auth** — no long-lived GCP service account keys in GitHub
+- **WIF for supply-chain CI** — `build-scan-sign` / mirror workflows; no long-lived GCP SA keys in GitHub
 - **Operator-executed provisioning** — Terraform and setup guides; no opaque automation scripts
 
 ---
@@ -85,7 +85,7 @@ Diagrams: [assets/diagrams/](../../assets/diagrams/). Folder nav: [README.md](RE
 
 ## 4. High-level architecture
 
-Git is the single source of truth. Engineers merge PRs that update Helm values (image digests) and platform manifests. GitHub Actions authenticates to GCP via Workload Identity Federation, builds or mirrors images, scans with Trivy, signs with cosign, and pushes to Artifact Registry. Argo CD watches the repo and syncs desired state to a **single regional GKE cluster** (private nodes, public API endpoint). Platform components (Kyverno, ESO, NetworkPolicy) enforce security at admission and runtime.
+Git is the single source of truth. Engineers merge PRs that update Helm values (image digests) and platform manifests. Supply-chain GitHub Actions workflows authenticate to GCP via WIF, mirror images, scan with Trivy, sign with cosign, and push to Artifact Registry. PR gate workflows (`ci.yml`) stay in-repo and do not need GCP. Argo CD watches the repo and syncs desired state to a **single regional GKE cluster** (private nodes, public API endpoint). Platform components (Kyverno, ESO, NetworkPolicy) enforce security at admission and runtime.
 
 Online Boutique runs in the `boutique` namespace; Argo CD in `argocd`; observability stack in `observability`. North-south traffic enters through Google Cloud external HTTP(S) load balancers with **dedicated** static IPs (`boutique-ingress-ip`, `argocd-ingress-ip`), Google-managed TLS certificates, and Cloud Armor. OpenTelemetry exports to Cloud Trace and Managed Prometheus; Grafana visualizes health. Cloud Monitoring hosts SLOs, uptime checks, and burn-rate alerts that route to PagerDuty with runbook links in `docs/sre/runbooks/`.
 
@@ -95,8 +95,8 @@ flowchart TB
     GH[GitHub Repo]
   end
 
-  subgraph CI["CI — GitHub Actions + WIF"]
-    GHA[Build · Trivy · cosign]
+  subgraph CI["CI — GitHub Actions (WIF on supply-chain jobs)"]
+    GHA[Mirror · Trivy · cosign]
   end
 
   subgraph GCP["GCP Project: boutique-gke"]
@@ -146,8 +146,8 @@ flowchart TB
 | **Application**   | Online Boutique Helm (`gitops/apps/boutique/`)                         | Microservices + frontend                                              |
 | **Observability** | OTel, Prometheus, Grafana (`observability/`)                           | Collect, store, visualize                                             |
 | **SRE**           | Cloud Monitoring, PagerDuty (`observability/monitoring/`, `docs/sre/`) | SLOs, alerts, runbooks, game days                                     |
-| **CI**            | GitHub Actions (`.github/workflows/`)                                  | WIF auth, scan, sign, digest PR                                       |
-| **Backup**        | GKE Backup / Velero (`scripts/`, runbooks)                             | Redis/cart state protection                                           |
+| **CI**            | GitHub Actions (`.github/workflows/`)                                  | PR gates; WIF on mirror/scan/sign; digest PR                          |
+| **Backup**        | GKE Backup module + runbooks (optional topic 19)                       | Redis/cart state protection when enabled                              |
 
 ---
 
@@ -196,7 +196,7 @@ Secret Manager (GCP)
 
 ```
 1. Merge or CI trigger on main
-2. GitHub Actions: WIF auth (OIDC → GCP SA)
+2. Supply-chain GitHub Actions: WIF auth (OIDC → GCP SA) → mirror / Trivy / cosign
 3. Build/mirror image → Trivy scan (fail critical/high)
 4. Push to Artifact Registry (immutable digest)
 5. cosign sign + SLSA/provenance attestation

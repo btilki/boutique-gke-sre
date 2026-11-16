@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Document **DNS** (**Domain Name System**) delegation and A records for public hostnames `boutique.biroltilki.art` and `argocd.boutique.biroltilki.art`. Each hostname points at a **dedicated** GCE Ingress static IP.
+Document DNS delegation and A records for public hostnames `boutique.biroltilki.art` and `argocd.boutique.biroltilki.art`. Each hostname points at a **dedicated** GCE Ingress static IP.
 
 ## Current status (post-teardown)
 

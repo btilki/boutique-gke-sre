@@ -72,7 +72,7 @@ Expected (offline now): empty `dig +short` and failed HTTPS — see [dns.md](../
 
 ## Security considerations
 
-- WIF-only CI; no SA keys in GitHub
+- Supply-chain CI uses WIF; no SA keys in GitHub
 - ESO-only secrets; audit Secret Manager access
 - Binary Authorization cluster rule in place; Enforce only after topic 16 ([edge-hardening.md](../security/edge-hardening.md)) — project default stays allow + dry-run
 

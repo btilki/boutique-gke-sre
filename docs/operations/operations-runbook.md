@@ -383,7 +383,7 @@ kubectl get pods -A | grep -v Running | grep -v Completed
 
 ### Purpose
 
-Protect persistent state (primarily Redis/cart data) and enable validated restore drills per Phase 8 requirements.
+Protect persistent state (primarily Redis/cart data). Restore drills use GKE Backup when topic 19 IaC is enabled — not a Phase 8 closed-path requirement.
 
 ### Commands
 
@@ -1356,7 +1356,7 @@ Identify safe automation candidates to reduce toil while preserving manual sync 
 
 | Area                | Automation                  | Location                                         |
 | ------------------- | --------------------------- | ------------------------------------------------ |
-| CI build/scan/sign  | GitHub Actions + WIF        | `.github/workflows/build-scan-sign.yml`          |
+| CI mirror/scan/sign | GitHub Actions + WIF        | `.github/workflows/build-scan-sign.yml`          |
 | Digest promotion    | PR from CI                  | `.github/workflows/manifest-digest-pr.yml`       |
 | Policy validation   | pre-commit, CI              | `Makefile`, `.github/workflows/ci.yml`           |
 | Terraform plan      | PR comment                  | `.github/workflows/terraform-plan.yml`           |

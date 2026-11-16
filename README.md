@@ -1,10 +1,10 @@
 # boutique-gke-sre
 
-Production reference SRE platform for [Google Online Boutique](https://github.com/GoogleCloudPlatform/microservices-demo) on private-node GKE (public API endpoint) — SLOs, burn-rate alerts, PagerDuty, GitOps.
+Production SRE reference for [Google Online Boutique](https://github.com/GoogleCloudPlatform/microservices-demo) on private-node GKE (public API endpoint) — SLOs, burn-rate alerts, PagerDuty, GitOps.
 
 > **Status:** Production reference closed. Phases 1–8 ran end to end; then the GCP resources were destroyed. There is no live GKE cluster or public DNS from that run. To run again, follow [`docs/setup/`](docs/setup/) (topics 01–16).
 
-Author: [Birol Tilki](https://www.linkedin.com/in/birol-tilki-48731326/) — solo design, operate, and teardown of this reference (topics 01–16; lived evidence dated 2026-07-04).
+Author: [Birol Tilki](https://www.linkedin.com/in/birol-tilki-48731326/) — designed, operated, and tore down this reference (topics 01–16; game-day evidence dated 2026-07-04).
 
 **Hostnames (offline until rebuild):** `boutique.biroltilki.art` · `argocd.boutique.biroltilki.art`
 
@@ -17,23 +17,23 @@ Shipping Online Boutique to a cluster is not the hard part. The hard part is rel
 ## Decision
 
 - **One private-node regional GKE cluster** in project `boutique-gke` (public Kubernetes API) — namespaces for isolation, not multi-cluster blast radius ([ADR-001](docs/adr/001-single-cluster.md)).
-- **Git is what Argo CD reconciles** — GitHub Actions builds, scans (Trivy), signs (cosign), and opens digest PRs. Operators sync Argo by hand ([ADR-003](docs/adr/003-manual-argocd-sync.md)).
-- **Admission blocks the easy mistakes** — Kyverno enforces digest-only images, probes, resources, NetworkPolicy labels, and ESO-only secrets. Binary Authorization checks attestations when the cluster admits images.
-- **SRE after deployment** — browse and checkout availability SLOs in Cloud Monitoring, multi-window burn alerts, PagerDuty with runbook links, one executed game day, and ordered teardown.
+- **Git is the deploy source of truth** — GitHub Actions mirrors, scans (Trivy), signs (cosign), and opens digest PRs. Operators sync Argo by hand ([ADR-003](docs/adr/003-manual-argocd-sync.md)).
+- **Admission policy blocks mutable tags and unsigned images** — Kyverno enforces digest-only images, probes, resources, NetworkPolicy labels, and ESO-only secrets. Binary Authorization checks attestations when the cluster admits images.
+- **SRE after deployment** — browse and checkout availability SLOs in Cloud Monitoring, multi-window burn alerts, PagerDuty with runbook links, game day 03 (alert path not verified), and ordered teardown.
 
 ## Result
 
-Topics 01–16 completed, then teardown. Documentation and screenshots remain; there are no public A records. Claims documented in this repo: [`docs/reference-claims.md`](docs/reference-claims.md).
+Topics 01–16 completed, then teardown. Documentation and screenshots remain; there are no public A records. Reference claims: [`docs/reference-claims.md`](docs/reference-claims.md).
 
 ---
 
 ## At a glance
 
-|           |                                                                                                        |
+| Field     | Value                                                                                                  |
 | --------- | ------------------------------------------------------------------------------------------------------ |
 | What      | SRE-focused private-node GKE (public API) for Online Boutique in `europe-west1`                        |
 | Hard rule | Reliability **after deployment** — SLOs → burn alerts → PagerDuty → runbooks                           |
-| CI model  | GitHub Actions + WIF; **CI does not sync Argo** — digest PRs only                                      |
+| CI model  | GitHub Actions; WIF on supply-chain jobs; **CI does not sync Argo** — digest PRs only                  |
 | Scope     | Production reference — one project, one cluster; not multi-region HA                                   |
 | Stack     | Terraform · GKE · Argo CD · Kyverno · ESO · Binary Authorization · OTel · Cloud Monitoring · PagerDuty |
 
@@ -43,11 +43,11 @@ Topics 01–16 completed, then teardown. Documentation and screenshots remain; t
 
 These screenshots are from when the stack was live. Full catalog: [`docs/evidence/`](docs/evidence/README.md). Hostnames stay offline until you rebuild.
 
-| Status                        | Examples                                                                                                                 |
-| ----------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
-| Proven in screenshots         | Storefront HTTPS, Argo Healthy/Synced, `build-scan-sign`, availability SLOs, Kyverno/BA/PagerDuty/Grafana (see evidence) |
-| Documented, no screenshot yet | Digest PR diff, Kyverno deny of `:latest`, Argo OutOfSync→Sync, BA deny on `redis-cart`, teardown console                |
-| Deferred                      | Game days 01/02/04; latency SLOs (topic 17); topics 18–20 scaffolds                                                      |
+| Status                        | Examples                                                                                                                                          |
+| ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Proven in screenshots         | Storefront HTTPS, Argo Healthy/Synced, `build-scan-sign`, availability SLOs; more in evidence (Kyverno, Binary Authorization, PagerDuty, Grafana) |
+| Documented, no screenshot yet | Digest PR diff, Kyverno deny of `:latest`, Argo OutOfSync→Sync, Binary Authorization deny on `redis-cart`, teardown console                       |
+| Deferred                      | Game days 01/02/04; latency SLOs (topic 17); topics 18–20 scaffolds                                                                               |
 
 **Storefront** — `https://boutique.biroltilki.art` over HTTPS (when the reference was live):
 

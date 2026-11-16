@@ -52,7 +52,7 @@ File: [`slo-browse-checkout.png`](../../assets/diagrams/slo-browse-checkout.png)
 
 ![Burn alert policy with runbook URL](../../assets/diagrams/alert-policy-runbook-link.png)
 
-Alert policy documentation label with a runbook URL in this repository. Useful when a reviewer never opens PagerDuty.
+Alert policy documentation label with a runbook URL in this repository. Shows the runbook URL on the alert policy without opening PagerDuty.
 
 File: [`alert-policy-runbook-link.png`](../../assets/diagrams/alert-policy-runbook-link.png)
 
@@ -124,7 +124,7 @@ These items are documented, but there is no screenshot here yet. Capture them on
 | Teardown: `terraform destroy` / empty orphan scan  | Phase 8 completion                         |
 | Private endpoint / authorized networks             | Would close the public API tradeoff        |
 
-Claims documented in this repo (no cluster required): [`../reference-claims.md`](../reference-claims.md). Current limits: [`../../SECURITY.md`](../../SECURITY.md).
+Reference claims (no cluster required): [`../reference-claims.md`](../reference-claims.md). Current limits: [`../../SECURITY.md`](../../SECURITY.md).
 
 Same PNGs plus Mermaid sources: [`../../assets/diagrams/README.md`](../../assets/diagrams/README.md).
 

@@ -1,6 +1,6 @@
 # Prometheus (optional reference)
 
-In-cluster Prometheus is **not** part of the GitOps observability Application. Production metrics path is **OTel Collector → GMP** (**Google Managed Prometheus**) plus Cloud Monitoring SLOs.
+In-cluster Prometheus is **not** part of the GitOps observability Application. Production metrics path is OTel Collector → Managed Prometheus plus Cloud Monitoring SLOs.
 
 This directory holds optional `kube-prometheus-stack` Helm values if you later add an in-cluster Prometheus for ServiceMonitors. Do not treat it as a required bootstrap step.
 

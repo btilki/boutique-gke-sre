@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Standardize **SEV** (**severity**) classification, response expectations, and escalation for boutique-gke-sre on-call.
+Standardize SEV classification, response expectations, and escalation for boutique-gke-sre on-call.
 
 ## When to use
 

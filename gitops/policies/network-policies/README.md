@@ -28,7 +28,7 @@ Implement zero-trust network segmentation: deny all traffic by default, then all
 
 ## Dependencies
 
-- Phase 4: CNI supports NetworkPolicy (GKE default)
+- Phase 4: NetworkPolicy manifests in Git; the GKE module does **not** pin Dataplane V2 or Calico — objects alone do not prove the CNI drops packets ([SECURITY.md](../../../SECURITY.md))
 - Kyverno: `require-netpol-labels` policy
 - Boutique Helm chart: pod labels matching selectors (Phase 5)
 

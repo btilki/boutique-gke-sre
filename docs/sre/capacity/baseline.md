@@ -7,7 +7,7 @@ Document the intended capacity model for Online Boutique on one private-node reg
 ## When to use
 
 - Planning HPA / node pool changes
-- Interpreting game day 02 (pod/zone failure)
+- Interpreting Game day 02 (pod/zone failure)
 - Before load exercises (see [scripts/load/](../../../scripts/load/))
 - Weekly platform sync if Pending pods or SLO latency burn
 

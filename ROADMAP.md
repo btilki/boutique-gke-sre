@@ -1,6 +1,6 @@
 # Roadmap
 
-Phased delivery for **boutique-gke-sre** — one phase per session: validate → commit → next.
+Phases 1–8 for **boutique-gke-sre** ran sequentially with validation at each gate. Phases 9-A–9-D stay optional after rebuild.
 
 **Full plan:** [docs/implementation/plan.md](docs/implementation/plan.md)
 **Step-by-step guides:** [docs/setup/README.md](docs/setup/README.md) (reference topics 01–16; optional after-rebuild scaffolds listed there)
@@ -74,7 +74,7 @@ Apply/prove on a rebuild. Some files below already exist from the closed path.
 | Argo CD uptime       | `observability/monitoring/uptime-checks/argocd-ui.yaml`                                  | Scaffold until applied                   |
 | Create script        | `scripts/create-argocd-uptime-check.sh`                                                  | Scaffold until applied                   |
 | Game-day ops         | `docs/sre/game-days/reports/{TEMPLATE,STATUS}.md`                                        | STATUS shows 01/02/04 deferred           |
-| Postmortem           | `docs/sre/postmortems/2026-07-04-redis-cart-down.md`                                     | **Lived** (game day 03) — not a scaffold |
+| Postmortem           | `docs/sre/postmortems/2026-07-04-redis-cart-down.md`                                     | **Lived** (Game day 03) — not a scaffold |
 | Setup guide          | [docs/setup/18-sre-operability-game-days.md](docs/setup/18-sre-operability-game-days.md) | Optional after rebuild                   |
 
 ### 9-C

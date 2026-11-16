@@ -2,6 +2,8 @@
 
 CI for boutique-gke-sre. Supply-chain workflows (`build-scan-sign`, `mirror-platform-images`) are manual (`workflow_dispatch`) unless you add schedule or merge triggers.
 
+The workflow id `build-scan-sign` is historical: the job **mirrors** upstream Boutique/Redis images — it does not compile Boutique from source. See [`docs/ci.md`](../../docs/ci.md).
+
 | Workflow                                                 | Phase | Purpose                                                                   |
 | -------------------------------------------------------- | ----- | ------------------------------------------------------------------------- |
 | [ci.yml](ci.yml)                                         | 1+    | Terraform validate, runbook lint, Kyverno tests, digest-only, kubeconform |

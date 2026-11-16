@@ -7,10 +7,10 @@ Production SRE reference for [Google Online Boutique](https://github.com/GoogleC
 ## Goals
 
 1. Run Online Boutique on one private-node GKE cluster (public API) with GitOps and supply-chain controls
-2. Operate browse and checkout availability SLOs, burn alerts, runbooks, and at least one game day
+2. Operate browse and checkout availability SLOs, burn alerts, runbooks, and at least one Game day
 3. Keep bootstrap and teardown documented so the stack can be rebuilt or removed without tribal knowledge
 
-→ Architecture: [ARCHITECTURE.md](ARCHITECTURE.md) · [docs/architecture/overview.md](docs/architecture/overview.md)
+Architecture: [ARCHITECTURE.md](ARCHITECTURE.md) · [docs/architecture/overview.md](docs/architecture/overview.md)
 
 ## Scope
 
@@ -38,11 +38,7 @@ See [docs/dns.md](docs/dns.md).
 
 ## Related
 
-Phased delivery — one phase per session, validate, commit, proceed.
-
-→ [ROADMAP.md](ROADMAP.md) · [docs/implementation/plan.md](docs/implementation/plan.md) · [docs/setup/README.md](docs/setup/README.md)
-
-## Session rule
+Phases 1–8 completed with validation at each gate. See [ROADMAP.md](ROADMAP.md), [docs/implementation/plan.md](docs/implementation/plan.md), and [docs/setup/README.md](docs/setup/README.md).
 
 **Do not skip Phase 4** (Argo CD + Kyverno + ESO + NetworkPolicy) before deploying Boutique.
 

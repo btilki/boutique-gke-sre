@@ -2,7 +2,7 @@
 
 ## Reporting vulnerabilities
 
-This repository is a closed reference (no live cluster from the operated run). Report vulnerabilities in the docs, IaC, workflows, or manifests responsibly.
+Closed reference — see [docs/reference-claims.md](docs/reference-claims.md). Report vulnerabilities in the docs, IaC, workflows, or manifests responsibly.
 
 **Contact:** Open a private [GitHub Security Advisory](https://github.com/btilki/boutique-gke-sre/security/advisories) for this repository. Do not open a public issue for exploitable vulnerabilities.
 
@@ -19,7 +19,7 @@ Closed-run posture; gaps are listed under Current limits.
 
 ## Current limits
 
-These principles guide design. The closed run still has the gaps below. Do not describe them as already enforced.
+Principles above guide design; the gaps below override any “already enforced” reading for the closed run.
 
 - The Kubernetes API endpoint is public (`enable_private_endpoint = false` in `terraform/modules/gke`). Master authorized networks are not set. Node OAuth scope is `https://www.googleapis.com/auth/cloud-platform`.
 - Binary Authorization's project default is allow plus dry-run. Only this cluster's admission rule requires an attestation.

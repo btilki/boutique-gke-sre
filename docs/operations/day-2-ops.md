@@ -61,7 +61,7 @@ Expected (offline now): empty `dig +short` and failed HTTPS — see [dns.md](../
 
 - All changes via PR; digest-only images
 - Link incidents to runbooks and postmortems
-- Schedule game-day exercises before major dependency upgrades (closed path: game day 03 only; see [STATUS](../sre/game-days/reports/STATUS.md))
+- Schedule Game day exercises before major dependency upgrades (closed path: Game day 03 only; see [STATUS](../sre/game-days/reports/STATUS.md))
 
 ## Production considerations
 

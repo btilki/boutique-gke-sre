@@ -3,7 +3,7 @@
 **Alert policy:** `redis-cart-down`
 **Architecture:** [Failure scenarios §10](../../architecture/overview.md#10-failure-scenarios)
 
-> Full steps expanded in Phase 7; game day 03.
+> Full steps expanded in Phase 7; Game day 03.
 
 ## Purpose
 

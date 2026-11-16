@@ -14,7 +14,7 @@ Author: [Birol Tilki](https://www.linkedin.com/in/birol-tilki-48731326/) — des
 
 Shipping Online Boutique to a cluster is not the hard part. The hard part is reliability **after deployment**. You need to know when browse or checkout is burning error budget, route that signal to a human with a runbook, and prove the supply chain did not leave `:latest` or unsigned images in the path. A Terraform apply alone does not prove that story.
 
-## Decision
+## Approach
 
 - **One private-node regional GKE cluster** in project `boutique-gke` (public Kubernetes API) — namespaces for isolation, not multi-cluster blast radius ([ADR-001](docs/adr/001-single-cluster.md)).
 - **Git is the deploy source of truth** — GitHub Actions mirrors, scans (Trivy), signs (cosign), and opens digest PRs. Operators sync Argo CD by hand ([ADR-003](docs/adr/003-manual-argocd-sync.md)).
@@ -135,23 +135,23 @@ Full tree: [`REPOSITORY_STRUCTURE.md`](REPOSITORY_STRUCTURE.md)
 - Private-node GKE with HTTPS on the storefront and Argo CD hostnames (when live)
 - Digest-only GitOps, Kyverno baseline, ESO + Secret Manager, Binary Authorization
 - Browse and checkout availability SLOs, burn-rate alerts, PagerDuty test path
-- One executed game day (03 redis-cart; PagerDuty/alert not verified — see [`docs/sre/game-days/reports/STATUS.md`](docs/sre/game-days/reports/STATUS.md))
+- One executed Game day (03 redis-cart; PagerDuty/alert not verified — see [`docs/sre/game-days/reports/STATUS.md`](docs/sre/game-days/reports/STATUS.md))
 - Ordered teardown with orphan-resource scans ([`docs/teardown.md`](docs/teardown.md))
 
 ---
 
 ## Technology stack
 
-| Area                | Choices                                                                          |
-| ------------------- | -------------------------------------------------------------------------------- |
-| Cloud / region      | GCP `europe-west1`, project `boutique-gke`                                       |
-| IaC                 | Terraform ≥ 1.5                                                                  |
-| Kubernetes          | Regional private-node GKE, Workload Identity                                     |
-| GitOps / delivery   | Argo CD (manual sync), Helm                                                      |
-| Policy / secrets    | Kyverno, ESO, Secret Manager, NetworkPolicy                                      |
-| Ingress / TLS       | Google-managed certs, static IP, Cloud Armor                                     |
-| CI / supply chain   | GitHub Actions, WIF, Artifact Registry, Trivy, cosign, Binary Authorization      |
-| Observability / SRE | OTel, Cloud Trace, Managed Prometheus, Grafana, Cloud Monitoring SLOs, PagerDuty |
+| Area                | Choices                                                                                    |
+| ------------------- | ------------------------------------------------------------------------------------------ |
+| Cloud / region      | GCP `europe-west1`, project `boutique-gke`                                                 |
+| IaC                 | Terraform ≥ 1.5                                                                            |
+| Kubernetes          | Regional private-node GKE (public API), Workload Identity                                  |
+| GitOps / delivery   | Argo CD (manual sync), Helm                                                                |
+| Policy / secrets    | Kyverno, ESO, Secret Manager, NetworkPolicy                                                |
+| Ingress / TLS       | Google-managed certs, static IP, Cloud Armor                                               |
+| CI / supply chain   | GitHub Actions, WIF (supply-chain), Artifact Registry, Trivy, cosign, Binary Authorization |
+| Observability / SRE | OTel, Cloud Trace, Managed Prometheus, Grafana, Cloud Monitoring SLOs, PagerDuty           |
 
 ---
 

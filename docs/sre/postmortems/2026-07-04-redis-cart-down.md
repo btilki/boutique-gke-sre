@@ -7,7 +7,7 @@
 
 ## Summary
 
-During game day 03 (Redis / cart down), scaling `redis-cart` to zero correctly broke the storefront (`HTTP 500`). Restore via `kubectl scale` failed for ~6 minutes because Binary Authorization enforce mode rejected the recreated pod: the Artifact Registry image lacked a trusted cosign attestation. Service was restored after a temporary BA DRYRUN window, then enforce was re-enabled. PagerDuty / `redis-cart-down` alert acknowledgment was not exercised.
+During Game day 03 (Redis / cart down), scaling `redis-cart` to zero correctly broke the storefront (`HTTP 500`). Restore via `kubectl scale` failed for ~6 minutes because Binary Authorization enforce mode rejected the recreated pod: the Artifact Registry image lacked a trusted cosign attestation. Service was restored after a temporary BA DRYRUN window, then enforce was re-enabled. PagerDuty / `redis-cart-down` alert acknowledgment was not exercised.
 
 ## Impact
 

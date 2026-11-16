@@ -190,7 +190,7 @@ curl -I https://boutique.biroltilki.art
 
 Expected live list includes `browse-availability`, `browse-latency` (and checkout pair on the checkout service).
 
-Optional alert drill: [test-alerts.md](../sre/oncall/test-alerts.md) for a latency policy (or game day 04).
+Optional alert drill: [test-alerts.md](../sre/oncall/test-alerts.md) for a latency policy (or Game day 04 after rebuild; deferred on the closed path).
 
 ## Common problems
 

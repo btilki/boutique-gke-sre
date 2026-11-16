@@ -35,7 +35,7 @@ Define when and how to escalate beyond the primary on-call engineer.
 ## Validation
 
 - Escalation policy test in PagerDuty shows correct order
-- After rebuild: secondary receives page during game day 04 (deferred on the closed path)
+- After rebuild: secondary receives page during Game day 04 (deferred on the closed path)
 
 ## Troubleshooting
 

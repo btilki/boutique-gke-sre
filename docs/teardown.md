@@ -16,7 +16,7 @@ Safely decommission all boutique-gke-sre resources and stop billing with **zero 
 
 - Owner/editor on GCP project `boutique-gke`
 - `kubectl` access if cluster still exists
-- Backup completed if Redis/cart data matters ([sre/runbooks/redis-restore.md](sre/runbooks/redis-restore.md))
+- If Redis/cart data matters: complete a restore-ready backup first ([sre/runbooks/redis-restore.md](sre/runbooks/redis-restore.md)). GKE Backup Terraform is optional after rebuild ([setup/19-monitoring-backup-terraform.md](setup/19-monitoring-backup-terraform.md)) — not part of Phase 8 closed-path proof.
 - [scripts/teardown/pre-destroy-checklist.sh](../scripts/teardown/pre-destroy-checklist.sh)
 
 ## Architecture
@@ -33,7 +33,7 @@ Argo Apps deleted → Ingress/LB released → GKE cluster destroyed
 1. **Scale down applications** — Delete or sync-to-empty Argo CD Applications: `boutique`, `observability`, `policies`
 2. **Remove Ingress** — Ensure Kubernetes Ingress/Services deleted so GCE LB releases
 3. **Wait** — Forwarding rules and backends can take 5–15 minutes to clear
-4. **Drain decision** — Confirm PVC retention policy for Redis (backup or discard)
+4. **Drain decision** — Confirm PVC retention for Redis (manual/export backup, topic 19 GKE Backup if enabled, or discard)
 5. **Pre-check:**
    ```bash
    ./scripts/teardown/pre-destroy-checklist.sh
@@ -98,5 +98,5 @@ dig +short argocd.boutique.biroltilki.art
 
 - [setup/16-smoke-validation.md](setup/16-smoke-validation.md) (pre-teardown checklist inverse)
 - [setup/19-monitoring-backup-terraform.md](setup/19-monitoring-backup-terraform.md) — topic 19 monitoring/backup IaC
-- [ROADMAP.md](../ROADMAP.md) Phase 8 / 9-C
+- [ROADMAP.md](../ROADMAP.md) — Phase 8 teardown; 9-C optional backup/monitoring
 - [bootstrap.md](bootstrap.md) — rebuild path

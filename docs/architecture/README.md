@@ -24,10 +24,10 @@ Delivery contracts: [`../ci.md`](../ci.md) · [`../operations/rollback.md`](../o
 
 ## Architecture pages
 
-| Doc                                              | Purpose                           |
-| ------------------------------------------------ | --------------------------------- |
-| [overview.md](overview.md)                       | Canonical deep dive (16 sections) |
-| [`../../ARCHITECTURE.md`](../../ARCHITECTURE.md) | Executive summary                 |
+| Doc                                              | Purpose                               |
+| ------------------------------------------------ | ------------------------------------- |
+| [overview.md](overview.md)                       | Canonical deep dive (16 sections)     |
+| [`../../ARCHITECTURE.md`](../../ARCHITECTURE.md) | Closed-reference architecture summary |
 
 When implementation changes the system, update `overview.md` and relevant ADRs in the same PR.
 

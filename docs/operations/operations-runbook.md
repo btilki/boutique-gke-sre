@@ -1,6 +1,6 @@
 # Production operations runbook — boutique-gke-sre
 
-Canonical day-2 operations guide for Online Boutique on private-node GKE in GCP project `boutique-gke`.
+Canonical day-2 operations guide for Online Boutique on private-node GKE (public API) in GCP project `boutique-gke`.
 
 > **Offline until rebuild:** The closed-reference cluster and public A records are gone. Every `curl` / `dig` / `kubectl` block in this runbook assumes a **live rebuild**. While offline, empty DNS and failed HTTPS are expected — see [dns.md](../dns.md).
 
@@ -217,7 +217,7 @@ curl -sS -o /dev/null -w "%{http_code}\n" https://boutique.biroltilki.art
 
 - Always follow Argo history rollback with a Git revert PR
 - Document rollback in PagerDuty incident timeline
-- Run game day 01 quarterly to practice rollback muscle memory
+- Run Game day 01 quarterly to practice rollback muscle memory
 
 **Further reading:** [rollback.md](rollback.md) · [bad-deploy-rollback.md](../sre/runbooks/bad-deploy-rollback.md)
 
@@ -295,7 +295,7 @@ kubectl get nodes
 
 - Prefer HPA over manual replica counts
 - Set realistic requests/limits (Kyverno-enforced) so scheduling is predictable
-- Test scale behavior in game day 02 (pod/zone failure)
+- Test scale behavior in Game day 02 (pod/zone failure)
 - Do not scale below PDB `minAvailable` during incidents
 
 **Further reading:** [architecture/overview.md §11](../architecture/overview.md#11-scalability) · [sre/capacity/baseline.md](../sre/capacity/baseline.md) · [scripts/load/](../../scripts/load/)

@@ -2,7 +2,7 @@
 
 Closed reference: GCP was torn down after topics 01–16 (including Phase 8 teardown). Nothing here requires a live cluster to read. Screenshots: [`evidence/`](evidence/README.md).
 
-GitHub Actions mirrors, scans, and signs images. Git stores digest pins. Argo CD reconciles. Cloud Monitoring holds the browse and checkout SLOs; burn alerts go to PagerDuty with runbook links. The reference proved that path once, then the cloud resources were removed.
+The closed run followed this path: GitHub Actions mirrored, scanned, and signed images; Git stored digest pins; Argo CD reconciled; Cloud Monitoring held browse and checkout availability SLOs; burn alerts went to PagerDuty with runbook links. That path ran once, then the cloud resources were removed.
 
 ## Operated, then torn down (topics 01–16)
 
@@ -10,7 +10,7 @@ GitHub Actions mirrors, scans, and signs images. Git stores digest pins. Argo CD
 - Argo CD (manual sync), ESO + Secret Manager, Kyverno Enforce, NetworkPolicy manifests
 - Digest-only Boutique Helm in the `boutique` namespace; storefront and Argo CD over HTTPS when live
 - Browse and checkout availability SLOs; burn-rate alerts with runbook URLs; PagerDuty test path
-- Cloud Armor on the storefront (console path); one executed game day (03; PD/alert not verified); ordered teardown
+- Cloud Armor on the storefront (console path); one executed Game day (03; PD/alert not verified); ordered teardown
 
 ## Limits inside the operated path
 

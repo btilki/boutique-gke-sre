@@ -220,7 +220,7 @@ Full procedure: [test-alerts.md](../sre/oncall/test-alerts.md)
 - Store integration keys in Secret Manager; reference from Terraform when wired
 - One PagerDuty service per environment (this reference has one: `boutique`)
 - Test push notifications, not email only
-- Re-run [test-alerts.md](../sre/oncall/test-alerts.md) at rotation handoff and during [game day 04](../sre/game-days/04-alert-routing.md)
+- Re-run [test-alerts.md](../sre/oncall/test-alerts.md) at rotation handoff and during [Game day 04](../sre/game-days/04-alert-routing.md) after rebuild (deferred on the closed path — see [STATUS](../sre/game-days/reports/STATUS.md))
 
 ## Security notes
 

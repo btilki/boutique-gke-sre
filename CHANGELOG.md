@@ -13,9 +13,7 @@ Notable changes to this project. Format based on [Keep a Changelog](https://keep
 
 ### Changed
 
-- Closed-reference path is topics 01–16 plus Phase 8 teardown. Topics 17–20 are optional after rebuild only.
-- Prefer **production reference** wording; outside links limited to sister platforms and Google Online Boutique.
-- Docs match the closed run: private-node / public API; Armor default off; Phase 8 = teardown; WIF on supply-chain only; CI mirrors images; Game day 03 only (04 deferred); smoke expected table vs edge hardening.
+- Documentation aligned with the closed reference: topics 01–16 plus Phase 8 teardown; topics 17–20 optional after rebuild; private-node / public API; WIF on supply-chain; CI mirrors images; Game day 03 only (04 deferred).
 
 ## [0.1.0] — 2026-07-04
 

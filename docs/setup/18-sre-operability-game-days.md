@@ -148,7 +148,7 @@ curl -I https://argocd.boutique.biroltilki.art/healthz
 
 ## Best practices
 
-- Run GD04 before chaotic injects so paging is proven
+- On rebuild: run Game day 04 before chaotic injects so paging is proven (deferred on the closed path — see [STATUS](../sre/game-days/reports/STATUS.md))
 - Keep STATUS.md honest — Deferred until a report exists
 - Re-read GD03 postmortem before re-running Redis (BA + signing)
 - Prefer GitOps scale over `kubectl scale` for lasting HA changes

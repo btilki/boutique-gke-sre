@@ -348,7 +348,7 @@ For environment teardown when the reference is no longer needed: [teardown.md](.
 - Run this checklist after every major platform change
 - Automate repeatable checks in CI (Kyverno tests, `helm template` dry-run) — keep this manual checklist for integration proof
 - Store smoke test results in a change log or PR comment
-- On a live rebuild, schedule an additional game day only after smoke and edge hardening — the closed reference executed game day 03; others stayed deferred
+- On a live rebuild, schedule an additional Game day only after smoke and edge hardening — the closed reference executed Game day 03; others stayed deferred
 
 ## Security notes
 

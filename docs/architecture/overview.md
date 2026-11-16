@@ -415,7 +415,7 @@ Cloud Monitoring SLOs → PagerDuty ← runbooks (docs/sre/)
 ## Related documentation
 
 - [README.md](README.md) — architecture folder nav
-- [ARCHITECTURE.md](../../ARCHITECTURE.md) — executive summary
+- [ARCHITECTURE.md](../../ARCHITECTURE.md) — closed-reference architecture summary
 - [ci.md](../ci.md) · [operations/rollback.md](../operations/rollback.md) — delivery contracts
 - [reference-claims.md](../reference-claims.md) — what the reference proved
 - [bootstrap.md](../bootstrap.md) — bootstrap path

@@ -1,6 +1,6 @@
 # Documentation — boutique-gke-sre
 
-Production reference closed. The delivery path was validated, then GCP resources from the reference were destroyed. These docs describe what was built and how to rebuild it.
+Closed reference — see [`reference-claims.md`](reference-claims.md). These docs describe what was built and how to rebuild it.
 
 If this file disagrees with [`setup/`](setup/README.md) on bootstrap steps, the setup guide wins.
 

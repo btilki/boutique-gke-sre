@@ -58,7 +58,7 @@ Synthetic alert or uptime check exercises the same channel path as production bu
 ## Production considerations
 
 - Run during business hours first
-- After rebuild, coordinate with game day 04 for a full burn-rate test
+- After rebuild, coordinate with Game day 04 for a full burn-rate test
 
 ## Security considerations
 

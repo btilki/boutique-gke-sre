@@ -41,7 +41,7 @@
 
 - One GCP project, one private-node GKE cluster (public API), Online Boutique as the workload
 - Setup topics explain controls (WIF, burn rates, manual Argo sync) instead of only listing them
-- Availability SLOs, runbooks, and one executed game day on the closed path
+- Availability SLOs, runbooks, and one executed Game day on the closed path
 - Teardown and orphan-scan path so billable resources do not linger
 
 ---
@@ -211,20 +211,20 @@ See [REPOSITORY_STRUCTURE.md](../../REPOSITORY_STRUCTURE.md).
 
 ## 15. Phase status
 
-| Phase   | Focus                                    | Size | Status        | Setup                                            |
-| ------- | ---------------------------------------- | ---- | ------------- | ------------------------------------------------ |
-| **1**   | Repo + Terraform foundation              | S    | ✅ Complete   | 01–03                                            |
-| **2**   | GKE + DNS + ingress + TLS                | L    | ✅ Complete   | 04–06                                            |
-| **3**   | WIF + Artifact Registry + CI             | M    | ✅ Complete   | 07–08                                            |
-| **4**   | Argo CD + policies + ESO + NP (**gate**) | L    | ✅ Complete   | 09–11                                            |
-| **5**   | Online Boutique deploy                   | M    | ✅ Complete   | 12                                               |
-| **6**   | Observability + SLOs                     | L    | ✅ Complete   | 13                                               |
-| **7**   | SRE ops + smoke                          | M    | ✅ Complete   | 14–16                                            |
-| **8**   | Teardown                                 | M    | ✅ Complete   | [teardown](../teardown.md)                       |
-| **9-A** | Latency SLOs + Grafana                   | M    | ✅ Repo ready | [17](../setup/17-latency-slos-dashboards.md)     |
-| **9-B** | HA, Argo uptime, game days               | M    | ✅ Repo ready | [18](../setup/18-sre-operability-game-days.md)   |
-| **9-C** | Monitoring + Backup Terraform            | M    | ✅ Repo ready | [19](../setup/19-monitoring-backup-terraform.md) |
-| **9-D** | Error budget, capacity, toil             | M    | ✅ Repo ready | [20](../setup/20-sre-practices-capacity-toil.md) |
+| Phase   | Focus                                    | Size | Status                            | Setup                                            |
+| ------- | ---------------------------------------- | ---- | --------------------------------- | ------------------------------------------------ |
+| **1**   | Repo + Terraform foundation              | S    | Complete                          | 01–03                                            |
+| **2**   | GKE + DNS + ingress + TLS                | L    | Complete                          | 04–06                                            |
+| **3**   | WIF + Artifact Registry + CI             | M    | Complete                          | 07–08                                            |
+| **4**   | Argo CD + policies + ESO + NP (**gate**) | L    | Complete                          | 09–11                                            |
+| **5**   | Online Boutique deploy                   | M    | Complete                          | 12                                               |
+| **6**   | Observability + SLOs                     | L    | Complete                          | 13                                               |
+| **7**   | SRE ops + smoke                          | M    | Complete                          | 14–16                                            |
+| **8**   | Teardown                                 | M    | Complete                          | [teardown](../teardown.md)                       |
+| **9-A** | Latency SLOs + Grafana                   | M    | Optional scaffold (after rebuild) | [17](../setup/17-latency-slos-dashboards.md)     |
+| **9-B** | HA, Argo uptime, game days               | M    | Optional scaffold (after rebuild) | [18](../setup/18-sre-operability-game-days.md)   |
+| **9-C** | Monitoring + Backup Terraform            | M    | Optional scaffold (after rebuild) | [19](../setup/19-monitoring-backup-terraform.md) |
+| **9-D** | Error budget, capacity, toil             | M    | Optional scaffold (after rebuild) | [20](../setup/20-sre-practices-capacity-toil.md) |
 
 ### Dependency graph
 

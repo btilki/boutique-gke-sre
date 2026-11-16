@@ -12,9 +12,9 @@ Notes from topics 01–16 and Phase 8 teardown. Not a full postmortem — only i
 
 ## What broke or surprised me
 
-- **Scale-to-zero under Binary Authorization is a recreate, not a wake-up.** In game day 03, `kubectl scale` on `redis-cart` failed for minutes because the Artifact Registry image had no trusted cosign attestation. The old pod had been admitted before enforce; scaling to zero forced a new admit. A short Binary Authorization dry-run restored service; enforce was turned back on in the same exercise. Details: [`sre/game-days/reports/`](sre/game-days/reports/README.md) and the matching postmortem under [`sre/postmortems/`](sre/postmortems/README.md).
-- **Restore runbooks assumed scale alone was enough.** The inject worked; the restore path under Binary Authorization enforce was not rehearsed. Attested digests (or a documented break-glass) belong in the redis runbook before the next game day.
-- **Alert routing was skipped in that game day.** Storefront 5xx was obvious from curl; PagerDuty ack and the `redis-cart-down` alert were not exercised. A game day should either include alert routing or say “not in scope” before inject.
+- **Scale-to-zero under Binary Authorization is a recreate, not a wake-up.** In Game day 03, `kubectl scale` on `redis-cart` failed for minutes because the Artifact Registry image had no trusted cosign attestation. The old pod had been admitted before enforce; scaling to zero forced a new admit. A short Binary Authorization dry-run restored service; enforce was turned back on in the same exercise. Details: [`sre/game-days/reports/`](sre/game-days/reports/README.md) and the matching postmortem under [`sre/postmortems/`](sre/postmortems/README.md).
+- **Restore runbooks assumed scale alone was enough.** The inject worked; the restore path under Binary Authorization enforce was not rehearsed. Attested digests (or a documented break-glass) belong in the redis runbook before the next Game day.
+- **Alert routing was skipped in that Game day.** Storefront 5xx was obvious from curl; PagerDuty ack and the `redis-cart-down` alert were not exercised. A Game day should either include alert routing or say “not in scope” before inject.
 - **Evidence that is not on disk does not help a reviewer.** Digest PR diffs, a live Kyverno deny, Binary Authorization deny screenshots, and teardown console proof were lived or documented, but they still sit under “Not shown yet” in [`evidence/README.md`](evidence/README.md).
 
 ## Design limits I accept (and would change for real production)

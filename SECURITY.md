@@ -8,7 +8,7 @@ If you discover a security issue, please report it responsibly.
 
 ## Design principles
 
-- **No long-lived GCP keys in GitHub** — Workload Identity Federation only
+- **No long-lived GCP keys in GitHub** — WIF on supply-chain workflows; no JSON keys
 - **No secrets in Git** — gitleaks in pre-commit; Secret Manager via ESO
 - **Digest-only images** — Kyverno rejects mutable tags
 - **Signed artifacts** — cosign + Binary Authorization (cluster rule; Enforce after smoke)
@@ -17,11 +17,11 @@ If you discover a security issue, please report it responsibly.
 
 ## Current limits
 
-The principles above are the target. This repository still has these gaps. Do not describe them as already enforced.
+These principles guide design. The closed run still has the gaps below. Do not describe them as already enforced.
 
 - The Kubernetes API endpoint is public (`enable_private_endpoint = false` in `terraform/modules/gke`). Master authorized networks are not set. Node OAuth scope is `https://www.googleapis.com/auth/cloud-platform`.
 - Binary Authorization's project default is allow plus dry-run. Only this cluster's admission rule requires an attestation.
-- `redis-cart` was not attested during the Redis cart game day. The action items in [docs/sre/postmortems/2026-07-04-redis-cart-down.md](docs/sre/postmortems/2026-07-04-redis-cart-down.md) are still open. Signing uses a long-lived cosign private key in GitHub secrets.
+- `redis-cart` was not attested during Game day 03 (`redis-cart`). The action items in [docs/sre/postmortems/2026-07-04-redis-cart-down.md](docs/sre/postmortems/2026-07-04-redis-cart-down.md) are still open. Signing uses a long-lived cosign private key in GitHub secrets.
 - Storefront Cloud Armor is a console procedure in [docs/setup/15-cloud-armor.md](docs/setup/15-cloud-armor.md). The Terraform Argo CD Armor policy defaults to off (`enable_argocd_armor = false`); set `true` after topic 16. The rules are SQLi, XSS, and a rate limit, then default allow.
 - The GKE module does not set Dataplane V2 or the Calico network-policy addon. NetworkPolicy objects in Git are not pinned to an enforcing dataplane. Kyverno checks the namespace label. It does not prove the CNI is dropping packets.
 

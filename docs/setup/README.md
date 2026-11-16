@@ -64,7 +64,7 @@ Topics 7–8 can start after topic 4 (in parallel with 5–6).
 | 3     | 07–08  | `wif`, `artifact_registry`, `binary_authorization`                                       |
 | 4+    | 09–16  | GitOps / Console (Argo CD, ESO, Kyverno, observability, and so on)                       |
 
-### Optional after rebuild — not part of the closed reference
+### Optional after rebuild (not part of the closed reference)
 
 Guides 17–20 exist in Git as scaffolds only. They were not required for topics 01–16 and are not claimed as demonstrated. Enable them only after a deliberate rebuild; see [ROADMAP](../../ROADMAP.md).
 

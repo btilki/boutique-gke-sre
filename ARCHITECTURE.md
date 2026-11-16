@@ -2,21 +2,25 @@
 
 Executive summary for boutique-gke-sre. Full design: [docs/architecture/overview.md](docs/architecture/overview.md) (16 sections). Folder nav: [docs/architecture/README.md](docs/architecture/README.md).
 
+This is a **closed production reference**: topics 01–16 ran end to end, then Phase 8 teardown removed the GCP resources. There is no live cluster or public DNS from that run. Rebuild via [docs/setup/](docs/setup/README.md).
+
+**Shape:** one private-node regional GKE cluster (public Kubernetes API) in project `boutique-gke`. Git is the deploy source of truth; operators sync Argo CD by hand. The main security tradeoff kept for the closed run is the public API endpoint — nodes are private; the control plane is not.
+
 ## Stack flow
 
 ```
-Git → GitHub Actions (WIF) → Artifact Registry → Argo CD → GKE (private nodes, public API endpoint)
+Git → GitHub Actions (WIF on supply-chain) → Artifact Registry → Argo CD → GKE (private-node, public API)
   → HTTPS (Cloud Armor, TLS) → OTel → Cloud Monitoring → PagerDuty
 ```
 
 ## Key decisions
 
-| Topic     | Choice                                                                                                                  |
-| --------- | ----------------------------------------------------------------------------------------------------------------------- |
-| Isolation | One cluster; private nodes; public API; namespaces `boutique`, `argocd`, `observability`, `kyverno`, `external-secrets` |
-| Deploy    | GitOps; manual Argo CD sync; digest-only images                                                                         |
-| Security  | WIF, ESO, Kyverno, NetworkPolicy, Binary Authorization, Cloud Armor                                                     |
-| SRE       | Browse 99.9%, checkout 99.95%; burn alerts; runbooks per alert                                                          |
+| Topic     | Choice                                                                                                                 |
+| --------- | ---------------------------------------------------------------------------------------------------------------------- |
+| Isolation | One cluster; private-node; public API; namespaces `boutique`, `argocd`, `observability`, `kyverno`, `external-secrets` |
+| Deploy    | GitOps; manual Argo CD sync; digest-only images                                                                        |
+| Security  | WIF (supply-chain), ESO, Kyverno, NetworkPolicy, Binary Authorization, Cloud Armor                                     |
+| SRE       | Browse/checkout availability SLOs; burn alerts; runbooks; Game day 03 executed (alert path not verified)               |
 
 ## Diagrams
 

@@ -2,7 +2,7 @@
 
 ## Goal
 
-Install Argo CD on the private GKE cluster, expose the UI at **`argocd.boutique.biroltilki.art`**, register the app-of-apps root Application (`gitops/bootstrap/root-app.yaml`), and confirm **manual sync** is the only promotion path. When this topic is complete, you can log in to Argo CD and see child Applications (policies, boutique, observability) in `OutOfSync` state awaiting deliberate sync.
+Install Argo CD on the private-node GKE cluster (public API), expose the UI at **`argocd.boutique.biroltilki.art`**, register the app-of-apps root Application (`gitops/bootstrap/root-app.yaml`), and confirm **manual sync** is the only promotion path. When this topic is complete, you can log in to Argo CD and see child Applications (policies, boutique, observability) in `OutOfSync` state awaiting deliberate sync.
 
 > **Phase 4 gate:** Topics **09–11** (Argo CD, ESO, Kyverno) must complete before deploying Online Boutique (topic 12).
 

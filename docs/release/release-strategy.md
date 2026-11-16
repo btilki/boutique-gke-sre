@@ -519,7 +519,7 @@ Transparent tracking of limitations not fixed in current release.
 
 | Issue                      | Impact                | Workaround                                  | Target fix           |
 | -------------------------- | --------------------- | ------------------------------------------- | -------------------- |
-| GKE Backup module scaffold | DR drill manual       | Documented scripts; Phase 8                 | v1.1.0               |
+| GKE Backup module scaffold | DR drill manual       | Documented scripts; optional topic 19       | v1.1.0               |
 | Burn-rate 3d window        | API 24h max           | Use 24h/1× for slow burn                    | Documented           |
 | Single cluster             | No env isolation      | Namespace boundaries                        | ADR-001              |
 | Upstream CVEs              | Trivy baseline ignore | `.github/trivy/upstream-mirror.trivyignore` | Per upstream release |
@@ -789,7 +789,7 @@ Standardize release artifacts on GitHub for operator consumption.
 
 ```
 boutique-gke-sre v1.0.0 — Reference checklist (smoke validation)
-boutique-gke-sre v1.1.0 — Backup/restore + Phase 8
+boutique-gke-sre v1.1.0 — Backup/restore (topic 19, after rebuild)
 boutique-gke-sre v1.1.1 — Hotfix: uptime alert tuning
 ```
 

@@ -1,5 +1,7 @@
 # GCP project and APIs
 
+> **Offline until rebuild:** The closed-reference GCP resources were torn down. Commands below create or re-enable project APIs for a rebuild. See [setup/README.md](README.md).
+
 ## Goal
 
 GCP project `boutique-gke` exists with billing linked, default region/zone configured, and all required service APIs enabled for GKE, DNS, IAM, Artifact Registry, monitoring, and security services.

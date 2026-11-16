@@ -8,7 +8,7 @@ Define how Cloud Monitoring alert policies detect SLO error-budget burn using Go
 
 - Implementing SLO alerts in Phase 6 ([setup/13-observability-slos.md](../../setup/13-observability-slos.md))
 - Tuning alert noise after false positives
-- On-call training and game day 04
+- On-call training; game day 04 after rebuild (deferred on the closed path)
 
 ## Prerequisites
 
@@ -64,7 +64,7 @@ https://github.com/<org>/boutique-gke-sre/blob/main/docs/sre/runbooks/browse-ava
 4. Attach PagerDuty notification channel
 5. Add runbook URL to policy documentation (registry: `observability/monitoring/runbooks.yaml`)
 6. Create latency burn policies via `./scripts/create-latency-burn-rate-policies.sh`
-7. Test via [test-alerts.md](../oncall/test-alerts.md) or game day 04
+7. Test via [test-alerts.md](../oncall/test-alerts.md) or game day 04 (deferred until rebuild)
 
 ## Validation
 

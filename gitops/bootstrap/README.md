@@ -8,11 +8,11 @@ Bootstrap the GitOps control plane and secret integration layer. Everything unde
 
 ## Inputs
 
-| Input             | Description                           |
-| ----------------- | ------------------------------------- |
-| GKE cluster       | Private regional cluster from Phase 2 |
-| Git repository    | This repo as Argo CD source           |
-| Terraform outputs | DNS, static IPs, IAM for ESO          |
+| Input             | Description                                             |
+| ----------------- | ------------------------------------------------------- |
+| GKE cluster       | Private-node regional cluster (public API) from Phase 2 |
+| Git repository    | This repo as Argo CD source                             |
+| Terraform outputs | DNS, static IPs, IAM for ESO                            |
 
 ## Outputs
 

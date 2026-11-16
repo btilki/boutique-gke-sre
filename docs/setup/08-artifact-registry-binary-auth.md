@@ -1,5 +1,7 @@
 # Artifact Registry and Binary Authorization
 
+> **Offline until rebuild:** Artifact Registry and Binary Authorization from the closed run were removed with teardown. Follow this topic when rebuilding. Images are **mirrored**, not rebuilt from Boutique source. See [setup/README.md](README.md).
+
 ## Goal
 
 A regional Docker **Artifact Registry** repository in `europe-west1` stores Online Boutique images (digest-only promotion). **Binary Authorization** is wired with a cosign attestor so the cluster can require attested images from that registry. An attestor trusts signatures produced by the CI pipeline (topic 07 WIF). Local and CI pushes target `europe-west1-docker.pkg.dev/boutique-gke/boutique`.

@@ -10,7 +10,7 @@ Install ESO so application secrets are sourced from GCP Secret Manager via `Exte
 
 | Input             | Description                                                     |
 | ----------------- | --------------------------------------------------------------- |
-| GKE cluster       | Private regional cluster                                        |
+| GKE cluster       | Private-node regional cluster (public API)                      |
 | Workload Identity | GSA bound to ESO controller SA (Terraform `iam` module)         |
 | Helm chart        | `external-secrets/external-secrets` (version pinned in Phase 4) |
 

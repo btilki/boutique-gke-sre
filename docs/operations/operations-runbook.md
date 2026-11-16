@@ -863,7 +863,7 @@ gcloud logging read \
 - Never log secrets or PII
 - Create log-based metrics for checkout failure rate
 
-**Further reading:** [architecture/overview.md §13](../architecture/overview.md#13-observability--signal-ownership)
+**Further reading:** [architecture/overview.md §13](../architecture/overview.md#13-observability-signal-ownership)
 
 ---
 

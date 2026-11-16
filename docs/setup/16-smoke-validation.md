@@ -1,5 +1,7 @@
 # Smoke validation + SRE verification
 
+> **Offline until rebuild:** Hostnames and the GKE cluster from the closed reference are gone. `curl` / `kubectl` / `dig` checks below apply only after you rebuild through topics 01–15. See [setup/README.md](README.md).
+
 ## Goal
 
 Run the full **reference checklist**: confirm HTTPS on both public URLs, GitOps and policy enforcement, observability and SLOs, PagerDuty routing, Cloud Armor, and SRE artifacts (runbooks, on-call docs). When this topic passes, bootstrap is complete and the cluster meets the definition of done in the project description.
@@ -367,7 +369,7 @@ Bootstrap (topics 01–16) is complete. Recommended before teardown or a long-li
 | Alert drill    | Re-test PagerDuty routing                                        | [oncall/test-alerts.md](../sre/oncall/test-alerts.md)              |
 | Teardown       | Safe decommission when finished                                  | [teardown.md](../teardown.md)                                      |
 
-Optional after rebuild — not part of the closed reference path ([setup index](README.md#optional-after-rebuild--not-part-of-the-closed-reference)):
+Optional after rebuild (not part of the closed reference path) ([setup index](README.md#optional-after-rebuild-not-part-of-the-closed-reference)):
 
 | Step                  | Action                                     | Guide                                                                  |
 | --------------------- | ------------------------------------------ | ---------------------------------------------------------------------- |

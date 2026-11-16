@@ -16,18 +16,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Changed
 
 - Closed-reference path is topics 01–16 plus Phase 8 teardown. Topics 17–20 stay under setup as optional after rebuild only.
-- Hubs use production reference wording. Outside links stay limited to the sister platforms and Google Online Boutique.
-- Docs say **reference** instead of **pilot** (`docs/pilot-claims.md` → [`docs/reference-claims.md`](docs/reference-claims.md)).
-- Claims, evidence, and lessons pages use engineering voice only (no audience framing).
-- Aligned Binary Auth dry-run → Enforce (after topic 16), optional topics 17–20 off the smoke “next” path, NetworkPolicy/CNI honesty, and related overclaims.
-- P0 honesty: private-node / public API wording; `enable_argocd_armor` default `false`; latency SLOs labeled optional (topic 17); Phase 8 = teardown (not backup IaC).
-- P1 honesty: offline guards on ops/SLO validation; CI mirror (not `docker build`) in topic 08; game-day wording aligned to STATUS; SECURITY advisory URL; dated `0.1.0`.
-- P2 polish: short-form abbreviations; `production reference` wording; ownership/timeline on README; ROADMAP 9-B marks GD03 postmortem as lived.
-- P3 polish: softer charter/maturity wording; maintainer-only labels; proven / not-shown / deferred table on README.
-- P0 (re-audit): Phase 8 = teardown everywhere; WIF scoped to supply-chain workflows; smoke expected table vs edge hardening.
-- P1 (re-audit): CI mirror wording; setup 04 public API; NetworkPolicy CNI honesty; short-form abbreviations on setup/security/observability hubs.
-- P2 (re-audit): README grammar and game-day caveat; SECURITY/PROJECT polish; evidence and claims wording.
-- P3 (re-audit): Soften Decision headlines; refresh `.cursor` project-description (no pilot; private-node + public API).
+- Hubs use production reference wording (not pilot). Outside links stay limited to the sister platforms and Google Online Boutique.
+- Claims, evidence, and lessons pages: engineering voice; proof tables; explicit limits ([`docs/reference-claims.md`](docs/reference-claims.md)).
+- Documentation accuracy: private-node / public API; Armor default off; Phase 8 = teardown; WIF on supply-chain only; CI mirror (not source rebuild); game-day STATUS honesty; smoke expected table vs edge hardening; stable setup/architecture fragment anchors.
 
 ## [0.1.0] — 2026-07-04
 

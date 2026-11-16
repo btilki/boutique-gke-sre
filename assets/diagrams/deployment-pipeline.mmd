@@ -1,6 +1,6 @@
 flowchart LR
   A[Code merge / CI trigger] --> B[WIF auth]
-  B --> C[Build / mirror image]
+  B --> C[Mirror upstream image]
   C --> D[Trivy scan]
   D --> E[Push digest to AR]
   E --> F[cosign sign + attest]

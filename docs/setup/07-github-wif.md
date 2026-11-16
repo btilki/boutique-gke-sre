@@ -1,8 +1,10 @@
 # GitHub WIF
 
+> **Offline until rebuild:** There is no live cluster from the closed run. Apply this topic when rebuilding supply-chain CI auth. See [setup/README.md](README.md) and [docs/ci.md](../ci.md).
+
 ## Goal
 
-GitHub Actions in repository `boutique-gke-sre` authenticates to GCP project `boutique-gke` using WIF with OIDC — no downloaded service account JSON keys. A WIF pool and provider trust `token.actions.githubusercontent.com`, a dedicated CI service account receives least-privilege IAM, and workflows use `google-github-actions/auth@v2`.
+Supply-chain GitHub Actions in repository `boutique-gke-sre` (`build-scan-sign`, `mirror-platform-images`) authenticate to GCP project `boutique-gke` using WIF with OIDC — no downloaded service account JSON keys. PR-gate workflows stay in-repo and do not need GCP. A WIF pool and provider trust `token.actions.githubusercontent.com`, a dedicated CI service account receives least-privilege IAM, and those supply-chain workflows use `google-github-actions/auth@v2`.
 
 ## Why this step is required
 

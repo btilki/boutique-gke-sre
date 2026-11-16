@@ -197,7 +197,7 @@ Secret Manager (GCP)
 ```
 1. Merge or CI trigger on main
 2. Supply-chain GitHub Actions: WIF auth (OIDC → GCP SA) → mirror / Trivy / cosign
-3. Build/mirror image → Trivy scan (fail critical/high)
+3. Mirror upstream image → Trivy scan (fail critical/high)
 4. Push to Artifact Registry (immutable digest)
 5. cosign sign + SLSA/provenance attestation
 6. CI opens PR with digest in gitops/apps/boutique/values-images.yaml
@@ -326,7 +326,7 @@ Teardown destroy order: [teardown.md](../teardown.md)
 
 ---
 
-## 13. Observability — signal ownership
+## 13. Observability (signal ownership)
 
 | Signal      | Owner    | Backend            | Consumer                                 |
 | ----------- | -------- | ------------------ | ---------------------------------------- |

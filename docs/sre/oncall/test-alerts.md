@@ -8,7 +8,7 @@ Verify PagerDuty and Cloud Monitoring notification routing before relying on pro
 
 - After PagerDuty setup ([setup/14-pagerduty.md](../../setup/14-pagerduty.md))
 - Start of new on-call rotation (optional)
-- Game day 04 — alert routing
+- Game day 04 — alert routing (deferred until rebuild; see [STATUS](../game-days/reports/STATUS.md))
 
 ## Prerequisites
 
@@ -58,7 +58,7 @@ Synthetic alert or uptime check exercises the same channel path as production bu
 ## Production considerations
 
 - Run during business hours first
-- Coordinate with game day 04 for full burn-rate test
+- After rebuild, coordinate with game day 04 for a full burn-rate test
 
 ## Security considerations
 

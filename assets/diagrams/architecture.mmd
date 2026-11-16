@@ -15,7 +15,7 @@ flowchart TB
     DNS[Cloud DNS]
     CA[Cloud Armor]
 
-    subgraph GKE["Private GKE Cluster"]
+    subgraph GKE["Private-node GKE (public API)"]
       AC[Argo CD]
       KY[Kyverno]
       ESO[External Secrets]

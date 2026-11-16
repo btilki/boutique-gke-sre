@@ -49,7 +49,7 @@ Backup/restore runbooks may exist under ops docs; GKE Backup Terraform is option
 
 **Critical:** Do not skip topics 09–11 (Argo CD, ESO, Kyverno) before deploying Boutique.
 
-Optional guides after a deliberate rebuild (not part of the closed reference): [setup/README.md — Optional after rebuild](setup/README.md#optional-after-rebuild--not-part-of-the-closed-reference).
+Optional guides after a deliberate rebuild (not part of the closed reference): [setup/README.md — Optional after rebuild](setup/README.md#optional-after-rebuild-not-part-of-the-closed-reference).
 
 ## Step-by-step implementation
 
@@ -134,4 +134,4 @@ Post-smoke hardening (Binary Auth enforce, Argo CD WAF): [security/edge-hardenin
 - [architecture/overview.md](architecture/overview.md)
 - [ROADMAP.md](../ROADMAP.md)
 - After bootstrap: [16-smoke-validation.md](setup/16-smoke-validation.md), [edge-hardening.md](security/edge-hardening.md), [game-days/01-bad-deploy-rollback.md](sre/game-days/01-bad-deploy-rollback.md), [oncall/README.md](sre/oncall/README.md)
-- Optional after rebuild: [setup/README.md](setup/README.md#optional-after-rebuild--not-part-of-the-closed-reference)
+- Optional after rebuild: [setup/README.md](setup/README.md#optional-after-rebuild-not-part-of-the-closed-reference)

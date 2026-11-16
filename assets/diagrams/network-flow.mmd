@@ -11,7 +11,7 @@ flowchart TB
   end
 
   subgraph VPC["boutique-vpc"]
-    subgraph GKE["Private GKE"]
+    subgraph GKE["Private-node GKE (public API)"]
       subgraph NS_B["namespace: boutique"]
         FE[frontend]
         SVC[Microservices]

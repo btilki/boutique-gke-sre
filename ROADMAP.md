@@ -20,7 +20,7 @@ Phased delivery for **boutique-gke-sre** — one phase per session: validate →
 | **9-C** | Terraform monitoring + GKE Backup modules             | M    | Optional scaffold (after rebuild) | [19](docs/setup/19-monitoring-backup-terraform.md) |
 | **9-D** | Error-budget ritual, capacity baseline, toil          | M    | Optional scaffold (after rebuild) | [20](docs/setup/20-sre-practices-capacity-toil.md) |
 
-Phases 9-A–9-D are not part of the closed reference. They appear only under [setup — Optional after rebuild](docs/setup/README.md#optional-after-rebuild--not-part-of-the-closed-reference).
+Phases 9-A–9-D are not part of the closed reference. They appear only under [setup — Optional after rebuild](docs/setup/README.md#optional-after-rebuild-not-part-of-the-closed-reference).
 
 ## Dependency graph
 
@@ -50,7 +50,7 @@ Optional follow-ups below are maintainer backlog, not closed-path claims.
 
 ## Optional after rebuild — scaffold inventory (9-A–9-D)
 
-Not part of the closed reference. File map for maintainers; apply only via [setup optional section](docs/setup/README.md#optional-after-rebuild--not-part-of-the-closed-reference).
+Not part of the closed reference. File map for maintainers; apply only via [setup optional section](docs/setup/README.md#optional-after-rebuild-not-part-of-the-closed-reference).
 
 ### 9-A
 

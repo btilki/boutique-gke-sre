@@ -1,6 +1,6 @@
 # Lessons learned — boutique-gke-sre
 
-Concrete takeaways from the closed production reference (topics 01–16 and Phase 8 teardown). Not a full postmortem — only items backed by the repo, screenshots, or the Redis cart game day (solo run).
+Notes from topics 01–16 and Phase 8 teardown. Not a full postmortem — only items backed by the repo, screenshots, or Game day 03 (`redis-cart`; solo run).
 
 ---
 

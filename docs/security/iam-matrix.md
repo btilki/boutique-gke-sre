@@ -14,7 +14,7 @@ Map identities to GCP/Kubernetes permissions. Expanded in Phase 3 (WIF) and Phas
 
 | Identity                                         | Purpose                     | GCP roles (indicative)                                                                                                  |
 | ------------------------------------------------ | --------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
-| `github-ci@boutique-gke.iam.gserviceaccount.com` | CI build, push, sign        | Repo-scoped `roles/artifactregistry.writer` on `boutique` (via Terraform module); WIF impersonation only — no JSON keys |
+| `github-ci@boutique-gke.iam.gserviceaccount.com` | CI mirror, push, sign       | Repo-scoped `roles/artifactregistry.writer` on `boutique` (via Terraform module); WIF impersonation only — no JSON keys |
 | `terraform-ci@...` (optional)                    | `terraform plan` in Actions | `roles/viewer` + scoped write for plan-only                                                                             |
 
 WIF binding: GitHub OIDC `attribute.repository` = `ORG/boutique-gke-sre`.

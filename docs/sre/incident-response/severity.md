@@ -48,7 +48,7 @@ Remaining error budget at **0%** → treat as **SEV2** minimum per [error-budget
 ## Validation
 
 - Tabletop: given scenario, on-call picks correct SEV in &lt; 2 minutes
-- Game day 04 validates alert → severity → runbook path
+- Game day 04 (deferred until rebuild) covers alert → severity → runbook path
 
 ## Troubleshooting
 

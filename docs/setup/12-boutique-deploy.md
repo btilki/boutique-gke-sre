@@ -229,7 +229,7 @@ See runbook [bad-deploy-rollback.md](../sre/runbooks/bad-deploy-rollback.md) for
 
 ## Best practices
 
-- Every image change flows: CI build → Trivy scan → cosign sign → digest PR → review → manual Argo sync
+- Every image change flows: CI mirror → Trivy scan → cosign sign → digest PR → review → manual Argo sync
 - Never hand-edit running deployments — change Git and sync
 - Run `argocd app diff` before every production sync
 - Keep `values.yaml` (config) and `values-images.yaml` (digests) separate for clean CI automation

@@ -19,7 +19,7 @@ Shipping Online Boutique to a cluster is not the hard part. The hard part is rel
 - **One private-node regional GKE cluster** in project `boutique-gke` (public Kubernetes API) — namespaces for isolation, not multi-cluster blast radius ([ADR-001](docs/adr/001-single-cluster.md)).
 - **Git is the deploy source of truth** — GitHub Actions mirrors, scans (Trivy), signs (cosign), and opens digest PRs. Operators sync Argo by hand ([ADR-003](docs/adr/003-manual-argocd-sync.md)).
 - **Admission policy blocks mutable tags and unsigned images** — Kyverno enforces digest-only images, probes, resources, NetworkPolicy labels, and ESO-only secrets. Binary Authorization checks attestations when the cluster admits images.
-- **SRE after deployment** — browse and checkout availability SLOs in Cloud Monitoring, multi-window burn alerts, PagerDuty with runbook links, game day 03 (alert path not verified), and ordered teardown.
+- **SRE after deployment** — browse and checkout availability SLOs in Cloud Monitoring, multi-window burn alerts, PagerDuty with runbook links, Game day 03 (alert path not verified), and ordered teardown.
 
 ## Result
 
@@ -46,7 +46,7 @@ These screenshots are from when the stack was live. Full catalog: [`docs/evidenc
 | Status                        | Examples                                                                                                                                          |
 | ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Proven in screenshots         | Storefront HTTPS, Argo Healthy/Synced, `build-scan-sign`, availability SLOs; more in evidence (Kyverno, Binary Authorization, PagerDuty, Grafana) |
-| Documented, no screenshot yet | Digest PR diff, Kyverno deny of `:latest`, Argo OutOfSync→Sync, Binary Authorization deny on `redis-cart`, teardown console                       |
+| Documented, no screenshot yet | Digest PR diff, Kyverno deny of `:latest`, Argo OutOfSync → Sync, Binary Authorization deny on `redis-cart`, teardown console                     |
 | Deferred                      | Game days 01/02/04; latency SLOs (topic 17); topics 18–20 scaffolds                                                                               |
 
 **Storefront** — `https://boutique.biroltilki.art` over HTTPS (when the reference was live):
@@ -73,7 +73,7 @@ More: Kyverno, Binary Authorization, PagerDuty test incident, Grafana, Cloud Tra
 
 - **Public Kubernetes API endpoint** — nodes are private; the control plane is not. A rebuild would set a private endpoint and master authorized networks ([`SECURITY.md`](SECURITY.md)).
 - **Single cluster, one Boutique namespace** — fine for a cost-capped reference; not true env isolation.
-- **`redis-cart` attestation gap** — game day 03 showed Binary Authorization blocking an unsigned restore; PagerDuty ack was not exercised; postmortem actions are still open.
+- **`redis-cart` attestation gap** — Game day 03 showed Binary Authorization blocking an unsigned restore; PagerDuty ack was not exercised; postmortem actions are still open.
 - **Storefront Cloud Armor is a console procedure** — Terraform Armor for Argo CD is off by default (`enable_argocd_armor = false`); enable after topic 16. Storefront WAF was topic 15 by hand.
 - **NetworkPolicy may not be enforced by the CNI** — Kyverno requires the label; the GKE module does not pin Dataplane V2 or Calico.
 
@@ -156,7 +156,7 @@ boutique-gke-sre/
 ├── docs/            # Setup topics, SRE runbooks, security, architecture
 ├── scripts/         # Bootstrap checks, game days, teardown helpers
 ├── tests/           # Policy and manifest validation
-└── .github/         # CI workflows (WIF)
+└── .github/         # CI workflows (WIF on supply-chain)
 ```
 
 ---

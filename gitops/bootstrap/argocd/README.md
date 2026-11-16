@@ -8,11 +8,11 @@ Bootstrap manifests for Argo CD on `argocd.boutique.biroltilki.art` (**inactive*
 
 ## Inputs
 
-| Input       | Description                                              |
-| ----------- | -------------------------------------------------------- |
-| GKE cluster | Private regional cluster (`boutique-gke`)                |
-| DNS         | `argocd.boutique.biroltilki.art` → static IP (Terraform) |
-| TLS         | Google-managed certificate on Ingress                    |
+| Input       | Description                                                |
+| ----------- | ---------------------------------------------------------- |
+| GKE cluster | Private-node regional cluster, public API (`boutique-gke`) |
+| DNS         | `argocd.boutique.biroltilki.art` → static IP (Terraform)   |
+| TLS         | Google-managed certificate on Ingress                      |
 
 ## Outputs
 

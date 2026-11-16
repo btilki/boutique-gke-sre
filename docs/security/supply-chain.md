@@ -18,9 +18,9 @@ Document DevSecOps controls for boutique-gke-sre: authentication, secrets, image
 ## Architecture
 
 ```
-CI (WIF) → Trivy → AR → cosign → PR digest → Argo sync
+Supply-chain CI (WIF) → mirror → Trivy → AR → cosign → PR digest → Argo CD sync
   → Binary Authorization → Kyverno → NetworkPolicy → workload
-Secrets: Secret Manager → ESO → Pod (never plain Secret in Git)
+PR-gate workflows stay in-repo (no WIF). Secrets: Secret Manager → ESO → Pod (never plain Secret in Git)
 ```
 
 Pipeline uses Artifact Registry for images and Binary Authorization at deploy time.

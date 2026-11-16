@@ -6,7 +6,7 @@
 
 ## Purpose
 
-Rebuild private GKE cluster and restore GitOps state from Git.
+Rebuild private-node GKE cluster (public API endpoint by default) and restore GitOps state from Git.
 
 ## Prerequisites
 

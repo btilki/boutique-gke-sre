@@ -17,7 +17,7 @@ Shipping Online Boutique to a cluster is not the hard part. The hard part is rel
 ## Decision
 
 - **One private-node regional GKE cluster** in project `boutique-gke` (public Kubernetes API) — namespaces for isolation, not multi-cluster blast radius ([ADR-001](docs/adr/001-single-cluster.md)).
-- **Git is the deploy source of truth** — GitHub Actions mirrors, scans (Trivy), signs (cosign), and opens digest PRs. Operators sync Argo by hand ([ADR-003](docs/adr/003-manual-argocd-sync.md)).
+- **Git is the deploy source of truth** — GitHub Actions mirrors, scans (Trivy), signs (cosign), and opens digest PRs. Operators sync Argo CD by hand ([ADR-003](docs/adr/003-manual-argocd-sync.md)).
 - **Admission policy blocks mutable tags and unsigned images** — Kyverno enforces digest-only images, probes, resources, NetworkPolicy labels, and ESO-only secrets. Binary Authorization checks attestations when the cluster admits images.
 - **SRE after deployment** — browse and checkout availability SLOs in Cloud Monitoring, multi-window burn alerts, PagerDuty with runbook links, Game day 03 (alert path not verified), and ordered teardown.
 
@@ -33,7 +33,7 @@ Topics 01–16 completed, then teardown. Documentation and screenshots remain; t
 | --------- | ------------------------------------------------------------------------------------------------------ |
 | What      | SRE-focused private-node GKE (public API) for Online Boutique in `europe-west1`                        |
 | Hard rule | Reliability **after deployment** — SLOs → burn alerts → PagerDuty → runbooks                           |
-| CI model  | GitHub Actions; WIF on supply-chain jobs; **CI does not sync Argo** — digest PRs only                  |
+| CI model  | GitHub Actions; WIF on supply-chain jobs; **CI does not sync Argo CD** — digest PRs only               |
 | Scope     | Production reference — one project, one cluster; not multi-region HA                                   |
 | Stack     | Terraform · GKE · Argo CD · Kyverno · ESO · Binary Authorization · OTel · Cloud Monitoring · PagerDuty |
 
@@ -71,7 +71,7 @@ More: Kyverno, Binary Authorization, PagerDuty test incident, Grafana, Cloud Tra
 
 ## Tradeoffs / what I would change for real production
 
-- **Public Kubernetes API endpoint** — nodes are private; the control plane is not. A rebuild would set a private endpoint and master authorized networks ([`SECURITY.md`](SECURITY.md)).
+- **Public Kubernetes API endpoint** — nodes are private; the control plane is not. IaC today keeps `enable_private_endpoint = false`. A hardened rebuild would set a private endpoint and master authorized networks ([`SECURITY.md`](SECURITY.md)).
 - **Single cluster, one Boutique namespace** — fine for a cost-capped reference; not true env isolation.
 - **`redis-cart` attestation gap** — Game day 03 showed Binary Authorization blocking an unsigned restore; PagerDuty ack was not exercised; postmortem actions are still open.
 - **Storefront Cloud Armor is a console procedure** — Terraform Armor for Argo CD is off by default (`enable_argocd_armor = false`); enable after topic 16. Storefront WAF was topic 15 by hand.
@@ -107,15 +107,24 @@ flowchart LR
   Users((Users)) -->|HTTPS TLS + Armor| Boutique
 ```
 
-Manual Argo sync after merge. Details: [`ARCHITECTURE.md`](ARCHITECTURE.md) · [`docs/architecture/overview.md`](docs/architecture/overview.md).
+Manual Argo CD sync after merge. Details: [`ARCHITECTURE.md`](ARCHITECTURE.md) · [`docs/architecture/overview.md`](docs/architecture/overview.md).
 
 ---
 
-## Repository map and navigation
-
-This map shows repository layout, platform components, and where each area lives.
+## Repository map
 
 ![Boutique GKE SRE — Repository Map and Navigation](assets/boutique-gke-sre-repository-map.png)
+
+```text
+boutique-gke-sre/
+├── terraform/       # GCP IaC (networking, GKE, WIF, AR, Binary Auth, …)
+├── gitops/          # Argo CD apps, Kyverno, NetworkPolicy, Boutique Helm
+├── observability/   # OTel, Grafana, SLO / alert YAML
+├── docs/            # Setup topics, SRE runbooks, security, architecture
+├── scripts/         # Bootstrap checks, game days, teardown helpers
+├── tests/           # Policy and manifest validation
+└── .github/         # CI workflows (WIF on supply-chain)
+```
 
 Full tree: [`REPOSITORY_STRUCTURE.md`](REPOSITORY_STRUCTURE.md)
 
@@ -143,21 +152,6 @@ Full tree: [`REPOSITORY_STRUCTURE.md`](REPOSITORY_STRUCTURE.md)
 | Ingress / TLS       | Google-managed certs, static IP, Cloud Armor                                     |
 | CI / supply chain   | GitHub Actions, WIF, Artifact Registry, Trivy, cosign, Binary Authorization      |
 | Observability / SRE | OTel, Cloud Trace, Managed Prometheus, Grafana, Cloud Monitoring SLOs, PagerDuty |
-
----
-
-## Repository layout
-
-```text
-boutique-gke-sre/
-├── terraform/       # GCP IaC (networking, GKE, WIF, AR, Binary Auth, …)
-├── gitops/          # Argo CD apps, Kyverno, NetworkPolicy, Boutique Helm
-├── observability/   # OTel, Grafana, SLO / alert YAML
-├── docs/            # Setup topics, SRE runbooks, security, architecture
-├── scripts/         # Bootstrap checks, game days, teardown helpers
-├── tests/           # Policy and manifest validation
-└── .github/         # CI workflows (WIF on supply-chain)
-```
 
 ---
 

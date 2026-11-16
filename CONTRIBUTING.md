@@ -1,5 +1,7 @@
 # Contributing
 
+This repository is a **closed production reference** — there is no live cluster from the operated run. Contributions are docs, policies, CI validation, and rebuild readiness. Hard rules: [`docs/ci.md`](docs/ci.md). Rebuild path: [`docs/setup/README.md`](docs/setup/README.md).
+
 ## Principles
 
 - **Git is source of truth** — no manual `kubectl apply` for GitOps-managed workloads
@@ -13,7 +15,7 @@
 2. Make changes; run `make validate` and `pre-commit run --all-files`
 3. Open PR with completed checklist (`.github/PULL_REQUEST_TEMPLATE.md`)
 4. Review and merge
-5. For deploys: manual Argo CD sync after merge
+5. For deploys (after rebuild): manual Argo CD sync after merge
 
 ## Releases
 

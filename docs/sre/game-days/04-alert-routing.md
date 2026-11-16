@@ -6,7 +6,7 @@ End-to-end verification that Cloud Monitoring alerts reach PagerDuty with correc
 
 ## When to use
 
-After [setup/14-pagerduty.md](../../setup/14-pagerduty.md); before reference sign-off.
+After [setup/14-pagerduty.md](../../setup/14-pagerduty.md) on a rebuild. **Deferred** on the closed path — see [STATUS](reports/STATUS.md).
 
 ## Prerequisites
 

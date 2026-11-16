@@ -30,7 +30,7 @@ These are deliberate reference choices. Each row links to the owning file.
 
 - “This is production-ready.” It is a **production reference** on one cluster.
 - “Reliability stops at deploy.” The lived story is reliability **after deployment** — SLOs, burn alerts, PagerDuty, runbooks.
-- “CI syncs the cluster.” CI opens digest PRs. Operators sync Argo by hand.
+- “CI syncs the cluster.” CI opens digest PRs. Operators sync Argo CD by hand.
 - “Binary Authorization and Kyverno closed every gap.” See the limits table — especially unsigned `redis-cart` and NetworkPolicy enforcement.
 - “The API is private because the nodes are private.” Nodes are private; the control plane endpoint is public.
 

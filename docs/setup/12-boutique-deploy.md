@@ -74,7 +74,7 @@ After a green `build-scan-sign` run, **manifest-digest-pr** opens (or updates) a
 2. Merge to `main`
 3. Continue with step 1 below
 
-**Re-deploys:** skip this section; merge new digest PRs from CI after image rebuilds only.
+**Re-deploys:** skip this section; merge new digest PRs from CI after upstream mirror / digest updates only.
 
 ### 1. Verify digest-only image values
 

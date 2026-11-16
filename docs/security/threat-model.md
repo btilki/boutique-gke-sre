@@ -6,15 +6,15 @@ Document trust boundaries and primary threats for the single-cluster Online Bout
 
 ## Trust zones
 
-| Zone                    | Trust level      | Entry points                            |
-| ----------------------- | ---------------- | --------------------------------------- |
-| Internet                | Untrusted        | HTTPS to boutique and argocd hostnames  |
-| Edge (Cloud Armor + LB) | Semi-trusted     | TLS termination, WAF                    |
-| Cluster edge (Ingress)  | Trusted platform | Host-based routing                      |
-| `boutique` namespace    | App trust        | NetworkPolicy-segmented microservices   |
-| Platform namespaces     | Elevated         | Argo CD, Kyverno, ESO — restricted RBAC |
-| GCP control plane       | Cloud trust      | Workload Identity scoped per K8s SA     |
-| CI (GitHub Actions)     | Automation trust | WIF-bound; repo/ref conditions          |
+| Zone                    | Trust level      | Entry points                                                 |
+| ----------------------- | ---------------- | ------------------------------------------------------------ |
+| Internet                | Untrusted        | HTTPS to boutique and argocd hostnames                       |
+| Edge (Cloud Armor + LB) | Semi-trusted     | TLS termination, WAF                                         |
+| Cluster edge (Ingress)  | Trusted platform | Host-based routing                                           |
+| `boutique` namespace    | App trust        | NetworkPolicy-segmented microservices                        |
+| Platform namespaces     | Elevated         | Argo CD, Kyverno, ESO — restricted RBAC                      |
+| GCP control plane       | Cloud trust      | Workload Identity scoped per K8s SA                          |
+| Supply-chain CI         | Automation trust | WIF-bound (`build-scan-sign`, mirror); PR gates stay in-repo |
 
 ## Threat catalog
 
@@ -27,7 +27,7 @@ The mitigation column is the intended control. Residual gaps are listed in the n
 | Malicious container image      | Trivy scan; cosign; Binary Authorization; digest-only |
 | Lateral movement in cluster    | NetworkPolicy default-deny                            |
 | DDoS / abuse at edge           | Cloud Armor rate limits and OWASP CRS                 |
-| Unauthorized deploy            | Manual Argo sync; PR review; Kyverno                  |
+| Unauthorized deploy            | Manual Argo CD sync; PR review; Kyverno               |
 | Data exfil via compromised pod | Egress NetworkPolicy; least-privilege WI              |
 
 ## Residual risks

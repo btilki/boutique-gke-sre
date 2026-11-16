@@ -7,14 +7,14 @@ Phased delivery for **boutique-gke-sre** — one phase per session: validate →
 
 | Phase   | Focus                                                 | Size | Status                            | Setup topics                                       |
 | ------- | ----------------------------------------------------- | ---- | --------------------------------- | -------------------------------------------------- |
-| **1**   | Repo scaffold + Terraform foundation                  | S    | ✅ Complete                       | 01–03                                              |
-| **2**   | GKE + DNS + ingress + TLS                             | L    | ✅ Complete                       | 04–06                                              |
-| **3**   | WIF + Artifact Registry + CI                          | M    | ✅ Complete                       | 07–08                                              |
-| **4**   | Argo CD + policies + ESO + NetworkPolicy (**gate**)   | L    | ✅ Complete                       | 09–11                                              |
-| **5**   | Online Boutique deploy                                | M    | ✅ Complete                       | 12                                                 |
-| **6**   | Observability + SLOs                                  | L    | ✅ Complete                       | 13                                                 |
-| **7**   | SRE ops + smoke validation                            | M    | ✅ Complete                       | 14–16                                              |
-| **8**   | Teardown                                              | M    | ✅ Complete                       | [teardown](docs/teardown.md)                       |
+| **1**   | Repo scaffold + Terraform foundation                  | S    | Complete                          | 01–03                                              |
+| **2**   | GKE + DNS + ingress + TLS                             | L    | Complete                          | 04–06                                              |
+| **3**   | WIF + Artifact Registry + CI                          | M    | Complete                          | 07–08                                              |
+| **4**   | Argo CD + policies + ESO + NetworkPolicy (**gate**)   | L    | Complete                          | 09–11                                              |
+| **5**   | Online Boutique deploy                                | M    | Complete                          | 12                                                 |
+| **6**   | Observability + SLOs                                  | L    | Complete                          | 13                                                 |
+| **7**   | SRE ops + smoke validation                            | M    | Complete                          | 14–16                                              |
+| **8**   | Teardown                                              | M    | Complete                          | [teardown](docs/teardown.md)                       |
 | **9-A** | Latency SLOs + burn alerts + Grafana dashboards       | M    | Optional scaffold (after rebuild) | [17](docs/setup/17-latency-slos-dashboards.md)     |
 | **9-B** | HA GitOps, Argo uptime, game-day ops, GD03 postmortem | M    | Optional scaffold (after rebuild) | [18](docs/setup/18-sre-operability-game-days.md)   |
 | **9-C** | Terraform monitoring + GKE Backup modules             | M    | Optional scaffold (after rebuild) | [19](docs/setup/19-monitoring-backup-terraform.md) |

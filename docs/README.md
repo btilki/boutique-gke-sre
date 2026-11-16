@@ -8,12 +8,13 @@ If this file disagrees with [`setup/`](setup/README.md) on bootstrap steps, the 
 
 ## Where to start
 
-| I want to…                     | Read                                                                                                                                                                                                              |
-| ------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Understand the project quickly | [`../ARCHITECTURE.md`](../ARCHITECTURE.md) · [ADR-003](adr/003-manual-argocd-sync.md)                                                                                                                             |
-| See reference proof            | [`reference-claims.md`](reference-claims.md) · [`evidence/`](evidence/README.md) · [`lessons-learned.md`](lessons-learned.md)                                                                                     |
-| Review design and SRE          | [`architecture/overview.md`](architecture/overview.md) · [`sre/`](sre/README.md) · [`ci.md`](ci.md) · [`security/threat-model.md`](security/threat-model.md) · [`operations/rollback.md`](operations/rollback.md) |
-| Rebuild or operate             | [`setup/`](setup/README.md) (topics 01–16) · [`teardown.md`](teardown.md) · [`operations/operations-runbook.md`](operations/operations-runbook.md)                                                                |
+Full map: [`../README.md`](../README.md#where-to-start).
+
+| I want to…          | Read                                                                               |
+| ------------------- | ---------------------------------------------------------------------------------- |
+| See reference proof | [`reference-claims.md`](reference-claims.md) · [`evidence/`](evidence/README.md)   |
+| Rebuild             | [`setup/`](setup/README.md) (topics 01–16) · [`teardown.md`](teardown.md)          |
+| Operate day-2       | [`operations/`](operations/README.md) · [`sre/`](sre/README.md) · [`ci.md`](ci.md) |
 
 ---
 

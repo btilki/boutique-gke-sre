@@ -76,12 +76,12 @@ Promote a new application revision from Git to the cluster via the documented CI
 ### Commands
 
 ```bash
-# 1. Trigger image build (when upstream version changes)
+# 1. Trigger image mirror (when upstream version changes)
 # GitHub → Actions → build-scan-sign → Run workflow
 #   upstream_version: v0.10.5
 #   redis_tag: 7.2-alpine
 
-# 2. After green CI, review and merge digest PR (updates values-images.yaml)
+# 2. After green mirror/sign CI, review and merge digest PR (updates values-images.yaml)
 grep '@sha256:' gitops/apps/boutique/values-images.yaml
 
 # 3. Review Argo CD diff before sync
@@ -797,7 +797,7 @@ Fire test alert per [test-alerts.md](../sre/oncall/test-alerts.md); confirm Page
 
 - Every alert must be actionable
 - Tune thresholds after false positives — do not disable permanently
-- Game day 04 validates alert routing quarterly
+- After rebuild, Game day 04 exercises alert routing (deferred on the closed path; see [STATUS](../sre/game-days/reports/STATUS.md))
 
 **Further reading:** [14-pagerduty.md](../setup/14-pagerduty.md) · [burn-rate-alerting.md](../sre/slos/burn-rate-alerting.md)
 
@@ -1369,14 +1369,14 @@ Identify safe automation candidates to reduce toil while preserving manual sync 
 
 ### Recommended future automation
 
-| Opportunity                   | Benefit                    | Guardrails                                          |
-| ----------------------------- | -------------------------- | --------------------------------------------------- |
-| Post-sync smoke in CI         | Catch regressions early    | Manual Argo sync remains; smoke after operator sync |
-| Scheduled backup verification | Prove RPO continuously     | Alert on failure; no auto-restore                   |
-| Error budget dashboard bot    | Weekly Slack/email summary | Read-only; checklist exists today                   |
-| Certificate expiry synthetic  | Early warning              | Complement managed cert auto-renewal                |
-| Orphan scan as scheduled GHA  | Reminder without local run | Report-only; needs GCP WIF in Actions               |
-| Automated game day scheduler  | Quarterly reminder         | Human executes inject steps                         |
+| Opportunity                   | Benefit                    | Guardrails                                             |
+| ----------------------------- | -------------------------- | ------------------------------------------------------ |
+| Post-sync smoke in CI         | Catch regressions early    | Manual Argo CD sync remains; smoke after operator sync |
+| Scheduled backup verification | Prove RPO continuously     | Alert on failure; no auto-restore                      |
+| Error budget dashboard bot    | Weekly Slack/email summary | Read-only; checklist exists today                      |
+| Certificate expiry synthetic  | Early warning              | Complement managed cert auto-renewal                   |
+| Orphan scan as scheduled GHA  | Reminder without local run | Report-only; needs GCP WIF in Actions                  |
+| Automated game day scheduler  | Quarterly reminder         | Human executes inject steps                            |
 
 ### Commands
 

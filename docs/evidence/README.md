@@ -4,6 +4,19 @@ Screenshots from the production reference while it was live. The GKE cluster and
 
 Files sit under [`assets/diagrams/`](../../assets/diagrams/). The README [Proof](../../README.md#proof) section shows a short crop of the same set.
 
+### What each capture omits
+
+| Capture              | Shown                         | Not shown                     |
+| -------------------- | ----------------------------- | ----------------------------- |
+| Storefront HTTPS     | Public TLS storefront         | Checkout success; Armor block |
+| Argo CD apps         | Healthy / Synced              | OutOfSync → Sync              |
+| `build-scan-sign`    | Trivy → push → cosign         | Digest PR diff; BA deny       |
+| Browse/checkout SLOs | Availability SLOs             | Multi-window burn firing      |
+| PagerDuty test       | Events API V2 + TEST incident | Live SEV from traffic         |
+| Kyverno Enforce      | Five ClusterPolicies          | Live deny of `:latest`        |
+
+Full gap list: [Not shown yet](#not-shown-yet).
+
 ---
 
 ## Captured
@@ -12,7 +25,7 @@ Files sit under [`assets/diagrams/`](../../assets/diagrams/). The README [Proof]
 
 ![Online Boutique storefront over HTTPS](../../assets/diagrams/boutique-storefront-https.png)
 
-`https://boutique.biroltilki.art` over Google-managed TLS (when the reference was live). Shows the public storefront. It does not show a successful checkout or a Cloud Armor block.
+`https://boutique.biroltilki.art` over Google-managed TLS (when the reference was live).
 
 File: [`boutique-storefront-https.png`](../../assets/diagrams/boutique-storefront-https.png)
 
@@ -20,7 +33,7 @@ File: [`boutique-storefront-https.png`](../../assets/diagrams/boutique-storefron
 
 ![Argo CD applications healthy and synced](../../assets/diagrams/argocd-applications-healthy-synced.png)
 
-`argocd.boutique.biroltilki.art` — Boutique and platform apps Synced and Healthy at capture. Manual sync was the reference rule. This crop does not show an OutOfSync app moving to Synced.
+`argocd.boutique.biroltilki.art` — Boutique and platform apps Synced and Healthy at capture. Manual sync was the reference rule.
 
 File: [`argocd-applications-healthy-synced.png`](../../assets/diagrams/argocd-applications-healthy-synced.png)
 
@@ -28,7 +41,7 @@ File: [`argocd-applications-healthy-synced.png`](../../assets/diagrams/argocd-ap
 
 ![GitHub Actions build-scan-sign success](../../assets/diagrams/github-actions-build-scan-sign-success.png)
 
-Green `build-scan-sign` run: Trivy → push to Artifact Registry → cosign. This crop does not show the digest PR diff or a Binary Authorization deny.
+Green `build-scan-sign` run: Trivy → push to Artifact Registry → cosign.
 
 File: [`github-actions-build-scan-sign-success.png`](../../assets/diagrams/github-actions-build-scan-sign-success.png)
 
@@ -36,7 +49,7 @@ File: [`github-actions-build-scan-sign-success.png`](../../assets/diagrams/githu
 
 ![GitHub Actions Trivy scan failure](../../assets/diagrams/github-actions-trivy-scan-failure.png)
 
-Trivy stopped the pipeline on critical/high findings before the upstream-mirror ignore baseline was in place. Shows that the scan gate can fail the job.
+Trivy stopped the pipeline on critical/high findings before the upstream-mirror ignore baseline was in place.
 
 File: [`github-actions-trivy-scan-failure.png`](../../assets/diagrams/github-actions-trivy-scan-failure.png)
 
@@ -44,7 +57,7 @@ File: [`github-actions-trivy-scan-failure.png`](../../assets/diagrams/github-act
 
 ![Browse and checkout SLO dashboard](../../assets/diagrams/slo-browse-checkout.png)
 
-Availability SLOs for browse and checkout in Cloud Monitoring. Shows SLOs from when the stack was live. It does not show a multi-window burn chart firing.
+Availability SLOs for browse and checkout in Cloud Monitoring from when the stack was live.
 
 File: [`slo-browse-checkout.png`](../../assets/diagrams/slo-browse-checkout.png)
 
@@ -52,7 +65,7 @@ File: [`slo-browse-checkout.png`](../../assets/diagrams/slo-browse-checkout.png)
 
 ![Burn alert policy with runbook URL](../../assets/diagrams/alert-policy-runbook-link.png)
 
-Alert policy documentation label with a runbook URL in this repository. Shows the runbook URL on the alert policy without opening PagerDuty.
+Alert policy documentation label with a runbook URL in this repository (without opening PagerDuty).
 
 File: [`alert-policy-runbook-link.png`](../../assets/diagrams/alert-policy-runbook-link.png)
 
@@ -62,7 +75,7 @@ File: [`alert-policy-runbook-link.png`](../../assets/diagrams/alert-policy-runbo
 
 ![PagerDuty test incident](../../assets/diagrams/pagerduty-test-incident.png)
 
-Service wired to Events API V2, plus a TEST alert that opened an incident. Shows routing on the reference. It does not show a real SEV from live traffic.
+Service wired to Events API V2, plus a TEST alert that opened an incident.
 
 Files: [`pagerduty-service-events-api-v2.png`](../../assets/diagrams/pagerduty-service-events-api-v2.png) · [`pagerduty-test-incident.png`](../../assets/diagrams/pagerduty-test-incident.png)
 
@@ -70,7 +83,7 @@ Files: [`pagerduty-service-events-api-v2.png`](../../assets/diagrams/pagerduty-s
 
 ![Kyverno five policies](../../assets/diagrams/kyverno-five-policies.png)
 
-Digest-only images, probes, resources, NetworkPolicy labels, and ESO-only secrets in Enforce. This crop does not show a live deny of `:latest`.
+Digest-only images, probes, resources, NetworkPolicy labels, and ESO-only secrets in Enforce.
 
 File: [`kyverno-five-policies.png`](../../assets/diagrams/kyverno-five-policies.png)
 

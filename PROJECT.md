@@ -6,8 +6,8 @@ Production SRE reference for [Google Online Boutique](https://github.com/GoogleC
 
 ## Goals
 
-1. Run Online Boutique on one private-node GKE cluster with GitOps and supply-chain controls
-2. Operate browse/checkout availability SLOs, burn alerts, runbooks, and at least one game day
+1. Run Online Boutique on one private-node GKE cluster (public API) with GitOps and supply-chain controls
+2. Operate browse and checkout availability SLOs, burn alerts, runbooks, and at least one game day
 3. Keep bootstrap and teardown documented so the stack can be rebuilt or removed without tribal knowledge
 
 → Architecture: [ARCHITECTURE.md](ARCHITECTURE.md) · [docs/architecture/overview.md](docs/architecture/overview.md)
@@ -22,7 +22,7 @@ Production SRE reference for [Google Online Boutique](https://github.com/GoogleC
 
 - HTTPS on `boutique.biroltilki.art` and `argocd.boutique.biroltilki.art` (when live)
 - Kyverno enforced; digest-only images; ESO-only secrets
-- SLOs + burn alerts with runbook links; PagerDuty test incident validated
+- SLOs + burn alerts with runbook links; PagerDuty test incident validated (topic 14 — not Game day 04)
 - Game day 03 executed (alert path not verified); infrastructure decommissioned
 
 Optional guides after a deliberate rebuild live under [`docs/setup/README.md`](docs/setup/README.md). They are not part of this checklist.

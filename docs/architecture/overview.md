@@ -361,15 +361,15 @@ Teardown destroy order: [teardown.md](../teardown.md)
 
 ## 15. Tradeoffs
 
-| Decision         | Chosen                  | Rejected                   | Rationale                               |
-| ---------------- | ----------------------- | -------------------------- | --------------------------------------- |
-| One cluster      | Namespace isolation     | Multi-project/cluster      | Cost, simplicity; patterns transferable |
-| Manual Argo sync | Operator approves       | Auto-sync                  | No surprise deploys; prod discipline    |
-| No service mesh  | NetworkPolicy + Ingress | Istio/Linkerd              | Ops burden exceeds Boutique needs       |
-| Upstream images  | Mirror + digest pin     | Custom fork                | SRE depth over app dev                  |
-| GCE Ingress      | GCP LB + Armor          | nginx-only                 | Native TLS, Armor, static IP            |
-| WIF              | OIDC federation         | SA JSON keys               | Security baseline                       |
-| ESO-only secrets | Secret Manager          | Sealed Secrets / plain K8s | GCP-native audit trail                  |
+| Decision            | Chosen                  | Rejected                   | Rationale                               |
+| ------------------- | ----------------------- | -------------------------- | --------------------------------------- |
+| One cluster         | Namespace isolation     | Multi-project/cluster      | Cost, simplicity; patterns transferable |
+| Manual Argo CD sync | Operator approves       | Auto-sync                  | No surprise deploys; prod discipline    |
+| No service mesh     | NetworkPolicy + Ingress | Istio/Linkerd              | Ops burden exceeds Boutique needs       |
+| Upstream images     | Mirror + digest pin     | Custom fork                | SRE depth over app dev                  |
+| GCE Ingress         | GCP LB + Armor          | nginx-only                 | Native TLS, Armor, static IP            |
+| WIF                 | OIDC federation         | SA JSON keys               | Security baseline                       |
+| ESO-only secrets    | Secret Manager          | Sealed Secrets / plain K8s | GCP-native audit trail                  |
 
 ADRs: [001](../adr/001-single-cluster.md) · [002](../adr/002-wif-over-sa-keys.md) · [003](../adr/003-manual-argocd-sync.md)
 

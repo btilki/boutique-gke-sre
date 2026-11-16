@@ -2,11 +2,13 @@
 
 ## Reporting vulnerabilities
 
-If you discover a security issue, please report it responsibly.
+This repository is a closed reference (no live cluster from the operated run). Report vulnerabilities in the docs, IaC, workflows, or manifests responsibly.
 
 **Contact:** Open a private [GitHub Security Advisory](https://github.com/btilki/boutique-gke-sre/security/advisories) for this repository. Do not open a public issue for exploitable vulnerabilities.
 
 ## Design principles
+
+Closed-run posture; gaps are listed under Current limits.
 
 - **No long-lived GCP keys in GitHub** — WIF on supply-chain workflows; no JSON keys
 - **No secrets in Git** — gitleaks in pre-commit; Secret Manager via ESO

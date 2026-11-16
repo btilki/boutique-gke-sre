@@ -35,7 +35,7 @@ Workflow YAML stays in Git under [`.github/workflows/`](../.github/workflows/). 
 | `ci.yml`                     | Terraform validate, runbook lint, Kyverno tests, digest-only, kubeconform | Every PR          |
 | `terraform-plan.yml`         | Terraform plan on PR                                                      | Topic 01+         |
 | `build-scan-sign.yml`        | Mirror, Trivy, push, cosign (`workflow_dispatch`)                         | Topics 07–08 · 12 |
-| `manifest-digest-pr.yml`     | Digest promotion PR after a green build                                   | Topic 12          |
+| `manifest-digest-pr.yml`     | Digest promotion PR after a green mirror/sign run                         | Topic 12          |
 | `mirror-platform-images.yml` | Mirror OTel/Grafana platform images to AR                                 | Topic 12+         |
 | `release.yml`                | GitHub Release on tag `v*` (no auto-deploy)                               | Topic 16+         |
 

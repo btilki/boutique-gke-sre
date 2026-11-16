@@ -1,6 +1,6 @@
 # Architecture
 
-Executive summary for boutique-gke-sre. Full design: [docs/architecture/overview.md](docs/architecture/overview.md) (16 sections). Folder nav: [docs/architecture/README.md](docs/architecture/README.md).
+Full design: [docs/architecture/overview.md](docs/architecture/overview.md) (16 sections). Folder nav: [docs/architecture/README.md](docs/architecture/README.md).
 
 This is a **closed production reference**: topics 01–16 ran end to end, then Phase 8 teardown removed the GCP resources. There is no live cluster or public DNS from that run. Rebuild via [docs/setup/](docs/setup/README.md).
 

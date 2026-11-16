@@ -6,8 +6,8 @@ CI for boutique-gke-sre. Supply-chain workflows (`build-scan-sign`, `mirror-plat
 | -------------------------------------------------------- | ----- | ------------------------------------------------------------------------- |
 | [ci.yml](ci.yml)                                         | 1+    | Terraform validate, runbook lint, Kyverno tests, digest-only, kubeconform |
 | [terraform-plan.yml](terraform-plan.yml)                 | 1     | Terraform plan on PR                                                      |
-| [build-scan-sign.yml](build-scan-sign.yml)               | 3     | WIF → Trivy → AR push → cosign sign + attest                              |
-| [manifest-digest-pr.yml](manifest-digest-pr.yml)         | 3     | Digest promotion PR (after build-scan-sign)                               |
+| [build-scan-sign.yml](build-scan-sign.yml)               | 3     | Mirror → WIF → Trivy → AR push → cosign sign + attest                     |
+| [manifest-digest-pr.yml](manifest-digest-pr.yml)         | 3     | Digest promotion PR (after green mirror/sign)                             |
 | [mirror-platform-images.yml](mirror-platform-images.yml) | 4+    | Mirror OTel/Grafana platform images to AR                                 |
 | [release.yml](release.yml)                               | 7+    | GitHub Release on tag push `v*` (no auto-deploy)                          |
 

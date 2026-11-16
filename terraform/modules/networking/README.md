@@ -1,10 +1,10 @@
 # Networking module
 
-VPC, private subnet, Cloud NAT, and baseline firewall rules for a private GKE cluster.
+VPC, private subnet, Cloud NAT, and baseline firewall rules for a private-node GKE cluster (public Kubernetes API).
 
 ## Purpose
 
-Provides network foundation for private GKE nodes with controlled egress via Cloud NAT and Private Google Access for GCP APIs.
+Provides network foundation for private GKE nodes with controlled egress via Cloud NAT and Private Google Access for GCP APIs. The GKE module keeps the API endpoint public (`enable_private_endpoint = false`).
 
 ## Inputs
 

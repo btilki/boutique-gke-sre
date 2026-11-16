@@ -60,7 +60,7 @@ flowchart LR
 
 1. **Freeze scope** — confirm error budget and change window ([error-budget-policy.md](../sre/error-budget-policy.md))
 2. **Merge** all release PRs to `main`; CI green (`ci.yml`, `terraform-plan.yml` if applicable)
-3. **Image rebuild** (if upstream bump): GitHub Actions → `build-scan-sign` → merge digest PR
+3. **Image mirror** (if upstream bump): GitHub Actions → `build-scan-sign` → merge digest PR
 4. **Tag** `vX.Y.Z` on `main` (or merge `release/vX.Y` then tag)
 5. **GitHub Release** — workflow `.github/workflows/release.yml` or manual from template
 6. **Operator promote:**
@@ -548,12 +548,12 @@ Explicit list of changes that require migration or cause deploy failure.
 
 ### Examples (historical / reference)
 
-| Change                    | Version      | Migration                    |
-| ------------------------- | ------------ | ---------------------------- |
-| Manual Argo sync required | v1.0.0+      | ADR-003; disable auto-sync   |
-| Digest-only images        | v1.0.0+      | Kyverno rejects tags         |
-| ESO-only secrets          | v1.0.0+      | No plain Secret resources    |
-| Obsolete GCR image paths  | v0.10.5 bump | [MIGRATION.md](MIGRATION.md) |
+| Change                       | Version      | Migration                    |
+| ---------------------------- | ------------ | ---------------------------- |
+| Manual Argo CD sync required | v1.0.0+      | ADR-003; disable auto-sync   |
+| Digest-only images           | v1.0.0+      | Kyverno rejects tags         |
+| ESO-only secrets             | v1.0.0+      | No plain Secret resources    |
+| Obsolete GCR image paths     | v0.10.5 bump | [MIGRATION.md](MIGRATION.md) |
 
 ### Validation
 

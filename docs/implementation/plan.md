@@ -13,7 +13,7 @@
 | Field              | Value                                                                                                              |
 | ------------------ | ------------------------------------------------------------------------------------------------------------------ |
 | Project            | **boutique-gke-sre**                                                                                               |
-| Goal               | Production SRE reference for Online Boutique on one private-node GKE cluster in GCP                                |
+| Goal               | Production SRE reference for Online Boutique on one private-node GKE cluster (public API) in GCP                   |
 | Domain             | `biroltilki.art` — hostnames currently **inactive** ([dns.md](../dns.md))                                          |
 | Phases             | **1–8** (bootstrap → teardown) + **9-A–9-D** (SRE expansion)                                                       |
 | Overall complexity | **L** (platform breadth); Phase 4 is the deploy gate                                                               |
@@ -26,9 +26,9 @@
 
 | ID   | Goal                          | Success indicator                                                                                 |
 | ---- | ----------------------------- | ------------------------------------------------------------------------------------------------- |
-| G-01 | Reproducible GCP foundation   | Terraform remote state; VPC; private GKE; DNS + TLS                                               |
+| G-01 | Reproducible GCP foundation   | Terraform remote state; VPC; private-node GKE (public API); DNS + TLS                             |
 | G-02 | GitOps-only app delivery      | Argo CD manual sync; digest-pinned Boutique                                                       |
-| G-03 | Supply-chain baseline         | WIF CI, Trivy, cosign, Binary Authorization, Kyverno                                              |
+| G-03 | Supply-chain baseline         | WIF on supply-chain CI, Trivy, cosign, Binary Authorization, Kyverno                              |
 | G-04 | Secrets without Git plaintext | ESO + Secret Manager only                                                                         |
 | G-05 | Operable SLOs                 | Availability SLOs lived; latency SLOs optional (9-A / topic 17); burn alerts; runbooks; PagerDuty |
 | G-06 | On-call readiness             | SEV taxonomy; game days; postmortems                                                              |
@@ -39,7 +39,7 @@
 
 ## 3. Why this shape
 
-- One GCP project, one private-node GKE cluster, Online Boutique as the workload
+- One GCP project, one private-node GKE cluster (public API), Online Boutique as the workload
 - Setup topics explain controls (WIF, burn rates, manual Argo sync) instead of only listing them
 - Availability SLOs, runbooks, and one executed game day on the closed path
 - Teardown and orphan-scan path so billable resources do not linger
@@ -48,20 +48,20 @@
 
 ## 4. Functional requirements
 
-| ID    | Requirement                                              | Phase / topic |
-| ----- | -------------------------------------------------------- | ------------- |
-| FR-01 | Terraform: APIs, VPC/NAT, remote state                   | 1 / 01–03     |
-| FR-02 | Private-node GKE (public API), static IP, Cloud DNS, TLS | 2 / 04–06     |
-| FR-03 | GitHub WIF, Artifact Registry, Binary Authorization, CI  | 3 / 07–08     |
-| FR-04 | Argo CD, ESO, Kyverno, NetworkPolicy (**gate**)          | 4 / 09–11     |
-| FR-05 | Online Boutique Helm GitOps (digest-only)                | 5 / 12        |
-| FR-06 | OTel, Grafana, Cloud Monitoring SLOs + burn alerts       | 6 / 13        |
-| FR-07 | PagerDuty, Armor, smoke validation                       | 7 / 14–16     |
-| FR-08 | Teardown documented; backup/restore optional (topic 19)  | 8 / teardown  |
-| FR-09 | Latency SLOs + Grafana dashboards                        | 9-A / 17      |
-| FR-10 | HA GitOps, Argo uptime, game-day ops                     | 9-B / 18      |
-| FR-11 | Monitoring + GKE Backup Terraform modules                | 9-C / 19      |
-| FR-12 | Error-budget ritual, capacity, toil cadence              | 9-D / 20      |
+| ID    | Requirement                                                | Phase / topic |
+| ----- | ---------------------------------------------------------- | ------------- |
+| FR-01 | Terraform: APIs, VPC/NAT, remote state                     | 1 / 01–03     |
+| FR-02 | Private-node GKE (public API), static IP, Cloud DNS, TLS   | 2 / 04–06     |
+| FR-03 | GitHub WIF, Artifact Registry, Binary Authorization, CI    | 3 / 07–08     |
+| FR-04 | Argo CD, ESO, Kyverno, NetworkPolicy (**gate**)            | 4 / 09–11     |
+| FR-05 | Online Boutique Helm GitOps (digest-only)                  | 5 / 12        |
+| FR-06 | OTel, Grafana, Cloud Monitoring SLOs + burn alerts         | 6 / 13        |
+| FR-07 | PagerDuty, Armor, smoke validation                         | 7 / 14–16     |
+| FR-08 | Teardown documented                                        | 8 / teardown  |
+| FR-09 | Latency SLOs + Grafana dashboards                          | 9-A / 17      |
+| FR-10 | HA GitOps, Argo uptime, game-day ops                       | 9-B / 18      |
+| FR-11 | Monitoring + GKE Backup Terraform (optional after rebuild) | 9-C / 19      |
+| FR-12 | Error-budget ritual, capacity, toil cadence                | 9-D / 20      |
 
 ---
 
@@ -97,13 +97,13 @@ See [architecture/overview.md](../architecture/overview.md) §1.
 
 ## 7. Constraints
 
-| Constraint                                   | Impact           |
-| -------------------------------------------- | ---------------- |
-| One GCP project, one regional private GKE    | No multi-cluster |
-| WIF for CI — no long-lived SA keys in GitHub | Topics 07–08     |
-| Manual Argo CD sync (prod-style)             | ADR-003          |
-| Private nodes; egress via Cloud NAT          | Topic 04         |
-| No service mesh / multi-region as default    | Non-goals        |
+| Constraint                                                  | Impact           |
+| ----------------------------------------------------------- | ---------------- |
+| One GCP project, one regional private-node GKE (public API) | No multi-cluster |
+| WIF on supply-chain CI — no long-lived SA keys in GitHub    | Topics 07–08     |
+| Manual Argo CD sync (prod-style)                            | ADR-003          |
+| Private nodes; egress via Cloud NAT                         | Topic 04         |
+| No service mesh / multi-region as default                   | Non-goals        |
 
 ---
 
@@ -163,10 +163,10 @@ See [architecture/overview.md](../architecture/overview.md) §1.
 
 ```
 Git (GitHub)
- → GitHub Actions (WIF → GCP; Trivy, cosign, PR gates)
+ → GitHub Actions (WIF on supply-chain → GCP; Trivy, cosign; PR gates in-repo)
  → Artifact Registry (digest + attestation, Binary Authorization)
  → Argo CD
- → ONE GKE cluster (Helm, Kyverno, ESO, NetworkPolicy)
+ → ONE private-node GKE cluster, public API (Helm, Kyverno, ESO, NetworkPolicy)
  → HTTPS (Cloud Armor, Google-managed TLS, static IP)
  → OTel → Cloud Trace / Managed Prometheus / Grafana
  → PagerDuty

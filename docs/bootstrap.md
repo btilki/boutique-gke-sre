@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Executive path from an empty GCP project to the storefront and Argo CD hostnames for Online Boutique on one private-node GKE cluster (public API endpoint).
+Bootstrap path from an empty GCP project to the storefront and Argo CD hostnames for Online Boutique on one private-node GKE cluster (public API endpoint).
 
 **DNS names** (offline until rebuild): `boutique.biroltilki.art` · `argocd.boutique.biroltilki.art` — [dns.md](dns.md)
 

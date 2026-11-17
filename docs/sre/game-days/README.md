@@ -2,6 +2,8 @@
 
 Scheduled failure exercises for boutique-gke-sre SRE practice.
 
+> **Closed reference (offline):** The cluster and public DNS are torn down. Guides and scripts remain for a rebuild. Only scenario **03** was executed on the lived path — see [reports/STATUS.md](reports/STATUS.md). Scenarios 01, 02, and 04 stay **Deferred** until topic 18 on a live cluster.
+
 ## Purpose
 
 Validate alerting, runbooks, on-call response, and error-budget process under controlled faults.
@@ -17,16 +19,24 @@ Validate alerting, runbooks, on-call response, and error-budget process under co
 
 ## Prerequisites
 
+**While offline:** Do not expect storefront HTTPS, PagerDuty pages, or inject scripts to succeed. Use STATUS and dated reports as the source of truth.
+
+**After rebuild (topic 18):**
+
 - Phase 6 observability and PagerDuty live
 - On-call roster notified
 - Storefront baseline: `boutique.biroltilki.art`
 
 ## Success criteria
 
+Ideal full run (record gaps when any item fails):
+
 - Alert fires within expected SLO window
 - On-call acknowledges in PagerDuty
 - Runbook steps restore service
 - Blameless notes captured for postmortem if gaps found
+
+**Partial executes are valid.** Mark **Executed** in STATUS when a dated report exists; document incomplete criteria (for example GD03: PagerDuty and alert path not verified). Do not invent PagerDuty acks.
 
 ## After each execution
 

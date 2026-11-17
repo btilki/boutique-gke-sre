@@ -435,13 +435,13 @@ gcloud beta container backup-restores backups list \
 
 ### Expected outcome
 
-When topic 19 IaC is enabled (`enable_backup_iac`):
+**Default (topic 19 off / `enable_backup_iac = false`):** No GKE Backup plan, plan list, or `SUCCEEDED` backup is required. The Validation `gcloud … backup-plans` / `backups list` commands above will fail or return empty — that is expected on the closed path. Use [redis-restore](../sre/runbooks/redis-restore.md) or a manual export before teardown if you need Redis/cart state off-cluster.
+
+**When topic 19 IaC is enabled (`enable_backup_iac = true`):**
 
 - Daily backup plan covers `boutique` namespace (including Redis PVC)
 - Latest backup state: `SUCCEEDED`
 - Retention matches policy (default: 7 days per backup module scaffold)
-
-If topic 19 is off: no GKE Backup plan is expected — use the redis-restore / manual export path before teardown.
 
 ### Recovery steps
 

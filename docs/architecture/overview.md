@@ -40,18 +40,18 @@ Diagrams: [assets/diagrams/](../../assets/diagrams/). Folder nav: [README.md](RE
 
 ### Non-functional
 
-| ID   | Requirement               | Target                                                              |
-| ---- | ------------------------- | ------------------------------------------------------------------- |
-| NF1  | Browse availability SLO   | 99.9% monthly (closed path — topic 13)                              |
-| NF2  | Checkout availability SLO | 99.95% monthly (closed path — topic 13)                             |
-| NF3  | Browse latency SLO        | p95 < 500ms (optional after rebuild — topic 17)                     |
-| NF4  | Checkout latency SLO      | p95 < 1000ms (optional after rebuild — topic 17)                    |
-| NF5  | Image immutability        | Digest-only; reject `:latest`                                       |
-| NF6  | Supply chain              | cosign sign + attest; Binary Authorization (Enforce after topic 16) |
-| NF7  | Policy enforcement        | Kyverno admission + NetworkPolicy manifests (CNI pin separate)      |
-| NF8  | Node privacy              | Private GKE nodes; public API endpoint; egress via Cloud NAT        |
-| NF9  | Incident readiness        | SEV1–SEV4 taxonomy; runbook per alert                               |
-| NF10 | Recoverability            | Backup/restore runbook for Redis/cart state                         |
+| ID   | Requirement               | Target                                                                           |
+| ---- | ------------------------- | -------------------------------------------------------------------------------- |
+| NF1  | Browse availability SLO   | 99.9% monthly (closed path — topic 13)                                           |
+| NF2  | Checkout availability SLO | 99.95% monthly (closed path — topic 13)                                          |
+| NF3  | Browse latency SLO        | p95 < 500ms (optional after rebuild — topic 17)                                  |
+| NF4  | Checkout latency SLO      | p95 < 1000ms (optional after rebuild — topic 17)                                 |
+| NF5  | Image immutability        | Digest-only; reject `:latest`                                                    |
+| NF6  | Supply chain              | cosign sign + attest; Binary Authorization (Enforce after topic 16)              |
+| NF7  | Policy enforcement        | Kyverno admission + NetworkPolicy manifests (CNI pin separate)                   |
+| NF8  | Node privacy              | Private GKE nodes; public API endpoint; egress via Cloud NAT                     |
+| NF9  | Incident readiness        | SEV1–SEV4 taxonomy; runbook per alert                                            |
+| NF10 | Recoverability            | Backup/restore runbook for Redis/cart state (GKE Backup IaC optional — topic 19) |
 
 ---
 

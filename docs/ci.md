@@ -17,7 +17,7 @@ Workflow YAML stays in Git under [`.github/workflows/`](../.github/workflows/). 
 | Git          | GitHub (source of truth for Argo CD)                                                       |
 | CI           | GitHub Actions; WIF only on supply-chain workflows (`build-scan-sign`, mirror)             |
 | Default path | Mirror Boutique v0.10.5 → Trivy CRITICAL/HIGH → AR push → cosign sign + attest → digest PR |
-| Hard rule    | **CI never syncs Argo** — digest PRs only; operators sync by hand                          |
+| Hard rule    | **CI never syncs Argo CD** — digest PRs only; operators sync by hand                       |
 
 ## Hard rules
 

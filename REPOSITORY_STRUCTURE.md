@@ -29,7 +29,7 @@ boutique-gke-sre/
 ├── assets/diagrams/      # Mermaid sources and operational screenshots
 ├── README.md             # Project overview and navigation
 ├── PROJECT.md            # Charter and reference checklist
-├── ARCHITECTURE.md       # Executive architecture index
+├── ARCHITECTURE.md       # Architecture index
 ├── ROADMAP.md            # Phase status
 ├── CONTRIBUTING.md
 ├── SECURITY.md

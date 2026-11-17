@@ -37,7 +37,7 @@ Full map: [`../README.md`](../README.md#where-to-start).
 | Security and threat model              | [`security/README.md`](security/README.md)                                                                               |
 | Day-2 operations                       | [`operations/README.md`](operations/README.md) · [`operations/operations-runbook.md`](operations/operations-runbook.md)  |
 | Symptom troubleshooting                | [`troubleshooting/README.md`](troubleshooting/README.md)                                                                 |
-| SLOs, runbooks, on-call, game days     | [`sre/README.md`](sre/README.md)                                                                                         |
+| SLOs, runbooks, on-call, Game days     | [`sre/README.md`](sre/README.md)                                                                                         |
 | Release and upgrade                    | [`release/release-strategy.md`](release/release-strategy.md)                                                             |
 | Implementation and phases (maintainer) | [`implementation/plan.md`](implementation/plan.md) · [`../ROADMAP.md`](../ROADMAP.md)                                    |
 

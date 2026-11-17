@@ -231,7 +231,7 @@ Latency SRE layer is complete for this rebuild. Continue with:
 
 | Step                                         | Guide                                                                 |
 | -------------------------------------------- | --------------------------------------------------------------------- |
-| SRE operability (HA, Argo uptime, game days) | [18-sre-operability-game-days.md](18-sre-operability-game-days.md)    |
+| SRE operability (HA, Argo uptime, Game days) | [18-sre-operability-game-days.md](18-sre-operability-game-days.md)    |
 | Smoke re-check (include latency SLOs)        | [16-smoke-validation.md](16-smoke-validation.md)                      |
 | Game day / alert routing                     | [game-days/04-alert-routing.md](../sre/game-days/04-alert-routing.md) |
 | On-call                                      | [oncall/README.md](../sre/oncall/README.md)                           |

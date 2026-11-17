@@ -4,7 +4,7 @@ Execution logs from scheduled failure exercises.
 
 ## Status overview
 
-See **[STATUS.md](STATUS.md)** for executed vs deferred . Only scenario **03** has a live report today.
+See **[STATUS.md](STATUS.md)** for executed vs deferred. Only scenario **03** has a live report today.
 
 ## Report template
 

@@ -71,7 +71,7 @@ Guides 17–20 exist in Git as scaffolds only. They were not required for topics
 | #   | Topic                                        | Guide                                                                  |
 | --- | -------------------------------------------- | ---------------------------------------------------------------------- |
 | 17  | Latency SLOs + Grafana dashboards            | [17-latency-slos-dashboards.md](17-latency-slos-dashboards.md)         |
-| 18  | SRE operability (HA, Argo uptime, game days) | [18-sre-operability-game-days.md](18-sre-operability-game-days.md)     |
+| 18  | SRE operability (HA, Argo uptime, Game days) | [18-sre-operability-game-days.md](18-sre-operability-game-days.md)     |
 | 19  | Monitoring + Backup Terraform                | [19-monitoring-backup-terraform.md](19-monitoring-backup-terraform.md) |
 | 20  | SRE practices (budget, capacity, toil)       | [20-sre-practices-capacity-toil.md](20-sre-practices-capacity-toil.md) |
 

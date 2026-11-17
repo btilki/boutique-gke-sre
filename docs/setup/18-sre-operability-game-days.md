@@ -1,8 +1,8 @@
-# SRE operability — HA sync, Argo uptime, game days
+# SRE operability — HA sync, Argo uptime, Game days
 
 ## Goal
 
-On a rebuilt cluster, sync Boutique **HPA/PDB/replica** defaults, add the **Argo CD uptime check**, and run (or schedule) remaining **game days** with dated reports. When complete, operability claims match the live system — not docs-only HA.
+On a rebuilt cluster, sync Boutique **HPA/PDB/replica** defaults, add the **Argo CD uptime check**, and run (or schedule) remaining **Game days** with dated reports. When complete, operability claims match the live system — not docs-only HA.
 
 **Repo status:** GitOps HA, uptime YAML, postmortem, and report templates already exist. This guide is the **future apply / execution** path.
 
@@ -16,7 +16,7 @@ Topics 17–20 are optional after rebuild — not part of the closed reference p
 | Only Game day 03 executed on the closed path | STATUS + TEMPLATE for 01/02/04; postmortem from Game day 03                                                    |
 | Argo CD edge unmonitored                     | `argocd-ui` uptime check                                                                                       |
 
-Without this step on a rebuild, further game days stay deferred and Argo CD outages stay invisible to synthetic probes.
+Without this step on a rebuild, further Game days stay deferred and Argo CD outages stay invisible to synthetic probes.
 
 ## Prerequisites
 
